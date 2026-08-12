@@ -2,8 +2,6 @@ package com.pravartak.view.login;
 
 import java.net.URL;
 
-import com.pravartak.view.farmer.MarketPlace;
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -34,736 +32,1015 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+
 public class LoginPage extends Application {
 
-        // The ONE stage used by the application
-        public static Stage mainStage;
+    // The ONE stage used by the application
+    private Stage mainStage;
 
-        // =========================================================
-        // START METHOD
-        // =========================================================
 
-        @Override
-        public void start(Stage stage) throws Exception {
+    // =========================================================
+    // START METHOD
+    // =========================================================
 
-                // Store the stage
-                mainStage = stage;
+    @Override
+    public void start(Stage stage) {
 
-                // Create login scene
-                Scene loginScene = createLoginScene();
+        // Store the stage
+        mainStage = stage;
 
-                // Set scene
-                mainStage.setScene(loginScene);
+        // Create login scene
+        Scene loginScene = createLoginScene();
 
-                // Window properties
-                mainStage.setTitle("Agro Biz ");
+        // Set scene
+        mainStage.setScene(loginScene);
 
-                mainStage.setWidth(1368);
-                mainStage.setHeight(768);
+        // Window properties
+        mainStage.setTitle("Agro Biz - Login");
 
-                mainStage.setMinWidth(1000);
-                mainStage.setMinHeight(650);
+        mainStage.setWidth(1368);
+        mainStage.setHeight(768);
 
-                // Show window
-                mainStage.show();
-        }
+        mainStage.setMinWidth(1000);
+        mainStage.setMinHeight(650);
 
-        // =========================================================
-        // CREATE LOGIN SCENE
-        // =========================================================
+        // Show window
+        mainStage.show();
+    }
 
-        private Scene createLoginScene() {
 
-                HBox mainLayout = new HBox();
+    // =========================================================
+    // CREATE LOGIN SCENE
+    // =========================================================
 
-                mainLayout.setPrefSize(1368, 768);
+    private Scene createLoginScene() {
 
-                // Create left and right sections
-                StackPane leftSection = createLeftSection();
+        HBox mainLayout = new HBox();
 
-                VBox rightSection = createRightSection();
+        mainLayout.setPrefSize(1368, 768);
 
-                leftSection.setPrefWidth(684);
-                leftSection.setMinWidth(500);
 
-                rightSection.setPrefWidth(684);
-                rightSection.setMinWidth(500);
+        // Create left and right sections
+        StackPane leftSection = createLeftSection();
 
-                // Allow them to grow
-                HBox.setHgrow(leftSection, Priority.ALWAYS);
-                HBox.setHgrow(rightSection, Priority.ALWAYS);
+        VBox rightSection = createRightSection();
 
-                // Add both sections
-                mainLayout.getChildren().addAll(
-                                leftSection,
-                                rightSection);
 
-                return new Scene(
-                                mainLayout,
-                                1368,
-                                768);
-        }
+        // IMPORTANT:
+        // Give each section exactly half of the window
 
-        // =========================================================
-        // LEFT SECTION
-        // =========================================================
+        leftSection.setPrefWidth(684);
+        leftSection.setMinWidth(500);
 
-        private StackPane createLeftSection() {
+        rightSection.setPrefWidth(684);
+        rightSection.setMinWidth(500);
 
-                StackPane leftSection = new StackPane();
 
-                // -----------------------------------------------------
-                // FARM IMAGE
-                // -----------------------------------------------------
+        // Allow them to grow
+        HBox.setHgrow(leftSection, Priority.ALWAYS);
+        HBox.setHgrow(rightSection, Priority.ALWAYS);
 
-                Image farmImage = loadFarmImage();
 
-                ImageView farmImageView = new ImageView(farmImage);
+        // Add both sections
+        mainLayout.getChildren().addAll(
+                leftSection,
+                rightSection
+        );
 
-                farmImageView.setPreserveRatio(false);
 
-                // Make image fill the left section
-                farmImageView.fitWidthProperty().bind(
-                                leftSection.widthProperty());
+        return new Scene(
+                mainLayout,
+                1368,
+                768
+        );
+    }
 
-                farmImageView.fitHeightProperty().bind(
-                                leftSection.heightProperty());
 
-                // -----------------------------------------------------
-                // DARK OVERLAY
-                // -----------------------------------------------------
+    // =========================================================
+    // LEFT SECTION
+    // =========================================================
 
-                Rectangle darkOverlay = new Rectangle();
+    private StackPane createLeftSection() {
 
-                darkOverlay.setFill(
-                                Color.rgb(0, 0, 0, 0.30));
+        StackPane leftSection = new StackPane();
 
-                darkOverlay.widthProperty().bind(
-                                leftSection.widthProperty());
 
-                darkOverlay.heightProperty().bind(
-                                leftSection.heightProperty());
+        // -----------------------------------------------------
+        // FARM IMAGE
+        // -----------------------------------------------------
 
-                // -----------------------------------------------------
-                // TITLE
-                // -----------------------------------------------------
+        Image farmImage = loadFarmImage();
 
-                Label title = new Label(
-                                "Cultivating the Future\n"
-                                                + "of Agriculture");
+        ImageView farmImageView =
+                new ImageView(farmImage);
 
-                title.setTextFill(Color.WHITE);
-
-                title.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                40));
 
-                title.setWrapText(true);
+        farmImageView.setPreserveRatio(false);
 
-                // -----------------------------------------------------
-                // DESCRIPTION
-                // -----------------------------------------------------
 
-                Label description = new Label(
-                                "Empowering farming entrepreneurs "
-                                                + "with AI-driven insights\n"
-                                                + "and a vibrant marketplace. "
-                                                + "Join the growing community\n"
-                                                + "today.");
+        // Make image fill the left section
+        farmImageView.fitWidthProperty().bind(
+                leftSection.widthProperty()
+        );
 
-                description.setTextFill(Color.WHITE);
+        farmImageView.fitHeightProperty().bind(
+                leftSection.heightProperty()
+        );
 
-                description.setFont(
-                                Font.font(
-                                                "Arial",
-                                                17));
 
-                description.setWrapText(true);
+        // -----------------------------------------------------
+        // DARK OVERLAY
+        // -----------------------------------------------------
 
-                // -----------------------------------------------------
-                // TEXT CONTAINER
-                // -----------------------------------------------------
+        Rectangle darkOverlay =
+                new Rectangle();
 
-                VBox textContainer = new VBox();
+        darkOverlay.setFill(
+                Color.rgb(0, 0, 0, 0.30)
+        );
 
-                textContainer.setSpacing(14);
+        darkOverlay.widthProperty().bind(
+                leftSection.widthProperty()
+        );
 
-                textContainer.setAlignment(
-                                Pos.BOTTOM_LEFT);
+        darkOverlay.heightProperty().bind(
+                leftSection.heightProperty()
+        );
 
-                textContainer.setPadding(
-                                new Insets(
-                                                0,
-                                                45,
-                                                55,
-                                                45));
 
-                textContainer.getChildren().addAll(
-                                title,
-                                description);
+        // -----------------------------------------------------
+        // TITLE
+        // -----------------------------------------------------
 
-                // -----------------------------------------------------
-                // IMPORTANT
-                // -----------------------------------------------------
-                // Order matters in StackPane.
-                //
-                // Image
-                // Overlay
-                // Text
-                //
-                // Text must be added LAST.
+        Label title =
+                new Label(
+                        "Cultivating the Future\n"
+                        + "of Agriculture"
+                );
 
-                leftSection.getChildren().addAll(
-                                farmImageView,
-                                darkOverlay,
-                                textContainer);
+        title.setTextFill(Color.WHITE);
 
-                StackPane.setAlignment(
-                                textContainer,
-                                Pos.BOTTOM_LEFT);
+        title.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        40
+                )
+        );
 
-                return leftSection;
-        }
+        title.setWrapText(true);
 
-        // =========================================================
-        // RIGHT SECTION
-        // =========================================================
 
-        private VBox createRightSection() {
+        // -----------------------------------------------------
+        // DESCRIPTION
+        // -----------------------------------------------------
 
-                VBox rightSection = new VBox();
+        Label description =
+                new Label(
+                        "Empowering farming entrepreneurs "
+                        + "with AI-driven insights\n"
+                        + "and a vibrant marketplace. "
+                        + "Join the growing community\n"
+                        + "today."
+                );
 
-                rightSection.setAlignment(
-                                Pos.CENTER);
+        description.setTextFill(Color.WHITE);
 
-                rightSection.setPadding(
-                                new Insets(30));
+        description.setFont(
+                Font.font(
+                        "Arial",
+                        17
+                )
+        );
 
-                // -----------------------------------------------------
-                // BACKGROUND
-                // -----------------------------------------------------
+        description.setWrapText(true);
 
-                rightSection.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                Color.rgb(
-                                                                                248,
-                                                                                249,
-                                                                                220),
-                                                                CornerRadii.EMPTY,
-                                                                Insets.EMPTY)));
 
-                // -----------------------------------------------------
-                // LOGIN CONTAINER
-                // -----------------------------------------------------
+        // -----------------------------------------------------
+        // TEXT CONTAINER
+        // -----------------------------------------------------
 
-                VBox loginContainer = new VBox();
+        VBox textContainer =
+                new VBox();
 
-                loginContainer.setSpacing(0);
+        textContainer.setSpacing(14);
 
-                loginContainer.setPrefWidth(480);
+        textContainer.setAlignment(
+                Pos.BOTTOM_LEFT
+        );
 
-                loginContainer.setMaxWidth(480);
+        textContainer.setPadding(
+                new Insets(
+                        0,
+                        45,
+                        55,
+                        45
+                )
+        );
 
-                // =====================================================
-                // LOGO
-                // =====================================================
 
-                Label logoIcon = new Label("🚜");
+        textContainer.getChildren().addAll(
+                title,
+                description
+        );
 
-                logoIcon.setAlignment(
-                                Pos.CENTER);
 
-                logoIcon.setPrefSize(
-                                52,
-                                52);
+        // -----------------------------------------------------
+        // IMPORTANT
+        // -----------------------------------------------------
+        // Order matters in StackPane.
+        //
+        // Image
+        // Overlay
+        // Text
+        //
+        // Text must be added LAST.
 
-                logoIcon.setFont(
-                                Font.font(
-                                                "Arial",
-                                                24));
+        leftSection.getChildren().addAll(
+                farmImageView,
+                darkOverlay,
+                textContainer
+        );
 
-                logoIcon.setTextFill(Color.WHITE);
 
-                logoIcon.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                Color.rgb(
-                                                                                15,
-                                                                                82,
-                                                                                21),
-                                                                new CornerRadii(9),
-                                                                Insets.EMPTY)));
+        StackPane.setAlignment(
+                textContainer,
+                Pos.BOTTOM_LEFT
+        );
 
-                Label logoText = new Label("Agro Biz");
 
-                logoText.setTextFill(
+        return leftSection;
+    }
+
+
+    // =========================================================
+    // RIGHT SECTION
+    // =========================================================
+
+    private VBox createRightSection() {
+
+        VBox rightSection =
+                new VBox();
+
+
+        rightSection.setAlignment(
+                Pos.CENTER
+        );
+
+
+        rightSection.setPadding(
+                new Insets(30)
+        );
+
+
+        // -----------------------------------------------------
+        // BACKGROUND
+        // -----------------------------------------------------
+
+        rightSection.setBackground(
+                new Background(
+                        new BackgroundFill(
                                 Color.rgb(
-                                                12,
-                                                65,
-                                                20));
+                                        248,
+                                        249,
+                                        220
+                                ),
+                                CornerRadii.EMPTY,
+                                Insets.EMPTY
+                        )
+                )
+        );
 
-                logoText.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                30));
 
-                HBox logoContainer = new HBox();
+        // -----------------------------------------------------
+        // LOGIN CONTAINER
+        // -----------------------------------------------------
 
-                logoContainer.setSpacing(14);
+        VBox loginContainer =
+                new VBox();
 
-                logoContainer.setAlignment(
-                                Pos.CENTER_LEFT);
+        loginContainer.setSpacing(0);
 
-                logoContainer.getChildren().addAll(
-                                logoIcon,
-                                logoText);
+        loginContainer.setPrefWidth(480);
 
-                // =====================================================
-                // WELCOME TITLE
-                // =====================================================
+        loginContainer.setMaxWidth(480);
 
-                Label welcomeTitle = new Label(
-                                "Welcome back");
 
-                welcomeTitle.setTextFill(
-                                Color.rgb(30, 30, 30));
+        // =====================================================
+        // LOGO
+        // =====================================================
 
-                welcomeTitle.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                28));
+        Label logoIcon =
+                new Label("🚜");
 
-                // =====================================================
-                // WELCOME DESCRIPTION
-                // =====================================================
+        logoIcon.setAlignment(
+                Pos.CENTER
+        );
 
-                Label welcomeDescription = new Label(
-                                "Please enter your details to sign in.");
+        logoIcon.setPrefSize(
+                52,
+                52
+        );
 
-                welcomeDescription.setTextFill(
-                                Color.rgb(70, 70, 70));
+        logoIcon.setFont(
+                Font.font(
+                        "Arial",
+                        24
+                )
+        );
 
-                welcomeDescription.setFont(
-                                Font.font(
-                                                "Arial",
-                                                16));
+        logoIcon.setTextFill(Color.WHITE);
 
-                // =====================================================
-                // CONTACT LABEL
-                // =====================================================
-
-                Label contactLabel = new Label(
-                                "Phone number or Email");
-
-                contactLabel.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                15));
-
-                // =====================================================
-                // CONTACT FIELD
-                // =====================================================
-
-                TextField contactField = new TextField();
-
-                contactField.setPromptText(
-                                "Enter your registered contact");
-
-                styleTextField(
-                                contactField);
-
-                // =====================================================
-                // PASSWORD LABEL
-                // =====================================================
-
-                Label passwordLabel = new Label(
-                                "Password");
-
-                passwordLabel.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                15));
-
-                // =====================================================
-                // FORGOT PASSWORD
-                // =====================================================
-
-                Button forgotPasswordButton = new Button(
-                                "Forgot password?");
-
-                styleLinkButton(
-                                forgotPasswordButton);
-
-                // =====================================================
-                // PASSWORD HEADER
-                // =====================================================
-
-                Region passwordSpace = new Region();
-
-                HBox.setHgrow(
-                                passwordSpace,
-                                Priority.ALWAYS);
-
-                HBox passwordHeader = new HBox();
-
-                passwordHeader.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                passwordHeader.getChildren().addAll(
-                                passwordLabel,
-                                passwordSpace,
-                                forgotPasswordButton);
-
-                // =====================================================
-                // PASSWORD FIELD
-                // =====================================================
-
-                PasswordField passwordField = new PasswordField();
-
-                passwordField.setPromptText(
-                                "Enter your password");
-
-                styleTextField(
-                                passwordField);
-
-                // =====================================================
-                // REMEMBER ME
-                // =====================================================
-
-                CheckBox rememberMe = new CheckBox(
-                                "Remember me for 30 days");
-
-                rememberMe.setFont(
-                                Font.font(
-                                                "Arial",
-                                                15));
-
-                // =====================================================
-                // LOGIN BUTTON
-                // =====================================================
-
-                Button loginButton = new Button(
-                                "Login   →");
-
-                styleLoginButton(
-                                loginButton);
-
-                // =====================================================
-                // LOGIN BUTTON ACTION
-                // =====================================================
-
-                loginButton.setOnAction(
-                                event -> {
-
-                                        String contact = contactField.getText();
-
-                                        String password = passwordField.getText();
-
-                                        if (contact.isEmpty() || password.isEmpty()) {
-
-                                                System.out.println("Please enter your contact and password.");
-
-                                        } else {
-                                                System.out.println("Login successful!");
-
-                                                // Later we will use Runnable here
-                                                // to navigate to Dashboard.
-                                        }
-                                });
-
-                // =====================================================
-                // CREATE ACCOUNT BUTTON
-                // =====================================================
-
-                Button createAccountButton = new Button("Create an account");
-
-                styleCreateAccountButton(
-                                createAccountButton);
-
-                createAccountButton.setOnAction(
-                                event -> {
-
-                                        System.out.println("Create account clicked.");
-                                        MarketPlace marketPlace = new MarketPlace();
-
-                                        mainStage.setScene(marketPlace.getMarketPlaceScene());
-                                        // Later we will use Runnable
-                                        // to navigate to RegistrationPage.
-                                       
-                                });
-
-                // =====================================================
-                // SUPPORT BOX
-                // =====================================================
-
-                Label helpIcon = new Label("?");
-
-                helpIcon.setPrefSize(22, 22);
-
-                helpIcon.setAlignment(
-                                Pos.CENTER);
-
-                helpIcon.setTextFill(
+        logoIcon.setBackground(
+                new Background(
+                        new BackgroundFill(
                                 Color.rgb(
-                                                5,
-                                                105,
-                                                20));
+                                        15,
+                                        82,
+                                        21
+                                ),
+                                new CornerRadii(9),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+
+        Label logoText =
+                new Label("Agro Biz");
+
+        logoText.setTextFill(
+                Color.rgb(
+                        12,
+                        65,
+                        20
+                )
+        );
+
+        logoText.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        30
+                )
+        );
+
+
+        HBox logoContainer =
+                new HBox();
+
+        logoContainer.setSpacing(14);
+
+        logoContainer.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+        logoContainer.getChildren().addAll(
+                logoIcon,
+                logoText
+        );
+
+
+        // =====================================================
+        // WELCOME TITLE
+        // =====================================================
+
+        Label welcomeTitle =
+                new Label(
+                        "Welcome back"
+                );
+
+        welcomeTitle.setTextFill(
+                Color.rgb(30, 30, 30)
+        );
+
+        welcomeTitle.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        28
+                )
+        );
+
+
+        // =====================================================
+        // WELCOME DESCRIPTION
+        // =====================================================
 
-                helpIcon.setBorder(
-                                new Border(
-                                                new BorderStroke(
-                                                                Color.rgb(
-                                                                                5,
-                                                                                105,
-                                                                                20),
-                                                                BorderStrokeStyle.SOLID,
-                                                                new CornerRadii(3),
-                                                                new BorderWidths(1.5))));
+        Label welcomeDescription =
+                new Label(
+                        "Please enter your details to sign in."
+                );
 
-                Label supportText = new Label(
-                                "Need help logging in?");
+        welcomeDescription.setTextFill(
+                Color.rgb(70, 70, 70)
+        );
+
+        welcomeDescription.setFont(
+                Font.font(
+                        "Arial",
+                        16
+                )
+        );
 
-                supportText.setFont(
-                                Font.font(
-                                                "Arial",
-                                                14));
 
-                Button supportButton = new Button(
-                                "Contact Support");
+        // =====================================================
+        // CONTACT LABEL
+        // =====================================================
 
-                styleLinkButton(
-                                supportButton);
+        Label contactLabel =
+                new Label(
+                        "Phone number or Email"
+                );
 
-                HBox supportBox = new HBox();
+        contactLabel.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        15
+                )
+        );
 
-                supportBox.setSpacing(10);
 
-                supportBox.setAlignment(
-                                Pos.CENTER);
+        // =====================================================
+        // CONTACT FIELD
+        // =====================================================
 
-                supportBox.setPadding(
-                                new Insets(18));
+        TextField contactField =
+                new TextField();
 
-                supportBox.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                Color.rgb(
-                                                                                242,
-                                                                                243,
-                                                                                216),
-                                                                new CornerRadii(12),
-                                                                Insets.EMPTY)));
+        contactField.setPromptText(
+                "Enter your registered contact"
+        );
 
-                supportBox.getChildren().addAll(
-                                helpIcon,
-                                supportText,
-                                supportButton);
+        styleTextField(
+                contactField
+        );
 
-                // =====================================================
-                // ADD EVERYTHING
-                // =====================================================
 
-                loginContainer.getChildren().addAll(
+        // =====================================================
+        // PASSWORD LABEL
+        // =====================================================
 
-                                logoContainer,
+        Label passwordLabel =
+                new Label(
+                        "Password"
+                );
 
-                                createSpace(35),
+        passwordLabel.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        15
+                )
+        );
 
-                                welcomeTitle,
 
-                                createSpace(8),
+        // =====================================================
+        // FORGOT PASSWORD
+        // =====================================================
 
-                                welcomeDescription,
+        Button forgotPasswordButton =
+                new Button(
+                        "Forgot password?"
+                );
 
-                                createSpace(32),
+        styleLinkButton(
+                forgotPasswordButton
+        );
 
-                                contactLabel,
 
-                                createSpace(8),
+        // =====================================================
+        // PASSWORD HEADER
+        // =====================================================
 
-                                contactField,
+        Region passwordSpace =
+                new Region();
 
-                                createSpace(23),
+        HBox.setHgrow(
+                passwordSpace,
+                Priority.ALWAYS
+        );
 
-                                passwordHeader,
 
-                                createSpace(8),
+        HBox passwordHeader =
+                new HBox();
 
-                                passwordField,
+        passwordHeader.setAlignment(
+                Pos.CENTER_LEFT
+        );
 
-                                createSpace(23),
+        passwordHeader.getChildren().addAll(
+                passwordLabel,
+                passwordSpace,
+                forgotPasswordButton
+        );
 
-                                rememberMe,
 
-                                createSpace(28),
+        // =====================================================
+        // PASSWORD FIELD
+        // =====================================================
 
-                                loginButton,
+        PasswordField passwordField =
+                new PasswordField();
 
-                                createSpace(16),
+        passwordField.setPromptText(
+                "Enter your password"
+        );
 
-                                createAccountButton,
+        styleTextField(
+                passwordField
+        );
 
-                                createSpace(30),
 
-                                supportBox);
+        // =====================================================
+        // REMEMBER ME
+        // =====================================================
 
-                // Add form to right section
-                rightSection.getChildren().add(
-                                loginContainer);
+        CheckBox rememberMe =
+                new CheckBox(
+                        "Remember me for 30 days"
+                );
 
-                return rightSection;
-        }
+        rememberMe.setFont(
+                Font.font(
+                        "Arial",
+                        15
+                )
+        );
 
-        // =========================================================
-        // TEXT FIELD STYLE
-        // =========================================================
 
-        private void styleTextField(TextField textField) {
+        // =====================================================
+        // LOGIN BUTTON
+        // =====================================================
 
-                textField.setPrefHeight(52);
+        Button loginButton =
+                new Button(
+                        "Login   →"
+                );
 
-                textField.setFont(Font.font("Arial", 15));
+        styleLoginButton(
+                loginButton
+        );
 
-                textField.setPadding(new Insets(0, 15, 0, 15));
 
-                textField.setBackground(new Background(
-                                new BackgroundFill(Color.WHITE, new CornerRadii(8), Insets.EMPTY)));
+        // =====================================================
+        // LOGIN BUTTON ACTION
+        // =====================================================
 
-                textField.setBorder(new Border(new BorderStroke(
-                                Color.rgb(190, 195, 185), BorderStrokeStyle.SOLID,
-                                new CornerRadii(8), new BorderWidths(1.5))));
-        }
+        loginButton.setOnAction(
+                event -> {
 
-        // =========================================================
-        // LINK BUTTON STYLE
-        // =========================================================
+                    String contact =
+                            contactField.getText();
 
-        private void styleLinkButton(
-                        Button button) {
+                    String password =
+                            passwordField.getText();
 
-                button.setTextFill(Color.rgb(5, 105, 20));
 
-                button.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+                    if (contact.isEmpty()
+                            || password.isEmpty()) {
 
-                button.setBackground(
-                                Background.EMPTY);
+                        System.out.println(
+                                "Please enter your contact and password."
+                        );
 
-                button.setBorder(
-                                Border.EMPTY);
+                    } else {
 
-                button.setCursor(
-                                Cursor.HAND);
-        }
+                        System.out.println(
+                                "Login successful!"
+                        );
 
-        // =========================================================
-        // LOGIN BUTTON STYLE
-        // =========================================================
-
-        private void styleLoginButton(
-                        Button button) {
-
-                button.setTextFill(
-                                Color.WHITE);
-
-                button.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                17));
-
-                button.setPrefHeight(56);
-
-                button.setMaxWidth(
-                                Double.MAX_VALUE);
-
-                button.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                Color.rgb(
-                                                                                15,
-                                                                                82,
-                                                                                21),
-                                                                new CornerRadii(30),
-                                                                Insets.EMPTY)));
-
-                button.setCursor(
-                                Cursor.HAND);
-        }
-
-        // =========================================================
-        // CREATE ACCOUNT BUTTON STYLE
-        // =========================================================
-
-        private void styleCreateAccountButton(
-                        Button button) {
-
-                button.setTextFill(
-                                Color.rgb(30, 30, 30));
-
-                button.setFont(
-                                Font.font("Arial", FontWeight.BOLD, 17));
-
-                button.setPrefHeight(56);
-
-                button.setMaxWidth(
-                                Double.MAX_VALUE);
-
-                button.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                Color.WHITE,
-                                                                new CornerRadii(30),
-                                                                Insets.EMPTY)));
-
-                button.setBorder(new Border(new BorderStroke(Color.rgb(110, 110, 110), BorderStrokeStyle.SOLID,
-                                new CornerRadii(30), new BorderWidths(1.5))));
-
-                button.setCursor(Cursor.HAND);
-        }
-
-        // =========================================================
-        // LOAD IMAGE
-        // =========================================================
-
-        private Image loadFarmImage() {
-
-                URL imageURL = getClass().getResource(
-                                "/farm-image.png");
-
-                if (imageURL == null) {
-
-                        throw new RuntimeException(
-                                        "ERROR: farm-image.png was not found.\n\n"
-                                                        + "Put the image here:\n"
-                                                        + "src/main/resources/farm-image.png");
+                        // Later we will use Runnable here
+                        // to navigate to Dashboard.
+                    }
                 }
+        );
 
-                return new Image(
-                                imageURL.toExternalForm());
+
+        // =====================================================
+        // CREATE ACCOUNT BUTTON
+        // =====================================================
+
+        Button createAccountButton =
+                new Button(
+                        "Create an account"
+                );
+
+        styleCreateAccountButton(
+                createAccountButton
+        );
+
+
+        createAccountButton.setOnAction(
+                event -> {
+
+                    System.out.println(
+                            "Create account clicked."
+                    );
+
+                    // Later we will use Runnable
+                    // to navigate to RegistrationPage.
+                }
+        );
+
+
+        // =====================================================
+        // SUPPORT BOX
+        // =====================================================
+
+        Label helpIcon =
+                new Label("?");
+
+        helpIcon.setPrefSize(
+                22,
+                22
+        );
+
+        helpIcon.setAlignment(
+                Pos.CENTER
+        );
+
+        helpIcon.setTextFill(
+                Color.rgb(
+                        5,
+                        105,
+                        20
+                )
+        );
+
+
+        helpIcon.setBorder(
+                new Border(
+                        new BorderStroke(
+                                Color.rgb(
+                                        5,
+                                        105,
+                                        20
+                                ),
+                                BorderStrokeStyle.SOLID,
+                                new CornerRadii(3),
+                                new BorderWidths(1.5)
+                        )
+                )
+        );
+
+
+        Label supportText =
+                new Label(
+                        "Need help logging in?"
+                );
+
+        supportText.setFont(
+                Font.font(
+                        "Arial",
+                        14
+                )
+        );
+
+
+        Button supportButton =
+                new Button(
+                        "Contact Support"
+                );
+
+        styleLinkButton(
+                supportButton
+        );
+
+
+        HBox supportBox =
+                new HBox();
+
+        supportBox.setSpacing(10);
+
+        supportBox.setAlignment(
+                Pos.CENTER
+        );
+
+        supportBox.setPadding(
+                new Insets(18)
+        );
+
+        supportBox.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Color.rgb(
+                                        242,
+                                        243,
+                                        216
+                                ),
+                                new CornerRadii(12),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        supportBox.getChildren().addAll(
+                helpIcon,
+                supportText,
+                supportButton
+        );
+
+
+        // =====================================================
+        // ADD EVERYTHING
+        // =====================================================
+
+        loginContainer.getChildren().addAll(
+
+                logoContainer,
+
+                createSpace(35),
+
+                welcomeTitle,
+
+                createSpace(8),
+
+                welcomeDescription,
+
+                createSpace(32),
+
+                contactLabel,
+
+                createSpace(8),
+
+                contactField,
+
+                createSpace(23),
+
+                passwordHeader,
+
+                createSpace(8),
+
+                passwordField,
+
+                createSpace(23),
+
+                rememberMe,
+
+                createSpace(28),
+
+                loginButton,
+
+                createSpace(16),
+
+                createAccountButton,
+
+                createSpace(30),
+
+                supportBox
+        );
+
+
+        // Add form to right section
+        rightSection.getChildren().add(
+                loginContainer
+        );
+
+
+        return rightSection;
+    }
+
+
+    // =========================================================
+    // TEXT FIELD STYLE
+    // =========================================================
+
+    private void styleTextField(
+            TextField textField) {
+
+        textField.setPrefHeight(52);
+
+        textField.setFont(
+                Font.font(
+                        "Arial",
+                        15
+                )
+        );
+
+        textField.setPadding(
+                new Insets(
+                        0,
+                        15,
+                        0,
+                        15
+                )
+        );
+
+        textField.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Color.WHITE,
+                                new CornerRadii(8),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        textField.setBorder(
+                new Border(
+                        new BorderStroke(
+                                Color.rgb(
+                                        190,
+                                        195,
+                                        185
+                                ),
+                                BorderStrokeStyle.SOLID,
+                                new CornerRadii(8),
+                                new BorderWidths(1.5)
+                        )
+                )
+        );
+    }
+
+
+    // =========================================================
+    // LINK BUTTON STYLE
+    // =========================================================
+
+    private void styleLinkButton(
+            Button button) {
+
+        button.setTextFill(
+                Color.rgb(
+                        5,
+                        105,
+                        20
+                )
+        );
+
+        button.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        14
+                )
+        );
+
+        button.setBackground(
+                Background.EMPTY
+        );
+
+        button.setBorder(
+                Border.EMPTY
+        );
+
+        button.setCursor(
+                Cursor.HAND
+        );
+    }
+
+
+    // =========================================================
+    // LOGIN BUTTON STYLE
+    // =========================================================
+
+    private void styleLoginButton(
+            Button button) {
+
+        button.setTextFill(
+                Color.WHITE
+        );
+
+        button.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        17
+                )
+        );
+
+        button.setPrefHeight(56);
+
+        button.setMaxWidth(
+                Double.MAX_VALUE
+        );
+
+        button.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Color.rgb(
+                                        15,
+                                        82,
+                                        21
+                                ),
+                                new CornerRadii(30),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        button.setCursor(
+                Cursor.HAND
+        );
+    }
+
+
+    // =========================================================
+    // CREATE ACCOUNT BUTTON STYLE
+    // =========================================================
+
+    private void styleCreateAccountButton(
+            Button button) {
+
+        button.setTextFill(
+                Color.rgb(
+                        30,
+                        30,
+                        30
+                )
+        );
+
+        button.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        17
+                )
+        );
+
+        button.setPrefHeight(56);
+
+        button.setMaxWidth(
+                Double.MAX_VALUE
+        );
+
+        button.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Color.WHITE,
+                                new CornerRadii(30),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        button.setBorder(
+                new Border(
+                        new BorderStroke(
+                                Color.rgb(
+                                        110,
+                                        110,
+                                        110
+                                ),
+                                BorderStrokeStyle.SOLID,
+                                new CornerRadii(30),
+                                new BorderWidths(1.5)
+                        )
+                )
+        );
+
+        button.setCursor(
+                Cursor.HAND
+        );
+    }
+
+
+    // =========================================================
+    // LOAD IMAGE
+    // =========================================================
+
+    private Image loadFarmImage() {
+
+        URL imageURL =
+                getClass().getResource(
+                        "/farm-image.png"
+                );
+
+
+        if (imageURL == null) {
+
+            throw new RuntimeException(
+                    "ERROR: farm-image.png was not found.\n\n"
+                    + "Put the image here:\n"
+                    + "src/main/resources/farm-image.png"
+            );
         }
 
-        // =========================================================
-        // CREATE SPACE
-        // =========================================================
 
-        private Region createSpace(
-                        double height) {
+        return new Image(
+                imageURL.toExternalForm()
+        );
+    }
 
-                Region space = new Region();
 
-                space.setMinHeight(height);
+    // =========================================================
+    // CREATE SPACE
+    // =========================================================
 
-                space.setPrefHeight(height);
+    private Region createSpace(
+            double height) {
 
-                space.setMaxHeight(height);
+        Region space =
+                new Region();
 
-                return space;
-        }
+        space.setMinHeight(height);
+
+        space.setPrefHeight(height);
+
+        space.setMaxHeight(height);
+
+        return space;
+    }
 }
