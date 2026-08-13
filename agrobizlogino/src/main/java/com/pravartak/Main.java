@@ -1,6 +1,6 @@
 package com.pravartak;
 
-import com.pravartak.view.login.LoginPage2;
+import com.pravartak.view.login.LoginPage;
 
 import javafx.application.Application;
 
@@ -8,6 +8,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Application.launch(LoginPage2.class, args);
+        Application.launch(LoginPage.class, args);
     }
 }
