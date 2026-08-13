@@ -1,6 +1,6 @@
 package com.pravartak.view.farmer;
 
-import com.pravartak.view.login.LoginPage;
+// import com.pravartak.view.login.LoginPage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,8 +12,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+// import javafx.scene.layout.VBox;
+// import javafx.scene.text.Text;
 
 public class CommuityPage {
     private Scene communityScene;
@@ -167,8 +167,7 @@ public class CommuityPage {
                         "-fx-border-color: #1b2021;" +
                         "-fx-border-width: 1 0 0 0;");
 
-        Label text = new Label(
-                "© 2026 AgriBiz Hub | Empowering Modern Agriculture");
+        Label text = new Label( "© 2026 AgriBiz Hub | Empowering Modern Agriculture");
 
         text.setStyle(
                 "-fx-text-fill: #777777;" +

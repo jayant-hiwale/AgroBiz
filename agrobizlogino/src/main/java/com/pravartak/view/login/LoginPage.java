@@ -476,6 +476,9 @@ public class LoginPage extends Application {
                                                 // Later we will use Runnable here
                                                 // to navigate to Dashboard.
                                         }
+                                        Login_role_selection logRoleSelection = new Login_role_selection();
+
+                                        mainStage.setScene(logRoleSelection.getLogin_role_selectionScene());
                                 });
 
                 // =====================================================

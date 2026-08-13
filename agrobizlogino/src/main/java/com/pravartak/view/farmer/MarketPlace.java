@@ -7,210 +7,236 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
-
 public class MarketPlace {
-    private Scene marketPlaceScene;
+        private Scene marketPlaceScene;
 
-    public Scene getMarketPlaceScene() {
-        BorderPane root = new BorderPane();
+        public Scene getMarketPlaceScene() {
+                BorderPane root = new BorderPane();
 
-        // TOP
-        root.setTop(createNavbar());
+                // TOP
+                root.setTop(createNavbar());
 
-        // CENTER
-        root.setCenter(createMarketplaceContent());
+                // CENTER
+                root.setCenter(createMarketplaceContent());
 
-        // BOTTOM
-        root.setBottom(createFooter());
-        marketPlaceScene = new Scene(root);
-        return marketPlaceScene;
-    }
+                // BOTTOM
+                root.setBottom(createFooter());
+                marketPlaceScene = new Scene(root);
+                return marketPlaceScene;
+        }
 
-    // ################## NAVBAR -- TOP ##############################
-    private  HBox createNavbar() {
+        // ################## NAVBAR -- TOP ##############################
+        private HBox createNavbar() {
 
-        HBox navbar = new HBox(25);
+                HBox navbar = new HBox();
 
-        navbar.setPadding(new Insets(10, 20, 10, 20));
-        navbar.setAlignment(Pos.CENTER_LEFT);
+                navbar.setPadding(new Insets(10, 20, 10, 20));
+                navbar.setAlignment(Pos.CENTER);
 
-        navbar.setStyle(
-                "-fx-background-color: #080c0d;" +
-                        "-fx-border-color: #1b2021;" +
-                        "-fx-border-width: 0 0 1 0;");
+                navbar.setStyle(
+                                "-fx-background-color: #080c0d;" +
+                                                "-fx-border-color: #1b2021;" +
+                                                "-fx-border-width: 0 0 1 0;");
 
-        Label logo = new Label("AgroBiz ");
+                // ------------------ LEFT : LOGO --------------------------------
 
-        logo.setStyle(
-                "-fx-text-fill: #68d34a;" +
-                        "-fx-font-size: 24px;" +
-                        "-fx-font-weight: bold;");
+                Label logo = new Label("AgroBiz");
 
-        Button explorerButton = navButton("Explorer");
-        Button marketplaceButton = navButton("Marketplace") ;
-        Button communityButton = navButton("Community");
-        Button learningButton = navButton("Learning");
-        Button schemesButton = navButton("Schemes");
-        
-        communityButton .setOnAction(e->{
-            System.out.println("community button clicked ");
-            CommuityPage communityPage = new CommuityPage();
+                logo.setStyle(
+                                "-fx-text-fill: #68d34a;" +
+                                                "-fx-font-size: 24px;" +
+                                                "-fx-font-weight: bold;");
 
-            Runnable callBackActionMarket = ()->{
-                backToMarket();
-            };
+                HBox left = new HBox();
+                left.setAlignment(Pos.CENTER_LEFT);
 
-            LoginPage.mainStage.setScene(communityPage.getCommunityScene(callBackActionMarket));
-        }            
-        );
+                left.getChildren().add(logo);
 
-        Region spacer = new Region();
+                // Give LEFT same width as RIGHT
+                left.setPrefWidth(450);
+                left.setMinWidth(450);
+                left.setMaxWidth(450);
 
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+                // ---------------- CENTER : NAVIGATION --------------------------
 
-        TextField search = new TextField();
-        search.setPromptText("Search marketplace...");
+                Button explorerButton = navButton("Explorer");
+                Button marketplaceButton = navButton("Marketplace");
+                Button communityButton = navButton("Community");
+                Button learningButton = navButton("Learning");
+                Button schemesButton = navButton("Schemes");
 
-        search.setPrefWidth(170);
+                // ---------------- COMMUNITY ACTION -----------------------------
 
-        search.setStyle(
-                "-fx-background-color: #101516;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-prompt-text-fill: #777;" +
-                        "-fx-border-color: #303738;" +
-                        "-fx-border-radius: 6;" +
-                        "-fx-background-radius: 6;");
+                communityButton.setOnAction(e -> {
 
-        Button sellButton = new Button("◇ List for Sale");
+                        System.out.println("community button clicked ");
 
-        sellButton.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-text-fill: #68d34a;" +
-                        "-fx-border-color: #68d34a;" +
-                        "-fx-border-radius: 5;");
+                        CommuityPage communityPage = new CommuityPage();
 
-        Label notification = new Label("♧");
-        Label profile = new Label("◎");
-        Label login = new Label("Login");
+                        Runnable callBackActionMarket = () -> {
+                                backToMarket();
+                        };
 
-        notification.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 18px;");
-        profile.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 18px;");
-        login.setStyle("-fx-text-fill: #bbbbbb;");
+                        LoginPage.mainStage.setScene(
+                                        communityPage.getCommunityScene(callBackActionMarket));
+                });
 
-        navbar.getChildren().addAll(
-                logo,
-                explorerButton ,
-                marketplaceButton ,
-                communityButton ,
-                learningButton ,
-                schemesButton,
-                spacer,
-                search,
-                sellButton,
-                notification,
-                profile,
-                login);
+                // ---------------- CENTER HBOX ----------------------------------
 
-        return navbar;
-    }
+                HBox center = new HBox(25);
 
-    // button global style
-    private static Button navButton(String text) {
-        Button button = new Button(text);
-        button.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-text-fill: #aaaaaa;" +
-                        "-fx-font-size: 13px;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 5 0 5 0;");
+                center.setAlignment(Pos.CENTER);
 
-         button.setOnMouseEntered(e -> {
-        button.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #68d34a;" +
-                "-fx-font-size: 13px;" +
-                "-fx-cursor: hand;" +
-                "-fx-padding: 5 0 5 0;" +
-                "-fx-border-color: #68d34a;" +
-                "-fx-border-width: 0 0 2 0;"
-        );
-    });
+                center.getChildren().addAll(
+                                explorerButton,
+                                marketplaceButton,
+                                communityButton,
+                                learningButton,
+                                schemesButton);
 
-    button.setOnMouseExited(e -> {
-        button.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: #aaaaaa;" +
-                "-fx-font-size: 13px;" +
-                "-fx-cursor: hand;" +
-                "-fx-padding: 5 0 5 0;" +
-                "-fx-border-color: transparent;" +
-                "-fx-border-width: 0 0 2 0;"
-        );
-    });
+                // ---------------- RIGHT : ACTIONS -------------------------------
 
-        return button;
-    }
+                Button sellButton = new Button("◇ List for Sale");
 
-    // ##################### Main Marketplace area - Center #####################
-    private static VBox createMarketplaceContent() {
+                sellButton.setStyle(
+                                "-fx-background-color: transparent;" +
+                                                "-fx-text-fill: #68d34a;" +
+                                                "-fx-border-color: #68d34a;" +
+                                                "-fx-border-radius: 5;" +
+                                                "-fx-cursor: hand;");
 
-        VBox content = new VBox(10);
+                Label notification = new Label("♧");
+                Label profile = new Label("◎");
+                Label login = new Label("Login");
 
-        content.setPadding(new Insets(25, 20, 30, 20));
+                notification.setStyle(
+                                "-fx-text-fill: #bbbbbb;" +
+                                                "-fx-font-size: 18px;");
 
-        content.setStyle("-fx-background-color: #080c0d;");
+                profile.setStyle(
+                                "-fx-text-fill: #bbbbbb;" +
+                                                "-fx-font-size: 18px;");
 
-        Label title = new Label("Marketplace");
+                login.setStyle(
+                                "-fx-text-fill: #bbbbbb;");
 
-        title.setStyle("-fx-text-fill: #eeeeee; -fx-font-size: 40px; -fx-font-weight: bold;");
+                HBox right = new HBox(15);
 
-        Label description = new Label(
-                "Browse high-quality livestock, premium feed, and advanced farming equipment from\n" +
-                        "verified sellers.");
+                right.setAlignment(Pos.CENTER_RIGHT);
 
-        description.setStyle(
-                "-fx-text-fill: #aaaaaa;" +
-                        "-fx-font-size: 14px;");
+                right.getChildren().addAll(
+                                sellButton,
+                                notification,
+                                profile,
+                                login);
 
-        content.getChildren().addAll(
-                title,
-                description);
+                // Give RIGHT same width as LEFT
+                right.setPrefWidth(450);
+                right.setMinWidth(450);
+                right.setMaxWidth(450);
 
-        return content;
-    }
+                // ---------------- ADD ALL TO NAVBAR ----------------------------
 
-    // ############################## FOOTER ##############################
-    private static HBox createFooter() {
+                navbar.getChildren().addAll(
+                                left,
+                                center,
+                                right);
 
-        HBox footer = new HBox();
+                return navbar;
+        }
 
-        footer.setPadding(new Insets(15, 20, 15, 20));
-        footer.setAlignment(Pos.CENTER);
+        // button global style
+        private static Button navButton(String text) {
+                Button button = new Button(text);
+                button.setStyle(
+                                "-fx-background-color: transparent;" +
+                                                "-fx-text-fill: #aaaaaa;" +
+                                                "-fx-font-size: 13px;" +
+                                                "-fx-cursor: hand;" +
+                                                "-fx-padding: 5 0 5 0;");
 
-        footer.setStyle(
-                "-fx-background-color: #080c0d;" +
-                        "-fx-border-color: #1b2021;" +
-                        "-fx-border-width: 1 0 0 0;");
+                button.setOnMouseEntered(e -> {
+                        button.setStyle(
+                                        "-fx-background-color: transparent;" +
+                                                        "-fx-text-fill: #68d34a;" +
+                                                        "-fx-font-size: 13px;" +
+                                                        "-fx-cursor: hand;" +
+                                                        "-fx-padding: 5 0 5 0;" +
+                                                        "-fx-border-color: #68d34a;" +
+                                                        "-fx-border-width: 0 0 2 0;");
+                });
 
-        Label text = new Label(
-                "© 2026 AgriBiz Hub | Empowering Modern Agriculture");
+                button.setOnMouseExited(e -> {
+                        button.setStyle(
+                                        "-fx-background-color: transparent;" +
+                                                        "-fx-text-fill: #aaaaaa;" +
+                                                        "-fx-font-size: 13px;" +
+                                                        "-fx-cursor: hand;" +
+                                                        "-fx-padding: 5 0 5 0;" +
+                                                        "-fx-border-color: transparent;" +
+                                                        "-fx-border-width: 0 0 2 0;");
+                });
+                return button;
+        }
 
-        text.setStyle(
-                "-fx-text-fill: #777777;" +
-                        "-fx-font-size: 12px;");
+        // ##################### Main Marketplace area - Center #####################
+        private static VBox createMarketplaceContent() {
 
-        footer.getChildren().add(text);
+                VBox content = new VBox(10);
 
-        return footer;
-    }
-    public  void backToMarket(){
-        LoginPage.mainStage.setScene(marketPlaceScene);
-    }
+                content.setPadding(new Insets(25, 20, 30, 20));
+
+                content.setStyle("-fx-background-color: #080c0d;");
+
+                Label title = new Label("Marketplace");
+
+                title.setStyle("-fx-text-fill: #eeeeee; -fx-font-size: 40px; -fx-font-weight: bold;");
+
+                Label description = new Label(
+                                "Browse high-quality livestock, premium feed, and advanced farming equipment from\n" +
+                                                "verified sellers.");
+
+                description.setStyle(
+                                "-fx-text-fill: #aaaaaa;" +
+                                                "-fx-font-size: 14px;");
+
+                content.getChildren().addAll(
+                                title,
+                                description);
+
+                return content;
+        }
+
+        // ############################## FOOTER ##############################
+        private static HBox createFooter() {
+
+                HBox footer = new HBox();
+
+                footer.setPadding(new Insets(15, 20, 15, 20));
+                footer.setAlignment(Pos.CENTER);
+
+                footer.setStyle(
+                                "-fx-background-color: #080c0d;" +
+                                                "-fx-border-color: #1b2021;" +
+                                                "-fx-border-width: 1 0 0 0;");
+
+                Label text = new Label(
+                                "© 2026 AgriBiz Hub | Empowering Modern Agriculture");
+
+                text.setStyle(
+                                "-fx-text-fill: #777777;" +
+                                                "-fx-font-size: 12px;");
+
+                footer.getChildren().add(text);
+
+                return footer;
+        }
+
+        public void backToMarket() {
+                LoginPage.mainStage.setScene(marketPlaceScene);
+        }
 }
