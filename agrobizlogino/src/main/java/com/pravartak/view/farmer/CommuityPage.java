@@ -167,8 +167,7 @@ public class CommuityPage {
                         "-fx-border-color: #1b2021;" +
                         "-fx-border-width: 1 0 0 0;");
 
-        Label text = new Label(
-                "© 2026 AgriBiz Hub | Empowering Modern Agriculture");
+        Label text = new Label( "© 2026 AgriBiz Hub | Empowering Modern Agriculture");
 
         text.setStyle(
                 "-fx-text-fill: #777777;" +
