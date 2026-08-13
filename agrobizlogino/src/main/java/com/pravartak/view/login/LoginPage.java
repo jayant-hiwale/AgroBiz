@@ -472,13 +472,11 @@ public class LoginPage extends Application {
 
                                         } else {
                                                 System.out.println("Login successful!");
-
+                                                 Login_role_selection logRoleSelection = new Login_role_selection();
                                                 // Later we will use Runnable here
                                                 // to navigate to Dashboard.
+                                                mainStage.setScene(logRoleSelection.getLogin_role_selectionScene());
                                         }
-                                        Login_role_selection logRoleSelection = new Login_role_selection();
-
-                                        mainStage.setScene(logRoleSelection.getLogin_role_selectionScene());
                                 });
 
                 // =====================================================
