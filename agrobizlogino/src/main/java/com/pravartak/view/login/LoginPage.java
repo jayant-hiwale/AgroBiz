@@ -466,16 +466,16 @@ public class LoginPage extends Application {
 
                                         String password = passwordField.getText();
 
-                                        // if (contact.isEmpty() || password.isEmpty()) {
+                                        if (contact.isEmpty() || password.isEmpty()) {
 
-                                        //         System.out.println("Please enter your contact and password.");
+                                                System.out.println("Please enter your contact and password.");
 
-                                        // } else {
-                                        //         System.out.println("Login successful!");
+                                        } else {
+                                                System.out.println("Login successful!");
 
-                                        //         // Later we will use Runnable here
-                                        //         // to navigate to Dashboard.
-                                        // }
+                                                // Later we will use Runnable here
+                                                // to navigate to Dashboard.
+                                        }
                                         Login_role_selection logRoleSelection = new Login_role_selection();
 
                                         mainStage.setScene(logRoleSelection.getLogin_role_selectionScene());
