@@ -1,5 +1,8 @@
 package com.pravartak.view.login;
 
+import com.pravartak.view.farmer.FarmerDashboard;
+import com.pravartak.view.farmer.SchemesPage;
+
 import java.net.URL;
 
 import javafx.application.Application;
@@ -37,6 +40,7 @@ public class LoginPage extends Application {
 
     // The ONE stage used by the application
     private Stage mainStage;
+   // HomePageFarmer homepagefarmer = new HomePageFarmer();
 
 
     // =========================================================
@@ -70,10 +74,25 @@ public class LoginPage extends Application {
 
 
     // =========================================================
+// OPEN SCHEMES PAGE
+        // =========================================================
+
+private void openSchemesPage() {
+
+        SchemesPage schemesPage =
+                new SchemesPage(mainStage);
+
+        mainStage.setScene(
+                schemesPage.getScene()
+        );
+}
+
+
+    // =========================================================
     // CREATE LOGIN SCENE
     // =========================================================
 
-    private Scene createLoginScene() {
+    public Scene createLoginScene() {
 
         HBox mainLayout = new HBox();
 
@@ -291,6 +310,8 @@ public class LoginPage extends Application {
         rightSection.setPadding(
                 new Insets(30)
         );
+
+
 
 
         // -----------------------------------------------------
@@ -588,34 +609,26 @@ public class LoginPage extends Application {
         // LOGIN BUTTON ACTION
         // =====================================================
 
-        loginButton.setOnAction(
-                event -> {
+        loginButton.setOnAction(event -> {
 
-                    String contact =
-                            contactField.getText();
+                 String contact = contactField.getText();
+                 String password = passwordField.getText();
 
-                    String password =
-                            passwordField.getText();
+                 if (contact.isEmpty() || password.isEmpty()) {
 
-
-                    if (contact.isEmpty()
-                            || password.isEmpty()) {
-
-                        System.out.println(
-                                "Please enter your contact and password."
+                         System.out.println(
+                                 "Please enter your contact and password."
                         );
 
-                    } else {
+                } else {
 
-                        System.out.println(
-                                "Login successful!"
-                        );
+                System.out.println(
+                        "Login successful!"
+                );
 
-                        // Later we will use Runnable here
-                        // to navigate to Dashboard.
-                    }
+                openFarmerDashboard();
                 }
-        );
+        });
 
 
         // =====================================================
@@ -802,6 +815,25 @@ public class LoginPage extends Application {
         return rightSection;
     }
 
+    // =========================================================
+        // OPEN FARMER DASHBOARD
+        // =========================================================
+    private void openFarmerDashboard() {
+
+    FarmerDashboard dashboard =
+            new FarmerDashboard(
+                    mainStage,
+                    () -> {
+                        mainStage.setScene(
+                                createLoginScene()
+                        );
+                    }
+            );
+
+    mainStage.setScene(
+            dashboard.getDashboardScene()
+    );
+}
 
     // =========================================================
     // TEXT FIELD STYLE
