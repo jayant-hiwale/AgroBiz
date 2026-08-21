@@ -1,192 +1,187 @@
 package com.pravartak.view.farmer;
 
+import java.util.List;
+
+import com.pravartak.controller.farmercontoller.ProductController;
+import com.pravartak.model.farmer_model.Product;
+import com.pravartak.view.farmer.common.Footer;
+import com.pravartak.view.farmer.common.NavBar;
 import com.pravartak.view.login.LoginPage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class MarketPlace {
+
         private Scene marketPlaceScene;
+        private ProductController productController;
+        private FlowPane productGrid;
+        private Label resultLabel;
+        private int farmerId = 101;
+
+        public MarketPlace() {
+                productController = new ProductController();
+        }
+
+        // ================= SCENE =================
 
         public Scene getMarketPlaceScene() {
+
                 BorderPane root = new BorderPane();
 
-                // TOP
-                root.setTop(createNavbar());
-
-                // CENTER
+                root.setTop(new NavBar().createNavbar("MarketPlace"));
                 root.setCenter(createMarketplaceContent());
+                root.setBottom(new Footer().createFooter());
 
-                // BOTTOM
-                root.setBottom(createFooter());
                 marketPlaceScene = new Scene(root);
+
                 return marketPlaceScene;
         }
 
-        // ################## NAVBAR -- TOP ##############################
-        private HBox createNavbar() {
+        // ================= NAVBAR =================
 
-                HBox navbar = new HBox();
+        // public HBox createNavbar() {
 
-                navbar.setPadding(new Insets(10, 20, 10, 20));
-                navbar.setAlignment(Pos.CENTER);
+        //         HBox navbar = new HBox();
+        //         navbar.setPadding(new Insets(10, 20, 10, 20));
+        //         navbar.setAlignment(Pos.CENTER);
 
-                navbar.setStyle(
-                                "-fx-background-color: #080c0d;" +
-                                                "-fx-border-color: #1b2021;" +
-                                                "-fx-border-width: 0 0 1 0;");
+        //         navbar.setStyle(
+        //                         "-fx-background-color: #080c0d;" +
+        //                                         "-fx-border-color: #1b2021;" +
+        //                                         "-fx-border-width: 0 0 1 0;");
 
-                // ------------------ LEFT : LOGO --------------------------------
+        //         // Logo
+        //         Label logo = new Label("AgroBiz");
 
-                Label logo = new Label("AgroBiz");
+        //         logo.setStyle(
+        //                         "-fx-text-fill: #68d34a;" +
+        //                                         "-fx-font-size: 24px;" +
+        //                                         "-fx-font-weight: bold;");
 
-                logo.setStyle(
-                                "-fx-text-fill: #68d34a;" +
-                                                "-fx-font-size: 24px;" +
-                                                "-fx-font-weight: bold;");
+        //         HBox left = new HBox(logo);
+        //         left.setAlignment(Pos.CENTER_LEFT);
+        //         setWidth(left, 450);
 
-                HBox left = new HBox();
-                left.setAlignment(Pos.CENTER_LEFT);
+        //         // Navigation
+        //         Button explorer = navButton("Explorer");
+        //         Button marketplace = navButton("Marketplace");
+        //         Button community = navButton("Community");
+        //         Button learning = navButton("Learning");
+        //         Button schemes = navButton("Schemes");
 
-                left.getChildren().add(logo);
+        //         community.setOnAction(e -> {
 
-                // Give LEFT same width as RIGHT
-                left.setPrefWidth(450);
-                left.setMinWidth(450);
-                left.setMaxWidth(450);
+        //                 CommuityPage page = new CommuityPage();
 
-                // ---------------- CENTER : NAVIGATION --------------------------
+        //                 Runnable callback = () -> {
+        //                         backToMarket();
+        //                 };
 
-                Button explorerButton = navButton("Explorer");
-                Button marketplaceButton = navButton("Marketplace");
-                Button communityButton = navButton("Community");
-                Button learningButton = navButton("Learning");
-                Button schemesButton = navButton("Schemes");
+        //                 LoginPage.mainStage.setScene(page.getCommunityScene(callback));
+        //         });
 
-                // ---------------- COMMUNITY ACTION -----------------------------
+        //         HBox center = new HBox(
+        //                         25,
+        //                         explorer,
+        //                         marketplace,
+        //                         community,
+        //                         learning,
+        //                         schemes);
 
-                communityButton.setOnAction(e -> {
+        //         center.setAlignment(Pos.CENTER);
 
-                        System.out.println("community button clicked ");
+        //         // Right
+        //         Button sell = new Button("◇ List for Sale");
 
-                        CommuityPage communityPage = new CommuityPage();
+        //         sell.setStyle(
+        //                         "-fx-background-color: transparent;" +
+        //                                         "-fx-text-fill: #68d34a;" +
+        //                                         "-fx-border-color: #68d34a;" +
+        //                                         "-fx-border-radius: 5;" +
+        //                                         "-fx-cursor: hand;");
 
-                        Runnable callBackActionMarket = () -> {
-                                backToMarket();
-                        };
+        //         sell.setOnAction(e -> openAddProductPage());
 
-                        LoginPage.mainStage.setScene(
-                                        communityPage.getCommunityScene(callBackActionMarket));
-                });
+        //         Label notification = new Label("♧");
+        //         Label profile = new Label("◎");
+        //         Label login = new Label("Login");
 
-                // ---------------- CENTER HBOX ----------------------------------
+        //         notification.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 18px;");
+        //         profile.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 18px;");
+        //         login.setStyle("-fx-text-fill: #bbbbbb;");
 
-                HBox center = new HBox(25);
+        //         HBox right = new HBox(
+        //                         15,
+        //                         sell,
+        //                         notification,
+        //                         profile,
+        //                         login);
 
-                center.setAlignment(Pos.CENTER);
+        //         right.setAlignment(Pos.CENTER_RIGHT);
+        //         setWidth(right, 450);
 
-                center.getChildren().addAll(
-                                explorerButton,
-                                marketplaceButton,
-                                communityButton,
-                                learningButton,
-                                schemesButton);
+        //         navbar.getChildren().addAll(
+        //                         left,
+        //                         center,
+        //                         right);
 
-                // ---------------- RIGHT : ACTIONS -------------------------------
+        //         return navbar;
+        // }
 
-                Button sellButton = new Button("◇ List for Sale");
+        // // Set same width for left/right navbar sections
+        // public void setWidth(HBox box, double width) {
+        //         box.setPrefWidth(width);
+        //         box.setMinWidth(width);
+        //         box.setMaxWidth(width);
+        // }
 
-                sellButton.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-text-fill: #68d34a;" +
-                                                "-fx-border-color: #68d34a;" +
-                                                "-fx-border-radius: 5;" +
-                                                "-fx-cursor: hand;");
+        // // ================= NAV BUTTON =================
 
-                Label notification = new Label("♧");
-                Label profile = new Label("◎");
-                Label login = new Label("Login");
+        // public static Button navButton(String text) {
 
-                notification.setStyle(
-                                "-fx-text-fill: #bbbbbb;" +
-                                                "-fx-font-size: 18px;");
+        //         Button button = new Button(text);
 
-                profile.setStyle(
-                                "-fx-text-fill: #bbbbbb;" +
-                                                "-fx-font-size: 18px;");
+        //         String normal = "-fx-background-color: transparent;" +
+        //                         "-fx-text-fill: #aaaaaa;" +
+        //                         "-fx-font-size: 13px;" +
+        //                         "-fx-cursor: hand;" +
+        //                         "-fx-padding: 5 0 5 0;";
 
-                login.setStyle(
-                                "-fx-text-fill: #bbbbbb;");
+        //         String hover = "-fx-background-color: transparent;" +
+        //                         "-fx-text-fill: #68d34a;" +
+        //                         "-fx-font-size: 13px;" +
+        //                         "-fx-cursor: hand;" +
+        //                         "-fx-padding: 5 0 5 0;" +
+        //                         "-fx-border-color: #68d34a;" +
+        //                         "-fx-border-width: 0 0 2 0;";
 
-                HBox right = new HBox(15);
+        //         button.setStyle(normal);
 
-                right.setAlignment(Pos.CENTER_RIGHT);
+        //         button.setOnMouseEntered(e -> button.setStyle(hover));
+        //         button.setOnMouseExited(e -> button.setStyle(normal));
 
-                right.getChildren().addAll(
-                                sellButton,
-                                notification,
-                                profile,
-                                login);
+        //         return button;
+        // }
 
-                // Give RIGHT same width as LEFT
-                right.setPrefWidth(450);
-                right.setMinWidth(450);
-                right.setMaxWidth(450);
+        // ================= MARKETPLACE CONTENT =================
 
-                // ---------------- ADD ALL TO NAVBAR ----------------------------
+        private VBox createMarketplaceContent() {
 
-                navbar.getChildren().addAll(
-                                left,
-                                center,
-                                right);
-
-                return navbar;
-        }
-
-        // button global style
-        private static Button navButton(String text) {
-                Button button = new Button(text);
-                button.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-text-fill: #aaaaaa;" +
-                                                "-fx-font-size: 13px;" +
-                                                "-fx-cursor: hand;" +
-                                                "-fx-padding: 5 0 5 0;");
-
-                button.setOnMouseEntered(e -> {
-                        button.setStyle(
-                                        "-fx-background-color: transparent;" +
-                                                        "-fx-text-fill: #68d34a;" +
-                                                        "-fx-font-size: 13px;" +
-                                                        "-fx-cursor: hand;" +
-                                                        "-fx-padding: 5 0 5 0;" +
-                                                        "-fx-border-color: #68d34a;" +
-                                                        "-fx-border-width: 0 0 2 0;");
-                });
-
-                button.setOnMouseExited(e -> {
-                        button.setStyle(
-                                        "-fx-background-color: transparent;" +
-                                                        "-fx-text-fill: #aaaaaa;" +
-                                                        "-fx-font-size: 13px;" +
-                                                        "-fx-cursor: hand;" +
-                                                        "-fx-padding: 5 0 5 0;" +
-                                                        "-fx-border-color: transparent;" +
-                                                        "-fx-border-width: 0 0 2 0;");
-                });
-                return button;
-        }
-
-        // ##################### Main Marketplace area - Center #####################
-        private static VBox createMarketplaceContent() {
-
-                VBox content = new VBox(10);
+                VBox content = new VBox(15);
 
                 content.setPadding(new Insets(25, 20, 30, 20));
 
@@ -194,49 +189,380 @@ public class MarketPlace {
 
                 Label title = new Label("Marketplace");
 
-                title.setStyle("-fx-text-fill: #eeeeee; -fx-font-size: 40px; -fx-font-weight: bold;");
+                title.setStyle(
+                                "-fx-text-fill: #eeeeee;" +
+                                                "-fx-font-size: 40px;" +
+                                                "-fx-font-weight: bold;");
 
-                Label description = new Label(
-                                "Browse high-quality livestock, premium feed, and advanced farming equipment from\n" +
-                                                "verified sellers.");
+                Label description = new Label("Manage and sell your agricultural products directly to buyers.");
 
                 description.setStyle(
                                 "-fx-text-fill: #aaaaaa;" +
                                                 "-fx-font-size: 14px;");
 
+                VBox productArea = createProductArea();
+
+                VBox.setVgrow(productArea, Priority.ALWAYS);
+
                 content.getChildren().addAll(
                                 title,
-                                description);
+                                description,
+                                productArea);
 
                 return content;
         }
 
-        // ############################## FOOTER ##############################
-        private static HBox createFooter() {
+        // ================= PRODUCT AREA =================
 
-                HBox footer = new HBox();
+        private VBox createProductArea() {
 
-                footer.setPadding(new Insets(15, 20, 15, 20));
-                footer.setAlignment(Pos.CENTER);
+                VBox area = new VBox(15);
 
-                footer.setStyle(
-                                "-fx-background-color: #080c0d;" +
-                                                "-fx-border-color: #1b2021;" +
-                                                "-fx-border-width: 1 0 0 0;");
+                area.setPadding(new Insets(15));
 
-                Label text = new Label(
-                                "© 2026 AgriBiz Hub | Empowering Modern Agriculture");
+                area.setStyle(
+                                "-fx-background-color: #0d1213;" +
+                                                "-fx-border-color: #242b2c;" +
+                                                "-fx-border-radius: 12;" +
+                                                "-fx-background-radius: 12;");
 
-                text.setStyle(
-                                "-fx-text-fill: #777777;" +
-                                                "-fx-font-size: 12px;");
+                // Top bar
+                HBox top = new HBox(12);
 
-                footer.getChildren().add(text);
+                top.setAlignment(Pos.CENTER_LEFT);
 
-                return footer;
+                resultLabel = new Label("My Products");
+
+                resultLabel.setStyle("-fx-text-fill: #aaaaaa;" + "-fx-font-size: 13px;");
+
+                Region spacer = new Region();
+
+                HBox.setHgrow(spacer, Priority.ALWAYS);
+
+                TextField searchBox = new TextField();
+
+                searchBox.setPromptText("Search your products...");
+
+                searchBox.setPrefWidth(200);
+
+                searchBox.setOnKeyReleased(e -> searchProducts(searchBox.getText()));
+
+                Button addButton = new Button("+ Add Product");
+
+                addButton.setStyle(
+                                "-fx-background-color: transparent;" +
+                                                "-fx-text-fill: #68d34a;" +
+                                                "-fx-border-color: #68d34a;" +
+                                                "-fx-border-radius: 5;" +
+                                                "-fx-padding: 7 12;" +
+                                                "-fx-cursor: hand;");
+
+                addButton.setOnAction(
+                                e -> openAddProductPage());
+
+                ComboBox<String> sortBox = new ComboBox<>();
+
+                sortBox.getItems().addAll(
+                                "Recommended",
+                                "Price: Low to High",
+                                "Price: High to Low",
+                                "Newest");
+
+                sortBox.setValue("Recommended");
+
+                sortBox.setOnAction(
+                                e -> sortProducts(sortBox.getValue()));
+
+                top.getChildren().addAll(
+                                resultLabel,
+                                spacer,
+                                searchBox,
+                                addButton,
+                                sortBox);
+
+                // Product grid
+                productGrid = new FlowPane();
+
+                productGrid.setHgap(15);
+                productGrid.setVgap(15);
+                productGrid.setPadding(new Insets(5));
+                productGrid.setAlignment(Pos.TOP_LEFT);
+
+                ScrollPane scroll = new ScrollPane(productGrid);
+
+                scroll.setFitToWidth(true);
+
+                scroll.setStyle("-fx-background: #0d1213;" + "-fx-background-color: #0d1213;");
+
+                VBox.setVgrow(scroll, Priority.ALWAYS);
+
+                loadProducts();
+
+                area.getChildren().addAll(top, scroll);
+
+                return area;
         }
+
+        // ================= LOAD PRODUCTS =================
+
+        private void loadProducts() {
+
+                productGrid.getChildren().clear();
+
+                List<Product> products = productController.getFarmerProducts(farmerId);
+
+                resultLabel.setText("My Products (" + products.size() + ")");
+
+                for (Product product : products) {
+                        productGrid.getChildren().add(createProductCard(product));
+                }
+        }
+
+        // ================= PRODUCT CARD =================
+
+        private VBox createProductCard(Product product) {
+
+                VBox card = new VBox();
+
+                card.setPrefWidth(250);
+                card.setMaxWidth(250);
+
+                card.setStyle(
+                                "-fx-background-color: #101516;" +
+                                                "-fx-border-color: #242b2c;" +
+                                                "-fx-border-radius: 12;" +
+                                                "-fx-background-radius: 12;");
+
+                // Image
+                StackPane image = new StackPane();
+
+                image.setPrefHeight(135);
+
+                image.setStyle("-fx-background-color: #1b2425;-fx-background-radius: 12 12 0 0;");
+
+                Label imageText = new Label("Product Image");
+
+                imageText.setStyle("-fx-text-fill: #666666;-fx-font-size: 13px;");
+
+                image.getChildren().add(imageText);
+
+                // Status
+                Label status = new Label(product.getStatus());
+
+                status.setStyle(product.getStatus().equals("Active")
+                                ? "-fx-background-color: #245d35;" +
+                                                "-fx-text-fill: white;" +
+                                                "-fx-padding: 5 8;" +
+                                                "-fx-background-radius: 5;"
+                                : "-fx-background-color: #633333;" +
+                                                "-fx-text-fill: white;" +
+                                                "-fx-padding: 5 8;" +
+                                                "-fx-background-radius: 5;");
+
+                StackPane.setAlignment(status, Pos.TOP_LEFT);
+
+                StackPane.setMargin(status, new Insets(10));
+
+                image.getChildren().add(status);
+
+                // Details
+                VBox details = new VBox(7);
+
+                details.setPadding(
+                                new Insets(12));
+
+                Label name = new Label(product.getProductName());
+
+                name.setStyle(
+                                "-fx-text-fill: #eeeeee;" +
+                                                "-fx-font-size: 16px;" +
+                                                "-fx-font-weight: bold;");
+
+                Label category = new Label(product.getCategory());
+
+                category.setStyle("-fx-text-fill: #888888;" + "-fx-font-size: 11px;");
+
+                Label price = new Label("₹" + product.getPrice() + " / " + product.getUnit());
+
+                price.setStyle(
+                                "-fx-text-fill: #68d34a;" +
+                                                "-fx-font-size: 17px;" +
+                                                "-fx-font-weight: bold;");
+
+                Label quantity = new Label("Stock: " + product.getQuantity() + " " + product.getUnit());
+
+                quantity.setStyle("-fx-text-fill: #aaaaaa;" + "-fx-font-size: 12px;");
+
+                Label orders = new Label("Orders: " + product.getOrders());
+
+                orders.setStyle(
+                                "-fx-text-fill: #888888;" +
+                                                "-fx-font-size: 11px;");
+
+                // Buttons
+                Button edit = new Button("Edit");
+
+                Button delete = new Button("Delete");
+
+                edit.setMaxWidth(Double.MAX_VALUE);
+                delete.setMaxWidth(Double.MAX_VALUE);
+
+                HBox.setHgrow(edit, Priority.ALWAYS);
+
+                HBox.setHgrow(delete, Priority.ALWAYS);
+
+                edit.setStyle(
+                                "-fx-background-color: transparent;" +
+                                                "-fx-text-fill: #68d34a;" +
+                                                "-fx-border-color: #68d34a;" +
+                                                "-fx-border-radius: 5;" +
+                                                "-fx-cursor: hand;");
+
+                delete.setStyle(
+                                "-fx-background-color: transparent;" +
+                                                "-fx-text-fill: #e57373;" +
+                                                "-fx-border-color: #e57373;" +
+                                                "-fx-border-radius: 5;" +
+                                                "-fx-cursor: hand;");
+
+                edit.setOnAction(e -> {
+                        editProduct(product);
+                });
+
+                delete.setOnAction(e -> {
+                        deleteProduct(product);
+                });
+
+                HBox buttons = new HBox(8, edit, delete);
+
+                details.getChildren().addAll(
+                                name,
+                                category,
+                                price,
+                                quantity,
+                                orders,
+                                buttons);
+
+                card.getChildren().addAll(
+                                image,
+                                details);
+
+                return card;
+        }
+
+        // ================= SEARCH =================
+
+        private void searchProducts(String text) {
+
+                if (text.isEmpty()) {
+                        loadProducts();
+                        return;
+                }
+
+                List<Product> products = productController.searchProducts(
+                                farmerId,
+                                text);
+
+                productGrid.getChildren().clear();
+
+                resultLabel.setText("Found " + products.size() + " products");
+
+                for (Product product : products) {
+                        productGrid.getChildren().add(createProductCard(product));
+                }
+        }
+
+        // ================= SORT =================
+
+        private void sortProducts(String sortType) {
+
+                List<Product> products = productController.getFarmerProducts(farmerId);
+
+                products = productController.sortProducts(
+                                products,
+                                sortType);
+
+                productGrid.getChildren().clear();
+
+                for (Product product : products) {
+                        productGrid.getChildren().add(createProductCard(product));
+                }
+        }
+
+        // ================= ADD PRODUCT =================
+
+        private void openAddProductPage() {
+                AddProductPage page = new AddProductPage();
+
+                Scene scene = page.getAddProductScene(() -> {
+                        // Reload products after adding
+                        loadProducts();
+                        // Go back to marketplace
+                        backToMarket();
+                });
+                LoginPage.mainStage.setScene(scene);
+        }
+
+        // ================= EDIT PRODUCT =================
+
+        private void editProduct(Product product) {
+
+                System.out.println("Edit product: " + product.getProductName());
+
+                AddProductPage page = new AddProductPage();
+
+                Runnable callback = () -> {
+                        backToMarket();
+                };
+
+                LoginPage.mainStage.setScene(page.getAddProductScene(callback));
+        }
+
+        // ================= DELETE PRODUCT =================
+
+        private void deleteProduct(Product product) {
+
+                boolean deleted = productController.deleteProduct(product.getProductId());
+
+                if (deleted) {
+
+                        System.out.println("Product deleted: " + product.getProductName());
+
+                        loadProducts();
+                }
+        }
+
+        // ================= BACK =================
 
         public void backToMarket() {
+
                 LoginPage.mainStage.setScene(marketPlaceScene);
         }
+
+        // ================= FOOTER =================
+
+        // public HBox createFooter() {
+
+        //         HBox footer = new HBox();
+
+        //         footer.setPadding(new Insets(15, 20, 15, 20));
+
+        //         footer.setAlignment(Pos.CENTER);
+
+        //         footer.setStyle(
+        //                         "-fx-background-color: #080c0d;" +
+        //                                         "-fx-border-color: #1b2021;" +
+        //                                         "-fx-border-width: 1 0 0 0;");
+
+        //         Label text = new Label(
+        //                         "© 2026 AgriBiz Hub | Empowering Modern Agriculture");
+
+        //         text.setStyle(
+        //                         "-fx-text-fill: #777777;" +
+        //                                         "-fx-font-size: 12px;");
+
+        //         footer.getChildren().add(text);
+
+        //         return footer;
+        // }
 }
