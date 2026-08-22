@@ -1,5 +1,5 @@
 package com.pravartak.view.farmer;
 
-public class Learning {
-        
+public class AIadvisorPage {
+    
 }

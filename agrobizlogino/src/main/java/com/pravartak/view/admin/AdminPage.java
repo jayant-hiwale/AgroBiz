@@ -276,7 +276,7 @@ public class AdminPage {
                                                 "-fx-background-radius:6;");
                 logout.setOnAction(e->{
                         LoginPage loginPage =new LoginPage();
-                        LoginPage.mainStage.setScene(loginPage.createLoginScene());
+                        //LoginPage.mainStage.setScene(loginPage);
                 });
 
                 // =========================

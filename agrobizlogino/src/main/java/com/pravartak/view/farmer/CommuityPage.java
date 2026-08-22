@@ -38,6 +38,7 @@ public class CommuityPage {
     }
 
     // ################## NAVBAR -- TOP ##############################
+
 //     private static HBox createNavbar(Runnable callBackAction) {
 
 //         HBox navbar = new HBox(25);
