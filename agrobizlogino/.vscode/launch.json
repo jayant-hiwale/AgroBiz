@@ -12,7 +12,6 @@
             "mainClass": "com.agrobizo.Main",
             "projectName": "agrobizlogino",
             "vmArgs": "--module-path \"D://java2026//javafx-sdk-21.0.12//lib\" --add-modules javafx.controls,javafx.fxml"
-
         }
     ]
 }
