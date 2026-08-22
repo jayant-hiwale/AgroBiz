@@ -1,5 +1,7 @@
 package com.pravartak.view.login;
 
+import com.pravartak.view.buyer.BuyerAIAdvisorPage;
+import com.pravartak.view.farmer.AIAdvisorPage;
 import com.pravartak.view.farmer.CommunityPage;
 
 import java.net.URL;
@@ -297,9 +299,17 @@ public class LoginPage extends Application {
 
             System.out.println("Create account clicked.");
 
-            mainStage.setScene(
-                    CommunityPage.getCommunityScene()
-            );
+           
+           mainStage.setScene(BuyerAIAdvisorPage.getAIAdvisorScene());
+        
+
+        //     mainStage.setScene(AIAdvisorPage.getAIAdvisorScene());
+
+        //     mainStage.setScene(
+        //             CommunityPage.getCommunityScene()
+        // );
+
+
         });
 
         // =====================================================
