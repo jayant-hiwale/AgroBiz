@@ -1,6 +1,7 @@
 package com.pravartak.view.login;
 
 import com.pravartak.view.farmer.HomePageFarmer;
+import com.pravartak.view.admin.AdminPage;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -26,7 +27,7 @@ public class Login_role_selection {
         HBox header = new HBox(10, logoIcon, logo);
         header.setStyle("-fx-alignment: center-left;");
 
-        // top title
+        // top title 
         Label title = new Label("Choose Your Path");
         title.setStyle("-fx-font-size: 48px;" + "-fx-font-weight: bold;" + "-fx-text-fill: #F1F3F1;");
 
@@ -50,19 +51,13 @@ public class Login_role_selection {
         Label farmerTitle = new Label("Farmer/Learner");
         farmerTitle.setStyle("-fx-font-size: 34px; " + "-fx-font-weight: bold; " + "-fx-text-fill: #F1F3F1;");
 
-    
         Label farmerTagline = new Label("Learn ,Grow & Sell");
         farmerTagline.setStyle("-fx-font-size: 18px; " + "-fx-text-fill: #A8AEAA;");
-
-    
-        Text farmerDescription = new Text("Access AI advisory, list your crops on the\n" + "marketplace, manage your inventory, and\n" + "connect directly with verified buyers.");
-        farmerDescription.setStyle("-fx-font-size: 16px; " + "-fx-fill: #737C77;");
 
         Label farmerLabel = new Label("Continue as Farmer  →");
         farmerLabel.setStyle("-fx-background-color: transparent;" + "-fx-font-size: 18px;" + "-fx-font-weight: bold;" + "-fx-text-fill: #7ED957;" + "-fx-cursor: hand;" + "-fx-padding: 0;");
 
-        
-        VBox farmerCard = new VBox(15, farmerIconBox, farmerTitle, farmerTagline, farmerDescription, farmerLabel);
+        VBox farmerCard = new VBox(15, farmerIconBox, farmerTitle, farmerTagline, farmerLabel);
         farmerCard.setPrefWidth(465);
         farmerCard.setPrefHeight(385);
 
