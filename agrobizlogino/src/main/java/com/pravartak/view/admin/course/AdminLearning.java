@@ -1,6 +1,6 @@
 package com.pravartak.view.admin.course;
 
-import com.pravartak.view.admin.AdminPage;
+// import com.pravartak.view.admin.AdminPage;
 import com.pravartak.view.login.LoginPage;
 
 import javafx.geometry.Insets;
@@ -158,8 +158,8 @@ public class AdminLearning {
                 createCourseBtn.setOnAction(e -> {
 
                         CreateCourseAdmin createCourseAdmin = new CreateCourseAdmin();
-                      
-                        LoginPage.mainStage.setScene(  createCourseAdmin.getCreateCourseScene());
+
+                        LoginPage.mainStage.setScene(createCourseAdmin.getCreateCourseScene());
 
                 });
 
@@ -353,7 +353,6 @@ public class AdminLearning {
 
         // return root;
         // }
-
 
         // // =========================================================
         // // ENROLLMENTS

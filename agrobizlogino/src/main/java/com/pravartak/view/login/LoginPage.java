@@ -59,6 +59,7 @@ public class LoginPage extends Application {
                 mainStage.setScene(splash.getSplashScene(() -> {
                         mainStage.setScene(loginPageScene);
                 }));
+
                 mainStage.show();
         }
 
@@ -368,7 +369,7 @@ public class LoginPage extends Application {
 
                                 AdminPage adminPage = new AdminPage();
 
-                                mainStage.setScene(adminPage.getAdminPage());
+                                mainStage.setScene(adminPage.getAdminPage("default"));
                                 mainStage.show();
 
                         } else {

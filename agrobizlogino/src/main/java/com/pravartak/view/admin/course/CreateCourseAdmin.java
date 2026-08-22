@@ -1,8 +1,15 @@
 package com.pravartak.view.admin.course;
 
+import java.io.File;
+
+import com.pravartak.view.admin.AdminPage;
+import com.pravartak.view.login.LoginPage;
+
+import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+// import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -10,647 +17,931 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-
-import com.pravartak.view.admin.AdminPage;
-import com.pravartak.view.login.LoginPage;
+import javafx.stage.FileChooser;
+import javafx.stage.Popup;
+import javafx.stage.Window;
+import javafx.util.Duration;
 
 public class CreateCourseAdmin {
 
-    public Scene createCouresScene;
-
-    public Scene getCreateCourseScene() {
-
-        VBox root = new VBox(16);
-
-        root.setPadding(
-                new Insets(15, 30, 18, 30));
-
-        root.setAlignment(
-                Pos.TOP_LEFT);
-
-        root.setStyle(
-                "-fx-background-color:#080C0D;");
-
-        // =========================================
-        // TOP BAR
-        // =========================================
+        public Scene createCouresScene;
+        private String thumbnailPath = "";
 
-        HBox topBar = new HBox(12);
+        // =========================================================
+        // CREATE COURSE SCENE
+        // =========================================================
 
-        topBar.setAlignment(
-                Pos.CENTER_LEFT);
+        public Scene getCreateCourseScene() {
 
-        // =========================================
-        // BACK BUTTON
-        // =========================================
+                VBox root = new VBox(16);
 
-        Button backButton = new Button("← Back");
+                root.setPadding(  new Insets(15, 30, 18, 30));
 
-        backButton.setPrefHeight(30);
+                root.setAlignment(Pos.TOP_LEFT);
 
-        backButton.setStyle(
-                "-fx-background-color:transparent;" +
-                        "-fx-text-fill:#AAAAAA;" +
-                        "-fx-font-size:11px;" +
-                        "-fx-border-color:#242B2C;" +
-                        "-fx-border-width:1;" +
-                        "-fx-border-radius:5;" +
-                        "-fx-background-radius:5;" +
-                        "-fx-padding:5 12;" +
-                        "-fx-cursor:hand;");
+                root.setStyle("-fx-background-color:#080C0D;");
 
-        // Hover
+                // =====================================================
+                // TOP BAR
+                // =====================================================
 
-        backButton.setOnMouseEntered(e -> {
+                HBox topBar = new HBox(12);
 
-            backButton.setStyle(
-                    "-fx-background-color:#245D35;" +
-                            "-fx-text-fill:#68D34A;" +
-                            "-fx-font-size:11px;" +
-                            "-fx-border-color:#68D34A;" +
-                            "-fx-border-width:1;" +
-                            "-fx-border-radius:5;" +
-                            "-fx-background-radius:5;" +
-                            "-fx-padding:5 12;" +
-                            "-fx-cursor:hand;");
-        });
+                topBar.setAlignment(
+                                Pos.CENTER_LEFT);
 
-        backButton.setOnMouseExited(e -> {
+                // =====================================================
+                // BACK BUTTON
+                // =====================================================
 
-            backButton.setStyle(
-                    "-fx-background-color:transparent;" +
-                            "-fx-text-fill:#AAAAAA;" +
-                            "-fx-font-size:11px;" +
-                            "-fx-border-color:#242B2C;" +
-                            "-fx-border-width:1;" +
-                            "-fx-border-radius:5;" +
-                            "-fx-background-radius:5;" +
-                            "-fx-padding:5 12;" +
-                            "-fx-cursor:hand;");
-        });
+                Button backButton = new Button("← Back");
 
-        // =========================================
-        // TITLE
-        // =========================================
+                backButton.setPrefHeight(30);
 
-        Label title =
-                new Label("Create New Course");
+                backButton.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:11px;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-padding:5 12;" +
+                                                "-fx-cursor:hand;");
 
-        title.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                        "-fx-font-size:24px;" +
-                        "-fx-font-weight:bold;");
+                backButton.setOnMouseEntered(e -> {
 
-        topBar.getChildren().addAll(
-                backButton,
-                title);
+                        backButton.setStyle(
+                                        "-fx-background-color:#245D35;" +
+                                                        "-fx-text-fill:#68D34A;" +
+                                                        "-fx-font-size:11px;" +
+                                                        "-fx-border-color:#68D34A;" +
+                                                        "-fx-border-width:1;" +
+                                                        "-fx-border-radius:5;" +
+                                                        "-fx-background-radius:5;" +
+                                                        "-fx-padding:5 12;" +
+                                                        "-fx-cursor:hand;");
+                });
 
-        // =========================================
-        // BACK ACTION
-        // =========================================
+                backButton.setOnMouseExited(e -> {
 
-        backButton.setOnAction(e -> {
+                        backButton.setStyle(
+                                        "-fx-background-color:transparent;" +
+                                                        "-fx-text-fill:#AAAAAA;" +
+                                                        "-fx-font-size:11px;" +
+                                                        "-fx-border-color:#242B2C;" +
+                                                        "-fx-border-width:1;" +
+                                                        "-fx-border-radius:5;" +
+                                                        "-fx-background-radius:5;" +
+                                                        "-fx-padding:5 12;" +
+                                                        "-fx-cursor:hand;");
+                });
 
-            AdminLearning learning =
-                    new AdminLearning();
+                // =====================================================
+                // TITLE
+                // =====================================================
 
-            LoginPage.mainStage.setScene(
-                    new Scene(
-                            learning.getLearningPage(),
-                            1100,
-                            700));
-        });
+                Label title = new Label(
+                                "Create New Course");
 
-        // =========================================
-        // COURSE INFORMATION
-        // =========================================
+                title.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:24px;" +
+                                                "-fx-font-weight:bold;");
 
-        HBox courseInformation =
-                new HBox(16);
+                topBar.getChildren().addAll(
+                                backButton,
+                                title);
 
-        courseInformation.setAlignment(
-                Pos.TOP_LEFT);
+                // =====================================================
+                // BACK ACTION
+                // =====================================================
 
-        VBox courseBasics =
-                createCourseBasics();
+                backButton.setOnAction(e -> {
 
-        VBox courseThumbnail =
-                createCourseThumbnail();
+                        AdminPage adminPage = new AdminPage();
 
-        VBox courseSettings =
-                createCourseSettings();
+                        LoginPage.mainStage.setScene(
+                                        adminPage.getAdminPage(
+                                                        "Manage Course"));
+                });
 
-        // =========================================
-        // WIDTH
-        // =========================================
+                // =====================================================
+                // COURSE INFORMATION
+                // =====================================================
 
-        courseBasics.setPrefWidth(620);
-        courseBasics.setMinWidth(620);
-        courseBasics.setMaxWidth(620);
+                HBox courseInformation = new HBox(16);
 
-        courseThumbnail.setPrefWidth(300);
-        courseThumbnail.setMinWidth(300);
-        courseThumbnail.setMaxWidth(300);
+                courseInformation.setAlignment(
+                                Pos.TOP_LEFT);
 
-        courseSettings.setPrefWidth(260);
-        courseSettings.setMinWidth(260);
-        courseSettings.setMaxWidth(260);
+                // =====================================================
+                // COURSE BASICS
+                // =====================================================
 
-        courseInformation.getChildren().addAll(
-                courseBasics,
-                courseThumbnail,
-                courseSettings);
+                VBox courseBasics = createCourseBasics();
 
-        // =========================================
-        // ADD TO ROOT
-        // =========================================
+                // =====================================================
+                // COURSE THUMBNAIL
+                // =====================================================
 
-        root.getChildren().addAll(
-                topBar,
-                courseInformation);
+                VBox courseThumbnail = createCourseThumbnail();
 
-        // =========================================
-        // SCENE
-        // =========================================
+                // =====================================================
+                // COURSE SETTINGS
+                // =====================================================
 
-        createCouresScene = new Scene(
-                root,
-                1100,
-                700);
+                VBox courseSettings = createCourseSettings();
 
-        return createCouresScene;
-    }
+                // =====================================================
+                // WIDTH
+                // =====================================================
 
-    // =========================================================
-    // COURSE BASICS
-    // =========================================================
+                courseBasics.setPrefWidth(620);
+                courseBasics.setMinWidth(620);
+                courseBasics.setMaxWidth(620);
 
-    private static VBox createCourseBasics() {
+                courseThumbnail.setPrefWidth(300);
+                courseThumbnail.setMinWidth(300);
+                courseThumbnail.setMaxWidth(300);
 
-        VBox card = new VBox(10);
+                courseSettings.setPrefWidth(260);
+                courseSettings.setMinWidth(260);
+                courseSettings.setMaxWidth(260);
 
-        card.setPrefWidth(620);
-        card.setMinWidth(620);
-        card.setMaxWidth(620);
+                courseInformation.getChildren().addAll(
+                                courseBasics,
+                                courseThumbnail,
+                                courseSettings);
 
-        card.setPrefHeight(250);
+                // =====================================================
+                // ACTION BUTTONS
+                // =====================================================
 
-        card.setPadding(
-                new Insets(16));
+                HBox actionButtons = createActionButtons();
 
-        card.setStyle(
-                "-fx-background-color:#101516;" +
-                        "-fx-border-color:#242B2C;" +
-                        "-fx-border-width:1;" +
-                        "-fx-border-radius:6;" +
-                        "-fx-background-radius:6;");
+                // =====================================================
+                // ROOT
+                // =====================================================
 
-        // =========================================
-        // HEADING
-        // =========================================
+                root.getChildren().addAll(
+                                topBar,
+                                courseInformation,
+                                actionButtons);
 
-        Label heading =
-                new Label("Course Basics");
+                // =====================================================
+                // SCENE
+                // =====================================================
 
-        heading.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                        "-fx-font-size:15px;" +
-                        "-fx-font-weight:bold;");
+                createCouresScene = new Scene(
+                                root,
+                                1100,
+                                700);
 
-        // =========================================
-        // LINE
-        // =========================================
+                return createCouresScene;
+        }
 
-        Separator separator =
-                new Separator();
+        // =========================================================
+        // COURSE BASICS
+        // =========================================================
 
-        separator.setMaxWidth(
-                Double.MAX_VALUE);
+        private static VBox createCourseBasics() {
 
-        separator.setStyle(
-                "-fx-background-color:#242B2C;");
+                VBox card = new VBox(10);
 
-        // =========================================
-        // COURSE TITLE
-        // =========================================
+                card.setPrefWidth(620);
+                card.setMinWidth(620);
+                card.setMaxWidth(620);
 
-        Label courseTitleLabel =
-                new Label("Course Title");
+                card.setPrefHeight(250);
 
-        courseTitleLabel.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                        "-fx-font-size:14px;" +
-                        "-fx-font-weight:bold;");
+                card.setPadding(
+                                new Insets(16));
 
-        TextField courseTitle =
-                new TextField();
+                card.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:6;" +
+                                                "-fx-background-radius:6;");
 
-        courseTitle.setPromptText(
-                "e.g., Advanced Hydroponics Systems");
+                // =====================================================
+                // HEADING
+                // =====================================================
 
-        courseTitle.setPrefHeight(32);
+                Label heading = new Label("Course Basics");
 
-        courseTitle.setMaxWidth(
-                Double.MAX_VALUE);
+                heading.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:15px;" +
+                                                "-fx-font-weight:bold;");
 
-        courseTitle.setStyle(
-                "-fx-background-color:#0D1213;" +
-                        "-fx-text-fill:#EEEEEE;" +
-                        "-fx-prompt-text-fill:#AAAAAA;" +
-                        "-fx-border-color:#242B2C;" +
-                        "-fx-border-radius:4;" +
-                        "-fx-background-radius:4;" +
-                        "-fx-font-size:14px;" +
-                        "-fx-padding:8;");
+                // =====================================================
+                // SEPARATOR
+                // =====================================================
 
-        // =========================================
-        // CATEGORY
-        // =========================================
+                Separator separator = new Separator();
 
-        HBox fields =
-                new HBox(10);
+                separator.setMaxWidth(
+                                Double.MAX_VALUE);
 
-        fields.setPrefWidth(
-                Double.MAX_VALUE);
+                separator.setStyle(
+                                "-fx-background-color:#242B2C;");
 
-        VBox categoryBox =
-                new VBox(5);
+                // =====================================================
+                // COURSE TITLE
+                // =====================================================
 
-        HBox.setHgrow(
-                categoryBox,
-                Priority.ALWAYS);
+                Label courseTitleLabel = new Label("Course Title");
 
-        Label categoryLabel =
-                new Label("Category");
+                courseTitleLabel.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:14px;" +
+                                                "-fx-font-weight:bold;");
 
-        categoryLabel.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                        "-fx-font-size:14px;" +
-                        "-fx-font-weight:bold;");
+                TextField courseTitle = new TextField();
 
-        ComboBox<String> category =
-                new ComboBox<>();
+                courseTitle.setPromptText(
+                                "e.g., Advanced Hydroponics Systems");
 
-        category.getItems().addAll(
-                "Crop Farming",
-                "Water Management",
-                "Hydroponics",
-                "Organic Farming");
+                courseTitle.setPrefHeight(32);
 
-        category.setValue(
-                "Crop Farming");
+                courseTitle.setMaxWidth(
+                                Double.MAX_VALUE);
 
-        category.setPrefHeight(32);
+                courseTitle.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-prompt-text-fill:#AAAAAA;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:4;" +
+                                                "-fx-background-radius:4;" +
+                                                "-fx-font-size:14px;" +
+                                                "-fx-padding:8;");
 
-        category.setMaxWidth(
-                Double.MAX_VALUE);
+                // =====================================================
+                // CATEGORY
+                // =====================================================
 
-        category.setStyle(
-                "-fx-background-color:#0D1213;" +
-                        "-fx-text-fill:#EEEEEE;" +
-                        "-fx-border-color:#242B2C;" +
-                        "-fx-border-radius:4;" +
-                        "-fx-background-radius:4;" +
-                        "-fx-font-size:14px;");
+                HBox fields = new HBox(10);
 
-        categoryBox.getChildren().addAll(
-                categoryLabel,
-                category);
+                fields.setPrefWidth(
+                                Double.MAX_VALUE);
 
-        fields.getChildren().add(
-                categoryBox);
+                VBox categoryBox = new VBox(5);
 
-        // =========================================
-        // ADD TO CARD
-        // =========================================
+                HBox.setHgrow(
+                                categoryBox,
+                                Priority.ALWAYS);
 
-        card.getChildren().addAll(
-                heading,
-                separator,
-                courseTitleLabel,
-                courseTitle,
-                fields);
+                Label categoryLabel = new Label("Category");
 
-        return card;
-    }
+                categoryLabel.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:14px;" +
+                                                "-fx-font-weight:bold;");
 
-    // =========================================================
-    // COURSE THUMBNAIL
-    // =========================================================
+                ComboBox<String> category = new ComboBox<>();
 
-    private static VBox createCourseThumbnail() {
+                category.getItems().addAll(
+                                "Crop Farming",
+                                "Water Management",
+                                "Hydroponics",
+                                "Organic Farming");
 
-        VBox card =
-                new VBox(10);
+                category.setValue(
+                                "Crop Farming");
 
-        card.setPrefWidth(300);
-        card.setMinWidth(300);
-        card.setMaxWidth(300);
+                category.setPrefHeight(32);
 
-        card.setPrefHeight(250);
+                category.setMaxWidth(
+                                Double.MAX_VALUE);
 
-        card.setPadding(
-                new Insets(16));
+                category.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:4;" +
+                                                "-fx-background-radius:4;" +
+                                                "-fx-font-size:14px;");
 
-        card.setStyle(
-                "-fx-background-color:#101516;" +
-                        "-fx-border-color:#242B2C;" +
-                        "-fx-border-width:1;" +
-                        "-fx-border-radius:6;" +
-                        "-fx-background-radius:6;");
+                categoryBox.getChildren().addAll(
+                                categoryLabel,
+                                category);
 
-        // =========================================
-        // HEADING
-        // =========================================
+                fields.getChildren().add(
+                                categoryBox);
 
-        Label heading =
-                new Label("▣  Course Thumbnail");
+                // =====================================================
+                // ADD TO CARD
+                // =====================================================
 
-        heading.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                        "-fx-font-size:14px;" +
-                        "-fx-font-weight:bold;");
+                card.getChildren().addAll(
+                                heading,
+                                separator,
+                                courseTitleLabel,
+                                courseTitle,
+                                fields);
 
-        // =========================================
-        // UPLOAD AREA
-        // =========================================
+                return card;
+        }
 
-        VBox uploadArea =
-                new VBox(7);
+        // =========================================================
+        // COURSE THUMBNAIL
+        // =========================================================
 
-        uploadArea.setAlignment(
-                Pos.CENTER);
+        private VBox createCourseThumbnail() {
 
-        uploadArea.setPrefHeight(170);
+                VBox card = new VBox(10);
 
-        uploadArea.setMaxWidth(
-                Double.MAX_VALUE);
+                card.setPrefWidth(300);
+                card.setMinWidth(300);
+                card.setMaxWidth(300);
 
-        uploadArea.setStyle(
-                "-fx-background-color:#0D1213;" +
-                        "-fx-border-color:#242B2C;" +
-                        "-fx-border-style:dashed;" +
-                        "-fx-border-width:1;" +
-                        "-fx-border-radius:4;" +
-                        "-fx-background-radius:4;");
+                card.setPrefHeight(250);
 
-        // =========================================
-        // ICON
-        // =========================================
+                card.setPadding(
+                                new Insets(16));
 
-        Label icon =
-                new Label("☁");
+                card.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:6;" +
+                                                "-fx-background-radius:6;");
 
-        icon.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                        "-fx-font-size:25px;");
+                // =====================================================
+                // HEADING
+                // =====================================================
 
-        // =========================================
-        // TEXT
-        // =========================================
+                Label heading = new Label(
+                                "▣  Course Thumbnail");
 
-        Label uploadText =
-                new Label(
-                        "Drag and drop image here");
+                heading.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:14px;" +
+                                                "-fx-font-weight:bold;");
 
-        uploadText.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                        "-fx-font-size:10px;");
+                // =====================================================
+                // UPLOAD AREA
+                // =====================================================
 
-        Label browseText =
-                new Label(
-                        "or click to browse");
+                VBox uploadArea = new VBox(7);
 
-        browseText.setStyle(
-                "-fx-text-fill:#777777;" +
-                        "-fx-font-size:8px;");
+                uploadArea.setAlignment(
+                                Pos.CENTER);
 
-        uploadArea.getChildren().addAll(
-                icon,
-                uploadText,
-                browseText);
+                uploadArea.setPrefHeight(170);
 
-        // =========================================
-        // CLICK
-        // =========================================
+                uploadArea.setMaxWidth(
+                                Double.MAX_VALUE);
 
-        uploadArea.setOnMouseClicked(e -> {
+                uploadArea.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-style:dashed;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:4;" +
+                                                "-fx-background-radius:4;");
 
-            System.out.println(
-                    "Select course thumbnail");
+                // =====================================================
+                // ICON
+                // =====================================================
 
-            // Later:
-            // FileChooser
-            // ↓
-            // Cloudinary
-            // ↓
-            // thumbnailUrl
-        });
+                Label icon = new Label("☁");
 
-        // =========================================
-        // ADD TO CARD
-        // =========================================
+                icon.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:25px;");
 
-        card.getChildren().addAll(
-                heading,
-                uploadArea);
+                // =====================================================
+                // TEXT
+                // =====================================================
 
-        return card;
-    }
+                Label uploadText = new Label(
+                                "Drag and drop image here");
 
-    // =========================================================
-    // COURSE SETTINGS
-    // =========================================================
+                uploadText.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:10px;");
 
-    private static VBox createCourseSettings() {
+                Label browseText = new Label(
+                                "or click to browse");
 
-        VBox card =
-                new VBox(8);
+                browseText.setStyle(
+                                "-fx-text-fill:#777777;" +
+                                                "-fx-font-size:8px;");
 
-        card.setPrefWidth(260);
-        card.setMinWidth(260);
-        card.setMaxWidth(260);
+                uploadArea.getChildren().addAll(
+                                icon,
+                                uploadText,
+                                browseText);
 
-        card.setPrefHeight(250);
+                // =====================================================
+                // CLICK TO SELECT IMAGE
+                // =====================================================
 
-        card.setPadding(
-                new Insets(16));
+                uploadArea.setOnMouseClicked(e -> {
 
-        card.setStyle(
-                "-fx-background-color:#101516;" +
-                        "-fx-border-color:#242B2C;" +
-                        "-fx-border-width:1;" +
-                        "-fx-border-radius:6;" +
-                        "-fx-background-radius:6;");
+                        FileChooser fileChooser = new FileChooser();
 
-        // =========================================
-        // HEADING
-        // =========================================
+                        fileChooser.setTitle(
+                                        "Select Course Thumbnail");
 
-        Label heading =
-                new Label("Course Settings");
+                        // =================================================
+                        // IMAGE FILTER
+                        // =================================================
 
-        heading.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                        "-fx-font-size:15px;" +
-                        "-fx-font-weight:bold;");
+                        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter(
+                                        "Image Files",
+                                        "*.png",
+                                        "*.jpg",
+                                        "*.jpeg",
+                                        "*.webp");
 
-        // =========================================
-        // SEPARATOR
-        // =========================================
+                        fileChooser.getExtensionFilters().add(
+                                        imageFilter);
 
-        Separator separator =
-                new Separator();
+                        // =================================================
+                        // OPEN FILE CHOOSER
+                        // =================================================
 
-        separator.setMaxWidth(
-                Double.MAX_VALUE);
+                        File selectedFile = fileChooser.showOpenDialog(
+                                        LoginPage.mainStage);
 
-        separator.setStyle(
-                "-fx-background-color:#242B2C;");
+                        // =================================================
+                        // CHECK FILE
+                        // =================================================
 
-        // =========================================
-        // DIFFICULTY
-        // =========================================
+                        if (selectedFile != null) {
 
-        Label difficultyLabel =
-                new Label("Difficulty Level");
+                                // Save image path
 
-        difficultyLabel.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                        "-fx-font-size:14px;" +
-                        "-fx-font-weight:bold;");
+                                thumbnailPath = selectedFile.getAbsolutePath();
 
-        ToggleGroup difficultyGroup =
-                new ToggleGroup();
+                                System.out.println(
+                                                "Selected Image: "
+                                                                + thumbnailPath);
 
-        RadioButton beginner =
-                new RadioButton("Beginner");
+                                // =================================================
+                                // DISPLAY IMAGE
+                                // =================================================
 
-        RadioButton intermediate =
-                new RadioButton("Intermediate");
+                                ImageView imageView = new ImageView(
+                                                new Image(
+                                                                selectedFile
+                                                                                .toURI()
+                                                                                .toString()));
 
-        RadioButton advanced =
-                new RadioButton("Advanced");
+                                imageView.setFitWidth(240);
 
-        beginner.setToggleGroup(
-                difficultyGroup);
+                                imageView.setFitHeight(150);
 
-        intermediate.setToggleGroup(
-                difficultyGroup);
+                                imageView.setPreserveRatio(true);
 
-        advanced.setToggleGroup(
-                difficultyGroup);
+                                imageView.setSmooth(true);
 
-        intermediate.setSelected(true);
+                                // =================================================
+                                // CLEAR OLD CONTENT
+                                // =================================================
 
-        String radioStyle =
-                "-fx-text-fill:#AAAAAA;" +
-                        "-fx-font-size:14px;";
+                                uploadArea.getChildren().clear();
 
-        beginner.setStyle(
-                radioStyle);
+                                // =================================================
+                                // ADD IMAGE
+                                // =================================================
 
-        intermediate.setStyle(
-                radioStyle);
+                                uploadArea.getChildren().add(
+                                                imageView);
+                        }
+                });
 
-        advanced.setStyle(
-                radioStyle);
+                // =====================================================
+                // ADD TO CARD
+                // =====================================================
 
-        VBox difficultyBox =
-                new VBox(4);
+                card.getChildren().addAll(
+                                heading,
+                                uploadArea);
 
-        difficultyBox.getChildren().addAll(
-                difficultyLabel,
-                beginner,
-                intermediate,
-                advanced);
+                return card;
+        }
 
-        // =========================================
-        // DURATION
-        // =========================================
+        // =========================================================
+        // COURSE SETTINGS
+        // =========================================================
 
-        Label durationLabel =
-                new Label(
-                        "Estimated Duration (Hours)");
+        private static VBox createCourseSettings() {
 
-        durationLabel.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                        "-fx-font-size:14px;" +
-                        "-fx-font-weight:bold;");
+                VBox card = new VBox(8);
 
-        TextField duration =
-                new TextField();
+                card.setPrefWidth(260);
+                card.setMinWidth(260);
+                card.setMaxWidth(260);
 
-        duration.setPromptText(
-                "e.g., 12");
+                card.setPrefHeight(250);
 
-        duration.setPrefHeight(32);
+                card.setPadding(
+                                new Insets(16));
 
-        duration.setMaxWidth(
-                Double.MAX_VALUE);
+                card.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:6;" +
+                                                "-fx-background-radius:6;");
 
-        duration.setStyle(
-                "-fx-background-color:#0D1213;" +
-                        "-fx-text-fill:#EEEEEE;" +
-                        "-fx-prompt-text-fill:#AAAAAA;" +
-                        "-fx-border-color:#242B2C;" +
-                        "-fx-border-radius:4;" +
-                        "-fx-background-radius:4;" +
-                        "-fx-font-size:14px;" +
-                        "-fx-padding:8;");
+                // =====================================================
+                // HEADING
+                // =====================================================
 
-        // =========================================
-        // LANGUAGE
-        // =========================================
+                Label heading = new Label("Course Settings");
 
-        Label languageLabel =
-                new Label("Language");
+                heading.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:15px;" +
+                                                "-fx-font-weight:bold;");
 
-        languageLabel.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                        "-fx-font-size:14px;" +
-                        "-fx-font-weight:bold;");
+                // =====================================================
+                // SEPARATOR
+                // =====================================================
 
-        ComboBox<String> language =
-                new ComboBox<>();
+                Separator separator = new Separator();
 
-        language.getItems().addAll(
-                "English",
-                "Hindi",
-                "Marathi");
+                separator.setMaxWidth(
+                                Double.MAX_VALUE);
 
-        language.setValue(
-                "English");
+                separator.setStyle(
+                                "-fx-background-color:#242B2C;");
 
-        language.setPrefHeight(32);
+                // =====================================================
+                // DIFFICULTY
+                // =====================================================
 
-        language.setMaxWidth(
-                Double.MAX_VALUE);
+                Label difficultyLabel = new Label(
+                                "Difficulty Level");
 
-        language.setStyle(
-                "-fx-background-color:#0D1213;" +
-                        "-fx-text-fill:#EEEEEE;" +
-                        "-fx-border-color:#242B2C;" +
-                        "-fx-border-radius:4;" +
-                        "-fx-background-radius:4;" +
-                        "-fx-font-size:14px;");
+                difficultyLabel.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:14px;" +
+                                                "-fx-font-weight:bold;");
 
-        // =========================================
-        // ADD TO CARD
-        // =========================================
+                ToggleGroup difficultyGroup = new ToggleGroup();
 
-        card.getChildren().addAll(
-                heading,
-                separator,
-                difficultyBox,
-                durationLabel,
-                duration,
-                languageLabel,
-                language);
+                RadioButton beginner = new RadioButton("Beginner");
 
-        return card;
-    }
+                RadioButton intermediate = new RadioButton("Intermediate");
+
+                RadioButton advanced = new RadioButton("Advanced");
+
+                beginner.setToggleGroup(
+                                difficultyGroup);
+
+                intermediate.setToggleGroup(
+                                difficultyGroup);
+
+                advanced.setToggleGroup(
+                                difficultyGroup);
+
+                intermediate.setSelected(
+                                true);
+
+                String radioStyle = "-fx-text-fill:#AAAAAA;" +
+                                "-fx-font-size:14px;";
+
+                beginner.setStyle(
+                                radioStyle);
+
+                intermediate.setStyle(
+                                radioStyle);
+
+                advanced.setStyle(
+                                radioStyle);
+
+                VBox difficultyBox = new VBox(4);
+
+                difficultyBox.getChildren().addAll(
+                                difficultyLabel,
+                                beginner,
+                                intermediate,
+                                advanced);
+
+                // =====================================================
+                // LANGUAGE
+                // =====================================================
+
+                Label languageLabel = new Label("Language");
+
+                languageLabel.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:14px;" +
+                                                "-fx-font-weight:bold;");
+
+                ComboBox<String> language = new ComboBox<>();
+
+                language.getItems().addAll(
+                                "English",
+                                "Hindi",
+                                "Marathi");
+
+                language.setValue(
+                                "English");
+
+                language.setPrefHeight(32);
+
+                language.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                language.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:4;" +
+                                                "-fx-background-radius:4;" +
+                                                "-fx-font-size:14px;");
+
+                // =====================================================
+                // ADD TO CARD
+                // =====================================================
+
+                card.getChildren().addAll(
+                                heading,
+                                separator,
+                                difficultyBox,
+                                languageLabel,
+                                language);
+
+                return card;
+        }
+
+        // =========================================================
+        // ACTION BUTTONS
+        // =========================================================
+
+        private HBox createActionButtons() {
+
+                HBox buttons = new HBox(10);
+
+                buttons.setAlignment(
+                                Pos.CENTER_RIGHT);
+
+                // =====================================================
+                // SAVE AS DRAFT
+                // =====================================================
+
+                Button draftButton = new Button("Save as Draft");
+
+                draftButton.setPrefHeight(36);
+
+                draftButton.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-padding:7 18;" +
+                                                "-fx-font-size:11px;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-cursor:hand;");
+
+                draftButton.setOnMouseEntered(e -> {
+
+                        draftButton.setStyle(
+                                        "-fx-background-color:#1B2021;" +
+                                                        "-fx-text-fill:#EEEEEE;" +
+                                                        "-fx-border-color:#68D34A;" +
+                                                        "-fx-border-width:1;" +
+                                                        "-fx-border-radius:5;" +
+                                                        "-fx-background-radius:5;" +
+                                                        "-fx-padding:7 18;" +
+                                                        "-fx-font-size:11px;" +
+                                                        "-fx-font-weight:bold;" +
+                                                        "-fx-cursor:hand;");
+                });
+
+                draftButton.setOnMouseExited(e -> {
+
+                        draftButton.setStyle(
+                                        "-fx-background-color:#101516;" +
+                                                        "-fx-text-fill:#AAAAAA;" +
+                                                        "-fx-border-color:#242B2C;" +
+                                                        "-fx-border-width:1;" +
+                                                        "-fx-border-radius:5;" +
+                                                        "-fx-background-radius:5;" +
+                                                        "-fx-padding:7 18;" +
+                                                        "-fx-font-size:11px;" +
+                                                        "-fx-font-weight:bold;" +
+                                                        "-fx-cursor:hand;");
+                });
+
+                // =====================================================
+                // PUBLISH
+                // =====================================================
+
+                Button publishButton = new Button("Publish Course");
+
+                publishButton.setPrefHeight(36);
+
+                publishButton.setStyle(
+                                "-fx-background-color:#68D34A;" +
+                                                "-fx-text-fill:#080C0D;" +
+                                                "-fx-border-color:#68D34A;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-padding:7 20;" +
+                                                "-fx-font-size:11px;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-cursor:hand;");
+
+                publishButton.setOnMouseEntered(e -> {
+
+                        publishButton.setStyle(
+                                        "-fx-background-color:#7BE65B;" +
+                                                        "-fx-text-fill:#080C0D;" +
+                                                        "-fx-border-color:#7BE65B;" +
+                                                        "-fx-border-width:1;" +
+                                                        "-fx-border-radius:5;" +
+                                                        "-fx-background-radius:5;" +
+                                                        "-fx-padding:7 20;" +
+                                                        "-fx-font-size:11px;" +
+                                                        "-fx-font-weight:bold;" +
+                                                        "-fx-cursor:hand;");
+                });
+
+                publishButton.setOnMouseExited(e -> {
+
+                        publishButton.setStyle(
+                                        "-fx-background-color:#68D34A;" +
+                                                        "-fx-text-fill:#080C0D;" +
+                                                        "-fx-border-color:#68D34A;" +
+                                                        "-fx-border-width:1;" +
+                                                        "-fx-border-radius:5;" +
+                                                        "-fx-background-radius:5;" +
+                                                        "-fx-padding:7 20;" +
+                                                        "-fx-font-size:11px;" +
+                                                        "-fx-font-weight:bold;" +
+                                                        "-fx-cursor:hand;");
+                });
+
+                // =====================================================
+                // SAVE AS DRAFT ACTION
+                // =====================================================
+
+                draftButton.setOnAction(e -> {
+
+                        showCourseStatusPopup(
+                                        "Draft Saved",
+                                        "Your course has been saved as a draft.",
+                                        false);
+                });
+
+                // =====================================================
+                // PUBLISH ACTION
+                // =====================================================
+
+                publishButton.setOnAction(e -> {
+
+                        showCourseStatusPopup(
+                                        "Course Published",
+                                        "Your course is now available to learners.",
+                                        true);
+                });
+
+                buttons.getChildren().addAll(
+                                draftButton,
+                                publishButton);
+
+                return buttons;
+        }
+
+        // =========================================================
+        // COURSE STATUS POPUP
+        // =========================================================
+
+        private void showCourseStatusPopup(
+                        String title,
+                        String message,
+                        boolean published) {
+
+                Popup popup = new Popup();
+
+                // =====================================================
+                // MAIN BOX
+                // =====================================================
+
+                VBox box = new VBox(8);
+
+                box.setAlignment(
+                                Pos.CENTER);
+
+                box.setPrefWidth(300);
+
+                box.setPrefHeight(130);
+
+                box.setPadding(
+                                new Insets(15));
+
+                // =====================================================
+                // ICON
+                // =====================================================
+
+                Label icon = new Label(
+                                published
+                                                ? "✓"
+                                                : "✓");
+
+                icon.setAlignment(
+                                Pos.CENTER);
+
+                icon.setPrefSize(
+                                42,
+                                42);
+
+                icon.setStyle(
+                                "-fx-background-color:#245D35;" +
+                                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-font-size:22px;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-background-radius:50%;");
+
+                // =====================================================
+                // TITLE
+                // =====================================================
+
+                Label titleLabel = new Label(title);
+
+                titleLabel.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:15px;" +
+                                                "-fx-font-weight:bold;");
+
+                // =====================================================
+                // MESSAGE
+                // =====================================================
+
+                Label messageLabel = new Label(message);
+
+                messageLabel.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:11px;");
+
+                // =====================================================
+                // ADD COMPONENTS
+                // =====================================================
+
+                box.getChildren().addAll(
+                                icon,
+                                titleLabel,
+                                messageLabel);
+
+                // =====================================================
+                // BOX STYLE
+                // =====================================================
+
+                box.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-border-color:#68D34A;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:8;" +
+                                                "-fx-background-radius:8;");
+
+                // =====================================================
+                // POPUP
+                // =====================================================
+
+                popup.getContent().add(
+                                box);
+
+                Window window = LoginPage.mainStage;
+
+                // =====================================================
+                // CENTER POPUP
+                // =====================================================
+
+                popup.show(
+                                window,
+                                window.getX()
+                                                + (window.getWidth() - 300) / 2,
+                                window.getY()
+                                                + (window.getHeight() - 130) / 2);
+
+                // =====================================================
+                // AUTO CLOSE
+                // =====================================================
+
+                PauseTransition delay = new PauseTransition(
+                                Duration.seconds(1.3));
+
+                delay.setOnFinished(
+                                e -> popup.hide());
+
+                delay.play();
+        }
 }
