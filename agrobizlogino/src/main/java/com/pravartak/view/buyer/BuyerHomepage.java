@@ -6,6 +6,11 @@ import com.pravartak.view.farmer.common.Footer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import com.pravartak.controller.Buyercontroller;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -120,8 +125,11 @@ public class BuyerHomepage {
                 "-fx-background-radius: 8;" +
                 "-fx-padding: 13 25;"
         );
+        viewMarketButton.setOnAction(e ->
+                controller.show(new Market(controller).getMarketPage())
+        );
         // viewMarketButton.setOnAction(e ->
-        //         controller.show(new Market(controller).getMarketPage())
+        //         controller.show(new Market(controller).createView())
         // );
 
         Label category = new Label("Popular Categories");
