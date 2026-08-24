@@ -1,6 +1,9 @@
 package com.pravartak.view.farmer;
 
 import java.net.URL;
+
+import com.pravartak.view.login.LoginPage;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -40,16 +43,17 @@ public class FarmerDashboard {
     private final Runnable logoutAction;
 
     // COLORS
-    private final Color DARK_GREEN = Color.rgb(18, 82, 24);
-    private final Color GREEN = Color.rgb(48, 125, 55);
+    private final Color DARK_GREEN = Color.rgb(14, 35, 16);
+    private static final Color GREEN = Color.rgb(230, 143, 28);
     private final Color LIGHT_GREEN = Color.rgb(186, 209, 174);
-    private final Color CREAM = Color.rgb(232, 233, 222);
-    private final Color DARK_TEXT = Color.rgb(35, 45, 35);
+    private final Color CREAM = Color.rgb(11, 16, 16);
+    private final Color DARK_TEXT = Color.rgb(112, 101, 234);
     private final Color GREY = Color.rgb(105, 110, 105);
     private final Color CARD_BACKGROUND = Color.rgb(152, 254, 136);
     private final Color BORDER_COLOR = Color.rgb(225, 230, 220);
 
     // SIDEBAR BUTTONS
+    private Button homepageButton;
     private Button dashboardButton;
     private Button profileButton;
     private Button aiAdvisorButton;
@@ -105,6 +109,15 @@ public class FarmerDashboard {
         menu.setPadding(new Insets(0, 0, 8, 15));
         sidebar.getChildren().add(menu);
 
+        
+        // HOMEPAGE
+        homepageButton = createMenuButton("⌂", "Home");
+
+        homepageButton.setOnAction(event -> {
+            HomePageFarmer homePageFarmer = new HomePageFarmer();
+            LoginPage.mainStage.setScene(homePageFarmer.getHomePageFarmer());
+        });
+
         // DASHBOARD
         dashboardButton = createMenuButton("⌂", "Dashboard");
         dashboardButton.setOnAction(event -> showPage("dashboard"));
@@ -134,7 +147,7 @@ public class FarmerDashboard {
         schemesButton.setOnAction(event -> showPage("schemes"));
 
         // ADD BUTTONS
-        sidebar.getChildren().addAll(dashboardButton, profileButton, aiAdvisorButton, learningButton, wishlistButton, investmentButton, schemesButton);
+        sidebar.getChildren().addAll(homepageButton, dashboardButton, profileButton, aiAdvisorButton, learningButton, wishlistButton, investmentButton, schemesButton);
 
         // SPACER
         Region spacer = new Region();
@@ -174,7 +187,7 @@ public class FarmerDashboard {
 
     // SELECTED BUTTON
     private void setSelectedMenuButton(Button selectedButton) {
-        Button[] buttons = {dashboardButton, profileButton, aiAdvisorButton, learningButton, wishlistButton, investmentButton, schemesButton};
+        Button[] buttons = {homepageButton,dashboardButton, profileButton, aiAdvisorButton, learningButton, wishlistButton, investmentButton, schemesButton};
 
         for (Button button : buttons) {
             if (button == null) {
@@ -214,16 +227,27 @@ public class FarmerDashboard {
         } else if (page.equals("schemes")) {
             setSelectedMenuButton(schemesButton);
             root.setCenter(createSchemesPage());
+        }else if (page.equals("Homepage")) {
+            setSelectedMenuButton(homepageButton);
+            HomePageFarmer homePageFarmer = new HomePageFarmer();
+            LoginPage.mainStage.setScene(homePageFarmer.getHomePageFarmer());
+        } else {
+            // Default to dashboard if unknown page
+            setSelectedMenuButton(dashboardButton);
+            root.setCenter(createDashboardPage());  
+            
         }
     }
 
     // DASHBOARD PAGE
     private VBox createDashboardPage() {
         VBox main = new VBox();
-        main.setBackground(new Background(new BackgroundFill(CREAM, CornerRadii.EMPTY, Insets.EMPTY)));
+        main.setBackground(new Background(new BackgroundFill(GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 
         HBox topBar = createTopBar("Farmer Dashboard", "Manage your farm and make smarter decisions.");
         VBox content = createDashboardContent();
+        content.setBackground(new Background(new BackgroundFill( DARK_GREEN,CornerRadii.EMPTY,Insets.EMPTY )
+    ));
 
         ScrollPane scroll = new ScrollPane(content);
         scroll.setFitToWidth(true);
@@ -241,7 +265,7 @@ public class FarmerDashboard {
         bar.setPrefHeight(100);
         bar.setPadding(new Insets(18, 35, 18, 35));
         bar.setAlignment(Pos.CENTER_LEFT);
-        bar.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+        bar.setBackground(new Background(new BackgroundFill(DARK_GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 
         VBox titleBox = new VBox();
         titleBox.setSpacing(3);
@@ -350,6 +374,7 @@ public class FarmerDashboard {
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         Label plant = new Label("🌿");
+        plant.setTextFill(Color.YELLOW);
         plant.setFont(Font.font("Arial", 60));
 
         card.getChildren().addAll(text, spacer, plant);
@@ -363,7 +388,7 @@ public class FarmerDashboard {
         card.setPadding(new Insets(20));
         card.setPrefHeight(160);
         HBox.setHgrow(card, Priority.ALWAYS);
-        card.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(15), Insets.EMPTY)));
+        card.setBackground(new Background(new BackgroundFill(LIGHT_GREEN, new CornerRadii(15), Insets.EMPTY)));
 
         Label iconLabel = new Label(icon);
         iconLabel.setPrefSize(48, 48);
@@ -531,7 +556,14 @@ public class FarmerDashboard {
 
         HBox topBar = createTopBar("Farmer Profile", "Manage your personal and farming information.");
 
-        VBox content = new VBox();
+        VBox content = new VBox(); 
+        content.setBackground(new Background(
+            new BackgroundFill(
+                    DARK_GREEN,
+                    CornerRadii.EMPTY,
+                    Insets.EMPTY
+            )
+    ));
         content.setPadding(new Insets(30, 35, 35, 35));
         content.setSpacing(22);
 
@@ -962,7 +994,7 @@ public class FarmerDashboard {
         iconLabel.setPrefSize(50, 50);
         iconLabel.setAlignment(Pos.CENTER);
         iconLabel.setFont(Font.font("Arial", 23));
-        iconLabel.setBackground(new Background(new BackgroundFill(Color.rgb(233, 237, 229), new CornerRadii(9), Insets.EMPTY)));
+        iconLabel.setBackground(new Background(new BackgroundFill(Color.rgb(237, 233, 229), new CornerRadii(9), Insets.EMPTY)));
 
         Region topSpacer = new Region();
         HBox.setHgrow(topSpacer, Priority.ALWAYS);

@@ -1,5 +1,7 @@
 package com.pravartak.view.farmer;
 
+import com.pravartak.view.farmer.common.NavBar;
+
 // import com.pravartak.view.login.LoginPage;
 
 import javafx.geometry.Insets;
@@ -18,12 +20,12 @@ import javafx.scene.layout.Region;
 public class CommuityPage {
     private Scene communityScene;
 
-    public Scene getCommunityScene(Runnable callBackAction) {
+    public Scene getCommunityScene() {
  
         BorderPane root = new BorderPane();
 
         // TOP
-        root.setTop(createNavbar(callBackAction));
+        root.setTop(new NavBar().createNavbar("Community"));
 
         // CENTER
         // root.setCenter(createMarketplaceContent());
@@ -36,123 +38,124 @@ public class CommuityPage {
     }
 
     // ################## NAVBAR -- TOP ##############################
-    private static HBox createNavbar(Runnable callBackAction) {
 
-        HBox navbar = new HBox(25);
+//     private static HBox createNavbar(Runnable callBackAction) {
 
-        navbar.setPadding(new Insets(10, 20, 10, 20));
-        navbar.setAlignment(Pos.CENTER_LEFT);
+//         HBox navbar = new HBox(25);
 
-        navbar.setStyle(
-                "-fx-background-color: #080c0d;" +
-                        "-fx-border-color: #1b2021;" +
-                        "-fx-border-width: 0 0 1 0;");
+//         navbar.setPadding(new Insets(10, 20, 10, 20));
+//         navbar.setAlignment(Pos.CENTER_LEFT);
 
-        Label logo = new Label("AgroBiz ");
+//         navbar.setStyle(
+//                 "-fx-background-color: #080c0d;" +
+//                         "-fx-border-color: #1b2021;" +
+//                         "-fx-border-width: 0 0 1 0;");
 
-        logo.setStyle(
-                "-fx-text-fill: #68d34a;" +
-                        "-fx-font-size: 24px;" +
-                        "-fx-font-weight: bold;");
+//         Label logo = new Label("AgroBiz ");
 
-        Button explorer = navButton("Explorer");
-        Button marketplaceButton = navButton("Marketplace");
-        Button community = navButton("Community");
-        Button learning = navButton("Learning");
-        Button schemes = navButton("Schemes");
+//         logo.setStyle(
+//                 "-fx-text-fill: #68d34a;" +
+//                         "-fx-font-size: 24px;" +
+//                         "-fx-font-weight: bold;");
+
+//         Button explorer = navButton("Explorer");
+//         Button marketplaceButton = navButton("Marketplace");
+//         Button community = navButton("Community");
+//         Button learning = navButton("Learning");
+//         Button schemes = navButton("Schemes");
         
         
-        marketplaceButton.setOnAction(e -> {
-            System.out.println("marketplace button clicked ");
-            callBackAction.run();
+//         marketplaceButton.setOnAction(e -> {
+//             System.out.println("marketplace button clicked ");
+//             callBackAction.run();
             
-            // LoginPage.mainStage.setScene(communityPage.getCommunityScene());
-        });
+//             // LoginPage.mainStage.setScene(communityPage.getCommunityScene());
+//         });
 
-        Region spacer = new Region();
+//         Region spacer = new Region();
 
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+//         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        TextField search = new TextField();
-        search.setPromptText("Search marketplace...");
+//         TextField search = new TextField();
+//         search.setPromptText("Search marketplace...");
 
-        search.setPrefWidth(170);
+//         search.setPrefWidth(170);
 
-        search.setStyle(
-                "-fx-background-color: #101516;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-prompt-text-fill: #777;" +
-                        "-fx-border-color: #303738;" +
-                        "-fx-border-radius: 6;" +
-                        "-fx-background-radius: 6;");
+//         search.setStyle(
+//                 "-fx-background-color: #101516;" +
+//                         "-fx-text-fill: white;" +
+//                         "-fx-prompt-text-fill: #777;" +
+//                         "-fx-border-color: #303738;" +
+//                         "-fx-border-radius: 6;" +
+//                         "-fx-background-radius: 6;");
 
-        Button sellButton = new Button("◇ List for Sale");
+//         Button sellButton = new Button("◇ List for Sale");
 
-        sellButton.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-text-fill: #68d34a;" +
-                        "-fx-border-color: #68d34a;" +
-                        "-fx-border-radius: 5;");
+//         sellButton.setStyle(
+//                 "-fx-background-color: transparent;" +
+//                         "-fx-text-fill: #68d34a;" +
+//                         "-fx-border-color: #68d34a;" +
+//                         "-fx-border-radius: 5;");
 
-        Label notification = new Label("♧");
-        Label profile = new Label("◎");
-        Label login = new Label("Login");
+//         Label notification = new Label("♧");
+//         Label profile = new Label("◎");
+//         Label login = new Label("Login");
 
-        notification.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 18px;");
-        profile.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 18px;");
-        login.setStyle("-fx-text-fill: #bbbbbb;");
+//         notification.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 18px;");
+//         profile.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 18px;");
+//         login.setStyle("-fx-text-fill: #bbbbbb;");
 
-        navbar.getChildren().addAll(
-                logo,
-                explorer,
-                marketplaceButton,
-                community,
-                learning,
-                schemes,
-                spacer,
-                search,
-                sellButton,
-                notification,
-                profile,
-                login);
+//         navbar.getChildren().addAll(
+//                 logo,
+//                 explorer,
+//                 marketplaceButton,
+//                 community,
+//                 learning,
+//                 schemes,
+//                 spacer,
+//                 search,
+//                 sellButton,
+//                 notification,
+//                 profile,
+//                 login);
 
-        return navbar;
-    }
+//         return navbar;
+//     }
 
-    // button global style
-    private static Button navButton(String text) {
-        Button button = new Button(text);
-        button.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-text-fill: #aaaaaa;" +
-                        "-fx-font-size: 13px;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 5 0 5 0;");
+//     // button global style
+//     private static Button navButton(String text) {
+//         Button button = new Button(text);
+//         button.setStyle(
+//                 "-fx-background-color: transparent;" +
+//                         "-fx-text-fill: #aaaaaa;" +
+//                         "-fx-font-size: 13px;" +
+//                         "-fx-cursor: hand;" +
+//                         "-fx-padding: 5 0 5 0;");
 
-        button.setOnMouseEntered(e -> {
-            button.setStyle(
-                    "-fx-background-color: transparent;" +
-                            "-fx-text-fill: #68d34a;" +
-                            "-fx-font-size: 13px;" +
-                            "-fx-cursor: hand;" +
-                            "-fx-padding: 5 0 5 0;" +
-                            "-fx-border-color: #68d34a;" +
-                            "-fx-border-width: 0 0 2 0;");
-        });
+//         button.setOnMouseEntered(e -> {
+//             button.setStyle(
+//                     "-fx-background-color: transparent;" +
+//                             "-fx-text-fill: #68d34a;" +
+//                             "-fx-font-size: 13px;" +
+//                             "-fx-cursor: hand;" +
+//                             "-fx-padding: 5 0 5 0;" +
+//                             "-fx-border-color: #68d34a;" +
+//                             "-fx-border-width: 0 0 2 0;");
+//         });
 
-        button.setOnMouseExited(e -> {
-            button.setStyle(
-                    "-fx-background-color: transparent;" +
-                            "-fx-text-fill: #aaaaaa;" +
-                            "-fx-font-size: 13px;" +
-                            "-fx-cursor: hand;" +
-                            "-fx-padding: 5 0 5 0;" +
-                            "-fx-border-color: transparent;" +
-                            "-fx-border-width: 0 0 2 0;");
-        });
+//         button.setOnMouseExited(e -> {
+//             button.setStyle(
+//                     "-fx-background-color: transparent;" +
+//                             "-fx-text-fill: #aaaaaa;" +
+//                             "-fx-font-size: 13px;" +
+//                             "-fx-cursor: hand;" +
+//                             "-fx-padding: 5 0 5 0;" +
+//                             "-fx-border-color: transparent;" +
+//                             "-fx-border-width: 0 0 2 0;");
+//         });
 
-        return button;
-    }
+//         return button;
+//     }
 
     // ############################## FOOTER ##############################
     private static HBox createFooter() {

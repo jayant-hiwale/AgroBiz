@@ -1,13 +1,18 @@
+
+
 package com.pravartak.view.farmer;
+
+import com.pravartak.view.farmer.common.Footer;
+import com.pravartak.view.farmer.common.NavBar;
+import com.pravartak.view.login.LoginPage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-//import javafx.scene.control.TextField;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -23,445 +28,49 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 
 public class SchemesPage {
 
-    // =========================================================
-    // STAGE
-    // =========================================================
+    private static Scene schemesScene;
 
-    private Stage mainStage;
+    public static Scene getSchemesPage() {
 
-    // Scene of this page
-    private Scene schemesScene;
+        // MAIN BORDER PANE
+        BorderPane borderPane = new BorderPane();
 
-
-    // =========================================================
-    // COLORS
-    // =========================================================
-
-    private final Color darkGreen =
-            Color.rgb(0, 82, 28);
-
-    private final Color mainGreen =
-            Color.rgb(0, 105, 35);
-
-    private final Color pageBackground =
-            Color.rgb(250, 249, 246);
-
-    private final Color textColor =
-            Color.rgb(25, 35, 30);
-
-    private final Color grayText =
-            Color.rgb(90, 95, 90);
-
-
-    // =========================================================
-    // CONSTRUCTOR
-    // =========================================================
-
-    public SchemesPage(Stage mainStage) {
-
-        this.mainStage = mainStage;
-
-        createSchemesPage();
-    }
-
-
-    // =========================================================
-    // CREATE PAGE
-    // =========================================================
-
-    private void createSchemesPage() {
-
-        BorderPane mainLayout =
-                new BorderPane();
-
-
-        // -----------------------------------------------------
-        // PAGE BACKGROUND
-        // -----------------------------------------------------
-
-        mainLayout.setBackground(
-                new Background(
-                        new BackgroundFill(
-                                pageBackground,
-                                CornerRadii.EMPTY,
-                                Insets.EMPTY
-                        )
-                )
+        borderPane.setStyle(
+                "-fx-background-color: #050b0a;"
         );
 
-
-        // -----------------------------------------------------
-        // TOP NAVIGATION
-        // -----------------------------------------------------
-
-        HBox topNavigation =
-                createTopNavigation();
-
-        mainLayout.setTop(
-                topNavigation
+        // NAVBAR
+        borderPane.setTop(
+                new NavBar().createNavbar("Schemes")
         );
 
-
-        // -----------------------------------------------------
-        // MAIN CONTENT
-        // -----------------------------------------------------
-
-        VBox mainContent =
-                createMainContent();
-
-        mainLayout.setCenter(
-                mainContent
-        );
-
-
-        // -----------------------------------------------------
         // FOOTER
-        // -----------------------------------------------------
-
-        HBox footer =
-                createFooter();
-
-        mainLayout.setBottom(
-                footer
+        borderPane.setBottom(
+                new Footer().createFooter()
         );
 
+        // MAIN VBOX
+        VBox mainVBox = new VBox(16);
 
-        // -----------------------------------------------------
-        // SCENE
-        // -----------------------------------------------------
-
-        schemesScene =
-                new Scene(
-                        mainLayout,
-                        1368,
-                        768
-                );
-    }
-
-
-    // =========================================================
-    // TOP NAVIGATION
-    // =========================================================
-
-    private HBox createTopNavigation() {
-
-        HBox topNavigation =
-                new HBox();
-
-        topNavigation.setAlignment(
-                Pos.CENTER_LEFT
+        mainVBox.setPadding(
+                new Insets(25, 35, 25, 35)
         );
 
-        topNavigation.setPadding(
-                new Insets(
-                        8,
-                        18,
-                        8,
-                        18
-                )
+        mainVBox.setAlignment(
+                Pos.TOP_LEFT
         );
 
-        topNavigation.setSpacing(20);
-
-        topNavigation.setPrefHeight(52);
-
-
-        // -----------------------------------------------------
-        // LOGO
-        // -----------------------------------------------------
-
-        Label logo =
-                new Label(
-                        "AgriBiz Hub"
-                );
-
-        logo.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        20
-                )
+        mainVBox.setStyle(
+                "-fx-background-color: #050b0a;"
         );
 
-        logo.setTextFill(
-                darkGreen
+        // MAIN TITLE
+        Label pageTitle = new Label(
+                "Government & Industry Schemes"
         );
-
-
-        // -----------------------------------------------------
-        // NAVIGATION BUTTONS
-        // -----------------------------------------------------
-
-        Button explorerButton =
-                createNavigationButton(
-                        "Explorer"
-                );
-
-        Button marketplaceButton =
-                createNavigationButton(
-                        "Marketplace"
-                );
-
-        Button schemesButton =
-                createNavigationButton(
-                        "Schemes"
-                );
-
-        Button newsButton =
-                createNavigationButton(
-                        "News"
-                );
-
-        Button communityButton =
-                createNavigationButton(
-                        "Community"
-                );
-
-
-        // Highlight Schemes
-        schemesButton.setTextFill(
-                mainGreen
-        );
-
-        schemesButton.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        11
-                )
-        );
-
-
-        // -----------------------------------------------------
-        // NAVIGATION ACTIONS
-        // -----------------------------------------------------
-
-        explorerButton.setOnAction(
-                event -> showMessage(
-                        "Explorer",
-                        "Explorer page will be added later."
-                )
-        );
-
-
-        marketplaceButton.setOnAction(
-                event -> showMessage(
-                        "Marketplace",
-                        "Marketplace page will be added later."
-                )
-        );
-
-
-        schemesButton.setOnAction(
-                event -> {
-                    // Already on Schemes Page
-                }
-        );
-
-
-        newsButton.setOnAction(
-                event -> showMessage(
-                        "News",
-                        "News page will be added later."
-                )
-        );
-
-
-        communityButton.setOnAction(
-                event -> showMessage(
-                        "Community",
-                        "Community page will be added later."
-                )
-        );
-
-
-        // -----------------------------------------------------
-         // SEARCH FIELD
-         // -----------------------------------------------------
-
-        // TextField searchField =
-        //         new TextField();
-
-        // searchField.setPromptText(
-        //         "Search schemes..."
-        // );
-
-        // searchField.setPrefWidth(180);
-
-        // searchField.setPrefHeight(32);
-
-        // searchField.setFont(
-        //         Font.font(
-        //                 "Arial",
-        //                 11
-        //         )
-        // );
-
-        // searchField.setStyle(
-        //         "-fx-background-color: #F4F4F2;"
-        //         + "-fx-background-radius: 18;"
-        //         + "-fx-border-color: #DDDDD8;"
-        //         + "-fx-border-radius: 18;"
-        //         + "-fx-padding: 0 12 0 12;"
-        // );
-
-
-        // -----------------------------------------------------
-        // SPACE
-        // -----------------------------------------------------
-
-        Region navigationSpace =
-                new Region();
-
-        HBox.setHgrow(
-                navigationSpace,
-                Priority.ALWAYS
-        );
-
-
-        // -----------------------------------------------------
-        // NOTIFICATION BUTTON
-        // -----------------------------------------------------
-
-        Button notificationButton =
-                createSmallButton(
-                        "♧"
-                );
-
-        notificationButton.setOnAction(
-                event -> showMessage(
-                        "Notifications",
-                        "You have no new notifications."
-                )
-        );
-
-
-        // -----------------------------------------------------
-        // PROFILE BUTTON
-        // -----------------------------------------------------
-
-        Button profileButton =
-                createSmallButton(
-                        "◎"
-                );
-
-        profileButton.setOnAction(
-                event -> showMessage(
-                        "Profile",
-                        "Profile page will be added later."
-                )
-        );
-
-
-        // -----------------------------------------------------
-        // LOGIN BUTTON
-        // -----------------------------------------------------
-
-        Button loginButton =
-                new Button(
-                        "Login"
-                );
-
-        loginButton.setPrefWidth(62);
-
-        loginButton.setPrefHeight(30);
-
-        loginButton.setCursor(
-                Cursor.HAND
-        );
-
-        loginButton.setTextFill(
-                Color.WHITE
-        );
-
-        loginButton.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        11
-                )
-        );
-
-        loginButton.setBackground(
-                new Background(
-                        new BackgroundFill(
-                                darkGreen,
-                                new CornerRadii(5),
-                                Insets.EMPTY
-                        )
-                )
-        );
-
-
-        loginButton.setOnAction(
-                event -> showMessage(
-                        "Login",
-                        "You are already logged in."
-                )
-        );
-
-
-        // -----------------------------------------------------
-        // ADD ALL
-        // -----------------------------------------------------
-
-        topNavigation.getChildren().addAll(
-
-                logo,
-
-                explorerButton,
-                marketplaceButton,
-                schemesButton,
-                newsButton,
-                communityButton,
-
-                navigationSpace,
-
-               // searchField,
-
-                notificationButton,
-                profileButton,
-                loginButton
-        );
-
-
-        return topNavigation;
-    }
-
-
-    // =========================================================
-    // MAIN CONTENT
-    // =========================================================
-
-    private VBox createMainContent() {
-
-        VBox mainContent =
-                new VBox();
-
-        mainContent.setSpacing(16);
-
-        mainContent.setPadding(
-                new Insets(
-                        25,
-                        35,
-                        25,
-                        35
-                )
-        );
-
-
-        // -----------------------------------------------------
-        // TITLE
-        // -----------------------------------------------------
-
-        Label pageTitle =
-                new Label(
-                        "Government & Industry Schemes"
-                );
 
         pageTitle.setFont(
                 Font.font(
@@ -472,21 +81,16 @@ public class SchemesPage {
         );
 
         pageTitle.setTextFill(
-                darkGreen
+                Color.WHITE
         );
 
-
-        // -----------------------------------------------------
         // DESCRIPTION
-        // -----------------------------------------------------
-
-        Label pageDescription =
-                new Label(
-                        "Explore available programs, subsidies, and insurance "
+        Label pageDescription = new Label(
+                "Explore available programs, subsidies, and insurance "
                         + "schemes designed to support sustainable agriculture "
                         + "and animal husbandry. Discover opportunities to "
                         + "enhance your farming operations."
-                );
+        );
 
         pageDescription.setFont(
                 Font.font(
@@ -496,55 +100,76 @@ public class SchemesPage {
         );
 
         pageDescription.setTextFill(
-                grayText
+                Color.rgb(145, 160, 153)
         );
 
         pageDescription.setWrapText(true);
 
         pageDescription.setMaxWidth(900);
 
-
-        // -----------------------------------------------------
         // CATEGORY BUTTONS
-        // -----------------------------------------------------
-
         HBox categoryButtons =
                 createCategoryButtons();
 
-
-        // -----------------------------------------------------
         // SCHEME CARDS
-        // -----------------------------------------------------
-
         HBox schemeCards =
                 createSchemeCards();
 
-
-        // -----------------------------------------------------
-        // ADD
-        // -----------------------------------------------------
-
-        mainContent.getChildren().addAll(
-
+        // ADD CONTENT
+        mainVBox.getChildren().addAll(
                 pageTitle,
-
                 pageDescription,
-
                 categoryButtons,
-
                 schemeCards
         );
 
+        // SCROLL PANE
+        ScrollPane scrollPane =
+                new ScrollPane();
 
-        return mainContent;
+        scrollPane.setContent(
+                mainVBox
+        );
+
+        scrollPane.setFitToWidth(
+                true
+        );
+
+        scrollPane.setHbarPolicy(
+                ScrollPane.ScrollBarPolicy.NEVER
+        );
+
+        scrollPane.setVbarPolicy(
+                ScrollPane.ScrollBarPolicy.AS_NEEDED
+        );
+
+        scrollPane.setStyle(
+                "-fx-background-color: #050b0a;"
+                        + "-fx-background: #050b0a;"
+                        + "-fx-control-inner-background: #050b0a;"
+        );
+
+        borderPane.setCenter(
+                scrollPane
+        );
+
+        // SCENE
+        Scene scene = new Scene(
+                borderPane,
+                1368,
+                768
+        );
+
+        schemesScene = scene;
+
+        return scene;
     }
-
 
     // =========================================================
     // CATEGORY BUTTONS
     // =========================================================
 
-    private HBox createCategoryButtons() {
+    private static HBox createCategoryButtons() {
 
         HBox categoryBox =
                 new HBox();
@@ -555,38 +180,29 @@ public class SchemesPage {
                 Pos.CENTER_LEFT
         );
 
-
         Button allSchemesButton =
                 createCategoryButton(
                         "All Schemes",
                         true
                 );
 
-
         Button animalButton =
                 createCategoryButton(
                         "Animal Husbandry",
-                        false
+                        true
                 );
-
 
         Button equipmentButton =
                 createCategoryButton(
                         "Equipment Subsidy",
-                        false
+                        true
                 );
-
 
         Button insuranceButton =
                 createCategoryButton(
                         "Livestock Insurance",
-                        false
+                        true
                 );
-
-
-        // -----------------------------------------------------
-        // BUTTON ACTIONS
-        // -----------------------------------------------------
 
         allSchemesButton.setOnAction(
                 event -> showMessage(
@@ -595,14 +211,12 @@ public class SchemesPage {
                 )
         );
 
-
         animalButton.setOnAction(
                 event -> showMessage(
                         "Animal Husbandry",
                         "Animal husbandry schemes selected."
                 )
         );
-
 
         equipmentButton.setOnAction(
                 event -> showMessage(
@@ -611,7 +225,6 @@ public class SchemesPage {
                 )
         );
 
-
         insuranceButton.setOnAction(
                 event -> showMessage(
                         "Livestock Insurance",
@@ -619,25 +232,21 @@ public class SchemesPage {
                 )
         );
 
-
         categoryBox.getChildren().addAll(
-
                 allSchemesButton,
                 animalButton,
                 equipmentButton,
                 insuranceButton
         );
 
-
         return categoryBox;
     }
-
 
     // =========================================================
     // SCHEME CARDS
     // =========================================================
 
-    private HBox createSchemeCards() {
+    private static HBox createSchemeCards() {
 
         HBox schemeCards =
                 new HBox();
@@ -648,129 +257,77 @@ public class SchemesPage {
                 Pos.TOP_LEFT
         );
 
-
-        // -----------------------------------------------------
         // CARD 1
-        // -----------------------------------------------------
-
         VBox livestockCard =
                 createSchemeCard(
-
                         "🐄",
-
                         "National Livestock\nMission (NLM)",
-
                         "Government support for livestock "
-                        + "entrepreneurship, breed improvement "
-                        + "and animal productivity.",
-
+                                + "entrepreneurship, breed improvement "
+                                + "and animal productivity.",
                         "Eligibility",
-
                         "• Individual farmers\n"
-                        + "• Farmer Producer Organisations\n"
-                        + "• Eligible livestock entrepreneurs",
-
+                                + "• Farmer Producer Organisations\n"
+                                + "• Eligible livestock entrepreneurs",
                         "Check Eligibility",
-
                         true
                 );
 
-
-        // -----------------------------------------------------
         // CARD 2
-        // -----------------------------------------------------
-
         VBox machineryCard =
                 createSchemeCard(
-
                         "⚙",
-
                         "Sub-Mission on\nAgricultural\nMechanization (SMAM)",
-
                         "Financial assistance for agricultural "
-                        + "machinery and modern farm equipment.",
-
+                                + "machinery and modern farm equipment.",
                         "Eligibility",
-
                         "• Farmers\n"
-                        + "• Farmer groups\n"
-                        + "• Registered agricultural organisations",
-
+                                + "• Farmer groups\n"
+                                + "• Registered agricultural organisations",
                         "Apply Now",
-
                         false
                 );
 
-
-        // -----------------------------------------------------
         // CARD 3
-        // -----------------------------------------------------
-
         VBox cropInsuranceCard =
                 createSchemeCard(
-
                         "🛡",
-
                         "Pradhan Mantri\nFasal Bima Yojana",
-
                         "Crop insurance support designed "
-                        + "to protect farmers against eligible "
-                        + "crop losses and risks.",
-
+                                + "to protect farmers against eligible "
+                                + "crop losses and risks.",
                         "Eligibility",
-
                         "• Eligible farmers\n"
-                        + "• Farmers growing notified crops\n"
-                        + "• Applicable geographical areas",
-
+                                + "• Farmers growing notified crops\n"
+                                + "• Applicable geographical areas",
                         "Check Eligibility",
-
                         true
                 );
 
-
-        // -----------------------------------------------------
-        // ADD CARDS
-        // -----------------------------------------------------
-
         schemeCards.getChildren().addAll(
-
                 livestockCard,
-
                 machineryCard,
-
                 cropInsuranceCard
         );
 
-
         return schemeCards;
     }
-
 
     // =========================================================
     // CREATE SCHEME CARD
     // =========================================================
 
-    private VBox createSchemeCard(
-
+    private static VBox createSchemeCard(
             String icon,
-
             String schemeName,
-
             String description,
-
             String eligibilityTitle,
-
             String eligibilityDetails,
-
             String actionText,
-
             boolean greenButton) {
-
 
         VBox schemeCard =
                 new VBox();
-
 
         schemeCard.setSpacing(10);
 
@@ -778,29 +335,30 @@ public class SchemesPage {
                 new Insets(14)
         );
 
-        schemeCard.setPrefWidth(350);
-
-        schemeCard.setMinWidth(300);
-
-        schemeCard.setMaxWidth(350);
-
-
-        // -----------------------------------------------------
-        // CARD STYLE
-        // -----------------------------------------------------
-
-        schemeCard.setStyle(
-
-                "-fx-background-color: white;"
-                + "-fx-background-radius: 12;"
-                + "-fx-border-color: #E0E0DB;"
-                + "-fx-border-radius: 12;"
+        schemeCard.setPrefWidth(
+                350
         );
 
+        schemeCard.setMinWidth(
+                300
+        );
 
-        // -----------------------------------------------------
+        schemeCard.setMaxWidth(
+                350
+        );
+
+        // DARK GREEN CARD
+        schemeCard.setStyle(
+                "-fx-background-color: #0b1714;"
+                        + "-fx-background-radius: 12;"
+                        + "-fx-border-color: #19352b;"
+                        + "-fx-border-radius: 12;"
+                        + "-fx-border-width: 1;"
+        );
+
+        // =====================================================
         // TOP ROW
-        // -----------------------------------------------------
+        // =====================================================
 
         HBox topRow =
                 new HBox();
@@ -809,7 +367,7 @@ public class SchemesPage {
                 Pos.CENTER_LEFT
         );
 
-
+        // ICON
         Label iconLabel =
                 new Label(icon);
 
@@ -833,9 +391,9 @@ public class SchemesPage {
                 new Background(
                         new BackgroundFill(
                                 Color.rgb(
-                                        255,
-                                        225,
-                                        215
+                                        16,
+                                        55,
+                                        39
                                 ),
                                 new CornerRadii(6),
                                 Insets.EMPTY
@@ -843,7 +401,7 @@ public class SchemesPage {
                 )
         );
 
-
+        // SPACE
         Region badgeSpace =
                 new Region();
 
@@ -852,7 +410,7 @@ public class SchemesPage {
                 Priority.ALWAYS
         );
 
-
+        // BADGE
         Label schemeBadge =
                 new Label(
                         getBadgeText(schemeName)
@@ -868,9 +426,9 @@ public class SchemesPage {
 
         schemeBadge.setTextFill(
                 Color.rgb(
-                        80,
-                        85,
-                        80
+                        130,
+                        210,
+                        150
                 )
         );
 
@@ -887,9 +445,9 @@ public class SchemesPage {
                 new Background(
                         new BackgroundFill(
                                 Color.rgb(
-                                        235,
-                                        235,
-                                        231
+                                        12,
+                                        43,
+                                        30
                                 ),
                                 new CornerRadii(10),
                                 Insets.EMPTY
@@ -897,20 +455,15 @@ public class SchemesPage {
                 )
         );
 
-
         topRow.getChildren().addAll(
-
                 iconLabel,
-
                 badgeSpace,
-
                 schemeBadge
         );
 
-
-        // -----------------------------------------------------
+        // =====================================================
         // SCHEME NAME
-        // -----------------------------------------------------
+        // =====================================================
 
         Label nameLabel =
                 new Label(
@@ -926,15 +479,16 @@ public class SchemesPage {
         );
 
         nameLabel.setTextFill(
-                textColor
+                Color.WHITE
         );
 
-        nameLabel.setWrapText(true);
+        nameLabel.setWrapText(
+                true
+        );
 
-
-        // -----------------------------------------------------
+        // =====================================================
         // DESCRIPTION
-        // -----------------------------------------------------
+        // =====================================================
 
         Label descriptionLabel =
                 new Label(
@@ -949,22 +503,31 @@ public class SchemesPage {
         );
 
         descriptionLabel.setTextFill(
-                grayText
+                Color.rgb(
+                        145,
+                        160,
+                        153
+                )
         );
 
-        descriptionLabel.setWrapText(true);
+        descriptionLabel.setWrapText(
+                true
+        );
 
-        descriptionLabel.setMinHeight(62);
+        descriptionLabel.setMinHeight(
+                62
+        );
 
-
-        // -----------------------------------------------------
+        // =====================================================
         // ELIGIBILITY BOX
-        // -----------------------------------------------------
+        // =====================================================
 
         VBox eligibilityBox =
                 new VBox();
 
-        eligibilityBox.setSpacing(6);
+        eligibilityBox.setSpacing(
+                6
+        );
 
         eligibilityBox.setPadding(
                 new Insets(10)
@@ -974,9 +537,9 @@ public class SchemesPage {
                 new Background(
                         new BackgroundFill(
                                 Color.rgb(
-                                        246,
-                                        246,
-                                        243
+                                        8,
+                                        28,
+                                        22
                                 ),
                                 new CornerRadii(7),
                                 Insets.EMPTY
@@ -984,7 +547,7 @@ public class SchemesPage {
                 )
         );
 
-
+        // ELIGIBILITY HEADING
         Label eligibilityHeading =
                 new Label(
                         "ⓘ  " + eligibilityTitle
@@ -999,10 +562,14 @@ public class SchemesPage {
         );
 
         eligibilityHeading.setTextFill(
-                darkGreen
+                Color.rgb(
+                        83,
+                        215,
+                        74
+                )
         );
 
-
+        // ELIGIBILITY DETAILS
         Label eligibilityLabel =
                 new Label(
                         eligibilityDetails
@@ -1016,37 +583,41 @@ public class SchemesPage {
         );
 
         eligibilityLabel.setTextFill(
-                grayText
+                Color.rgb(
+                        145,
+                        160,
+                        153
+                )
         );
 
-        eligibilityLabel.setWrapText(true);
-
+        eligibilityLabel.setWrapText(
+                true
+        );
 
         eligibilityBox.getChildren().addAll(
-
                 eligibilityHeading,
-
                 eligibilityLabel
         );
 
-
-        // -----------------------------------------------------
+        // =====================================================
         // ACTION BUTTON
-        // -----------------------------------------------------
+        // =====================================================
 
         Button actionButton =
                 new Button(
                         actionText
                 );
 
-        actionButton.setPrefHeight(34);
+        actionButton.setPrefHeight(
+                34
+        );
 
         actionButton.setMaxWidth(
                 Double.MAX_VALUE
         );
 
         actionButton.setCursor(
-                Cursor.HAND
+                javafx.scene.Cursor.HAND
         );
 
         actionButton.setFont(
@@ -1057,43 +628,57 @@ public class SchemesPage {
                 )
         );
 
-
-        // -----------------------------------------------------
+        // =====================================================
         // GREEN BUTTON
-        // -----------------------------------------------------
+        // =====================================================
 
         if (greenButton) {
 
             actionButton.setTextFill(
-                    Color.WHITE
+                    Color.BLACK
             );
 
             actionButton.setBackground(
                     new Background(
                             new BackgroundFill(
-                                    darkGreen,
+                                    Color.rgb(
+                                            83,
+                                            215,
+                                            74
+                                    ),
                                     new CornerRadii(5),
                                     Insets.EMPTY
                             )
                     )
             );
 
+            actionButton.setStyle(
+                    "-fx-background-color: #53d74a;"
+                            + "-fx-text-fill: #06100b;"
+                            + "-fx-background-radius: 5;"
+                            + "-fx-cursor: hand;"
+            );
+
         }
 
-        // -----------------------------------------------------
+        // =====================================================
         // OUTLINE BUTTON
-        // -----------------------------------------------------
+        // =====================================================
 
         else {
 
             actionButton.setTextFill(
-                    darkGreen
+                    Color.rgb(
+                            83,
+                            215,
+                            74
+                    )
             );
 
             actionButton.setBackground(
                     new Background(
                             new BackgroundFill(
-                                    Color.WHITE,
+                                    Color.TRANSPARENT,
                                     new CornerRadii(5),
                                     Insets.EMPTY
                             )
@@ -1104,9 +689,9 @@ public class SchemesPage {
                     new Border(
                             new BorderStroke(
                                     Color.rgb(
-                                            150,
-                                            105,
-                                            90
+                                            55,
+                                            180,
+                                            80
                                     ),
                                     BorderStrokeStyle.SOLID,
                                     new CornerRadii(5),
@@ -1116,11 +701,7 @@ public class SchemesPage {
             );
         }
 
-
-        // -----------------------------------------------------
-        // BUTTON ACTION
-        // -----------------------------------------------------
-
+        // ACTION
         actionButton.setOnAction(
                 event -> showMessage(
                         schemeName.replace(
@@ -1128,38 +709,27 @@ public class SchemesPage {
                                 " "
                         ),
                         "Scheme details and application "
-                        + "page will be connected later."
+                                + "page will be connected later."
                 )
         );
 
-
-        // -----------------------------------------------------
-        // ADD CARD COMPONENTS
-        // -----------------------------------------------------
-
+        // ADD CARD CONTENT
         schemeCard.getChildren().addAll(
-
                 topRow,
-
                 nameLabel,
-
                 descriptionLabel,
-
                 eligibilityBox,
-
                 actionButton
         );
 
-
         return schemeCard;
     }
-
 
     // =========================================================
     // BADGE
     // =========================================================
 
-    private String getBadgeText(
+    private static String getBadgeText(
             String schemeName) {
 
         if (schemeName.contains(
@@ -1171,104 +741,13 @@ public class SchemesPage {
         return "CENTRAL GOVT";
     }
 
-
-    // =========================================================
-    // NAVIGATION BUTTON
-    // =========================================================
-
-    private Button createNavigationButton(
-            String buttonText) {
-
-        Button navigationButton =
-                new Button(
-                        buttonText
-                );
-
-        navigationButton.setBackground(
-                Background.EMPTY
-        );
-
-        navigationButton.setBorder(
-                Border.EMPTY
-        );
-
-        navigationButton.setTextFill(
-                Color.rgb(
-                        65,
-                        70,
-                        65
-                )
-        );
-
-        navigationButton.setFont(
-                Font.font(
-                        "Arial",
-                        11
-                )
-        );
-
-        navigationButton.setCursor(
-                Cursor.HAND
-        );
-
-        return navigationButton;
-    }
-
-
-    // =========================================================
-    // SMALL BUTTON
-    // =========================================================
-
-    private Button createSmallButton(
-            String icon) {
-
-        Button smallButton =
-                new Button(
-                        icon
-                );
-
-        smallButton.setPrefSize(
-                30,
-                30
-        );
-
-        smallButton.setFont(
-                Font.font(
-                        "Arial",
-                        16
-                )
-        );
-
-        smallButton.setBackground(
-                Background.EMPTY
-        );
-
-        smallButton.setBorder(
-                Border.EMPTY
-        );
-
-        smallButton.setTextFill(
-                darkGreen
-        );
-
-        smallButton.setCursor(
-                Cursor.HAND
-        );
-
-        return smallButton;
-    }
-
-
     // =========================================================
     // CATEGORY BUTTON
     // =========================================================
 
-    private Button createCategoryButton(
-
+    private static Button createCategoryButton(
             String buttonText,
-
             boolean selected) {
-
 
         Button categoryButton =
                 new Button(
@@ -1288,50 +767,51 @@ public class SchemesPage {
         );
 
         categoryButton.setCursor(
-                Cursor.HAND
+                javafx.scene.Cursor.HAND
         );
 
-
-        // -----------------------------------------------------
         // SELECTED BUTTON
-        // -----------------------------------------------------
-
         if (selected) {
 
             categoryButton.setTextFill(
-                    Color.WHITE
+                    Color.BLACK
             );
 
             categoryButton.setBackground(
                     new Background(
                             new BackgroundFill(
-                                    darkGreen,
+                                    Color.rgb(
+                                            83,
+                                            215,
+                                            74
+                                    ),
                                     new CornerRadii(15),
                                     Insets.EMPTY
                             )
                     )
             );
+
         }
 
-
-        // -----------------------------------------------------
         // NORMAL BUTTON
-        // -----------------------------------------------------
-
         else {
 
             categoryButton.setTextFill(
                     Color.rgb(
-                            65,
-                            70,
-                            65
+                            145,
+                            160,
+                            153
                     )
             );
 
             categoryButton.setBackground(
                     new Background(
                             new BackgroundFill(
-                                    Color.WHITE,
+                                    Color.rgb(
+                                            8,
+                                            23,
+                                            19
+                                    ),
                                     new CornerRadii(15),
                                     Insets.EMPTY
                             )
@@ -1342,9 +822,9 @@ public class SchemesPage {
                     new Border(
                             new BorderStroke(
                                     Color.rgb(
-                                            190,
-                                            190,
-                                            185
+                                            28,
+                                            55,
+                                            45
                                     ),
                                     BorderStrokeStyle.SOLID,
                                     new CornerRadii(15),
@@ -1354,223 +834,15 @@ public class SchemesPage {
             );
         }
 
-
         return categoryButton;
     }
-
-
-    // =========================================================
-    // FOOTER
-    // =========================================================
-
-    private HBox createFooter() {
-
-        HBox footer =
-                new HBox();
-
-        footer.setPadding(
-                new Insets(
-                        18,
-                        25,
-                        18,
-                        25
-                )
-        );
-
-        footer.setSpacing(70);
-
-        footer.setAlignment(
-                Pos.TOP_LEFT
-        );
-
-        footer.setPrefHeight(
-                100
-        );
-
-        footer.setBackground(
-                new Background(
-                        new BackgroundFill(
-                                Color.rgb(
-                                        235,
-                                        235,
-                                        233
-                                ),
-                                CornerRadii.EMPTY,
-                                Insets.EMPTY
-                        )
-                )
-        );
-
-
-        // -----------------------------------------------------
-        // BRAND
-        // -----------------------------------------------------
-
-        VBox brandColumn =
-                new VBox();
-
-        brandColumn.setSpacing(5);
-
-
-        Label brandName =
-                new Label(
-                        "AgriBiz Hub"
-                );
-
-        brandName.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        14
-                )
-        );
-
-        brandName.setTextFill(
-                darkGreen
-        );
-
-
-        Label brandDescription =
-                new Label(
-                        "Empowering Sustainable Agriculture."
-                );
-
-        brandDescription.setFont(
-                Font.font(
-                        "Arial",
-                        9
-                )
-        );
-
-        brandDescription.setTextFill(
-                grayText
-        );
-
-
-        Label copyright =
-                new Label(
-                        "© 2024 AgriBiz Hub."
-                );
-
-        copyright.setFont(
-                Font.font(
-                        "Arial",
-                        9
-                )
-        );
-
-        copyright.setTextFill(
-                grayText
-        );
-
-
-        brandColumn.getChildren().addAll(
-
-                brandName,
-
-                brandDescription,
-
-                copyright
-        );
-
-
-        // -----------------------------------------------------
-        // OTHER FOOTER COLUMNS
-        // -----------------------------------------------------
-
-        VBox governmentColumn =
-                createFooterColumn(
-                        "Government Schemes",
-                        "Market News"
-                );
-
-
-        VBox farmerColumn =
-                createFooterColumn(
-                        "Farmer Community",
-                        "Terms of Service"
-                );
-
-
-        VBox privacyColumn =
-                createFooterColumn(
-                        "Privacy Policy"
-                );
-
-
-        // -----------------------------------------------------
-        // ADD FOOTER
-        // -----------------------------------------------------
-
-        footer.getChildren().addAll(
-
-                brandColumn,
-
-                governmentColumn,
-
-                farmerColumn,
-
-                privacyColumn
-        );
-
-
-        return footer;
-    }
-
-
-    // =========================================================
-    // FOOTER COLUMN
-    // =========================================================
-
-    private VBox createFooterColumn(
-            String... footerItems) {
-
-        VBox footerColumn =
-                new VBox();
-
-        footerColumn.setSpacing(8);
-
-
-        for (String item : footerItems) {
-
-            Label footerLabel =
-                    new Label(
-                            item
-                    );
-
-            footerLabel.setFont(
-                    Font.font(
-                            "Arial",
-                            9
-                    )
-            );
-
-            footerLabel.setTextFill(
-                    Color.rgb(
-                            70,
-                            75,
-                            70
-                    ));
-
-
-            footerColumn.getChildren().add(
-                    footerLabel
-            );
-        }
-
-
-        return footerColumn;
-    }
-
 
     // =========================================================
     // SHOW MESSAGE
     // =========================================================
 
-    private void showMessage(
-
+    private static void showMessage(
             String title,
-
             String message) {
 
         Alert alert =
@@ -1593,13 +865,14 @@ public class SchemesPage {
         alert.showAndWait();
     }
 
-
     // =========================================================
-    // GET SCENE
+    // BACK TO SCHEMES
     // =========================================================
 
-    public Scene getScene() {
+    public void backtoSchemes() {
 
-        return schemesScene;
+        LoginPage.mainStage.setScene(
+                schemesScene
+        );
     }
 }
