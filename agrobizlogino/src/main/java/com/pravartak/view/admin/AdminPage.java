@@ -426,18 +426,13 @@ public class AdminPage {
                 // ROOT STYLE
                 // =========================
 
-                bp.setStyle(
-                                "-fx-background-color:#080C0D;");
+                bp.setStyle("-fx-background-color:#080C0D;");
 
                 // =========================
                 // SCENE
                 // =========================
 
-                Scene sc = new Scene(
-                                bp,
-                                1000,
-                                700);
-
+                Scene sc = new Scene(bp,1000,700);
                 AdminPageScene = sc;
 
                 return AdminPageScene;
