@@ -1,9 +1,12 @@
 package com.pravartak.view.buyer;
 
-import com.pravartak.controller.Buyercontroller;
+import com.pravartak.controller.buyercontroller.Contactcontroller;
+import com.pravartak.view.buyer.common.buyerTop;
+import com.pravartak.view.farmer.common.Footer;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,16 +19,19 @@ import javafx.scene.text.FontWeight;
 
 public class Market {
 
-    private final Buyercontroller controller;
+    private final Contactcontroller controller;
 
-    public Market(Buyercontroller controller) {
+    public Market(Contactcontroller controller) {
         this.controller = controller;
     }
 
-    public Parent createView() {
+    public Scene getMarketPage() {
 
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: #F4F8F3;");
+        root.setStyle("-fx-background-color: #F4F8F3;");
+        root.setTop(new buyerTop().createBuyerTop("Market"));
+        root.setBottom(new Footer().createFooter());
 
         Label logo = new Label("AgroBiz");
         logo.setFont(Font.font("Arial", FontWeight.BOLD, 25));
@@ -45,9 +51,7 @@ public class Market {
                 "-fx-text-fill: white;" +
                 "-fx-font-weight: bold;"
         );
-        watchlistButton.setOnAction(e ->
-                controller.show(new Watchlist(controller).createView())
-        );
+        
 
         Button HomepageButton = new Button("Homepage");
         HomepageButton.setStyle(
@@ -55,9 +59,7 @@ public class Market {
                 "-fx-text-fill: white;" +
                 "-fx-font-weight: bold;"
         );
-        HomepageButton.setOnAction(e ->
-                controller.show(new BuyerHomepage(controller).createView())
-        );
+        
 
         HBox menu = new HBox(18, marketButton, watchlistButton, HomepageButton);
         menu.setAlignment(Pos.CENTER);
@@ -154,9 +156,9 @@ public class Market {
         VBox content = new VBox(25, title, products);
         content.setPadding(new Insets(40, 65, 40, 65));
 
-        root.setTop(navbar);
+        //root.setTop(navbar);
         root.setCenter(content);
 
-        return root;
+        return new Scene(root, 800, 600);
     }
 }

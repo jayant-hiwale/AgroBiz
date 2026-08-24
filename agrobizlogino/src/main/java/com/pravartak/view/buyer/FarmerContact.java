@@ -1,6 +1,7 @@
 package com.pravartak.view.buyer;
 
-import com.pravartak.controller.Buyercontroller;
+import com.pravartak.controller.buyercontroller.Contactcontroller;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -13,13 +14,13 @@ import javafx.scene.text.FontWeight;
 
 public class FarmerContact {
 
-    private final Buyercontroller controller;
+    private final Contactcontroller controller;
     private final String product;
     private final String farmer;
     private final String mobile;
     private final String location;
 
-    public FarmerContact(Buyercontroller controller, String product,
+    public FarmerContact(Contactcontroller controller, String product,
                          String farmer, String mobile, String location) {
         this.controller = controller;
         this.product = product;
@@ -56,7 +57,7 @@ public class FarmerContact {
                 "-fx-padding: 11 18;"
         );
         backButton.setOnAction(e ->
-                controller.show(new Market(controller).createView())
+                controller.show(new Market(controller).getMarketPage())
         );
 
         VBox card = new VBox(17,

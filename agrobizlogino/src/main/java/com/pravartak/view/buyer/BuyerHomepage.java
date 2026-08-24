@@ -1,10 +1,11 @@
 package com.pravartak.view.buyer;
 
-import com.pravartak.controller.Buyercontroller;
+import com.pravartak.controller.buyercontroller.Contactcontroller;
+import com.pravartak.view.buyer.common.buyerTop;
+import com.pravartak.view.farmer.common.Footer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.control.Alert;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -16,77 +17,77 @@ import javafx.scene.text.FontWeight;
 
 public class BuyerHomepage {
 
-    private final Buyercontroller controller;
 
-    public BuyerHomepage(Buyercontroller controller) {
+
+    private final Contactcontroller controller;
+
+    public BuyerHomepage(Contactcontroller controller) {
         this.controller = controller;
     }
 
-    public Parent createView() {
+    public Scene getBuyerHomePage() {
 
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: #F4F8F3;");
+        root.setTop(new buyerTop().createBuyerTop("Home"));
+        root.setBottom(new Footer().createFooter());
 
-        Label logo = new Label("AgroBiz");
-        logo.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-        logo.setStyle("-fx-text-fill: #9BE29B;");
+        // Label logo = new Label("AgroBiz");
+        // logo.setFont(Font.font("Arial", FontWeight.BOLD, 25));
+        // logo.setStyle("-fx-text-fill: #9BE29B;");
 
-        Button marketButton = new Button("Market");
-        marketButton.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-weight: bold;"
-        );
-        marketButton.setOnAction(e ->
-                controller.show(new Market(controller).createView())
-        );
+        // Button marketButton = new Button("Market");
+        // marketButton.setStyle(
+        //         "-fx-background-color: transparent;" +
+        //         "-fx-text-fill: white;" +
+        //         "-fx-font-weight: bold;"
+        // );
+        // marketButton.setOnAction(e ->
+        //         controller.show(new Market(controller).createView())
+        // );
 
-        Button watchlistButton = new Button("Watchlist");
-        watchlistButton.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-weight: bold;"
-        );
-        watchlistButton.setOnAction(e ->
-                controller.show(new Watchlist(controller).createView())
-        );
+        // Button watchlistButton = new Button("Watchlist");
+        // watchlistButton.setStyle(
+        //         "-fx-background-color: transparent;" +
+        //         "-fx-text-fill: white;" +
+        //         "-fx-font-weight: bold;"
+        // );
+        
 
-        Button HomepageButton = new Button("Homepage");
-        HomepageButton.setStyle(
-                "-fx-background-color: #238636;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 18;"
-        );
-        HomepageButton.setOnAction(e ->
-                controller.show(new BuyerHomepage(controller).createView())
-        );
+        // Button HomepageButton = new Button("Homepage");
+        // HomepageButton.setStyle(
+        //         "-fx-background-color: #238636;" +
+        //         "-fx-text-fill: white;" +
+        //         "-fx-font-weight: bold;" +
+        //         "-fx-background-radius: 18;"
+        // );
+        
 
-        HBox menu = new HBox(18, marketButton, watchlistButton, HomepageButton);
-        menu.setAlignment(Pos.CENTER);
+        // HBox menu = new HBox(18, marketButton, watchlistButton, HomepageButton);
+        // menu.setAlignment(Pos.CENTER);
 
-        Button profileButton = new Button("◉  Profile");
-        profileButton.setStyle(
-                "-fx-background-color: #238636;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 18;" +
-                "-fx-padding: 8 15;"
-        );
-        profileButton.setOnAction(e -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Profile");
-            alert.setHeaderText("Buyer Profile");
-            alert.setContentText("Name: Buyer\nMobile: 9876543210");
-            alert.showAndWait();
-        });
+        // Button profileButton = new Button("◉  Profile");
+        // profileButton.setStyle(
+        //         "-fx-background-color: #238636;" +
+        //         "-fx-text-fill: white;" +
+        //         "-fx-font-weight: bold;" +
+        //         "-fx-background-radius: 18;" +
+        //         "-fx-padding: 8 15;"
+        // );
+        // profileButton.setOnAction(e -> {
+        //     Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        //     alert.setTitle("Profile");
+        //     alert.setHeaderText("Buyer Profile");
+        //     alert.setContentText("Name: Buyer\nMobile: 9876543210");
+        //     alert.showAndWait();
+        // });
 
-        BorderPane navbar = new BorderPane();
-        navbar.setPadding(new Insets(18, 40, 18, 40));
-        navbar.setStyle("-fx-background-color: #173B24;");
-        navbar.setLeft(logo);
-        navbar.setCenter(menu);
-        navbar.setRight(profileButton);
+        // BorderPane navbar = new BorderPane();
+        // navbar.setPadding(new Insets(18, 40, 18, 40));
+        // navbar.setStyle("-fx-background-color: #173B24;");
+        // //navbar.setLeft(logo);
+        // //navbar.setCenter(menu);
+        // navbar.setRight(profileButton);
 
         Label title = new Label("Fresh From Farmers,\nDirect To You.");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 42));
@@ -119,9 +120,9 @@ public class BuyerHomepage {
                 "-fx-background-radius: 8;" +
                 "-fx-padding: 13 25;"
         );
-        viewMarketButton.setOnAction(e ->
-                controller.show(new Market(controller).createView())
-        );
+        // viewMarketButton.setOnAction(e ->
+        //         controller.show(new Market(controller).getMarketPage())
+        // );
 
         Label category = new Label("Popular Categories");
         category.setFont(Font.font("Arial", FontWeight.BOLD, 22));
@@ -156,9 +157,9 @@ public class BuyerHomepage {
         content.setAlignment(Pos.CENTER);
         content.setPadding(new Insets(55));
 
-        root.setTop(navbar);
+        // root.setTop(navbar);
         root.setCenter(content);
 
-        return root;
+        return new Scene(root, 1000, 700);
     }
 }

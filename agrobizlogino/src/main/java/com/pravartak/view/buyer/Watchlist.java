@@ -1,23 +1,31 @@
 package com.pravartak.view.buyer;
 
-import com.pravartak.controller.Buyercontroller;
+import com.pravartak.view.buyer.common.buyerTop;
+import com.pravartak.view.farmer.common.Footer;
+
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class Watchlist {
 
-    private final Buyercontroller controller;
+    //private final Buyercontroller controller;
 
-    public Watchlist(Buyercontroller controller) {
-        this.controller = controller;
-    }
+    // public Watchlist(Buyercontroller controller) {
+    //     this.controller = controller;
+    // }
 
-    public Parent createView() {
+
+    public Scene getWatchlistPage() {
+        BorderPane root = new BorderPane();
+        root.setStyle("-fx-background-color: #F4F8F3;");
+        root.setTop(new buyerTop().createBuyerTop("Watchlist"));
+        root.setBottom(new Footer().createFooter());
 
         VBox page = new VBox(18);
         page.setPadding(new Insets(55));
@@ -38,12 +46,10 @@ public class Watchlist {
                 "-fx-background-radius: 7;" +
                 "-fx-padding: 11 18;"
         );
-        marketButton.setOnAction(e ->
-                controller.show(new Market(controller).createView())
-        );
-
+        
         page.getChildren().addAll(title, message, marketButton);
-
-        return page;
+        root.setCenter(page);
+        Scene scene = new Scene(root, 800, 600);
+        return scene;
     }
 }
