@@ -1,27 +1,47 @@
 package com.pravartak.controller.buyercontroller;
 
-import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 public class Contactcontroller {
 
-    private final BorderPane mainLayout = new BorderPane();
+    private Stage stage;
 
+    // १. Default Constructor (LoginPage साठी)
     public Contactcontroller() {
-        mainLayout.setStyle("-fx-background-color: #F4F8F3;");
     }
 
-    public BorderPane getMainLayout() {
-        return mainLayout;
+    // २. Parameterized Constructor
+    public Contactcontroller(Stage stage) {
+        this.stage = stage;
     }
 
-    public void show(Node page) {
-        mainLayout.setCenter(page);
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
-    public Object show(Scene marketPage) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'show'");
+    public Stage getStage() {
+        return stage;
+    }
+
+    
+    public void show(Parent root) {
+        if (stage != null) {
+            if (stage.getScene() == null) {
+                stage.setScene(new Scene(root, 800, 600));
+            } else {
+                stage.getScene().setRoot(root);
+            }
+            stage.show();
+        }
+    }
+
+    
+    public void show(Scene scene) {
+        if (stage != null) {
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 }
