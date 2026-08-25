@@ -6,9 +6,9 @@ import com.pravartak.view.farmer.CommunityPage;
 
 import java.net.URL;
 import com.pravartak.view.farmer.HomePageFarmer;
+import com.pravartak.controller.buyercontroller.Contactcontroller;
 import com.pravartak.view.admin.AdminPage;
-import com.pravartak.view.farmer.MarketPlace;
-
+import com.pravartak.view.buyer.BuyerHomepage;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -37,7 +37,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class LoginPage extends Application {
@@ -361,14 +360,13 @@ public class LoginPage extends Application {
                 System.out.println(
                         "Buyer login Successful!");
 
-                // BuyerHomePage buyerHomePage =
-                // new BuyerHomePage();
+                BuyerHomepage buyerHomePage = new BuyerHomepage(new Contactcontroller());
 
-                // mainStage.setScene(
-                // buyerHomePage.getBuyerHomePage()
-                // );
-                Create_Profile createProfile = new Create_Profile();
-                LoginPage.mainStage.setScene(createProfile.getCreateProfilePageScene(null));
+                mainStage.setScene(buyerHomePage.getBuyerHomePage()
+                );
+                //LoginPage.mainStage.setScene(buyerHomePage.createView());
+                // Create_Profile createProfile = new Create_Profile();
+                // LoginPage.mainStage.setScene(createProfile.getCreateProfilePageScene(null));
 
                 return;
             }

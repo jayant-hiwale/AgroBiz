@@ -14,7 +14,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-import com.pravartak.view.admin.AdminPage;
 import com.pravartak.view.login.LoginPage;
 
 public class CreateCourseAdmin {

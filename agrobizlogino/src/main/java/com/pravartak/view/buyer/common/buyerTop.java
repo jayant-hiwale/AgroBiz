@@ -1,21 +1,18 @@
-package com.pravartak.view.farmer.common;
+package com.pravartak.view.buyer.common;
 
-
-import com.pravartak.view.farmer.ExplorerPage;
-import com.pravartak.view.farmer.HomePageFarmer;
-import com.pravartak.view.farmer.LearningPage;
-import com.pravartak.view.farmer.MarketPlace;
+import com.pravartak.view.buyer.Ai;
+import com.pravartak.view.buyer.BuyerHomepage;
+import com.pravartak.view.buyer.Market;
+import com.pravartak.view.buyer.Watchlist;
 import com.pravartak.view.login.LoginPage;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
-public class NavBar {
-
-    public HBox createNavbar(String currentPage) {
+public class buyerTop {
+    public HBox createBuyerTop(String currentPage) {
 
         HBox navbar = new HBox();
         navbar.setPadding(new Insets(10, 20, 10, 20));
@@ -32,60 +29,46 @@ public class NavBar {
 
         // Navigation
         Button home =  navButton("Home");
-        Button explorer = navButton("Explorer");
-        Button marketplace = navButton("Marketplace");
-        Button community = navButton("Community");
-        Button learning = navButton("Learning");
-        Button schemes = navButton("Schemes");
+        Button market = navButton("Market");
+        Button watchlist = navButton("Watchlist");
+        Button Aiadvisor = navButton("Aiadvisor");
+        
 
         if (currentPage.equals("Home")) {
             home.setStyle(navButtonActive());
         }
         home.setOnAction(e -> {
-            HomePageFarmer homePageFarmer = new HomePageFarmer();
-            LoginPage.mainStage.setScene(homePageFarmer.getHomePageFarmer());
+            BuyerHomepage buyerHomePage = new BuyerHomepage(null);
+            LoginPage.mainStage.setScene(buyerHomePage.getBuyerHomePage());
         });
 
         // Current page
-        if (currentPage.equals("Explorer")) {
-            explorer.setStyle(navButtonActive());
+        if (currentPage.equals("Market")) {
+            market.setStyle(navButtonActive());
         }
-        explorer.setOnAction(e -> {
-            ExplorerPage explorerPage = new ExplorerPage();
-            LoginPage.mainStage.setScene(explorerPage.getExplorerPage());
+        market.setOnAction(e -> {
+            
+            Market marketPage = new Market(null);
+            LoginPage.mainStage.setScene(marketPage.getMarketPage());
         });
 
-        if (currentPage.equals("Marketplace")) {
-            marketplace.setStyle(navButtonActive());
+        if (currentPage.equals("Watchlist")) {
+            watchlist.setStyle(navButtonActive());
         }
-        marketplace.setOnAction(e -> {
-
-            MarketPlace marketPlaceScene = new MarketPlace();
-            LoginPage.mainStage.setScene(marketPlaceScene.getMarketPlaceScene());
+        watchlist.setOnAction(e -> {
+           Watchlist watchlistPage = new Watchlist();
+           LoginPage.mainStage.setScene(watchlistPage.getWatchlistPage());
+        });
+         if (currentPage.equals("Watchlist")) {
+            watchlist.setStyle(navButtonActive());
+        }
+        Aiadvisor.setOnAction(e -> {
+           Ai AiPage = new Ai();
+           LoginPage.mainStage.setScene(AiPage.gatAiScene());
         });
 
-        if (currentPage.equals("Community")) {
-            community.setStyle(navButtonActive());
-        }
-        community.setOnAction(e -> {
-
-            // CommuityPage commuityPageScene = new CommuityPage();
-            // LoginPage.mainStage.setScene(commuityPageScene.getCommunityScene());
-        });
-
-        if (currentPage.equals("Learning")) {
-            learning.setStyle(navButtonActive());
-        }
-
-        learning.setOnAction(e->{
-            LearningPage learningPage = new LearningPage();
-            LoginPage.mainStage.setScene(learningPage.get_learning_pageScene());
-        });
-        if (currentPage.equals("Schemes")) {
-            schemes.setStyle(navButtonActive());
-        }
-
-        HBox center = new HBox(25,home,explorer,marketplace,community,learning,schemes);
+        
+        HBox center = new HBox(25,home,market,watchlist,Aiadvisor);
         center.setAlignment(Pos.CENTER);
 
         // Right
