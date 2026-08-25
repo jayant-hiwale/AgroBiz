@@ -4,6 +4,7 @@ package com.pravartak.view.farmer;
 import java.net.URL;
 
 import com.pravartak.view.login.LoginPage;
+import javafx.scene.control.ProgressBar;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -1913,251 +1915,618 @@ private Button createSuggestionButton(String text) {
     // INVESTMENT PAGE
     // =========================================================
 
-    private VBox createInvestmentPage() {
+   // =========================================================
+// INVESTMENT PAGE
+// =========================================================
 
-        VBox page = new VBox();
-        page.setBackground(new Background(new BackgroundFill(
-                GREEN, CornerRadii.EMPTY, Insets.EMPTY
-        )));
+    // private VBox createInvestmentPage() {
+    //     VBox page = new VBox();
+    //     page.setBackground(new Background(new BackgroundFill(CREAM, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        HBox topBar = createTopBar(
-                "Investment Calculator",
-                "Estimate your farming investment and returns."
-        );
+    //     HBox topBar = createTopBar("Investment Calculator", "Plan your course investment month by month.");
 
-        VBox content = new VBox(20);
-        content.setPadding(new Insets(30, 35, 35, 35));
+    //     VBox content = new VBox(25);
+    //     content.setPadding(new Insets(30, 35, 35, 35));
+    //     content.setBackground(new Background(new BackgroundFill(CREAM, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        // Left card: farm details entered by the farmer.
-        VBox calculatorCard = createWhiteCard();
-        calculatorCard.setPrefWidth(330);
+    //     VBox inputCard = createWhiteCard();
+    //     inputCard.setMaxWidth(650);
+    //     inputCard.setPadding(new Insets(30));
+    //     inputCard.setSpacing(14);
 
-        Label title = new Label("Farm Investment Details");
-        title.setTextFill(DARK_TEXT);
-        title.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+    //     Label title = new Label("Course Investment");
+    //     title.setTextFill(DARK_TEXT);
+    //     title.setFont(Font.font("Arial", FontWeight.BOLD, 22));
 
-        TextField acres = createInvestmentField("10");
-        acres.setText("10");
+    //     Label courseLabel = new Label("Course Duration (Months)");
+    //     courseLabel.setTextFill(GREY);
+    //     courseLabel.setFont(Font.font("Arial", FontWeight.BOLD, 13));
 
-        ComboBox<String> cropType = new ComboBox<>();
-        cropType.getItems().addAll("Wheat", "Rice", "Maize", "Tomato");
-        cropType.setValue("Wheat");
-        cropType.setPrefHeight(40);
-        cropType.setMaxWidth(Double.MAX_VALUE);
+    //     TextField courseDuration = new TextField();
+    //     courseDuration.setPromptText("Example: 6");
+    //     courseDuration.setPrefHeight(45);
+    //     courseDuration.setFont(Font.font("Arial", 14));
+    //     courseDuration.setStyle("-fx-background-color: #ffffff;" +
+    //             "-fx-background-radius: 8;" +
+    //             "-fx-border-color: #263a2b;" +
+    //             "-fx-border-radius: 8;" +
+    //             "-fx-padding: 0 12;" +
+    //             "-fx-text-fill: #172018;");
 
-        TextField seedCost = createInvestmentField("150");
-        seedCost.setText("150");
-        TextField fertilizerCost = createInvestmentField("200");
-        fertilizerCost.setText("200");
-        TextField labourCost = createInvestmentField("300");
-        labourCost.setText("300");
-        TextField expectedRevenue = createInvestmentField("1200");
-        expectedRevenue.setText("1200");
+    //     Label investmentLabel = new Label("Total Investment");
+    //     investmentLabel.setTextFill(GREY);
+    //     investmentLabel.setFont(Font.font("Arial", FontWeight.BOLD, 13));
 
-        Button calculate = createWishlistActionButton("Calculate Investment");
+    //     TextField totalInvestment = new TextField();
+    //     totalInvestment.setPromptText("Example: 60000");
+    //     totalInvestment.setPrefHeight(45);
+    //     totalInvestment.setFont(Font.font("Arial", 14));
+    //     totalInvestment.setStyle("-fx-background-color: #ffffff;" +
+    //             "-fx-background-radius: 8;" +
+    //             "-fx-border-color: #263a2b;" +
+    //             "-fx-border-radius: 8;" +
+    //             "-fx-padding: 0 12;" +
+    //             "-fx-text-fill: #172018;");
 
-        calculatorCard.getChildren().addAll(
-                title,
-                createSpace(8),
-                createInvestmentInputLabel("Total Area (Acres)"),
-                acres,
-                createInvestmentInputLabel("Crop Type"),
-                cropType,
-                createInvestmentInputLabel("Seed Cost (per Acre)"),
-                seedCost,
-                createInvestmentInputLabel("Fertilizer Cost (per Acre)"),
-                fertilizerCost,
-                createInvestmentInputLabel("Labor & Equipment Cost (per Acre)"),
-                labourCost,
-                createInvestmentInputLabel("Expected Revenue (per Acre)"),
-                expectedRevenue,
-                createSpace(6),
-                calculate
-        );
+    //     Button calculate = createWishlistActionButton("Calculate Monthly Investment");
+    //     calculate.setTextFill(Color.BLACK);
+    //     calculate.setPrefHeight(48);
 
-        // Right side: calculated results and a simple cost breakdown.
-        VBox results = new VBox(18);
-        HBox.setHgrow(results, Priority.ALWAYS);
+    //     Label errorMessage = new Label();
+    //     errorMessage.setTextFill(Color.web("#e57373"));
+    //     errorMessage.setFont(Font.font("Arial", 12));
 
-        Label resultTitle = new Label("Estimated Results");
-        resultTitle.setTextFill(DARK_TEXT);
-        resultTitle.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+    //     inputCard.getChildren().addAll(
+    //             title,
+    //             createSpace(8),
+    //             courseLabel,
+    //             courseDuration,
+    //             investmentLabel,
+    //             totalInvestment,
+    //             createSpace(5),
+    //             calculate,
+    //             errorMessage
+    //     );
 
-        Label totalValue = createInvestmentValue("₹6,500");
-        Label revenueValue = createInvestmentValue("₹12,000");
-        Label profitValue = createInvestmentValue("₹5,500");
-        Label roiValue = createInvestmentValue("84.6%");
+    //     VBox resultCard = createWhiteCard();
+    //     resultCard.setMaxWidth(650);
+    //     resultCard.setPadding(new Insets(30));
+    //     resultCard.setSpacing(12);
 
-        HBox firstRow = new HBox(12,
-                createInvestmentStatCard("TOTAL INVESTMENT", totalValue, "🧾", Color.rgb(210, 40, 40)),
-                createInvestmentStatCard("EST. REVENUE", revenueValue, "↗", GREEN)
-        );
-        HBox secondRow = new HBox(12,
-                createInvestmentStatCard("EST. PROFIT", profitValue, "₹", GREEN),
-                createInvestmentStatCard("RETURN ON INVESTMENT\n(ROI)", roiValue, "%", DARK_TEXT)
-        );
+    //     Label resultTitle = new Label("Month-wise Investment");
+    //     resultTitle.setTextFill(DARK_TEXT);
+    //     resultTitle.setFont(Font.font("Arial", FontWeight.BOLD, 22));
 
-        VBox breakdown = createWhiteCard();
-        breakdown.setSpacing(14);
+    //     VBox monthlyList = new VBox(8);
 
-        Label breakdownTitle = new Label("INVESTMENT BREAKDOWN");
-        breakdownTitle.setTextFill(GREY);
-        breakdownTitle.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+    //     Label instruction = new Label("Enter course duration and total investment to see your monthly plan.");
+    //     instruction.setTextFill(GREY);
+    //     instruction.setFont(Font.font("Arial", 13));
+    //     instruction.setWrapText(true);
 
-        Label breakdownText = new Label("Costs per acre for " + cropType.getValue());
-        breakdownText.setTextFill(GREY);
-        breakdownText.setFont(Font.font("Arial", 12));
+    //     monthlyList.getChildren().add(instruction);
+    //     resultCard.getChildren().addAll(resultTitle, monthlyList);
 
-        breakdown.getChildren().addAll(
-                breakdownTitle,
-                breakdownText,
-                createBreakdownRow("Seeds", "₹150"),
-                createBreakdownRow("Fertilizer", "₹200"),
-                createBreakdownRow("Labor", "₹300")
-        );
+    //     calculate.setOnAction(event -> {
+    //         try {
+    //             int months = Integer.parseInt(courseDuration.getText().trim());
+    //             double investment = Double.parseDouble(totalInvestment.getText().trim());
 
-        calculate.setOnAction(event -> {
-            try {
-                double area = Double.parseDouble(acres.getText().trim());
-                double seeds = Double.parseDouble(seedCost.getText().trim());
-                double fertilizer = Double.parseDouble(fertilizerCost.getText().trim());
-                double labour = Double.parseDouble(labourCost.getText().trim());
-                double revenuePerAcre = Double.parseDouble(expectedRevenue.getText().trim());
+    //             if (months <= 0) {
+    //                 errorMessage.setText("Course duration must be greater than 0.");
+    //                 return;
+    //             }
 
-                if (area <= 0 || seeds < 0 || fertilizer < 0 || labour < 0 || revenuePerAcre < 0) {
-                    breakdownText.setText("Enter a positive area and valid costs or revenue.");
-                    return;
+    //             if (investment <= 0) {
+    //                 errorMessage.setText("Total investment must be greater than 0.");
+    //                 return;
+    //             }
+
+    //             errorMessage.setText("");
+    //             monthlyList.getChildren().clear();
+
+    //             double monthlyInvestment = investment / months;
+
+    //             for (int i = 1; i <= months; i++) {
+    //                 HBox monthRow = new HBox();
+    //                 monthRow.setAlignment(Pos.CENTER_LEFT);
+    //                 monthRow.setPadding(new Insets(12, 15, 12, 15));
+    //                 monthRow.setBackground(new Background(
+    //                         new BackgroundFill(
+    //                                 Color.web("#101914"),
+    //                                 new CornerRadii(8),
+    //                                 Insets.EMPTY
+    //                         )
+    //                 ));
+
+    //                 Label monthLabel = new Label("Month " + i);
+    //                 monthLabel.setTextFill(DARK_TEXT);
+    //                 monthLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+
+    //                 Region spacer = new Region();
+    //                 HBox.setHgrow(spacer, Priority.ALWAYS);
+
+    //                 Label amountLabel = new Label(
+    //                         "₹" + String.format("%,.2f", monthlyInvestment)
+    //                 );
+    //                 amountLabel.setTextFill(GREEN);
+    //                 amountLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+
+    //                 monthRow.getChildren().addAll(monthLabel, spacer, amountLabel);
+    //                 monthlyList.getChildren().add(monthRow);
+    //             }
+
+    //         } catch (NumberFormatException exception) {
+    //             errorMessage.setText("Please enter valid numbers.");
+    //         }
+    //     });
+
+    //     VBox wrapper = new VBox(20, inputCard, resultCard);
+    //     wrapper.setAlignment(Pos.TOP_CENTER);
+
+    //     ScrollPane scroll = new ScrollPane(wrapper);
+    //     scroll.setFitToWidth(true);
+    //     scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+    //     scroll.setStyle("-fx-background-color: #080c0d;" +
+    //             "-fx-background: #080c0d;" +
+    //             "-fx-control-inner-background: #080c0d;");
+
+    //     VBox.setVgrow(scroll, Priority.ALWAYS);
+    //     page.getChildren().addAll(topBar, scroll);
+
+    //     return page;
+    // }
+    // =========================================================
+// INVESTMENT PAGE
+// =========================================================
+
+private VBox createInvestmentPage() {
+    VBox page = new VBox();
+    page.setBackground(new Background(new BackgroundFill(CREAM, CornerRadii.EMPTY, Insets.EMPTY)));
+
+    HBox topBar = createTopBar("Course Investment Planner", "Plan your course investment month by month.");
+
+    VBox content = new VBox(22);
+    content.setPadding(new Insets(25, 35, 35, 35));
+    content.setBackground(new Background(new BackgroundFill(CREAM, CornerRadii.EMPTY, Insets.EMPTY)));
+
+    // =====================================================
+    // INPUT CARD
+    // =====================================================
+
+    VBox inputCard = createWhiteCard();
+    inputCard.setMaxWidth(700);
+    inputCard.setPadding(new Insets(28));
+    inputCard.setSpacing(12);
+
+    Label title = new Label("Course Investment Details");
+    title.setTextFill(DARK_TEXT);
+    title.setFont(Font.font("Arial", FontWeight.BOLD, 22));
+
+    Label courseLabel = new Label("Select Course");
+    courseLabel.setTextFill(GREY);
+    courseLabel.setFont(Font.font("Arial", FontWeight.BOLD, 13));
+
+    ComboBox<String> courseBox = new ComboBox<>();
+    courseBox.getItems().addAll(
+            "Poultry Farming",
+            "Dairy Farming",
+            "Aquaculture",
+            "Smart Agriculture",
+            "Precision Agriculture",
+            "AI in Agriculture"
+    );
+    courseBox.setValue("Poultry Farming");
+    courseBox.setPrefHeight(45);
+    courseBox.setMaxWidth(Double.MAX_VALUE);
+
+    Label durationLabel = new Label("Course Duration (Months)");
+    durationLabel.setTextFill(GREY);
+    durationLabel.setFont(Font.font("Arial", FontWeight.BOLD, 13));
+
+    ComboBox<Integer> durationBox = new ComboBox<>();
+    durationBox.getItems().addAll(3, 6, 9, 12);
+    durationBox.setValue(6);
+    durationBox.setPrefHeight(45);
+    durationBox.setMaxWidth(Double.MAX_VALUE);
+
+    Label totalLabel = new Label("Total Investment");
+    totalLabel.setTextFill(GREY);
+    totalLabel.setFont(Font.font("Arial", FontWeight.BOLD, 13));
+
+    TextField totalInvestmentField = new TextField();
+    totalInvestmentField.setPromptText("Example: 60000");
+    totalInvestmentField.setPrefHeight(45);
+    totalInvestmentField.setFont(Font.font("Arial", 14));
+    totalInvestmentField.setStyle(
+            "-fx-background-color: #ffffff;" +
+            "-fx-background-radius: 8;" +
+            "-fx-border-color: #263a2b;" +
+            "-fx-border-radius: 8;" +
+            "-fx-padding: 0 12;" +
+            "-fx-text-fill: #172018;"
+    );
+
+    Label initialLabel = new Label("Initial Investment");
+    initialLabel.setTextFill(GREY);
+    initialLabel.setFont(Font.font("Arial", FontWeight.BOLD, 13));
+
+    TextField initialInvestmentField = new TextField();
+    initialInvestmentField.setPromptText("Example: 10000");
+    initialInvestmentField.setPrefHeight(45);
+    initialInvestmentField.setFont(Font.font("Arial", 14));
+    initialInvestmentField.setStyle(
+            "-fx-background-color: #ffffff;" +
+            "-fx-background-radius: 8;" +
+            "-fx-border-color: #263a2b;" +
+            "-fx-border-radius: 8;" +
+            "-fx-padding: 0 12;" +
+            "-fx-text-fill: #172018;"
+    );
+
+    Button calculate = createWishlistActionButton("Calculate Investment Plan");
+    calculate.setPrefHeight(48);
+    calculate.setMaxWidth(Double.MAX_VALUE);
+
+    Label errorLabel = new Label();
+    errorLabel.setTextFill(Color.web("#e57373"));
+    errorLabel.setFont(Font.font("Arial", 12));
+
+    inputCard.getChildren().addAll(
+            title,
+            createSpace(5),
+            courseLabel,
+            courseBox,
+            durationLabel,
+            durationBox,
+            totalLabel,
+            totalInvestmentField,
+            initialLabel,
+            initialInvestmentField,
+            createSpace(5),
+            calculate,
+            errorLabel
+    );
+
+    // =====================================================
+    // SUMMARY CARD
+    // =====================================================
+
+    VBox summaryCard = createWhiteCard();
+    summaryCard.setMaxWidth(700);
+    summaryCard.setPadding(new Insets(25));
+    summaryCard.setSpacing(12);
+
+    Label summaryTitle = new Label("Investment Summary");
+    summaryTitle.setTextFill(DARK_TEXT);
+    summaryTitle.setFont(Font.font("Arial", FontWeight.BOLD, 21));
+
+    Label selectedCourse = new Label("Course: Poultry Farming");
+    selectedCourse.setTextFill(GREY);
+    selectedCourse.setFont(Font.font("Arial", 13));
+
+    Label totalValue = new Label("Total Investment: ₹0");
+    totalValue.setTextFill(DARK_TEXT);
+    totalValue.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+
+    Label initialValue = new Label("Initial Investment: ₹0");
+    initialValue.setTextFill(DARK_TEXT);
+    initialValue.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+
+    Label remainingValue = new Label("Remaining Investment: ₹0");
+    remainingValue.setTextFill(DARK_TEXT);
+    remainingValue.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+
+    Label monthlyValue = new Label("Monthly Investment: ₹0");
+    monthlyValue.setTextFill(GREEN);
+    monthlyValue.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+
+    ProgressBar progressBar = new ProgressBar(0);
+    progressBar.setPrefHeight(18);
+    progressBar.setMaxWidth(Double.MAX_VALUE);
+    progressBar.setStyle(
+            "-fx-accent: #68d34a;" +
+            "-fx-control-inner-background: #dfe7e0;"
+    );
+
+    Label progressLabel = new Label("Investment Progress: 0%");
+    progressLabel.setTextFill(GREY);
+    progressLabel.setFont(Font.font("Arial", 12));
+
+    summaryCard.getChildren().addAll(
+            summaryTitle,
+            selectedCourse,
+            totalValue,
+            initialValue,
+            remainingValue,
+            monthlyValue,
+            progressBar,
+            progressLabel
+    );
+
+    // =====================================================
+    // MONTH-WISE PLAN
+    // =====================================================
+
+    VBox monthlyCard = createWhiteCard();
+    monthlyCard.setMaxWidth(700);
+    monthlyCard.setPadding(new Insets(25));
+    monthlyCard.setSpacing(12);
+
+    Label monthlyTitle = new Label("Month-wise Investment Plan");
+    monthlyTitle.setTextFill(DARK_TEXT);
+    monthlyTitle.setFont(Font.font("Arial", FontWeight.BOLD, 21));
+
+    VBox monthlyList = new VBox(8);
+
+    Label monthlyInstruction = new Label(
+            "Calculate your plan to see the monthly investment."
+    );
+    monthlyInstruction.setTextFill(GREY);
+    monthlyInstruction.setFont(Font.font("Arial", 13));
+
+    monthlyList.getChildren().add(monthlyInstruction);
+
+    monthlyCard.getChildren().addAll(
+            monthlyTitle,
+            monthlyList
+    );
+
+    // =====================================================
+    // AI SUGGESTION
+    // =====================================================
+
+    VBox suggestionCard = new VBox(8);
+    suggestionCard.setMaxWidth(700);
+    suggestionCard.setPadding(new Insets(22));
+
+    suggestionCard.setBackground(
+            new Background(
+                    new BackgroundFill(
+                            Color.web("#102517"),
+                            new CornerRadii(12),
+                            Insets.EMPTY
+                    )
+            )
+    );
+
+    suggestionCard.setBorder(
+            new Border(
+                    new BorderStroke(
+                            Color.web("#2d6b3f"),
+                            BorderStrokeStyle.SOLID,
+                            new CornerRadii(12),
+                            new BorderWidths(1)
+                    )
+            )
+    );
+
+    Label suggestionTitle = new Label("💡 Investment Suggestion");
+    suggestionTitle.setTextFill(GREEN);
+    suggestionTitle.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+
+    Label suggestionText = new Label(
+            "Enter your investment details to receive a simple monthly investment suggestion."
+    );
+    suggestionText.setTextFill(Color.web("#c8d5ca"));
+    suggestionText.setFont(Font.font("Arial", 13));
+    suggestionText.setWrapText(true);
+
+    suggestionCard.getChildren().addAll(
+            suggestionTitle,
+            suggestionText
+    );
+
+    // =====================================================
+    // CALCULATE ACTION
+    // =====================================================
+
+    calculate.setOnAction(event -> {
+
+        try {
+
+            String selected = courseBox.getValue();
+            int months = durationBox.getValue();
+
+            double totalInvestment = Double.parseDouble(
+                    totalInvestmentField.getText().trim()
+            );
+
+            double initialInvestment = Double.parseDouble(
+                    initialInvestmentField.getText().trim()
+            );
+
+            if (totalInvestment <= 0) {
+                errorLabel.setText("Total investment must be greater than 0.");
+                return;
+            }
+
+            if (initialInvestment < 0) {
+                errorLabel.setText("Initial investment cannot be negative.");
+                return;
+            }
+
+            if (initialInvestment > totalInvestment) {
+                errorLabel.setText(
+                        "Initial investment cannot be greater than total investment."
+                );
+                return;
+            }
+
+            double remainingInvestment =
+                    totalInvestment - initialInvestment;
+
+            double monthlyInvestment =
+                    remainingInvestment / months;
+
+            selectedCourse.setText("Course: " + selected);
+
+            totalValue.setText(
+                    "Total Investment: ₹" +
+                    String.format("%,.0f", totalInvestment)
+            );
+
+            initialValue.setText(
+                    "Initial Investment: ₹" +
+                    String.format("%,.0f", initialInvestment)
+            );
+
+            remainingValue.setText(
+                    "Remaining Investment: ₹" +
+                    String.format("%,.0f", remainingInvestment)
+            );
+
+            monthlyValue.setText(
+                    "Monthly Investment: ₹" +
+                    String.format("%,.2f", monthlyInvestment)
+            );
+
+            monthlyList.getChildren().clear();
+
+            for (int i = 1; i <= months; i++) {
+
+                double currentAmount = monthlyInvestment;
+
+                if (i == months) {
+                    currentAmount = remainingInvestment -
+                            (monthlyInvestment * (months - 1));
                 }
 
-                double totalInvestment = area * (seeds + fertilizer + labour);
-                double estimatedRevenue = area * revenuePerAcre;
-                double estimatedProfit = estimatedRevenue - totalInvestment;
-                double roi = (estimatedProfit / totalInvestment) * 100;
+                HBox monthRow = new HBox();
+                monthRow.setAlignment(Pos.CENTER_LEFT);
+                monthRow.setPadding(
+                        new Insets(12, 15, 12, 15)
+                );
 
-                totalValue.setText("₹" + String.format("%,.0f", totalInvestment));
-                revenueValue.setText("₹" + String.format("%,.0f", estimatedRevenue));
-                profitValue.setText("₹" + String.format("%,.0f", estimatedProfit));
-                roiValue.setText(String.format("%.1f", roi) + "%");
-                breakdownText.setText("Costs per acre for " + cropType.getValue() + " • Based on " + area + " acres");
+                monthRow.setBackground(
+                        new Background(
+                                new BackgroundFill(
+                                        Color.web("#101914"),
+                                        new CornerRadii(8),
+                                        Insets.EMPTY
+                                )
+                        )
+                );
 
-            } catch (NumberFormatException exception) {
-                breakdownText.setText("Please enter valid numbers in all cost fields.");
+                Label monthLabel = new Label(
+                        "Month " + i
+                );
+
+                monthLabel.setTextFill(DARK_TEXT);
+                monthLabel.setFont(
+                        Font.font(
+                                "Arial",
+                                FontWeight.BOLD,
+                                14
+                        )
+                );
+
+                Region spacer = new Region();
+                HBox.setHgrow(
+                        spacer,
+                        Priority.ALWAYS
+                );
+
+                Label amountLabel = new Label(
+                        "₹" +
+                        String.format(
+                                "%,.2f",
+                                currentAmount
+                        )
+                );
+
+                amountLabel.setTextFill(GREEN);
+                amountLabel.setFont(
+                        Font.font(
+                                "Arial",
+                                FontWeight.BOLD,
+                                14
+                        )
+                );
+
+                monthRow.getChildren().addAll(
+                        monthLabel,
+                        spacer,
+                        amountLabel
+                );
+
+                monthlyList.getChildren().add(
+                        monthRow
+                );
             }
-        });
 
-        results.getChildren().addAll(resultTitle, firstRow, secondRow, breakdown);
-        HBox layout = new HBox(28, calculatorCard, results);
-        content.getChildren().add(layout);
+            progressBar.setProgress(
+                    initialInvestment / totalInvestment
+            );
 
-        ScrollPane scroll = new ScrollPane(content);
-        scroll.setFitToWidth(true);
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scroll.setStyle("-fx-background-color: transparent;");
+            int progress =
+                    (int) ((initialInvestment / totalInvestment) * 100);
 
-        VBox.setVgrow(scroll, Priority.ALWAYS);
-        page.getChildren().addAll(topBar, scroll);
+            progressLabel.setText(
+                    "Investment Progress: " +
+                    progress +
+                    "%"
+            );
 
-        return page;
-    }
+            suggestionText.setText(
+                    "For " + selected +
+                    ", your remaining investment is ₹" +
+                    String.format("%,.0f", remainingInvestment) +
+                    ". You need approximately ₹" +
+                    String.format("%,.2f", monthlyInvestment) +
+                    " per month for " +
+                    months +
+                    " months."
+            );
 
-    // Creates a consistent text field for calculator values.
-    private TextField createInvestmentField(String promptText) {
+            errorLabel.setText("");
 
-        TextField field = new TextField();
-        field.setPromptText(promptText);
-        field.setPrefHeight(45);
-        field.setFont(Font.font("Arial", 14));
-        field.setBackground(new Background(new BackgroundFill(
-                Color.WHITE, new CornerRadii(7), Insets.EMPTY
-        )));
-        field.setBorder(new Border(new BorderStroke(
-                BORDER_COLOR, BorderStrokeStyle.SOLID, new CornerRadii(7), new BorderWidths(1)
-        )));
+        } catch (NumberFormatException exception) {
 
-        return field;
-    }
+            errorLabel.setText(
+                    "Please enter valid investment amounts."
+            );
+        }
+    });
 
-    private Label createInvestmentInputLabel(String text) {
+    // =====================================================
+    // PAGE LAYOUT
+    // =====================================================
 
-        Label label = new Label(text);
-        label.setTextFill(GREY);
-        label.setFont(Font.font("Arial", 10));
+    VBox wrapper = new VBox(
+            20,
+            inputCard,
+            summaryCard,
+            monthlyCard,
+            suggestionCard
+    );
 
-        return label;
-    }
+    wrapper.setAlignment(Pos.TOP_CENTER);
 
-    private Label createInvestmentValue(String text) {
+    ScrollPane scroll = new ScrollPane(wrapper);
+    scroll.setFitToWidth(true);
+    scroll.setHbarPolicy(
+            ScrollPane.ScrollBarPolicy.NEVER
+    );
 
-        Label value = new Label(text);
-        value.setTextFill(Color.rgb(15, 20, 15));
-        value.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+    scroll.setStyle(
+            "-fx-background-color: #080c0d;" +
+            "-fx-background: #080c0d;" +
+            "-fx-control-inner-background: #080c0d;"
+    );
 
-        return value;
-    }
+    VBox.setVgrow(
+            scroll,
+            Priority.ALWAYS
+    );
 
-    // One result box: label, large value, and small icon.
-    private VBox createInvestmentStatCard(
-            String title,
-            Label value,
-            String icon,
-            Color borderColor) {
+    page.getChildren().addAll(
+            topBar,
+            scroll
+    );
 
-        VBox card = new VBox(8);
-        card.setPrefWidth(220);
-        card.setPadding(new Insets(17));
-        card.setBackground(new Background(new BackgroundFill(
-                CARD_BACKGROUND, new CornerRadii(10), Insets.EMPTY
-        )));
-        card.setBorder(new Border(new BorderStroke(
-                borderColor,
-                BorderStrokeStyle.SOLID,
-                new CornerRadii(10),
-                new BorderWidths(0, 0, 0, 3)
-        )));
-
-        Label heading = new Label(title);
-        heading.setTextFill(GREY);
-        heading.setFont(Font.font("Arial", FontWeight.BOLD, 9));
-
-        Label iconLabel = new Label(icon);
-        iconLabel.setTextFill(borderColor);
-        iconLabel.setFont(Font.font("Arial", FontWeight.BOLD, 17));
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        HBox topLine = new HBox(heading, spacer, iconLabel);
-
-        card.getChildren().addAll(topLine, value);
-        return card;
-    }
-
-    // Small rows form the simple investment breakdown area.
-    private HBox createBreakdownRow(String name, String amount) {
-
-        Label nameLabel = new Label(name);
-        nameLabel.setTextFill(DARK_TEXT);
-        nameLabel.setFont(Font.font("Arial", 13));
-
-        Label amountLabel = new Label(amount);
-        amountLabel.setTextFill(DARK_GREEN);
-        amountLabel.setFont(Font.font("Arial", FontWeight.BOLD, 13));
-
-        Region space = new Region();
-        HBox.setHgrow(space, Priority.ALWAYS);
-
-        HBox row = new HBox(nameLabel, space, amountLabel);
-        row.setPadding(new Insets(7, 0, 7, 0));
-        row.setBorder(new Border(new BorderStroke(
-                BORDER_COLOR,
-                BorderStrokeStyle.SOLID,
-                CornerRadii.EMPTY,
-                new BorderWidths(0, 0, 1, 0)
-        )));
-
-        return row;
-    }
-
+    return page;
+}
     // =========================================================
     // SCHEMES PAGE
     // =========================================================

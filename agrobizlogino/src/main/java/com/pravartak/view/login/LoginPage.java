@@ -487,10 +487,15 @@
 // }
 package com.pravartak.view.login;
 
+import com.pravartak.view.buyer.BuyerAIAdvisorPage;
+// import com.pravartak.view.farmer.AIAdvisorPage;
+import com.pravartak.view.farmer.CommunityPage;
+
 import java.net.URL;
 import java.util.Random;
 
 import com.pravartak.view.farmer.HomePageFarmer;
+import com.pravartak.controller.buyercontroller.Contactcontroller;
 import com.pravartak.view.admin.AdminPage;
 import com.pravartak.view.farmer.MarketPlace;
 
@@ -793,6 +798,8 @@ public class LoginPage extends Application {
         contactField.setBorder(
                 new Border(new BorderStroke(Color.rgb(70, 90, 75), BorderStrokeStyle.SOLID,
                         new CornerRadii(8), new BorderWidths(1.5))));
+        
+        
 
         // =====================================================
         // PASSWORD
@@ -825,6 +832,7 @@ public class LoginPage extends Application {
         passwordField.setBorder(
                 new Border(new BorderStroke(Color.rgb(70, 90, 75), BorderStrokeStyle.SOLID,
                         new CornerRadii(8), new BorderWidths(1.5))));
+        contactField.setOnAction(e -> passwordField.requestFocus());
 
         // =====================================================
         // LOGIN BUTTON
@@ -888,6 +896,8 @@ public class LoginPage extends Application {
 
                 return;
             }
+                contactField.setOnAction(e -> passwordField.requestFocus());
+                passwordField.setOnAction(e -> loginButton.fire());
         });
 
         // =====================================================

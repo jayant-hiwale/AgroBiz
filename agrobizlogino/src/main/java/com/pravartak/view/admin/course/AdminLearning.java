@@ -1,6 +1,5 @@
 package com.pravartak.view.admin.course;
 
-import com.pravartak.view.admin.AdminPage;
 import com.pravartak.view.login.LoginPage;
 
 import javafx.geometry.Insets;

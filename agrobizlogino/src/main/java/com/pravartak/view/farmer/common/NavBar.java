@@ -74,9 +74,9 @@ public class NavBar {
             community.setStyle(navButtonActive());
         }
         community.setOnAction(e -> {
-            System.out.println("CommunityButton Clicked");
-            CommuityPage commuityPageScene = new CommuityPage();
-            LoginPage.mainStage.setScene(commuityPageScene.getCommunityScene());
+
+            // CommuityPage commuityPageScene = new CommuityPage();
+            // LoginPage.mainStage.setScene(commuityPageScene.getCommunityScene());
         });
 
         if (currentPage.equals("Learning")) {
