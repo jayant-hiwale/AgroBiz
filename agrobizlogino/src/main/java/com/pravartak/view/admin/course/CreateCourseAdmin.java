@@ -2,6 +2,7 @@ package com.pravartak.view.admin.course;
 
 import java.io.File;
 
+import com.pravartak.controller.admincontroller.CourseController;
 import com.pravartak.view.admin.AdminPage;
 import com.pravartak.view.login.LoginPage;
 
@@ -9,7 +10,6 @@ import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-// import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -30,7 +30,25 @@ import javafx.util.Duration;
 public class CreateCourseAdmin {
 
         public Scene createCouresScene;
-        private String thumbnailPath = "";
+
+        // =========================================================
+        // FORM HOLDER
+        // =========================================================
+
+        private static class CourseForm {
+
+                TextField title;
+
+                ComboBox<String> category;
+
+                ComboBox<String> language;
+
+                TextField duration;
+
+                ToggleGroup difficultyGroup;
+
+                String thumbnailPath = "";
+        }
 
         // =========================================================
         // CREATE COURSE SCENE
@@ -40,11 +58,16 @@ public class CreateCourseAdmin {
 
                 VBox root = new VBox(16);
 
-                root.setPadding(  new Insets(15, 30, 18, 30));
+                root.setPadding(
+                                new Insets(15, 30, 18, 30));
 
-                root.setAlignment(Pos.TOP_LEFT);
+                root.setAlignment(
+                                Pos.TOP_LEFT);
 
-                root.setStyle("-fx-background-color:#080C0D;");
+                root.setStyle(
+                                "-fx-background-color:#080C0D;");
+
+                CourseForm form = new CourseForm();
 
                 // =====================================================
                 // TOP BAR
@@ -56,12 +79,10 @@ public class CreateCourseAdmin {
                                 Pos.CENTER_LEFT);
 
                 // =====================================================
-                // BACK BUTTON
+                // BACK
                 // =====================================================
 
                 Button backButton = new Button("← Back");
-
-                backButton.setPrefHeight(30);
 
                 backButton.setStyle(
                                 "-fx-background-color:transparent;" +
@@ -73,38 +94,6 @@ public class CreateCourseAdmin {
                                                 "-fx-background-radius:5;" +
                                                 "-fx-padding:5 12;" +
                                                 "-fx-cursor:hand;");
-
-                backButton.setOnMouseEntered(e -> {
-
-                        backButton.setStyle(
-                                        "-fx-background-color:#245D35;" +
-                                                        "-fx-text-fill:#68D34A;" +
-                                                        "-fx-font-size:11px;" +
-                                                        "-fx-border-color:#68D34A;" +
-                                                        "-fx-border-width:1;" +
-                                                        "-fx-border-radius:5;" +
-                                                        "-fx-background-radius:5;" +
-                                                        "-fx-padding:5 12;" +
-                                                        "-fx-cursor:hand;");
-                });
-
-                backButton.setOnMouseExited(e -> {
-
-                        backButton.setStyle(
-                                        "-fx-background-color:transparent;" +
-                                                        "-fx-text-fill:#AAAAAA;" +
-                                                        "-fx-font-size:11px;" +
-                                                        "-fx-border-color:#242B2C;" +
-                                                        "-fx-border-width:1;" +
-                                                        "-fx-border-radius:5;" +
-                                                        "-fx-background-radius:5;" +
-                                                        "-fx-padding:5 12;" +
-                                                        "-fx-cursor:hand;");
-                });
-
-                // =====================================================
-                // TITLE
-                // =====================================================
 
                 Label title = new Label(
                                 "Create New Course");
@@ -137,30 +126,11 @@ public class CreateCourseAdmin {
 
                 HBox courseInformation = new HBox(16);
 
-                courseInformation.setAlignment(
-                                Pos.TOP_LEFT);
+                VBox courseBasics = createCourseBasics(form);
 
-                // =====================================================
-                // COURSE BASICS
-                // =====================================================
+                VBox courseThumbnail = createCourseThumbnail(form);
 
-                VBox courseBasics = createCourseBasics();
-
-                // =====================================================
-                // COURSE THUMBNAIL
-                // =====================================================
-
-                VBox courseThumbnail = createCourseThumbnail();
-
-                // =====================================================
-                // COURSE SETTINGS
-                // =====================================================
-
-                VBox courseSettings = createCourseSettings();
-
-                // =====================================================
-                // WIDTH
-                // =====================================================
+                VBox courseSettings = createCourseSettings(form);
 
                 courseBasics.setPrefWidth(620);
                 courseBasics.setMinWidth(620);
@@ -180,10 +150,10 @@ public class CreateCourseAdmin {
                                 courseSettings);
 
                 // =====================================================
-                // ACTION BUTTONS
+                // BUTTONS
                 // =====================================================
 
-                HBox actionButtons = createActionButtons();
+                HBox actionButtons = createActionButtons(form);
 
                 // =====================================================
                 // ROOT
@@ -193,10 +163,6 @@ public class CreateCourseAdmin {
                                 topBar,
                                 courseInformation,
                                 actionButtons);
-
-                // =====================================================
-                // SCENE
-                // =====================================================
 
                 createCouresScene = new Scene(
                                 root,
@@ -210,15 +176,10 @@ public class CreateCourseAdmin {
         // COURSE BASICS
         // =========================================================
 
-        private static VBox createCourseBasics() {
+        private VBox createCourseBasics(
+                        CourseForm form) {
 
                 VBox card = new VBox(10);
-
-                card.setPrefWidth(620);
-                card.setMinWidth(620);
-                card.setMaxWidth(620);
-
-                card.setPrefHeight(250);
 
                 card.setPadding(
                                 new Insets(16));
@@ -230,10 +191,6 @@ public class CreateCourseAdmin {
                                                 "-fx-border-radius:6;" +
                                                 "-fx-background-radius:6;");
 
-                // =====================================================
-                // HEADING
-                // =====================================================
-
                 Label heading = new Label("Course Basics");
 
                 heading.setStyle(
@@ -241,21 +198,7 @@ public class CreateCourseAdmin {
                                                 "-fx-font-size:15px;" +
                                                 "-fx-font-weight:bold;");
 
-                // =====================================================
-                // SEPARATOR
-                // =====================================================
-
                 Separator separator = new Separator();
-
-                separator.setMaxWidth(
-                                Double.MAX_VALUE);
-
-                separator.setStyle(
-                                "-fx-background-color:#242B2C;");
-
-                // =====================================================
-                // COURSE TITLE
-                // =====================================================
 
                 Label courseTitleLabel = new Label("Course Title");
 
@@ -264,17 +207,18 @@ public class CreateCourseAdmin {
                                                 "-fx-font-size:14px;" +
                                                 "-fx-font-weight:bold;");
 
-                TextField courseTitle = new TextField();
+                // =====================================================
+                // TITLE
+                // =====================================================
 
-                courseTitle.setPromptText(
+                form.title = new TextField();
+
+                form.title.setPromptText(
                                 "e.g., Advanced Hydroponics Systems");
 
-                courseTitle.setPrefHeight(32);
+                form.title.setPrefHeight(32);
 
-                courseTitle.setMaxWidth(
-                                Double.MAX_VALUE);
-
-                courseTitle.setStyle(
+                form.title.setStyle(
                                 "-fx-background-color:#0D1213;" +
                                                 "-fx-text-fill:#EEEEEE;" +
                                                 "-fx-prompt-text-fill:#AAAAAA;" +
@@ -288,17 +232,6 @@ public class CreateCourseAdmin {
                 // CATEGORY
                 // =====================================================
 
-                HBox fields = new HBox(10);
-
-                fields.setPrefWidth(
-                                Double.MAX_VALUE);
-
-                VBox categoryBox = new VBox(5);
-
-                HBox.setHgrow(
-                                categoryBox,
-                                Priority.ALWAYS);
-
                 Label categoryLabel = new Label("Category");
 
                 categoryLabel.setStyle(
@@ -306,64 +239,52 @@ public class CreateCourseAdmin {
                                                 "-fx-font-size:14px;" +
                                                 "-fx-font-weight:bold;");
 
-                ComboBox<String> category = new ComboBox<>();
+                form.category = new ComboBox<>();
 
-                category.getItems().addAll(
+                form.category.getItems().addAll(
                                 "Crop Farming",
                                 "Water Management",
                                 "Hydroponics",
                                 "Organic Farming");
 
-                category.setValue(
+                form.category.setValue(
                                 "Crop Farming");
 
-                category.setPrefHeight(32);
-
-                category.setMaxWidth(
+                form.category.setMaxWidth(
                                 Double.MAX_VALUE);
 
-                category.setStyle(
+                form.category.setPrefHeight(32);
+
+                form.category.setStyle(
                                 "-fx-background-color:#0D1213;" +
                                                 "-fx-text-fill:#EEEEEE;" +
                                                 "-fx-border-color:#242B2C;" +
                                                 "-fx-border-radius:4;" +
-                                                "-fx-background-radius:4;" +
-                                                "-fx-font-size:14px;");
-
-                categoryBox.getChildren().addAll(
-                                categoryLabel,
-                                category);
-
-                fields.getChildren().add(
-                                categoryBox);
+                                                "-fx-background-radius:4;");
 
                 // =====================================================
-                // ADD TO CARD
+                // ADD
                 // =====================================================
 
                 card.getChildren().addAll(
                                 heading,
                                 separator,
                                 courseTitleLabel,
-                                courseTitle,
-                                fields);
+                                form.title,
+                                categoryLabel,
+                                form.category);
 
                 return card;
         }
 
         // =========================================================
-        // COURSE THUMBNAIL
+        // THUMBNAIL
         // =========================================================
 
-        private VBox createCourseThumbnail() {
+        private VBox createCourseThumbnail(
+                        CourseForm form) {
 
                 VBox card = new VBox(10);
-
-                card.setPrefWidth(300);
-                card.setMinWidth(300);
-                card.setMaxWidth(300);
-
-                card.setPrefHeight(250);
 
                 card.setPadding(
                                 new Insets(16));
@@ -375,21 +296,12 @@ public class CreateCourseAdmin {
                                                 "-fx-border-radius:6;" +
                                                 "-fx-background-radius:6;");
 
-                // =====================================================
-                // HEADING
-                // =====================================================
-
-                Label heading = new Label(
-                                "▣  Course Thumbnail");
+                Label heading = new Label("▣  Course Thumbnail");
 
                 heading.setStyle(
                                 "-fx-text-fill:#EEEEEE;" +
                                                 "-fx-font-size:14px;" +
                                                 "-fx-font-weight:bold;");
-
-                // =====================================================
-                // UPLOAD AREA
-                // =====================================================
 
                 VBox uploadArea = new VBox(7);
 
@@ -397,9 +309,6 @@ public class CreateCourseAdmin {
                                 Pos.CENTER);
 
                 uploadArea.setPrefHeight(170);
-
-                uploadArea.setMaxWidth(
-                                Double.MAX_VALUE);
 
                 uploadArea.setStyle(
                                 "-fx-background-color:#0D1213;" +
@@ -409,121 +318,66 @@ public class CreateCourseAdmin {
                                                 "-fx-border-radius:4;" +
                                                 "-fx-background-radius:4;");
 
-                // =====================================================
-                // ICON
-                // =====================================================
-
                 Label icon = new Label("☁");
 
                 icon.setStyle(
                                 "-fx-text-fill:#AAAAAA;" +
                                                 "-fx-font-size:25px;");
 
-                // =====================================================
-                // TEXT
-                // =====================================================
-
                 Label uploadText = new Label(
-                                "Drag and drop image here");
+                                "Click to select image");
 
                 uploadText.setStyle(
                                 "-fx-text-fill:#AAAAAA;" +
                                                 "-fx-font-size:10px;");
 
-                Label browseText = new Label(
-                                "or click to browse");
-
-                browseText.setStyle(
-                                "-fx-text-fill:#777777;" +
-                                                "-fx-font-size:8px;");
-
                 uploadArea.getChildren().addAll(
                                 icon,
-                                uploadText,
-                                browseText);
+                                uploadText);
 
                 // =====================================================
-                // CLICK TO SELECT IMAGE
+                // IMAGE SELECT
                 // =====================================================
 
                 uploadArea.setOnMouseClicked(e -> {
 
-                        FileChooser fileChooser = new FileChooser();
+                        FileChooser chooser = new FileChooser();
 
-                        fileChooser.setTitle(
+                        chooser.setTitle(
                                         "Select Course Thumbnail");
 
-                        // =================================================
-                        // IMAGE FILTER
-                        // =================================================
+                        chooser.getExtensionFilters()
+                                        .add(
+                                                        new FileChooser.ExtensionFilter(
+                                                                        "Image Files",
+                                                                        "*.png",
+                                                                        "*.jpg",
+                                                                        "*.jpeg",
+                                                                        "*.webp"));
 
-                        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter(
-                                        "Image Files",
-                                        "*.png",
-                                        "*.jpg",
-                                        "*.jpeg",
-                                        "*.webp");
-
-                        fileChooser.getExtensionFilters().add(
-                                        imageFilter);
-
-                        // =================================================
-                        // OPEN FILE CHOOSER
-                        // =================================================
-
-                        File selectedFile = fileChooser.showOpenDialog(
+                        File file = chooser.showOpenDialog(
                                         LoginPage.mainStage);
 
-                        // =================================================
-                        // CHECK FILE
-                        // =================================================
+                        if (file != null) {
 
-                        if (selectedFile != null) {
-
-                                // Save image path
-
-                                thumbnailPath = selectedFile.getAbsolutePath();
-
-                                System.out.println(
-                                                "Selected Image: "
-                                                                + thumbnailPath);
-
-                                // =================================================
-                                // DISPLAY IMAGE
-                                // =================================================
+                                form.thumbnailPath = file.getAbsolutePath();
 
                                 ImageView imageView = new ImageView(
                                                 new Image(
-                                                                selectedFile
-                                                                                .toURI()
+                                                                file.toURI()
                                                                                 .toString()));
 
                                 imageView.setFitWidth(240);
-
                                 imageView.setFitHeight(150);
-
                                 imageView.setPreserveRatio(true);
 
-                                imageView.setSmooth(true);
+                                uploadArea.getChildren()
+                                                .clear();
 
-                                // =================================================
-                                // CLEAR OLD CONTENT
-                                // =================================================
-
-                                uploadArea.getChildren().clear();
-
-                                // =================================================
-                                // ADD IMAGE
-                                // =================================================
-
-                                uploadArea.getChildren().add(
-                                                imageView);
+                                uploadArea.getChildren()
+                                                .add(imageView);
                         }
                 });
-
-                // =====================================================
-                // ADD TO CARD
-                // =====================================================
 
                 card.getChildren().addAll(
                                 heading,
@@ -533,18 +387,13 @@ public class CreateCourseAdmin {
         }
 
         // =========================================================
-        // COURSE SETTINGS
+        // SETTINGS
         // =========================================================
 
-        private static VBox createCourseSettings() {
+        private VBox createCourseSettings(
+                        CourseForm form) {
 
                 VBox card = new VBox(8);
-
-                card.setPrefWidth(260);
-                card.setMinWidth(260);
-                card.setMaxWidth(260);
-
-                card.setPrefHeight(250);
 
                 card.setPadding(
                                 new Insets(16));
@@ -556,10 +405,6 @@ public class CreateCourseAdmin {
                                                 "-fx-border-radius:6;" +
                                                 "-fx-background-radius:6;");
 
-                // =====================================================
-                // HEADING
-                // =====================================================
-
                 Label heading = new Label("Course Settings");
 
                 heading.setStyle(
@@ -567,31 +412,20 @@ public class CreateCourseAdmin {
                                                 "-fx-font-size:15px;" +
                                                 "-fx-font-weight:bold;");
 
-                // =====================================================
-                // SEPARATOR
-                // =====================================================
-
                 Separator separator = new Separator();
-
-                separator.setMaxWidth(
-                                Double.MAX_VALUE);
-
-                separator.setStyle(
-                                "-fx-background-color:#242B2C;");
 
                 // =====================================================
                 // DIFFICULTY
                 // =====================================================
 
-                Label difficultyLabel = new Label(
-                                "Difficulty Level");
+                Label difficultyLabel = new Label("Difficulty Level");
 
                 difficultyLabel.setStyle(
                                 "-fx-text-fill:#AAAAAA;" +
                                                 "-fx-font-size:14px;" +
                                                 "-fx-font-weight:bold;");
 
-                ToggleGroup difficultyGroup = new ToggleGroup();
+                form.difficultyGroup = new ToggleGroup();
 
                 RadioButton beginner = new RadioButton("Beginner");
 
@@ -600,36 +434,22 @@ public class CreateCourseAdmin {
                 RadioButton advanced = new RadioButton("Advanced");
 
                 beginner.setToggleGroup(
-                                difficultyGroup);
+                                form.difficultyGroup);
 
                 intermediate.setToggleGroup(
-                                difficultyGroup);
+                                form.difficultyGroup);
 
                 advanced.setToggleGroup(
-                                difficultyGroup);
+                                form.difficultyGroup);
 
-                intermediate.setSelected(
-                                true);
+                intermediate.setSelected(true);
 
                 String radioStyle = "-fx-text-fill:#AAAAAA;" +
                                 "-fx-font-size:14px;";
 
-                beginner.setStyle(
-                                radioStyle);
-
-                intermediate.setStyle(
-                                radioStyle);
-
-                advanced.setStyle(
-                                radioStyle);
-
-                VBox difficultyBox = new VBox(4);
-
-                difficultyBox.getChildren().addAll(
-                                difficultyLabel,
-                                beginner,
-                                intermediate,
-                                advanced);
+                beginner.setStyle(radioStyle);
+                intermediate.setStyle(radioStyle);
+                advanced.setStyle(radioStyle);
 
                 // =====================================================
                 // LANGUAGE
@@ -642,39 +462,37 @@ public class CreateCourseAdmin {
                                                 "-fx-font-size:14px;" +
                                                 "-fx-font-weight:bold;");
 
-                ComboBox<String> language = new ComboBox<>();
+                form.language = new ComboBox<>();
 
-                language.getItems().addAll(
+                form.language.getItems().addAll(
                                 "English",
                                 "Hindi",
                                 "Marathi");
 
-                language.setValue(
+                form.language.setValue(
                                 "English");
 
-                language.setPrefHeight(32);
-
-                language.setMaxWidth(
+                form.language.setMaxWidth(
                                 Double.MAX_VALUE);
 
-                language.setStyle(
+                form.language.setPrefHeight(32);
+
+                form.language.setStyle(
                                 "-fx-background-color:#0D1213;" +
                                                 "-fx-text-fill:#EEEEEE;" +
                                                 "-fx-border-color:#242B2C;" +
                                                 "-fx-border-radius:4;" +
-                                                "-fx-background-radius:4;" +
-                                                "-fx-font-size:14px;");
-
-                // =====================================================
-                // ADD TO CARD
-                // =====================================================
+                                                "-fx-background-radius:4;");
 
                 card.getChildren().addAll(
                                 heading,
                                 separator,
-                                difficultyBox,
+                                difficultyLabel,
+                                beginner,
+                                intermediate,
+                                advanced,
                                 languageLabel,
-                                language);
+                                form.language);
 
                 return card;
         }
@@ -683,20 +501,17 @@ public class CreateCourseAdmin {
         // ACTION BUTTONS
         // =========================================================
 
-        private HBox createActionButtons() {
+        private HBox createActionButtons(
+                        CourseForm form) {
 
                 HBox buttons = new HBox(10);
 
                 buttons.setAlignment(
                                 Pos.CENTER_RIGHT);
 
-                // =====================================================
-                // SAVE AS DRAFT
-                // =====================================================
-
                 Button draftButton = new Button("Save as Draft");
 
-                draftButton.setPrefHeight(36);
+                Button publishButton = new Button("Publish Course");
 
                 draftButton.setStyle(
                                 "-fx-background-color:#101516;" +
@@ -704,49 +519,9 @@ public class CreateCourseAdmin {
                                                 "-fx-border-color:#242B2C;" +
                                                 "-fx-border-width:1;" +
                                                 "-fx-border-radius:5;" +
-                                                "-fx-background-radius:5;" +
                                                 "-fx-padding:7 18;" +
-                                                "-fx-font-size:11px;" +
                                                 "-fx-font-weight:bold;" +
                                                 "-fx-cursor:hand;");
-
-                draftButton.setOnMouseEntered(e -> {
-
-                        draftButton.setStyle(
-                                        "-fx-background-color:#1B2021;" +
-                                                        "-fx-text-fill:#EEEEEE;" +
-                                                        "-fx-border-color:#68D34A;" +
-                                                        "-fx-border-width:1;" +
-                                                        "-fx-border-radius:5;" +
-                                                        "-fx-background-radius:5;" +
-                                                        "-fx-padding:7 18;" +
-                                                        "-fx-font-size:11px;" +
-                                                        "-fx-font-weight:bold;" +
-                                                        "-fx-cursor:hand;");
-                });
-
-                draftButton.setOnMouseExited(e -> {
-
-                        draftButton.setStyle(
-                                        "-fx-background-color:#101516;" +
-                                                        "-fx-text-fill:#AAAAAA;" +
-                                                        "-fx-border-color:#242B2C;" +
-                                                        "-fx-border-width:1;" +
-                                                        "-fx-border-radius:5;" +
-                                                        "-fx-background-radius:5;" +
-                                                        "-fx-padding:7 18;" +
-                                                        "-fx-font-size:11px;" +
-                                                        "-fx-font-weight:bold;" +
-                                                        "-fx-cursor:hand;");
-                });
-
-                // =====================================================
-                // PUBLISH
-                // =====================================================
-
-                Button publishButton = new Button("Publish Course");
-
-                publishButton.setPrefHeight(36);
 
                 publishButton.setStyle(
                                 "-fx-background-color:#68D34A;" +
@@ -754,63 +529,29 @@ public class CreateCourseAdmin {
                                                 "-fx-border-color:#68D34A;" +
                                                 "-fx-border-width:1;" +
                                                 "-fx-border-radius:5;" +
-                                                "-fx-background-radius:5;" +
                                                 "-fx-padding:7 20;" +
-                                                "-fx-font-size:11px;" +
                                                 "-fx-font-weight:bold;" +
                                                 "-fx-cursor:hand;");
 
-                publishButton.setOnMouseEntered(e -> {
-
-                        publishButton.setStyle(
-                                        "-fx-background-color:#7BE65B;" +
-                                                        "-fx-text-fill:#080C0D;" +
-                                                        "-fx-border-color:#7BE65B;" +
-                                                        "-fx-border-width:1;" +
-                                                        "-fx-border-radius:5;" +
-                                                        "-fx-background-radius:5;" +
-                                                        "-fx-padding:7 20;" +
-                                                        "-fx-font-size:11px;" +
-                                                        "-fx-font-weight:bold;" +
-                                                        "-fx-cursor:hand;");
-                });
-
-                publishButton.setOnMouseExited(e -> {
-
-                        publishButton.setStyle(
-                                        "-fx-background-color:#68D34A;" +
-                                                        "-fx-text-fill:#080C0D;" +
-                                                        "-fx-border-color:#68D34A;" +
-                                                        "-fx-border-width:1;" +
-                                                        "-fx-border-radius:5;" +
-                                                        "-fx-background-radius:5;" +
-                                                        "-fx-padding:7 20;" +
-                                                        "-fx-font-size:11px;" +
-                                                        "-fx-font-weight:bold;" +
-                                                        "-fx-cursor:hand;");
-                });
-
                 // =====================================================
-                // SAVE AS DRAFT ACTION
+                // DRAFT
                 // =====================================================
 
                 draftButton.setOnAction(e -> {
 
-                        showCourseStatusPopup(
-                                        "Draft Saved",
-                                        "Your course has been saved as a draft.",
+                        saveCourse(
+                                        form,
                                         false);
                 });
 
                 // =====================================================
-                // PUBLISH ACTION
+                // PUBLISH
                 // =====================================================
 
                 publishButton.setOnAction(e -> {
 
-                        showCourseStatusPopup(
-                                        "Course Published",
-                                        "Your course is now available to learners.",
+                        saveCourse(
+                                        form,
                                         true);
                 });
 
@@ -822,19 +563,117 @@ public class CreateCourseAdmin {
         }
 
         // =========================================================
-        // COURSE STATUS POPUP
+        // SAVE COURSE
         // =========================================================
 
+        private void saveCourse(
+                        CourseForm form,
+                        boolean published) {
+
+                try {
+
+                        String title = form.title.getText().trim();
+
+                        if (title.isEmpty()) {
+
+                                showCourseStatusPopup(
+                                                "Missing Information",
+                                                "Please enter course title.",
+                                                false);
+
+                                return;
+                        }
+
+                        String category = form.category.getValue();
+
+                        String language = form.language.getValue();
+
+                        RadioButton selected = (RadioButton) form.difficultyGroup
+                                        .getSelectedToggle();
+
+                        String difficulty = selected != null
+                                        ? selected.getText()
+                                        : "Intermediate";
+
+                        // =====================================================
+                        // CONTROLLER
+                        // =====================================================
+
+                        CourseController controller = new CourseController();
+
+                        boolean success = controller.addCourse(
+                                        title,
+                                        category,
+                                        difficulty,
+                                        language,
+                                        form.thumbnailPath,
+                                        published);
+
+                        // =====================================================
+                        // SUCCESS
+                        // =====================================================
+
+                        if (success) {
+
+                                if (published) {
+
+                                        showCourseStatusPopup(
+                                                        "Course Published",
+                                                        "Your course is now available to learners.",
+                                                        true);
+
+                                } else {
+
+                                        showCourseStatusPopup(
+                                                        "Draft Saved",
+                                                        "Your course has been saved as a draft.",
+                                                        true);
+                                }
+
+                                // =================================================
+                                // RETURN TO COURSE PAGE
+                                // =================================================
+
+                                PauseTransition delay = new PauseTransition(
+                                                Duration.seconds(1.3));
+
+                                delay.setOnFinished(e -> {
+
+                                        AdminPage adminPage = new AdminPage();
+
+                                        LoginPage.mainStage.setScene(
+                                                        adminPage.getAdminPage(
+                                                                        "Manage Course"));
+                                });
+
+                                delay.play();
+
+                        } else {
+
+                                showCourseStatusPopup(
+                                                "Error",
+                                                "Course could not be saved.",
+                                                false);
+                        }
+
+                } catch (Exception e) {
+
+                        e.printStackTrace();
+
+                        showCourseStatusPopup(
+                                        "Error",
+                                        "Something went wrong while saving the course.",
+                                        false);
+                }
+        }
+
+   
         private void showCourseStatusPopup(
                         String title,
                         String message,
-                        boolean published) {
+                        boolean success) {
 
                 Popup popup = new Popup();
-
-                // =====================================================
-                // MAIN BOX
-                // =====================================================
 
                 VBox box = new VBox(8);
 
@@ -842,27 +681,18 @@ public class CreateCourseAdmin {
                                 Pos.CENTER);
 
                 box.setPrefWidth(300);
-
                 box.setPrefHeight(130);
 
                 box.setPadding(
                                 new Insets(15));
 
-                // =====================================================
-                // ICON
-                // =====================================================
-
                 Label icon = new Label(
-                                published
-                                                ? "✓"
-                                                : "✓");
+                                success ? "✓" : "!");
+
+                icon.setPrefSize(42, 42);
 
                 icon.setAlignment(
                                 Pos.CENTER);
-
-                icon.setPrefSize(
-                                42,
-                                42);
 
                 icon.setStyle(
                                 "-fx-background-color:#245D35;" +
@@ -871,10 +701,6 @@ public class CreateCourseAdmin {
                                                 "-fx-font-weight:bold;" +
                                                 "-fx-background-radius:50%;");
 
-                // =====================================================
-                // TITLE
-                // =====================================================
-
                 Label titleLabel = new Label(title);
 
                 titleLabel.setStyle(
@@ -882,28 +708,16 @@ public class CreateCourseAdmin {
                                                 "-fx-font-size:15px;" +
                                                 "-fx-font-weight:bold;");
 
-                // =====================================================
-                // MESSAGE
-                // =====================================================
-
                 Label messageLabel = new Label(message);
 
                 messageLabel.setStyle(
                                 "-fx-text-fill:#AAAAAA;" +
                                                 "-fx-font-size:11px;");
 
-                // =====================================================
-                // ADD COMPONENTS
-                // =====================================================
-
                 box.getChildren().addAll(
                                 icon,
                                 titleLabel,
                                 messageLabel);
-
-                // =====================================================
-                // BOX STYLE
-                // =====================================================
 
                 box.setStyle(
                                 "-fx-background-color:#101516;" +
@@ -912,18 +726,9 @@ public class CreateCourseAdmin {
                                                 "-fx-border-radius:8;" +
                                                 "-fx-background-radius:8;");
 
-                // =====================================================
-                // POPUP
-                // =====================================================
-
-                popup.getContent().add(
-                                box);
+                popup.getContent().add(box);
 
                 Window window = LoginPage.mainStage;
-
-                // =====================================================
-                // CENTER POPUP
-                // =====================================================
 
                 popup.show(
                                 window,
@@ -931,10 +736,6 @@ public class CreateCourseAdmin {
                                                 + (window.getWidth() - 300) / 2,
                                 window.getY()
                                                 + (window.getHeight() - 130) / 2);
-
-                // =====================================================
-                // AUTO CLOSE
-                // =====================================================
 
                 PauseTransition delay = new PauseTransition(
                                 Duration.seconds(1.3));

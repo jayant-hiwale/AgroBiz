@@ -461,9 +461,7 @@ public class AdminPage {
 
                         case "Manage Course":
 
-                                bp.setCenter(
-                                                AdminLearning
-                                                                .getLearningPage());
+                                bp.setCenter(AdminLearning.getLearningPage());
 
                                 break;
 
