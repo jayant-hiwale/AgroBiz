@@ -1,10 +1,13 @@
 package com.pravartak.view.farmer.common;
 
+import com.pravartak.view.farmer.AIAdvisorPage;
 import com.pravartak.view.farmer.CommuityPage;
 import com.pravartak.view.farmer.ExplorerPage;
+import com.pravartak.view.farmer.FarmerDashboard;
 import com.pravartak.view.farmer.HomePageFarmer;
 import com.pravartak.view.farmer.LearningPage;
 import com.pravartak.view.farmer.MarketPlace;
+import com.pravartak.view.farmer.SchemesPage;
 import com.pravartak.view.login.LoginPage;
 
 import javafx.geometry.Insets;
@@ -92,6 +95,8 @@ public class NavBar {
             //LearningPage learningPage = new LearningPage()
             System.out.println("Schemes button Clicked");;
             //LoginPage.mainStage.setScene(learningPage.get_learning_pageScene());
+            SchemesPage schemesPage = new SchemesPage();
+            LoginPage.mainStage.setScene(schemesPage.getSchemesPage());
         });
 
         if (currentPage.equals("AI Advisor")) {
@@ -101,35 +106,28 @@ public class NavBar {
             //LearningPage learningPage = new LearningPage();
             System.out.println("AI advisor button Clicked");;
             //LoginPage.mainStage.setScene(learningPage.get_learning_pageScene());
+            AIAdvisorPage ai = new AIAdvisorPage();
+            LoginPage.mainStage.setScene(ai.getAIAdvisorScene());
         });
 
         HBox center = new HBox(25,home,explorer,marketplace,community,learning,schemes,aiadvisor);
         center.setAlignment(Pos.CENTER);
 
-        // Right
-        // Button sell = new Button("◇ List for Sale");
-
-        // sell.setStyle(
-        //         "-fx-background-color: transparent;" +
-        //                 "-fx-text-fill: #68d34a;" +
-        //                 "-fx-border-color: #68d34a;" +
-        //                 "-fx-border-radius: 5;" +
-        //                 "-fx-cursor: hand;");
-
-        // // sell.setOnAction(e -> openAddProductPage());
-
-        //Label notification = new Label("♧");
+        
         Button profile = new Button("◎ Profile");
-        //Label login = new Label("Login");
+        if (currentPage.equals("◎ Profile")) {
+            profile.setStyle(navButtonActive());
+        }
+        profile.setOnAction(e->{
+            System.out.println("Profile button Clicked");;
+            FarmerDashboard fm = new FarmerDashboard(null);
+            LoginPage.mainStage.setScene(fm.getDashboardScene());
+        });
 
-        // notification.setStyle(
-        //         "-fx-text-fill: #bbbbbb; -fx-font-size: 18px;");
-
+       
         profile.setStyle(navButtonActive());
 
-        //login.setStyle("-fx-text-fill: #bbbbbb;");
-
-        //HBox right = new HBox(15,sell,notification,profile,login);
+        
         HBox right = new HBox(profile);
         right.setAlignment(Pos.CENTER_RIGHT);
         right.setPrefWidth(450);
