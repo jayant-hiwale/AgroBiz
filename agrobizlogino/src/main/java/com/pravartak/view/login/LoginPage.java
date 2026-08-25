@@ -1,7 +1,10 @@
 package com.pravartak.view.login;
 
-import java.net.URL;
+import com.pravartak.view.buyer.BuyerAIAdvisorPage;
+// import com.pravartak.view.farmer.AIAdvisorPage;
+import com.pravartak.view.farmer.CommunityPage;
 
+import java.net.URL;
 import com.pravartak.view.farmer.HomePageFarmer;
 import com.pravartak.controller.buyercontroller.Contactcontroller;
 import com.pravartak.view.admin.AdminPage;

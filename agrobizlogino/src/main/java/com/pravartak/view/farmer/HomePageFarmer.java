@@ -35,7 +35,7 @@ public class HomePageFarmer {
         // main border pane for all border pane
         BorderPane borderPane = new BorderPane();
         borderPane.setStyle("-fx-background-color: #080c0d;");
-        borderPane.setTop(new NavBar().createNavbar("Explorer"));
+        borderPane.setTop(new NavBar().createNavbar("Home"));
         borderPane.setBottom(new Footer().createFooter());
 
         // logo name

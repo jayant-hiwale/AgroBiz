@@ -1,6 +1,6 @@
 package com.pravartak.view.farmer.common;
 
-import com.pravartak.view.farmer.CommuityPage;
+
 import com.pravartak.view.farmer.ExplorerPage;
 import com.pravartak.view.farmer.HomePageFarmer;
 import com.pravartak.view.farmer.LearningPage;
@@ -69,8 +69,8 @@ public class NavBar {
         }
         community.setOnAction(e -> {
 
-            CommuityPage commuityPageScene = new CommuityPage();
-            LoginPage.mainStage.setScene(commuityPageScene.getCommunityScene());
+            // CommuityPage commuityPageScene = new CommuityPage();
+            // LoginPage.mainStage.setScene(commuityPageScene.getCommunityScene());
         });
 
         if (currentPage.equals("Learning")) {
