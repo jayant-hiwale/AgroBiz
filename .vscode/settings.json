@@ -1,4 +1,7 @@
 {
+<<<<<<< HEAD
     "java.configuration.updateBuildConfiguration": "automatic",
+=======
+>>>>>>> 43bee0fe1e8a0b8c65747e93498203592283126a
     "java.debug.settings.onBuildFailureProceed": true
 }

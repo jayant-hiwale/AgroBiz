@@ -1,6 +1,7 @@
 package com.pravartak.view.admin;
 
 import com.pravartak.view.admin.course.AdminLearning;
+import com.pravartak.view.admin.scheme.SchemeTab;
 import com.pravartak.view.login.LoginPage;
 
 import javafx.geometry.Insets;
@@ -171,13 +172,15 @@ public class AdminPage {
                 // =====================================================
 
                 logout.setOnAction(e -> {
+                        try{
+                                 LoginPage loginPage = new LoginPage();
+                                 
+                                loginPage.start(LoginPage.mainStage);
 
-                        LoginPage loginPage = new LoginPage();
-
-                        LoginPage.mainStage.setScene(
-                                        loginPage.createLoginScene());
-
-                        LoginPage.mainStage.show();
+                        }catch(Exception ex){
+                                ex.printStackTrace();
+                        }
+                       
                 });
 
                 // =====================================================
@@ -375,8 +378,7 @@ public class AdminPage {
                 // ROOT STYLE
                 // =====================================================
 
-                bp.setStyle(
-                                "-fx-background-color:#080C0D;");
+                bp.setStyle("-fx-background-color:#080C0D;");
 
                 // =====================================================
                 // SCENE

@@ -106,7 +106,6 @@ public class MarketPlace {
                 top.setAlignment(Pos.CENTER_LEFT);
 
                 resultLabel = new Label("My Products");
-
                 resultLabel.setStyle("-fx-text-fill: #aaaaaa;" + "-fx-font-size: 13px;");
 
                 Region spacer = new Region();
@@ -114,11 +113,8 @@ public class MarketPlace {
                 HBox.setHgrow(spacer, Priority.ALWAYS);
 
                 TextField searchBox = new TextField();
-
                 searchBox.setPromptText("Search your products...");
-
                 searchBox.setPrefWidth(200);
-
                 searchBox.setOnKeyReleased(e -> searchProducts(searchBox.getText()));
 
                 Button addButton = new Button("+ Add Product");
@@ -413,30 +409,4 @@ public class MarketPlace {
                 LoginPage.mainStage.setScene(marketPlaceScene);
         }
 
-        // ================= FOOTER =================
-
-        // public HBox createFooter() {
-
-        //         HBox footer = new HBox();
-
-        //         footer.setPadding(new Insets(15, 20, 15, 20));
-
-        //         footer.setAlignment(Pos.CENTER);
-
-        //         footer.setStyle(
-        //                         "-fx-background-color: #080c0d;" +
-        //                                         "-fx-border-color: #1b2021;" +
-        //                                         "-fx-border-width: 1 0 0 0;");
-
-        //         Label text = new Label(
-        //                         "© 2026 AgriBiz Hub | Empowering Modern Agriculture");
-
-        //         text.setStyle(
-        //                         "-fx-text-fill: #777777;" +
-        //                                         "-fx-font-size: 12px;");
-
-        //         footer.getChildren().add(text);
-
-        //         return footer;
-        // }
 }
