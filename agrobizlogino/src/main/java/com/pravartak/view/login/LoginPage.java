@@ -488,6 +488,7 @@
 package com.pravartak.view.login;
 
 import com.pravartak.view.buyer.BuyerAIAdvisorPage;
+import com.pravartak.view.buyer.BuyerHomepage;
 // import com.pravartak.view.farmer.AIAdvisorPage;
 import com.pravartak.view.farmer.CommunityPage;
 
@@ -891,8 +892,8 @@ public class LoginPage extends Application {
             if (selectedRole.equals("BUYER")) {
                 System.out.println("Buyer login Successful!");
 
-                Create_Profile createProfile = new Create_Profile();
-                LoginPage.mainStage.setScene(createProfile.getCreateProfilePageScene(null));
+                BuyerHomepage buyerHomepage = new BuyerHomepage(null);
+                LoginPage.mainStage.setScene(buyerHomepage.getBuyerHomePage());
 
                 return;
             }

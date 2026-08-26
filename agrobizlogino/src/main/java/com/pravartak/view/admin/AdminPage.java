@@ -1,6 +1,7 @@
 package com.pravartak.view.admin;
 
 import com.pravartak.view.admin.course.AdminLearning;
+import com.pravartak.view.admin.scheme.SchemeTab;
 import com.pravartak.view.login.LoginPage;
 
 import javafx.geometry.Insets;
@@ -214,15 +215,8 @@ public class AdminPage {
 
                         else if (selectedItem.equals("Government Schemes")) {
 
-                                Text t1 = new Text(
-                                                "Government Schemes");
-
-                                t1.setStyle(
-                                                "-fx-font-size:34px;" +
-                                                                "-fx-font-weight:bold;" +
-                                                                "-fx-fill:#EEEEEE;");
-
-                                bp.setCenter(t1);
+                                VBox schemePage = SchemeTab.getSchemesPage();
+                                bp.setCenter(schemePage);
 
                         }
 

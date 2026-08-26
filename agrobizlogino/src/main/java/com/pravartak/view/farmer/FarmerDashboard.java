@@ -746,105 +746,6 @@ public class FarmerDashboard {
         return tag;
     }
 
-// // AI ADVISOR PAGE
-//     private VBox createAIAdvisorPage() {
-//         VBox page = createSimplePage("AI Farming Advisor", "Get intelligent recommendations for your farm.");
-
-//         VBox card = createWhiteCard();
-//         card.setMargin(card,Insets.EMPTY);
-//         card.setPrefHeight(650);
-
-//         VBox center = new VBox();
-//         center.setAlignment(Pos.TOP_CENTER);
-//         center.setSpacing(25);
-//         center.setPadding(new Insets(20));
-
-//         Label aiIcon = new Label("✦");
-//         aiIcon.setPrefSize(70, 70);
-//         aiIcon.setAlignment(Pos.CENTER);
-//         aiIcon.setTextFill(Color.WHITE);
-//         aiIcon.setFont(Font.font("Arial", FontWeight.BOLD, 32));
-//         aiIcon.setBackground(new Background(new BackgroundFill(DARK_GREEN, new CornerRadii(50), Insets.EMPTY)));
-
-//         Label question = new Label("How can Agro Biz AI help your farm?");
-//         question.setTextFill(Color.WHITE);
-//         question.setFont(Font.font("Arial", FontWeight.BOLD, 23));
-
-//         HBox suggestions = new HBox();
-//         suggestions.setSpacing(12);
-//         suggestions.setAlignment(Pos.CENTER);
-
-//         suggestions.getChildren().addAll(
-//             createSuggestionButton("🌾  Which crop should I grow?"),
-//             createSuggestionButton("↗  How can I improve my yield?")
-//         );
-
-//         Button irrigation = createSuggestionButton("💧  Optimize irrigation schedule");
-
-//         center.getChildren().addAll(aiIcon, question, suggestions, irrigation);
-
-//         HBox message = new HBox();
-//         message.setSpacing(12);
-//         message.setPadding(new Insets(20));
-//         message.setBackground(new Background(new BackgroundFill(Color.rgb(244, 246, 238), new CornerRadii(15), Insets.EMPTY)));
-
-//         Label assistantIcon = new Label("✦");
-//         assistantIcon.setPrefSize(42, 42);
-//         assistantIcon.setAlignment(Pos.CENTER);
-//         assistantIcon.setTextFill(Color.WHITE);
-//         assistantIcon.setBackground(new Background(new BackgroundFill(DARK_GREEN, new CornerRadii(50), Insets.EMPTY)));
-
-//         Label assistantText = new Label("Hello Farmer! 🌱 I can help you make smarter " + "farming decisions based on your current " + "soil data and local weather forecasts. " + "What would you like to analyze today?");
-//         assistantText.setWrapText(true);
-//         assistantText.setTextFill(Color.GREY);
-//         assistantText.setFont(Font.font("Arial", 15));
-//         HBox.setHgrow(assistantText, Priority.ALWAYS);
-
-//         message.getChildren().addAll(assistantIcon, assistantText);
-
-//         Region aiSpacer = new Region();
-//         VBox.setVgrow(aiSpacer, Priority.ALWAYS);
-
-//         TextField questionField = new TextField();
-//         questionField.setPromptText("Ask your farming question...");
-//         questionField.setPrefHeight(50);
-
-//         Button askAI = new Button("Ask AI  ➤");
-//         askAI.setPrefHeight(50);
-//         askAI.setPrefWidth(120);
-//         askAI.setTextFill(Color.WHITE);
-//         askAI.setFont(Font.font("Arial", FontWeight.BOLD, 13));
-//         askAI.setBackground(new Background(new BackgroundFill(DARK_GREEN, new CornerRadii(9), Insets.EMPTY)));
-
-//         askAI.setOnAction(event -> {
-//             if (!questionField.getText().trim().isEmpty()) {
-//                 assistantText.setText("AI Advisor received your question: " + questionField.getText() + "\n\nThis AI response module is ready " + "to be connected with your AI service.");
-//                 questionField.clear();
-//             }
-//         });
-
-//         HBox input = new HBox(questionField, askAI);
-//         input.setSpacing(12);
-//         HBox.setHgrow(questionField, Priority.ALWAYS);
-
-//         center.getChildren().addAll(message, aiSpacer, input);
-//         card.getChildren().add(center);
-//         page.getChildren().add(card);
-
-//         return page;
-//     }
-
-//     // AI SUGGESTION BUTTON
-//     private Button createSuggestionButton(String text) {
-//         Button button = new Button(text);
-//         button.setPrefHeight(40);
-//         button.setTextFill(LIGHT_GREEN);
-//         button.setFont(Font.font("Arial", 12));
-//         button.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(20), Insets.EMPTY)));
-//         button.setBorder(new Border(new BorderStroke(BORDER_COLOR, BorderStrokeStyle.SOLID, new CornerRadii(20), new BorderWidths(1))));
-//         button.setCursor(Cursor.HAND);
-//         return button;
-//     }
 // =========================================================
 // AI ADVISOR PAGE
 // =========================================================
@@ -1549,15 +1450,18 @@ private Button createSuggestionButton(String text) {
 
         VBox page = new VBox();
 
-        page.setBackground(
-                new Background(
-                        new BackgroundFill(
-                                DARK_GREEN,
-                                CornerRadii.EMPTY,
-                                Insets.EMPTY
-                        )
-                )
-        );
+        // page.setBackground(
+        //         new Background(
+        //                 new BackgroundFill(
+        //                         DARK_GREEN,
+        //                         CornerRadii.EMPTY,
+        //                         Insets.EMPTY
+        //                 )
+        //         )
+        // );
+        page.setBackground(new Background(
+            new BackgroundFill(CREAM, CornerRadii.EMPTY, Insets.EMPTY)
+));
 
         // Reuse the normal dashboard header on the right side.
         HBox topBar = createTopBar(
@@ -1567,13 +1471,26 @@ private Button createSuggestionButton(String text) {
 
         VBox content = new VBox(22);
         content.setPadding(new Insets(30, 35, 35, 35));
-        content.setBackground(new Background(
-                new BackgroundFill(
-                        DARK_GREEN,
-                        CornerRadii.EMPTY,
-                        Insets.EMPTY
-                )
-        ));
+        // content.setBackground(new Background(
+        //         new BackgroundFill(
+        //                 DARK_GREEN,
+        //                 CornerRadii.EMPTY,
+        //                 Insets.EMPTY
+        //         )
+        // ));
+        // content.setBackground(new Background(
+        // new BackgroundFill(CREAM, CornerRadii.EMPTY, Insets.EMPTY)
+//));
+//VBox content = new VBox(22);
+//content.setPadding(new Insets(30, 35, 35, 35));
+content.setBackground(new Background(
+        new BackgroundFill(
+                Color.web("#080c0d"),
+                CornerRadii.EMPTY,
+                Insets.EMPTY
+        )
+));
+
 
         HBox tabs = new HBox(35);
         tabs.setAlignment(Pos.CENTER_LEFT);
@@ -1605,11 +1522,22 @@ private Button createSuggestionButton(String text) {
 
         ScrollPane scroll = new ScrollPane(content);
         scroll.setFitToWidth(true);
+        scroll.setFitToHeight(true);
+        scroll.setStyle("-fx-background-color: #080c0d;  -fx-control-inner-background: #080c0d;");
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scroll.setStyle("-fx-background-color: transparent;");
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroll.setBackground(Background.EMPTY);
 
-        VBox.setVgrow(scroll, Priority.ALWAYS);
-        page.getChildren().addAll(topBar, scroll);
+        scroll.applyCss();
+
+javafx.scene.Node viewport = scroll.lookup(".viewport");
+
+if (viewport != null) {
+    viewport.setStyle("-fx-background-color: #080c0d;");
+}
+
+VBox.setVgrow(scroll, Priority.ALWAYS);
+page.getChildren().addAll(topBar, scroll);
 
         return page;
     }
@@ -1620,7 +1548,7 @@ private Button createSuggestionButton(String text) {
         Button tab = new Button(text);
         tab.setCursor(Cursor.HAND);
         tab.setFont(Font.font("Arial", selected ? FontWeight.BOLD : FontWeight.NORMAL, 18));
-        tab.setTextFill(selected ? DARK_GREEN : DARK_TEXT);
+        tab.setTextFill(selected ? LIGHT_GREEN  : DARK_TEXT);
         tab.setPadding(new Insets(0, 0, 10, 0));
         tab.setBackground(Background.EMPTY);
 
