@@ -1,9 +1,9 @@
 package com.pravartak.view.admin;
 
 import com.pravartak.view.admin.course.AdminLearning;
+import com.pravartak.view.admin.scheme.SchemeTab;
 import com.pravartak.view.login.LoginPage;
 
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,11 +16,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class AdminPage {
 
@@ -217,15 +215,8 @@ public class AdminPage {
 
                         else if (selectedItem.equals("Government Schemes")) {
 
-                                Text t1 = new Text(
-                                                "Government Schemes");
-
-                                t1.setStyle(
-                                                "-fx-font-size:34px;" +
-                                                                "-fx-font-weight:bold;" +
-                                                                "-fx-fill:#EEEEEE;");
-
-                                bp.setCenter(t1);
+                                VBox schemePage = SchemeTab.getSchemesPage();
+                                bp.setCenter(schemePage);
 
                         }
 
@@ -426,18 +417,13 @@ public class AdminPage {
                 // ROOT STYLE
                 // =========================
 
-                bp.setStyle(
-                                "-fx-background-color:#080C0D;");
+                bp.setStyle("-fx-background-color:#080C0D;");
 
                 // =========================
                 // SCENE
                 // =========================
 
-                Scene sc = new Scene(
-                                bp,
-                                1000,
-                                700);
-
+                Scene sc = new Scene(bp,1000,700);
                 AdminPageScene = sc;
 
                 return AdminPageScene;

@@ -65,6 +65,8 @@ public class ExplorerPage {
         searchField.setPrefWidth(620);
         searchField.setPadding(new Insets(0, 18, 0, 18));
         searchField.setStyle("-fx-background-color: #101516;" +"-fx-text-fill: #eeeeee;" +"-fx-prompt-text-fill: #777777;" +"-fx-border-color: #242b2c;" +"-fx-border-radius: 8;" +"-fx-background-radius: 8;");
+        //searchField.setOnKeyReleased(e -> searchProducts(searchField.getText()));
+
 
         Button searchButton = new Button("Search");
         searchButton.setPrefWidth(90);
@@ -136,7 +138,7 @@ searchHBox.setStyle(
         poultryCard.setPrefWidth(220);
         poultryCard.setPrefHeight(220);
         poultryCard.setAlignment(Pos.TOP_LEFT);
-        poultryCard.setStyle("-fx-background-color: #101516;" + "-fx-background-radius: 12" + "-fx-border-color: #242c2c;" + "-fx-border-radius: 12;");
+        poultryCard.setStyle("-fx-background-color: #101516;" + "-fx-background-radius: 12;" + "-fx-border-color: #242b2c;" + "-fx-border-radius: 12;");
 
         URL poultryURL = getClass().getResource("/poltry.png");
 
