@@ -35,7 +35,7 @@ public class LearningPage {
         VBox poultryBox = new VBox(8);
         poultryBox.setPadding(new Insets(8));
         poultryBox.setPrefWidth(230);
-        poultryBox.setPrefHeight(205);
+        //poultryBox.setPrefHeight(205);
         poultryBox.setAlignment(Pos.TOP_LEFT);
         poultryBox.setStyle("-fx-background-color: darkgreen;" + "-fx-background-radius: 12;" + "-fx-border-color: #eff6f3;" + "-fx-border-radius: 12;");
 
@@ -57,7 +57,7 @@ public class LearningPage {
 
         VBox mainVBox = new VBox(28);
         mainVBox.setPadding(new Insets(18, 18, 30, 18));
-        mainVBox.setFillWidth(true);
+        //mainVBox.setFillWidth(true);
         mainVBox.getChildren().addAll(poultryBox);
         borderPane.setCenter(mainVBox);
 

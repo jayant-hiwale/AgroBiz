@@ -106,7 +106,6 @@ public class MarketPlace {
                 top.setAlignment(Pos.CENTER_LEFT);
 
                 resultLabel = new Label("My Products");
-
                 resultLabel.setStyle("-fx-text-fill: #aaaaaa;" + "-fx-font-size: 13px;");
 
                 Region spacer = new Region();
@@ -114,11 +113,8 @@ public class MarketPlace {
                 HBox.setHgrow(spacer, Priority.ALWAYS);
 
                 TextField searchBox = new TextField();
-
                 searchBox.setPromptText("Search your products...");
-
                 searchBox.setPrefWidth(200);
-
                 searchBox.setOnKeyReleased(e -> searchProducts(searchBox.getText()));
 
                 Button addButton = new Button("+ Add Product");

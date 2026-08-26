@@ -1,10 +1,13 @@
 package com.pravartak.view.farmer.common;
 
-
+import com.pravartak.view.farmer.AIAdvisorPage;
+import com.pravartak.view.farmer.CommuityPage;
 import com.pravartak.view.farmer.ExplorerPage;
+import com.pravartak.view.farmer.FarmerDashboard;
 import com.pravartak.view.farmer.HomePageFarmer;
 import com.pravartak.view.farmer.LearningPage;
 import com.pravartak.view.farmer.MarketPlace;
+import com.pravartak.view.farmer.SchemesPage;
 import com.pravartak.view.login.LoginPage;
 
 import javafx.geometry.Insets;
@@ -37,7 +40,9 @@ public class NavBar {
         Button community = navButton("Community");
         Button learning = navButton("Learning");
         Button schemes = navButton("Schemes");
+        Button aiadvisor = navButton("AI Advisor");
 
+        //curent page
         if (currentPage.equals("Home")) {
             home.setStyle(navButtonActive());
         }
@@ -51,6 +56,7 @@ public class NavBar {
             explorer.setStyle(navButtonActive());
         }
         explorer.setOnAction(e -> {
+            System.out.println("Explore button clicked");
             ExplorerPage explorerPage = new ExplorerPage();
             LoginPage.mainStage.setScene(explorerPage.getExplorerPage());
         });
@@ -59,7 +65,7 @@ public class NavBar {
             marketplace.setStyle(navButtonActive());
         }
         marketplace.setOnAction(e -> {
-
+            System.out.println("MarketButton Clicked");
             MarketPlace marketPlaceScene = new MarketPlace();
             LoginPage.mainStage.setScene(marketPlaceScene.getMarketPlaceScene());
         });
@@ -76,43 +82,53 @@ public class NavBar {
         if (currentPage.equals("Learning")) {
             learning.setStyle(navButtonActive());
         }
-
         learning.setOnAction(e->{
             LearningPage learningPage = new LearningPage();
+            System.out.println("Learning button Clicked");;
             LoginPage.mainStage.setScene(learningPage.get_learning_pageScene());
         });
+
         if (currentPage.equals("Schemes")) {
             schemes.setStyle(navButtonActive());
         }
+         schemes.setOnAction(e->{
+            //LearningPage learningPage = new LearningPage()
+            System.out.println("Schemes button Clicked");;
+            //LoginPage.mainStage.setScene(learningPage.get_learning_pageScene());
+            SchemesPage schemesPage = new SchemesPage();
+            LoginPage.mainStage.setScene(schemesPage.getSchemesPage());
+        });
 
-        HBox center = new HBox(25,home,explorer,marketplace,community,learning,schemes);
+        if (currentPage.equals("AI Advisor")) {
+            aiadvisor.setStyle(navButtonActive());
+        }
+        aiadvisor.setOnAction(e->{
+            //LearningPage learningPage = new LearningPage();
+            System.out.println("AI advisor button Clicked");;
+            //LoginPage.mainStage.setScene(learningPage.get_learning_pageScene());
+            AIAdvisorPage ai = new AIAdvisorPage();
+            LoginPage.mainStage.setScene(ai.getAIAdvisorScene());
+        });
+
+        HBox center = new HBox(25,home,explorer,marketplace,community,learning,schemes,aiadvisor);
         center.setAlignment(Pos.CENTER);
 
-        // Right
-        Button sell = new Button("◇ List for Sale");
+        
+        Button profile = new Button("◎ Profile");
+        if (currentPage.equals("◎ Profile")) {
+            profile.setStyle(navButtonActive());
+        }
+        profile.setOnAction(e->{
+            System.out.println("Profile button Clicked");;
+            FarmerDashboard fm = new FarmerDashboard(null);
+            LoginPage.mainStage.setScene(fm.getDashboardScene());
+        });
 
-        sell.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-text-fill: #68d34a;" +
-                        "-fx-border-color: #68d34a;" +
-                        "-fx-border-radius: 5;" +
-                        "-fx-cursor: hand;");
+       
+        profile.setStyle(navButtonActive());
 
-        // sell.setOnAction(e -> openAddProductPage());
-
-        Label notification = new Label("♧");
-        Label profile = new Label("◎");
-        Label login = new Label("Login");
-
-        notification.setStyle(
-                "-fx-text-fill: #bbbbbb; -fx-font-size: 18px;");
-
-        profile.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 18px;");
-
-        login.setStyle("-fx-text-fill: #bbbbbb;");
-
-        HBox right = new HBox(15,sell,notification,profile,login);
-
+        
+        HBox right = new HBox(profile);
         right.setAlignment(Pos.CENTER_RIGHT);
         right.setPrefWidth(450);
 

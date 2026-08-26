@@ -1,4 +1,4 @@
-package com.pravartak.view.login;
+/*package com.pravartak.view.login;
 
 import com.pravartak.view.farmer.HomePageFarmer;
 import javafx.scene.Scene;
@@ -61,8 +61,7 @@ public class Login_role_selection {
 
         farmerCard.setStyle("-fx-background-color: #101718;" + "-fx-background-radius: 14;" + "-fx-border-color: #293334;" + "-fx-border-width: 1;" + "-fx-border-radius: 14;" + "-fx-padding: 35px;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0, 0, 5);");
 
-        farmerCard.setOnMouseClicked(e -> {
-            System.out.println("Farmer selected");
+        farmerCard.setOnMouseClicked(e -> { System.out.println("Farmer selected");
             //farmer
             HomePageFarmer homepagefarmer = new HomePageFarmer();
 
@@ -134,7 +133,6 @@ public class Login_role_selection {
         root.setStyle("-fx-background-color: linear-gradient(" + "to bottom right," + "#080D0E 0%," + "#0C1513 50%," + "#101B14 100%);" + "-fx-padding: 28px;");
 
         Login_role_selectionScene = new Scene(root);
-
         return Login_role_selectionScene;
     }
-}
+}*/
