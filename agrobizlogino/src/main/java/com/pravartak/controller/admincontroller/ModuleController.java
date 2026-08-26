@@ -1,10 +1,11 @@
 package com.pravartak.controller.admincontroller;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+// import java.util.ArrayList;
+// import java.util.Comparator;
+// import java.util.HashMap;
+// import java.util.List;
+// import java.util.Map;
 
 import com.pravartak.model.admin.Module;
 
@@ -14,8 +15,7 @@ public class ModuleController {
     // MODULE STORAGE
     // =========================================================
 
-    private static final Map<Integer, List<Module>> courseModules =
-            new HashMap<>();
+    private static final Map<Integer, List<Module>> courseModules = new HashMap<>();
 
     private static int nextModuleId = 1;
 
@@ -32,14 +32,10 @@ public class ModuleController {
 
             if (title == null ||
                     title.trim().isEmpty()) {
-
                 return false;
             }
 
-            List<Module> modules =
-                    courseModules.computeIfAbsent(
-                            courseId,
-                            k -> new ArrayList<>());
+            List<Module> modules = courseModules.computeIfAbsent(courseId, k -> new ArrayList<>());
 
             int order = modules.size() + 1;
 
@@ -47,9 +43,7 @@ public class ModuleController {
                     nextModuleId++,
                     courseId,
                     title.trim(),
-                    description == null
-                            ? ""
-                            : description.trim(),
+                    description == null ? "" : description.trim(),
                     order,
                     false);
 
@@ -78,8 +72,7 @@ public class ModuleController {
     public List<Module> getModulesByCourse(
             int courseId) {
 
-        List<Module> modules =
-                courseModules.get(courseId);
+        List<Module> modules = courseModules.get(courseId);
 
         if (modules == null) {
 
@@ -100,8 +93,7 @@ public class ModuleController {
     public Module getModule(
             int moduleId) {
 
-        for (List<Module> modules :
-                courseModules.values()) {
+        for (List<Module> modules : courseModules.values()) {
 
             for (Module module : modules) {
 
@@ -122,12 +114,9 @@ public class ModuleController {
     public boolean deleteModule(
             int moduleId) {
 
-        for (List<Module> modules :
-                courseModules.values()) {
+        for (List<Module> modules : courseModules.values()) {
 
-            for (int i = 0;
-                    i < modules.size();
-                    i++) {
+            for (int i = 0; i < modules.size(); i++) {
 
                 if (modules.get(i)
                         .getModuleId() == moduleId) {
@@ -154,8 +143,7 @@ public class ModuleController {
             String description,
             boolean published) {
 
-        Module module =
-                getModule(moduleId);
+        Module module = getModule(moduleId);
 
         if (module == null) {
 
@@ -176,9 +164,7 @@ public class ModuleController {
     private void refreshOrder(
             List<Module> modules) {
 
-        for (int i = 0;
-                i < modules.size();
-                i++) {
+        for (int i = 0; i < modules.size(); i++) {
 
             modules.get(i)
                     .setModuleOrder(i + 1);
@@ -192,7 +178,6 @@ public class ModuleController {
     public int getModuleCount(
             int courseId) {
 
-        return getModulesByCourse(courseId)
-                .size();
+        return getModulesByCourse(courseId).size();
     }
 }

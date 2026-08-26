@@ -1,8 +1,11 @@
 package com.pravartak.view.admin.course;
 
 import java.io.File;
+import java.util.List;
 
+import com.pravartak.controller.admincontroller.CategoryController;
 import com.pravartak.controller.admincontroller.CourseController;
+import com.pravartak.model.admin.Category;
 import com.pravartak.view.admin.AdminPage;
 import com.pravartak.view.login.LoginPage;
 
@@ -32,6 +35,12 @@ public class CreateCourseAdmin {
         public Scene createCouresScene;
 
         // =========================================================
+        // CATEGORY CONTROLLER
+        // =========================================================
+
+        private final CategoryController categoryController = new CategoryController();
+
+        // =========================================================
         // FORM HOLDER
         // =========================================================
 
@@ -39,7 +48,11 @@ public class CreateCourseAdmin {
 
                 TextField title;
 
-                ComboBox<String> category;
+                // CHANGED:
+                // ComboBox<String>
+                // ↓
+                // ComboBox<Category>
+                ComboBox<Category> category;
 
                 ComboBox<String> language;
 
@@ -239,16 +252,32 @@ public class CreateCourseAdmin {
                                                 "-fx-font-size:14px;" +
                                                 "-fx-font-weight:bold;");
 
+                // =====================================================
+                // CATEGORY COMBOBOX
+                // =====================================================
+
                 form.category = new ComboBox<>();
 
-                form.category.getItems().addAll(
-                                "Crop Farming",
-                                "Water Management",
-                                "Hydroponics",
-                                "Organic Farming");
+                // ---------------------------------------------
+                // GET TEMPORARY CATEGORIES
+                // ---------------------------------------------
 
-                form.category.setValue(
-                                "Crop Farming");
+                List<Category> categories = categoryController
+                                .getAllCategories();
+
+                form.category
+                                .getItems()
+                                .setAll(categories);
+
+                // ---------------------------------------------
+                // SELECT FIRST CATEGORY
+                // ---------------------------------------------
+
+                if (!categories.isEmpty()) {
+
+                        form.category.setValue(
+                                        categories.get(0));
+                }
 
                 form.category.setMaxWidth(
                                 Double.MAX_VALUE);
@@ -296,7 +325,8 @@ public class CreateCourseAdmin {
                                                 "-fx-border-radius:6;" +
                                                 "-fx-background-radius:6;");
 
-                Label heading = new Label("▣  Course Thumbnail");
+                Label heading = new Label(
+                                "▣  Course Thumbnail");
 
                 heading.setStyle(
                                 "-fx-text-fill:#EEEEEE;" +
@@ -371,10 +401,12 @@ public class CreateCourseAdmin {
                                 imageView.setFitHeight(150);
                                 imageView.setPreserveRatio(true);
 
-                                uploadArea.getChildren()
+                                uploadArea
+                                                .getChildren()
                                                 .clear();
 
-                                uploadArea.getChildren()
+                                uploadArea
+                                                .getChildren()
                                                 .add(imageView);
                         }
                 });
@@ -405,7 +437,8 @@ public class CreateCourseAdmin {
                                                 "-fx-border-radius:6;" +
                                                 "-fx-background-radius:6;");
 
-                Label heading = new Label("Course Settings");
+                Label heading = new Label(
+                                "Course Settings");
 
                 heading.setStyle(
                                 "-fx-text-fill:#EEEEEE;" +
@@ -418,7 +451,8 @@ public class CreateCourseAdmin {
                 // DIFFICULTY
                 // =====================================================
 
-                Label difficultyLabel = new Label("Difficulty Level");
+                Label difficultyLabel = new Label(
+                                "Difficulty Level");
 
                 difficultyLabel.setStyle(
                                 "-fx-text-fill:#AAAAAA;" +
@@ -447,9 +481,14 @@ public class CreateCourseAdmin {
                 String radioStyle = "-fx-text-fill:#AAAAAA;" +
                                 "-fx-font-size:14px;";
 
-                beginner.setStyle(radioStyle);
-                intermediate.setStyle(radioStyle);
-                advanced.setStyle(radioStyle);
+                beginner.setStyle(
+                                radioStyle);
+
+                intermediate.setStyle(
+                                radioStyle);
+
+                advanced.setStyle(
+                                radioStyle);
 
                 // =====================================================
                 // LANGUAGE
@@ -572,7 +611,9 @@ public class CreateCourseAdmin {
 
                 try {
 
-                        String title = form.title.getText().trim();
+                        String title = form.title
+                                        .getText()
+                                        .trim();
 
                         if (title.isEmpty()) {
 
@@ -584,7 +625,28 @@ public class CreateCourseAdmin {
                                 return;
                         }
 
-                        String category = form.category.getValue();
+                        // =====================================================
+                        // GET SELECTED CATEGORY
+                        // =====================================================
+
+                        Category selectedCategory = form.category.getValue();
+
+                        if (selectedCategory == null) {
+
+                                showCourseStatusPopup(
+                                                "Missing Information",
+                                                "Please select a category.",
+                                                false);
+
+                                return;
+                        }
+
+                        // ---------------------------------------------
+                        // Get category name
+                        // ---------------------------------------------
+
+                        String category = selectedCategory
+                                        .getCategoryName();
 
                         String language = form.language.getValue();
 
@@ -635,7 +697,8 @@ public class CreateCourseAdmin {
                                 // =================================================
 
                                 PauseTransition delay = new PauseTransition(
-                                                Duration.seconds(1.3));
+                                                Duration.seconds(
+                                                                1.3));
 
                                 delay.setOnFinished(e -> {
 
@@ -667,7 +730,10 @@ public class CreateCourseAdmin {
                 }
         }
 
-   
+        // =========================================================
+        // STATUS POPUP
+        // =========================================================
+
         private void showCourseStatusPopup(
                         String title,
                         String message,
@@ -689,7 +755,9 @@ public class CreateCourseAdmin {
                 Label icon = new Label(
                                 success ? "✓" : "!");
 
-                icon.setPrefSize(42, 42);
+                icon.setPrefSize(
+                                42,
+                                42);
 
                 icon.setAlignment(
                                 Pos.CENTER);
@@ -726,7 +794,8 @@ public class CreateCourseAdmin {
                                                 "-fx-border-radius:8;" +
                                                 "-fx-background-radius:8;");
 
-                popup.getContent().add(box);
+                popup.getContent()
+                                .add(box);
 
                 Window window = LoginPage.mainStage;
 

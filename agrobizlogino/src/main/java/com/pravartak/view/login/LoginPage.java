@@ -356,8 +356,8 @@ public class LoginPage extends Application {
                         String password = passwordField.getText().trim();
 
                         // Hard-coded Admin credentials
-                        String adminContact = "admin@agrobiz.com";
-                        String adminPassword = "admin123";
+                        String adminContact = "q";      //admin@agrobiz.com
+                        String adminPassword = "q";                      //admin123
 
                         if (contact.isEmpty() || password.isEmpty()) {
 

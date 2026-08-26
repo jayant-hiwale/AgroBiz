@@ -383,41 +383,7 @@ public class CourseTab {
 
                 courseTitle.setMaxWidth(500);
 
-                // =====================================================
-                // INSTRUCTOR
-                // =====================================================
-
-                HBox instructorBox = new HBox(6);
-
-                instructorBox.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                Label instructorIcon = new Label("A");
-
-                instructorIcon.setPrefSize(
-                                18,
-                                18);
-
-                instructorIcon.setAlignment(
-                                Pos.CENTER);
-
-                instructorIcon.setStyle(
-                                "-fx-background-color:#33352F;" +
-                                                "-fx-text-fill:#EEEEEE;" +
-                                                "-fx-font-size:8px;" +
-                                                "-fx-font-weight:bold;" +
-                                                "-fx-background-radius:50%;");
-
-                Label instructor = new Label(
-                                "Instructor: Admin");
-
-                instructor.setStyle(
-                                "-fx-text-fill:#AAAAAA;" +
-                                                "-fx-font-size:9px;");
-
-                instructorBox.getChildren().addAll(
-                                instructorIcon,
-                                instructor);
+               
 
                 // =====================================================
                 // ADD INFORMATION
@@ -425,8 +391,8 @@ public class CourseTab {
 
                 information.getChildren().addAll(
                                 tags,
-                                courseTitle,
-                                instructorBox);
+                                courseTitle
+                                );
 
                 // =====================================================
                 // ACTIONS
@@ -481,9 +447,9 @@ public class CourseTab {
 
                         ModulePage modulePage = new ModulePage(course);
 
-                    Scene moduleScene = modulePage.getModuleScene();
+                        Scene moduleScene = modulePage.getModuleScene();
 
-                     LoginPage.mainStage.setScene(moduleScene);
+                        LoginPage.mainStage.setScene(moduleScene);
                 });
 
                 return card;
@@ -493,8 +459,7 @@ public class CourseTab {
         // THUMBNAIL
         // =========================================================
 
-        private static VBox createThumbnail(
-                        Course course) {
+        private static VBox createThumbnail(Course course) {
 
                 VBox box = new VBox();
 
@@ -506,8 +471,7 @@ public class CourseTab {
                 box.setMinHeight(75);
                 box.setMaxHeight(75);
 
-                box.setAlignment(
-                                Pos.CENTER);
+                box.setAlignment(Pos.CENTER);
 
                 box.setStyle(
                                 "-fx-background-color:#0D1213;" +
@@ -566,8 +530,7 @@ public class CourseTab {
                                 // ADD IMAGE
                                 // =================================================
 
-                                if (image != null &&
-                                                !image.isError()) {
+                                if (image != null && !image.isError()) {
 
                                         ImageView imageView = new ImageView(image);
 
@@ -578,15 +541,12 @@ public class CourseTab {
 
                                         imageView.setSmooth(true);
 
-                                        box.getChildren().add(
-                                                        imageView);
+                                        box.getChildren().add(imageView);
                                 }
 
                         } catch (Exception e) {
 
-                                System.out.println(
-                                                "Thumbnail loading failed: "
-                                                                + e.getMessage());
+                                System.out.println("Thumbnail loading failed: " + e.getMessage());
                         }
                 }
 
@@ -602,8 +562,7 @@ public class CourseTab {
                                         "-fx-text-fill:#68D34A;" +
                                                         "-fx-font-size:28px;");
 
-                        box.getChildren().add(
-                                        placeholder);
+                        box.getChildren().add(placeholder);
                 }
 
                 return box;
@@ -613,13 +572,11 @@ public class CourseTab {
         // ACTIONS
         // =========================================================
 
-        private static VBox createActions(
-                        Course course) {
+        private static VBox createActions(Course course) {
 
                 VBox actions = new VBox(8);
 
-                actions.setAlignment(
-                                Pos.CENTER_RIGHT);
+                actions.setAlignment(Pos.CENTER_RIGHT);
 
                 actions.setPrefWidth(190);
 
@@ -695,8 +652,7 @@ public class CourseTab {
 
                         AddModuleAdmin addModulePage = new AddModuleAdmin(course);
 
-                        LoginPage.mainStage.setScene(
-                                        addModulePage.getAddModuleScene());
+                        LoginPage.mainStage.setScene(addModulePage.getAddModuleScene());
                 });
 
                 // =====================================================

@@ -68,7 +68,6 @@ public class AdminPage {
                                 "Manage Course",
                                 "Community",
                                 "Government Schemes",
-                                "Analytics",
                                 "Settings");
 
                 lv.setStyle(
@@ -87,9 +86,7 @@ public class AdminPage {
                         ListCell<String> cell = new ListCell<String>() {
 
                                 @Override
-                                protected void updateItem(
-                                                String item,
-                                                boolean empty) {
+                                protected void updateItem(String item, boolean empty) {
 
                                         super.updateItem(item, empty);
 
@@ -97,13 +94,11 @@ public class AdminPage {
 
                                                 setText(null);
 
-                                                setStyle(
-                                                                "-fx-background-color:#0D1213;");
+                                                setStyle("-fx-background-color:#0D1213;");
 
                                         } else {
 
                                                 setText(item);
-
                                                 updateCellStyle();
                                         }
                                 }
@@ -112,8 +107,7 @@ public class AdminPage {
 
                                         if (isSelected()) {
 
-                                                setTextFill(
-                                                                Color.web("#68D34A"));
+                                                setTextFill(Color.web("#68D34A"));
 
                                                 setStyle(
                                                                 "-fx-background-color:#245D35;" +
@@ -125,13 +119,10 @@ public class AdminPage {
 
                                         } else {
 
-                                                setTextFill(
-                                                                Color.web("#AAAAAA"));
+                                                setTextFill(Color.web("#AAAAAA"));
 
-                                                setStyle(
-                                                                "-fx-background-color:#0D1213;" +
-                                                                                "-fx-padding:12 15;" +
-                                                                                "-fx-font-size:14px;");
+                                                setStyle("-fx-background-color:#0D1213;" + "-fx-padding:12 15;"
+                                                                + "-fx-font-size:14px;");
                                         }
                                 }
                         };
@@ -355,37 +346,30 @@ public class AdminPage {
 
                 if (selectedIndex >= 0) {
 
-                        lv.getSelectionModel()
-                                        .select(selectedIndex);
+                        lv.getSelectionModel().select(selectedIndex);
                 } else {
 
-                        lv.getSelectionModel()
-                                        .select(0);
+                        lv.getSelectionModel().select(0);
                 }
 
                 // =====================================================
                 // LIST VIEW SELECTION
                 // =====================================================
 
-                lv.getSelectionModel()
-                                .selectedItemProperty()
-                                .addListener(
-                                                (observable,
-                                                                oldValue,
-                                                                newValue) -> {
+                lv.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 
-                                                        if (newValue == null) {
-                                                                return;
-                                                        }
+                        if (newValue == null) {
+                                return;
+                        }
 
-                                                        System.out.println(
-                                                                        "Selected item: "
-                                                                                        + newValue);
+                        System.out.println(
+                                        "Selected item: "
+                                                        + newValue);
 
-                                                        showPage(
-                                                                        newValue,
-                                                                        bp);
-                                                });
+                        showPage(
+                                        newValue,
+                                        bp);
+                });
 
                 // =====================================================
                 // ROOT STYLE
@@ -484,23 +468,9 @@ public class AdminPage {
 
                         case "Government Schemes":
 
-                                Text schemes = createPageTitle(
-                                                "Government Schemes");
+                                Text schemes = createPageTitle( "Government Schemes");
 
                                 bp.setCenter(schemes);
-
-                                break;
-
-                        // =================================================
-                        // ANALYTICS
-                        // =================================================
-
-                        case "Analytics":
-
-                                Text analytics = createPageTitle(
-                                                "Analytics");
-
-                                bp.setCenter(analytics);
 
                                 break;
 

@@ -1037,43 +1037,30 @@ public class EditCourseAdmin {
 
                 VBox box = new VBox(8);
 
-                box.setAlignment(
-                                Pos.CENTER);
+                box.setAlignment(Pos.CENTER);
 
                 box.setPrefWidth(320);
 
                 box.setPrefHeight(135);
 
-                box.setPadding(
-                                new Insets(15));
+                box.setPadding(new Insets(15));
 
                 // =====================================================
                 // ICON
                 // =====================================================
 
-                Label icon = new Label(
-                                success
-                                                ? "✓"
-                                                : "!");
+                Label icon = new Label(success ? "✓" : "!");
 
                 icon.setPrefSize(
                                 42,
                                 42);
 
-                icon.setAlignment(
-                                Pos.CENTER);
+                icon.setAlignment(Pos.CENTER);
 
                 icon.setStyle(
                                 "-fx-background-color:"
-                                                + (success
-                                                                ? "#245D35;"
-                                                                : "#3A2525;")
-                                                +
-                                                "-fx-text-fill:"
-                                                + (success
-                                                                ? "#68D34A;"
-                                                                : "#FF6B6B;")
-                                                +
+                                                + (success ? "#245D35;" : "#3A2525;") +
+                                                "-fx-text-fill:" + (success ? "#68D34A;" : "#FF6B6B;") +
                                                 "-fx-font-size:22px;" +
                                                 "-fx-font-weight:bold;" +
                                                 "-fx-background-radius:50%;");
@@ -1101,8 +1088,7 @@ public class EditCourseAdmin {
 
                 messageLabel.setWrapText(true);
 
-                messageLabel.setAlignment(
-                                Pos.CENTER);
+                messageLabel.setAlignment(Pos.CENTER);
 
                 // =====================================================
                 // ADD
@@ -1124,8 +1110,7 @@ public class EditCourseAdmin {
                                                 "-fx-border-radius:8;" +
                                                 "-fx-background-radius:8;");
 
-                popup.getContent()
-                                .add(box);
+                popup.getContent().add(box);
 
                 // =====================================================
                 // SHOW
@@ -1133,21 +1118,14 @@ public class EditCourseAdmin {
 
                 Window window = LoginPage.mainStage;
 
-                popup.show(
-                                window,
-                                window.getX()
-                                                + (window.getWidth()
-                                                                - 320) / 2,
-                                window.getY()
-                                                + (window.getHeight()
-                                                                - 135) / 2);
+                popup.show(window, window.getX() + (window.getWidth() - 320) / 2,
+                                window.getY() + (window.getHeight() - 135) / 2);
 
                 // =====================================================
                 // AUTO HIDE
                 // =====================================================
 
-                PauseTransition delay = new PauseTransition(
-                                Duration.seconds(1.5));
+                PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
 
                 delay.setOnFinished(
                                 e -> popup.hide());

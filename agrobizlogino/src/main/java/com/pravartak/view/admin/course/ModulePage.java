@@ -1,22 +1,45 @@
 package com.pravartak.view.admin.course;
 
+import com.pravartak.controller.admincontroller.LessonController;
+import com.pravartak.controller.admincontroller.ModuleController;
 import com.pravartak.model.admin.Course;
+import com.pravartak.model.admin.Lesson;
+import com.pravartak.model.admin.Module;
 import com.pravartak.view.admin.AdminPage;
 import com.pravartak.view.login.LoginPage;
+
+import java.util.List;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class ModulePage {
 
+        // =========================================================
+        // VARIABLES
+        // =========================================================
+
         private final Course course;
+
+        private final ModuleController moduleController = new ModuleController();
+
+        private final LessonController lessonController = new LessonController();
+
+        // =========================================================
+        // CONSTRUCTOR
+        // =========================================================
 
         public ModulePage(Course course) {
                 this.course = course;
@@ -31,7 +54,11 @@ public class ModulePage {
                 VBox root = new VBox(15);
 
                 root.setPadding(
-                                new Insets(20, 30, 20, 30));
+                                new Insets(
+                                                20,
+                                                30,
+                                                20,
+                                                30));
 
                 root.setStyle(
                                 "-fx-background-color:#080C0D;");
@@ -44,6 +71,10 @@ public class ModulePage {
 
                 header.setAlignment(
                                 Pos.CENTER_LEFT);
+
+                // =====================================================
+                // BACK BUTTON
+                // =====================================================
 
                 Button backButton = new Button("← Back");
 
@@ -59,6 +90,10 @@ public class ModulePage {
 
                 backButton.setOnAction(
                                 e -> goBack());
+
+                // =====================================================
+                // TITLE
+                // =====================================================
 
                 VBox titleBox = new VBox(3);
 
@@ -100,37 +135,52 @@ public class ModulePage {
                 VBox moduleList = new VBox(12);
 
                 moduleList.setPadding(
-                                new Insets(5, 0, 20, 0));
+                                new Insets(
+                                                5,
+                                                0,
+                                                20,
+                                                0));
 
                 moduleList.setFillWidth(true);
 
-                /*
-                 * Currently showing sample modules.
-                 *
-                 * Later replace this with:
-                 *
-                 * ModuleController.getModulesByCourseId(
-                 * course.getCourseId()
-                 * );
-                 */
+                // =====================================================
+                // LOAD MODULES
+                // =====================================================
 
-                moduleList.getChildren().add(
-                                createModuleCard(
-                                                1,
-                                                "Introduction to Hydroponics",
-                                                "Understanding the basics of soil-less agriculture."));
+                int courseId = course.getCourseId();
 
-                moduleList.getChildren().add(
-                                createModuleCard(
-                                                2,
-                                                "Nutrient Solutions",
-                                                "Chemistry and management of plant nutrients."));
+                List<Module> modules = moduleController
+                                .getModulesByCourse(
+                                                courseId);
+
+                // =====================================================
+                // DISPLAY MODULES
+                // =====================================================
+
+                if (modules.isEmpty()) {
+
+                        moduleList.getChildren().add(
+                                        createEmptyModuleView());
+
+                } else {
+
+                        for (int i = 0; i < modules.size(); i++) {
+
+                                Module module = modules.get(i);
+
+                                moduleList.getChildren().add(
+                                                createModuleCard(
+                                                                i + 1,
+                                                                module));
+                        }
+                }
 
                 // =====================================================
                 // ADD MODULE BUTTON
                 // =====================================================
 
-                Button addModule = new Button("+  ADD NEW MODULE");
+                Button addModule = new Button(
+                                "+  ADD NEW MODULE");
 
                 addModule.setMaxWidth(
                                 Double.MAX_VALUE);
@@ -158,7 +208,8 @@ public class ModulePage {
                         AddModuleAdmin addModulePage = new AddModuleAdmin(course);
 
                         LoginPage.mainStage.setScene(
-                                        addModulePage.getAddModuleScene());
+                                        addModulePage
+                                                        .getAddModuleScene());
                 });
 
                 moduleList.getChildren().add(
@@ -172,9 +223,11 @@ public class ModulePage {
 
                 scrollPane.setFitToWidth(true);
 
-                scrollPane.setHbarPolicy(  ScrollPane.ScrollBarPolicy.NEVER);
+                scrollPane.setHbarPolicy(
+                                ScrollPane.ScrollBarPolicy.NEVER);
 
-                scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+                scrollPane.setVbarPolicy(
+                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
                 scrollPane.setPannable(true);
 
@@ -222,7 +275,14 @@ public class ModulePage {
                                                 "-fx-border-radius:7;" +
                                                 "-fx-background-radius:7;");
 
-                Label category = new Label(course != null ? safe(course.getCategory()) : "Category");
+                // =====================================================
+                // CATEGORY
+                // =====================================================
+
+                Label category = new Label(
+                                course != null
+                                                ? safe(course.getCategory())
+                                                : "Category");
 
                 category.setStyle(
                                 "-fx-background-color:#10302A;" +
@@ -232,7 +292,15 @@ public class ModulePage {
                                                 "-fx-padding:5 8;" +
                                                 "-fx-background-radius:3;");
 
-                Label status = new Label(course != null &&course.getStatus()? "PUBLISHED"  : "DRAFT");
+                // =====================================================
+                // STATUS
+                // =====================================================
+
+                Label status = new Label(
+                                course != null &&
+                                                course.getStatus()
+                                                                ? "PUBLISHED"
+                                                                : "DRAFT");
 
                 status.setStyle(
                                 "-fx-background-color:#0D3B25;" +
@@ -241,6 +309,10 @@ public class ModulePage {
                                                 "-fx-font-weight:bold;" +
                                                 "-fx-padding:5 8;" +
                                                 "-fx-background-radius:3;");
+
+                // =====================================================
+                // COURSE ID
+                // =====================================================
 
                 Label id = new Label(
                                 course != null
@@ -266,20 +338,19 @@ public class ModulePage {
 
         private VBox createModuleCard(
                         int moduleNumber,
-                        String moduleTitle,
-                        String description) {
+                        Module module) {
 
-                VBox module = new VBox(8);
+                VBox moduleBox = new VBox(8);
 
-                module.setPadding(
-                                new Insets(15));
+                moduleBox.setPadding(
+                                new Insets(16));
 
-                module.setStyle(
-                                "-fx-background-color:#101612;" +
-                                                "-fx-border-color:#242B2C;" +
-                                                "-fx-border-width:1;" +
-                                                "-fx-border-radius:7;" +
-                                                "-fx-background-radius:7;");
+                moduleBox.setStyle(
+                                "-fx-background-color:#0D1511;" +
+                                                "-fx-border-color:#202A25;" +
+                                                "-fx-border-radius:8;" +
+                                                "-fx-background-radius:8;" +
+                                                "-fx-cursor:hand;");
 
                 // =====================================================
                 // MODULE HEADER
@@ -287,154 +358,589 @@ public class ModulePage {
 
                 HBox header = new HBox(10);
 
-                header.setAlignment(Pos.CENTER_LEFT);
+                header.setAlignment(
+                                Pos.CENTER_LEFT);
 
-                VBox titleBox = new VBox(3);
+                // =====================================================
+                // MODULE INFORMATION
+                // =====================================================
 
-                HBox.setHgrow(
-                                titleBox,
-                                Priority.ALWAYS);
+                VBox moduleInfo = new VBox(4);
 
-                Label moduleLabel = new Label(
+                // -----------------------------------------------------
+                // MODULE NUMBER
+                // -----------------------------------------------------
+
+                Label moduleNumberLabel = new Label(
                                 "MODULE "
                                                 + moduleNumber);
 
-                moduleLabel.setStyle(
-                                "-fx-text-fill:#68D34A;" +
-                                                "-fx-font-size:9px;" +
+                moduleNumberLabel.setStyle(
+                                "-fx-text-fill:#39FF72;" +
+                                                "-fx-font-size:11px;" +
                                                 "-fx-font-weight:bold;");
 
-                Label title = new Label(
-                                moduleTitle);
+                // -----------------------------------------------------
+                // MODULE TITLE
+                // -----------------------------------------------------
 
-                title.setStyle(
-                                "-fx-text-fill:#EEEEEE;" +
-                                                "-fx-font-size:15px;" +
+                Label moduleTitle = new Label(
+                                safe(
+                                                module.getTitle()));
+
+                moduleTitle.setStyle(
+                                "-fx-text-fill:#FFFFFF;" +
+                                                "-fx-font-size:16px;" +
                                                 "-fx-font-weight:bold;");
 
-                Label desc = new Label(
-                                description);
+                // -----------------------------------------------------
+                // MODULE DESCRIPTION
+                // -----------------------------------------------------
 
-                desc.setStyle(
-                                "-fx-text-fill:#777777;" +
-                                                "-fx-font-size:10px;");
+                Label moduleDescription = new Label(
+                                safe(
+                                                module.getDescription()));
 
-                titleBox.getChildren().addAll(
-                                moduleLabel,
-                                title,
-                                desc);
+                moduleDescription.setStyle(
+                                "-fx-text-fill:#88958E;" +
+                                                "-fx-font-size:11px;");
+
+                moduleInfo.getChildren().addAll(
+                                moduleNumberLabel,
+                                moduleTitle,
+                                moduleDescription);
+
+                // =====================================================
+                // SPACER
+                // =====================================================
+
+                Region spacer = new Region();
+
+                HBox.setHgrow(
+                                spacer,
+                                Priority.ALWAYS);
+
+                // =====================================================
+                // ADD LESSON BUTTON
+                // =====================================================
 
                 Button addLesson = new Button("+ Lesson");
 
                 addLesson.setStyle(
-                                "-fx-background-color:#101A14;" +
-                                                "-fx-text-fill:#68D34A;" +
-                                                "-fx-border-color:#245D35;" +
+                                "-fx-background-color:transparent;" +
+                                                "-fx-border-color:#1F8F46;" +
                                                 "-fx-border-radius:5;" +
-                                                "-fx-background-radius:5;" +
-                                                "-fx-font-size:9px;" +
+                                                "-fx-text-fill:#39FF72;" +
+                                                "-fx-font-size:10px;" +
                                                 "-fx-cursor:hand;");
+
+                /*
+                 * Prevent this click from reaching
+                 * the module card.
+                 */
+
+                addLesson.addEventFilter(
+                                MouseEvent.MOUSE_CLICKED,
+                                MouseEvent::consume);
 
                 addLesson.setOnAction(e -> {
 
-                        System.out.println("Add lesson to module " + moduleNumber);
+                        System.out.println(
+                                        "Add lesson to module: "
+                                                        + module.getModuleId());
+
+                        AddLessonAdmin addLessonPage = new AddLessonAdmin(
+                                        course,
+                                        module);
+
+                        LoginPage.mainStage.setScene(
+                                        addLessonPage
+                                                        .getAddLessonScene());
                 });
 
-                Button delete = new Button("🗑");
+                // =====================================================
+                // DELETE MODULE
+                // =====================================================
 
-                delete.setStyle(
+                Button deleteButton = new Button("▯");
+
+                deleteButton.setStyle(
                                 "-fx-background-color:transparent;" +
                                                 "-fx-text-fill:#777777;" +
                                                 "-fx-font-size:11px;" +
                                                 "-fx-cursor:hand;");
 
+                /*
+                 * Prevent this click from reaching
+                 * the module card.
+                 */
+
+                deleteButton.addEventFilter(
+                                MouseEvent.MOUSE_CLICKED,
+                                MouseEvent::consume);
+
+                deleteButton.setOnAction(e -> {
+
+                        e.consume();
+
+                        Alert alert = new Alert(
+                                        Alert.AlertType.CONFIRMATION);
+
+                        alert.setTitle("Delete Module");
+                        alert.setHeaderText("Delete this module?");
+                        alert.setContentText(
+                                        "This will delete the module and its lessons.");
+
+                        ButtonType yesButton = new ButtonType("Delete");
+
+                        ButtonType cancelButton = new ButtonType(
+                                        "Cancel",
+                                        ButtonBar.ButtonData.CANCEL_CLOSE);
+
+                        alert.getButtonTypes().setAll(
+                                        yesButton,
+                                        cancelButton);
+
+                        alert.showAndWait().ifPresent(response -> {
+
+                                if (response == yesButton) {
+
+                                        System.out.println(
+                                                        "Delete module: "
+                                                                        + module.getModuleId());
+
+                                        boolean deleted = moduleController.deleteModule(
+                                                        module.getModuleId());
+
+                                        if (deleted) {
+
+                                                refreshPage();
+
+                                        } else {
+
+                                                Alert error = new Alert(
+                                                                Alert.AlertType.ERROR);
+
+                                                error.setTitle(
+                                                                "Delete Failed");
+
+                                                error.setHeaderText(
+                                                                "Unable to delete module");
+
+                                                error.setContentText(
+                                                                "The module could not be deleted.");
+
+                                                error.showAndWait();
+                                        }
+                                }
+                        });
+                });
+
+                // =====================================================
+                // EXPAND / COLLAPSE ARROW
+                // =====================================================
+
+                Label arrow = new Label("›");
+
+                arrow.setStyle(
+                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-font-size:20px;" +
+                                                "-fx-font-weight:bold;");
+
+                arrow.setMinWidth(15);
+
+                arrow.setAlignment(
+                                Pos.CENTER);
+
+                // =====================================================
+                // HEADER CHILDREN
+                // =====================================================
+
                 header.getChildren().addAll(
-                                titleBox,
+                                moduleInfo,
+                                spacer,
                                 addLesson,
-                                delete);
+                                deleteButton,
+                                arrow);
 
                 // =====================================================
-                // LESSONS
+                // LESSON LIST
                 // =====================================================
 
-                VBox lessons = new VBox(6);
+                VBox lessonList = createLessons(
+                                module,
+                                moduleNumber);
 
-                lessons.getChildren().add(
-                                createLesson(
-                                                "1.1",
-                                                "History and Evolution",
-                                                "VIDEO • 12 MIN"));
+                lessonList.setPadding(
+                                new Insets(
+                                                10,
+                                                0,
+                                                0,
+                                                20));
 
-                lessons.getChildren().add(
-                                createLesson(
-                                                "1.2",
-                                                "Types of Systems Overview",
-                                                "READING • 5 PAGES"));
+                // Initially collapsed
+                lessonList.setVisible(false);
 
-                lessons.getChildren().add(
-                                createLesson(
-                                                "1.3",
-                                                "Module 1 Knowledge Check",
-                                                "QUIZ • 10 Q"));
+                lessonList.setManaged(false);
 
-                module.getChildren().addAll(
+                // =====================================================
+                // MODULE CLICK
+                // =====================================================
+
+                moduleBox.setOnMouseClicked(e -> {
+
+                        boolean expanded = lessonList.isVisible();
+
+                        lessonList.setVisible(
+                                        !expanded);
+
+                        lessonList.setManaged(
+                                        !expanded);
+
+                        // Update arrow
+                        if (expanded) {
+
+                                arrow.setText("›");
+
+                        } else {
+
+                                arrow.setText("⌄");
+                        }
+                });
+
+                // =====================================================
+                // HOVER
+                // =====================================================
+
+                moduleBox.setOnMouseEntered(e -> {
+
+                        moduleBox.setStyle(
+                                        "-fx-background-color:#111A15;" +
+                                                        "-fx-border-color:#2B4735;" +
+                                                        "-fx-border-radius:8;" +
+                                                        "-fx-background-radius:8;" +
+                                                        "-fx-cursor:hand;");
+                });
+
+                moduleBox.setOnMouseExited(e -> {
+
+                        moduleBox.setStyle(
+                                        "-fx-background-color:#0D1511;" +
+                                                        "-fx-border-color:#202A25;" +
+                                                        "-fx-border-radius:8;" +
+                                                        "-fx-background-radius:8;" +
+                                                        "-fx-cursor:hand;");
+                });
+
+                // =====================================================
+                // ADD COMPONENTS
+                // =====================================================
+
+                moduleBox.getChildren().addAll(
                                 header,
-                                lessons);
+                                lessonList);
 
-                return module;
+                return moduleBox;
         }
 
         // =========================================================
-        // LESSON
+        // CREATE LESSONS
+        // =========================================================
+
+        private VBox createLessons(
+                        Module module,
+                        int moduleNumber) {
+
+                VBox lessons = new VBox(6);
+
+                // =====================================================
+                // GET LESSONS FROM DATABASE
+                // =====================================================
+
+                List<Lesson> lessonList = lessonController
+                                .getLessonsByModule(
+                                                module.getModuleId());
+
+                // =====================================================
+                // NO LESSONS
+                // =====================================================
+
+                if (lessonList.isEmpty()) {
+
+                        Label empty = new Label(
+                                        "No lessons added yet.");
+
+                        empty.setStyle(
+                                        "-fx-text-fill:#555555;" +
+                                                        "-fx-font-size:10px;" +
+                                                        "-fx-padding:10;");
+
+                        lessons.getChildren().add(
+                                        empty);
+
+                        return lessons;
+                }
+
+                // =====================================================
+                // CREATE LESSON ROWS
+                // =====================================================
+
+                for (Lesson lesson : lessonList) {
+
+                        lessons.getChildren().add(
+                                        createLesson(
+                                                        lesson,
+                                                        moduleNumber));
+                }
+
+                return lessons;
+        }
+
+        // =========================================================
+        // CREATE SINGLE LESSON
         // =========================================================
 
         private HBox createLesson(
-                        String number,
-                        String title,
-                        String type) {
+                        Lesson lesson,
+                        int moduleNumber) {
 
-                HBox lesson = new HBox(10);
+                HBox box = new HBox(10);
 
-                lesson.setAlignment(
+                box.setAlignment(
                                 Pos.CENTER_LEFT);
 
-                lesson.setPadding(
+                box.setPadding(
                                 new Insets(10));
 
-                lesson.setStyle(
+                box.setStyle(
                                 "-fx-background-color:#0D1213;" +
-                                                "-fx-background-radius:5;");
+                                                "-fx-background-radius:5;" +
+                                                "-fx-cursor:hand;");
 
-                Label numberLabel = new Label(number);
+                // =====================================================
+                // LESSON NUMBER
+                // =====================================================
 
-                numberLabel.setStyle(
+                Label number = new Label(
+                                moduleNumber
+                                                + "."
+                                                + lesson.getLessonOrder());
+
+                number.setStyle(
                                 "-fx-text-fill:#68D34A;" +
                                                 "-fx-font-size:10px;" +
                                                 "-fx-font-weight:bold;");
 
-                Label titleLabel = new Label(title);
+                number.setMinWidth(30);
 
-                titleLabel.setStyle(
+                // =====================================================
+                // ICON
+                // =====================================================
+
+                Label icon = new Label(
+                                getLessonIcon(
+                                                lesson.getType()));
+
+                icon.setPrefSize(
+                                25,
+                                25);
+
+                icon.setAlignment(
+                                Pos.CENTER);
+
+                icon.setStyle(
+                                "-fx-background-color:#14251A;" +
+                                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-font-size:11px;");
+
+                // =====================================================
+                // TITLE
+                // =====================================================
+
+                Label title = new Label(
+                                safe(
+                                                lesson.getTitle()));
+
+                title.setStyle(
                                 "-fx-text-fill:#EEEEEE;" +
-                                                "-fx-font-size:10px;" +
+                                                "-fx-font-size:11px;" +
                                                 "-fx-font-weight:bold;");
 
+                title.setWrapText(true);
+
                 HBox.setHgrow(
-                                titleLabel,
+                                title,
                                 Priority.ALWAYS);
 
-                Label typeLabel = new Label(type);
+                // =====================================================
+                // TYPE
+                // =====================================================
 
-                typeLabel.setStyle(
+                Label type = new Label(
+                                safe(
+                                                lesson.getType())
+                                                .toUpperCase());
+
+                type.setStyle(
                                 "-fx-text-fill:#777777;" +
-                                                "-fx-font-size:8px;");
+                                                "-fx-font-size:8px;" +
+                                                "-fx-font-weight:bold;");
 
-                lesson.getChildren().addAll(
-                                numberLabel,
-                                titleLabel,
-                                typeLabel);
+                // =====================================================
+                // DELETE
+                // =====================================================
 
-                return lesson;
+                Button delete = new Button("×");
+
+                delete.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-text-fill:#777777;" +
+                                                "-fx-font-size:14px;" +
+                                                "-fx-cursor:hand;");
+
+                /*
+                 * Prevent delete click from
+                 * reaching module card.
+                 */
+
+                delete.addEventFilter(
+                                MouseEvent.MOUSE_CLICKED,
+                                MouseEvent::consume);
+
+                delete.setOnAction(e -> {
+
+                        if (lessonController.deleteLesson(
+                                        lesson.getLessonId())) {
+
+                                refreshPage();
+                        }
+                });
+
+                // =====================================================
+                // ADD COMPONENTS
+                // =====================================================
+
+                box.getChildren().addAll(
+                                number,
+                                icon,
+                                title,
+                                type,
+                                delete);
+
+                // =====================================================
+                // LESSON CLICK
+                // =====================================================
+
+                box.addEventFilter(
+                                MouseEvent.MOUSE_CLICKED,
+                                e -> {
+
+                                        /*
+                                         * Prevent lesson click
+                                         * from collapsing module.
+                                         */
+
+                                        e.consume();
+
+                                        System.out.println(
+                                                        "Clicked lesson: "
+                                                                        + lesson.getLessonId());
+
+                                        /*
+                                         * Add your lesson edit/view
+                                         * page here later.
+                                         */
+                                });
+
+                // =====================================================
+                // HOVER
+                // =====================================================
+
+                box.setOnMouseEntered(e -> {
+
+                        box.setStyle(
+                                        "-fx-background-color:#141B16;" +
+                                                        "-fx-background-radius:5;" +
+                                                        "-fx-cursor:hand;");
+                });
+
+                box.setOnMouseExited(e -> {
+
+                        box.setStyle(
+                                        "-fx-background-color:#0D1213;" +
+                                                        "-fx-background-radius:5;" +
+                                                        "-fx-cursor:hand;");
+                });
+
+                return box;
+        }
+
+        // =========================================================
+        // EMPTY MODULE VIEW
+        // =========================================================
+
+        private VBox createEmptyModuleView() {
+
+                VBox box = new VBox(8);
+
+                box.setAlignment(
+                                Pos.CENTER);
+
+                box.setPadding(
+                                new Insets(40));
+
+                // =====================================================
+                // ICON
+                // =====================================================
+
+                Label icon = new Label("＋");
+
+                icon.setStyle(
+                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-font-size:28px;");
+
+                // =====================================================
+                // TITLE
+                // =====================================================
+
+                Label title = new Label(
+                                "No modules yet");
+
+                title.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:16px;" +
+                                                "-fx-font-weight:bold;");
+
+                // =====================================================
+                // MESSAGE
+                // =====================================================
+
+                Label message = new Label(
+                                "Create your first module for this course.");
+
+                message.setStyle(
+                                "-fx-text-fill:#777777;" +
+                                                "-fx-font-size:10px;");
+
+                box.getChildren().addAll(
+                                icon,
+                                title,
+                                message);
+
+                return box;
+        }
+
+        // =========================================================
+        // REFRESH PAGE
+        // =========================================================
+
+        private void refreshPage() {
+
+                ModulePage page = new ModulePage(course);
+
+                LoginPage.mainStage.setScene(
+                                page.getModuleScene());
         }
 
         // =========================================================
@@ -454,10 +960,41 @@ public class ModulePage {
         // SAFE
         // =========================================================
 
-        private String safe(String value) {
+        private String safe(
+                        String value) {
 
                 return value == null
                                 ? ""
                                 : value;
+        }
+
+        // =========================================================
+        // LESSON ICON
+        // =========================================================
+
+        private String getLessonIcon(
+                        String type) {
+
+                if (type == null) {
+                        return "•";
+                }
+
+                switch (type.toUpperCase()) {
+
+                        case "VIDEO":
+                                return "▶";
+
+                        case "READING":
+                                return "▤";
+
+                        case "QUIZ":
+                                return "?";
+
+                        case "ACTIVITY":
+                                return "✓";
+
+                        default:
+                                return "•";
+                }
         }
 }

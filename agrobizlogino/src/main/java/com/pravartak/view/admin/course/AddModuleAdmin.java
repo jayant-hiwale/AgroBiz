@@ -1,5 +1,6 @@
 package com.pravartak.view.admin.course;
 
+import com.pravartak.controller.admincontroller.ModuleController;
 import com.pravartak.model.admin.Course;
 import com.pravartak.view.admin.AdminPage;
 import com.pravartak.view.login.LoginPage;
@@ -24,10 +25,7 @@ import javafx.util.Duration;
 
 public class AddModuleAdmin {
 
-    // =========================================================
-    // COURSE
-    // =========================================================
-
+    private final ModuleController moduleController = new ModuleController();
     private final Course course;
 
     // =========================================================
@@ -75,22 +73,22 @@ public class AddModuleAdmin {
 
         backButton.setStyle(
                 "-fx-background-color:transparent;" +
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-font-size:11px;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-width:1;" +
-                "-fx-border-radius:5;" +
-                "-fx-background-radius:5;" +
-                "-fx-padding:6 14;" +
-                "-fx-cursor:hand;");
+                        "-fx-text-fill:#AAAAAA;" +
+                        "-fx-font-size:11px;" +
+                        "-fx-border-color:#242B2C;" +
+                        "-fx-border-width:1;" +
+                        "-fx-border-radius:5;" +
+                        "-fx-background-radius:5;" +
+                        "-fx-padding:6 14;" +
+                        "-fx-cursor:hand;");
 
         Label pageTitle = new Label(
                 "Add Module");
 
         pageTitle.setStyle(
                 "-fx-text-fill:#EEEEEE;" +
-                "-fx-font-size:24px;" +
-                "-fx-font-weight:bold;");
+                        "-fx-font-size:24px;" +
+                        "-fx-font-weight:bold;");
 
         Label courseLabel = new Label(
                 course != null
@@ -99,8 +97,8 @@ public class AddModuleAdmin {
 
         courseLabel.setStyle(
                 "-fx-text-fill:#68D34A;" +
-                "-fx-font-size:11px;" +
-                "-fx-font-weight:bold;");
+                        "-fx-font-size:11px;" +
+                        "-fx-font-weight:bold;");
 
         topBar.getChildren().addAll(
                 backButton,
@@ -119,7 +117,7 @@ public class AddModuleAdmin {
 
         description.setStyle(
                 "-fx-text-fill:#888888;" +
-                "-fx-font-size:11px;");
+                        "-fx-font-size:11px;");
 
         // =====================================================
         // MAIN CONTENT
@@ -131,8 +129,7 @@ public class AddModuleAdmin {
         // LEFT - MODULE INFORMATION
         // =====================================================
 
-        VBox informationCard =
-                createInformationCard();
+        VBox informationCard = createInformationCard();
 
         informationCard.setPrefWidth(650);
         informationCard.setMinWidth(500);
@@ -145,8 +142,7 @@ public class AddModuleAdmin {
         // RIGHT - MODULE SETTINGS
         // =====================================================
 
-        VBox settingsCard =
-                createSettingsCard();
+        VBox settingsCard = createSettingsCard();
 
         settingsCard.setPrefWidth(300);
         settingsCard.setMinWidth(260);
@@ -159,15 +155,13 @@ public class AddModuleAdmin {
         // ACTION BUTTONS
         // =====================================================
 
-        HBox actions =
-                createActionButtons();
+        HBox actions = createActionButtons();
 
         // =====================================================
         // PAGE CONTENT
         // =====================================================
 
-        VBox pageContent =
-                new VBox(16);
+        VBox pageContent = new VBox(16);
 
         pageContent.setPadding(
                 new Insets(5, 0, 20, 0));
@@ -180,8 +174,7 @@ public class AddModuleAdmin {
         // SCROLL PANE
         // =====================================================
 
-        ScrollPane scrollPane =
-                new ScrollPane(pageContent);
+        ScrollPane scrollPane = new ScrollPane(pageContent);
 
         scrollPane.setFitToWidth(true);
 
@@ -195,8 +188,8 @@ public class AddModuleAdmin {
 
         scrollPane.setStyle(
                 "-fx-background-color:#080C0D;" +
-                "-fx-background:#080C0D;" +
-                "-fx-border-color:transparent;");
+                        "-fx-background:#080C0D;" +
+                        "-fx-border-color:transparent;");
 
         VBox.setVgrow(
                 scrollPane,
@@ -225,21 +218,17 @@ public class AddModuleAdmin {
 
         VBox card = createCard();
 
-        Label heading =
-                createHeading("Module Information");
+        Label heading = createHeading("Module Information");
 
-        Separator separator =
-                new Separator();
+        Separator separator = new Separator();
 
         // =====================================================
         // MODULE TITLE
         // =====================================================
 
-        Label titleLabel =
-                createFieldLabel("Module Title");
+        Label titleLabel = createFieldLabel("Module Title");
 
-        moduleTitleField =
-                new TextField();
+        moduleTitleField = new TextField();
 
         moduleTitleField.setPromptText(
                 "Enter module title");
@@ -251,11 +240,9 @@ public class AddModuleAdmin {
         // MODULE DESCRIPTION
         // =====================================================
 
-        Label descriptionLabel =
-                createFieldLabel("Module Description");
+        Label descriptionLabel = createFieldLabel("Module Description");
 
-        descriptionField =
-                new TextArea();
+        descriptionField = new TextArea();
 
         descriptionField.setPromptText(
                 "Describe what students will learn in this module...");
@@ -289,21 +276,17 @@ public class AddModuleAdmin {
 
         VBox card = createCard();
 
-        Label heading =
-                createHeading("Module Settings");
+        Label heading = createHeading("Module Settings");
 
-        Separator separator =
-                new Separator();
+        Separator separator = new Separator();
 
         // =====================================================
         // MODULE ORDER
         // =====================================================
 
-        Label orderLabel =
-                createFieldLabel("Module Order");
+        Label orderLabel = createFieldLabel("Module Order");
 
-        orderField =
-                new TextField();
+        orderField = new TextField();
 
         orderField.setPromptText(
                 "e.g. 1");
@@ -315,11 +298,9 @@ public class AddModuleAdmin {
         // STATUS
         // =====================================================
 
-        Label statusLabel =
-                createFieldLabel("Module Status");
+        Label statusLabel = createFieldLabel("Module Status");
 
-        statusBox =
-                new ComboBox<>();
+        statusBox = new ComboBox<>();
 
         statusBox.getItems().addAll(
                 "Draft",
@@ -335,39 +316,35 @@ public class AddModuleAdmin {
         // COURSE INFORMATION
         // =====================================================
 
-        Label courseHeading =
-                createFieldLabel("Course");
+        Label courseHeading = createFieldLabel("Course");
 
-        Label selectedCourse =
-                new Label(
-                        course != null
-                                ? safe(course.getTitle())
-                                : "Unknown Course");
+        Label selectedCourse = new Label(
+                course != null
+                        ? safe(course.getTitle())
+                        : "Unknown Course");
 
         selectedCourse.setWrapText(true);
 
         selectedCourse.setStyle(
                 "-fx-text-fill:#68D34A;" +
-                "-fx-font-size:13px;" +
-                "-fx-font-weight:bold;");
+                        "-fx-font-size:13px;" +
+                        "-fx-font-weight:bold;");
 
         // =====================================================
         // COURSE ID
         // =====================================================
 
-        Label idLabel =
-                createFieldLabel("Course ID");
+        Label idLabel = createFieldLabel("Course ID");
 
-        Label courseId =
-                new Label(
-                        course != null
-                                ? String.valueOf(
-                                        course.getCourseId())
-                                : "-");
+        Label courseId = new Label(
+                course != null
+                        ? String.valueOf(
+                                course.getCourseId())
+                        : "-");
 
         courseId.setStyle(
                 "-fx-text-fill:#777777;" +
-                "-fx-font-size:11px;");
+                        "-fx-font-size:11px;");
 
         // =====================================================
         // ADD
@@ -394,39 +371,36 @@ public class AddModuleAdmin {
 
     private HBox createActionButtons() {
 
-        HBox buttons =
-                new HBox(10);
+        HBox buttons = new HBox(10);
 
         buttons.setAlignment(
                 Pos.CENTER_RIGHT);
 
-        Button cancel =
-                new Button("Cancel");
+        Button cancel = new Button("Cancel");
 
         cancel.setStyle(
                 "-fx-background-color:#101516;" +
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-width:1;" +
-                "-fx-border-radius:5;" +
-                "-fx-background-radius:5;" +
-                "-fx-padding:8 22;" +
-                "-fx-font-weight:bold;" +
-                "-fx-cursor:hand;");
+                        "-fx-text-fill:#AAAAAA;" +
+                        "-fx-border-color:#242B2C;" +
+                        "-fx-border-width:1;" +
+                        "-fx-border-radius:5;" +
+                        "-fx-background-radius:5;" +
+                        "-fx-padding:8 22;" +
+                        "-fx-font-weight:bold;" +
+                        "-fx-cursor:hand;");
 
-        Button save =
-                new Button("✓  Save Module");
+        Button save = new Button("✓  Save Module");
 
         save.setStyle(
                 "-fx-background-color:#68D34A;" +
-                "-fx-text-fill:#080C0D;" +
-                "-fx-border-color:#68D34A;" +
-                "-fx-border-width:1;" +
-                "-fx-border-radius:5;" +
-                "-fx-background-radius:5;" +
-                "-fx-padding:8 24;" +
-                "-fx-font-weight:bold;" +
-                "-fx-cursor:hand;");
+                        "-fx-text-fill:#080C0D;" +
+                        "-fx-border-color:#68D34A;" +
+                        "-fx-border-width:1;" +
+                        "-fx-border-radius:5;" +
+                        "-fx-background-radius:5;" +
+                        "-fx-padding:8 24;" +
+                        "-fx-font-weight:bold;" +
+                        "-fx-cursor:hand;");
 
         cancel.setOnAction(
                 e -> goBack());
@@ -449,6 +423,10 @@ public class AddModuleAdmin {
 
         try {
 
+            // =========================================================
+            // COURSE CHECK
+            // =========================================================
+
             if (course == null) {
 
                 showPopup(
@@ -459,14 +437,13 @@ public class AddModuleAdmin {
                 return;
             }
 
-            // =================================================
+            // =========================================================
             // TITLE
-            // =================================================
+            // =========================================================
 
-            String title =
-                    moduleTitleField
-                            .getText()
-                            .trim();
+            String title = moduleTitleField
+                    .getText()
+                    .trim();
 
             if (title.isEmpty()) {
 
@@ -475,17 +452,18 @@ public class AddModuleAdmin {
                         "Please enter a module title.",
                         false);
 
+                moduleTitleField.requestFocus();
+
                 return;
             }
 
-            // =================================================
+            // =========================================================
             // DESCRIPTION
-            // =================================================
+            // =========================================================
 
-            String description =
-                    descriptionField
-                            .getText()
-                            .trim();
+            String description = descriptionField
+                    .getText()
+                    .trim();
 
             if (description.isEmpty()) {
 
@@ -494,17 +472,18 @@ public class AddModuleAdmin {
                         "Please enter a module description.",
                         false);
 
+                descriptionField.requestFocus();
+
                 return;
             }
 
-            // =================================================
+            // =========================================================
             // ORDER
-            // =================================================
+            // =========================================================
 
-            String orderText =
-                    orderField
-                            .getText()
-                            .trim();
+            String orderText = orderField
+                    .getText()
+                    .trim();
 
             int order = 1;
 
@@ -512,8 +491,19 @@ public class AddModuleAdmin {
 
                 try {
 
-                    order = Integer.parseInt(
-                            orderText);
+                    order = Integer.parseInt(orderText);
+
+                    if (order < 1) {
+
+                        showPopup(
+                                "Invalid Order",
+                                "Module order must be greater than 0.",
+                                false);
+
+                        orderField.requestFocus();
+
+                        return;
+                    }
 
                 } catch (NumberFormatException ex) {
 
@@ -522,75 +512,81 @@ public class AddModuleAdmin {
                             "Module order must be a number.",
                             false);
 
+                    orderField.requestFocus();
+
                     return;
                 }
             }
 
-            // =================================================
+            // =========================================================
             // STATUS
-            // =================================================
+            // =========================================================
 
-            boolean published =
-                    "Published".equals(
-                            statusBox.getValue());
+            boolean published = "Published".equals(statusBox.getValue());
 
-            // =================================================
-            // TEMPORARY OUTPUT
-            // =================================================
+            // =========================================================
+            // COURSE DATA
+            // =========================================================
 
-            System.out.println(
-                    "================================");
+            int courseId = course.getCourseId();
 
-            System.out.println(
-                    "ADD MODULE");
+    
+            System.out.println("================================");
+            System.out.println("ADDING MODULE");
+            System.out.println("Course ID     : " + courseId);
+            System.out.println("Course        : " + course.getTitle());
+            System.out.println("Module Title  : " + title);
+            System.out.println("Description   : " + description);
+            System.out.println("Order         : " + order);
+            System.out.println("Published     : " + published);
+            System.out.println("================================");
 
-            System.out.println(
-                    "Course ID: "
-                            + course.getCourseId());
+            // =========================================================
+            // SAVE USING MODULE CONTROLLER
+            // =========================================================
 
-            System.out.println(
-                    "Course: "
-                            + course.getTitle());
+            boolean success = moduleController.addModule(
+                    courseId,
+                    title,
+                    description);
 
-            System.out.println(
-                    "Module Title: "
-                            + title);
+            // =========================================================
+            // SAVE FAILED
+            // =========================================================
 
-            System.out.println(
-                    "Description: "
-                            + description);
+            if (!success) {
 
-            System.out.println(
-                    "Order: "
-                            + order);
+                showPopup(
+                        "Error",
+                        "Unable to create the module.",
+                        false);
 
-            System.out.println(
-                    "Published: "
-                            + published);
+                return;
+            }
 
-            System.out.println(
-                    "================================");
-
-            /*
-             * =====================================================
-             * DATABASE SAVE
-             * =====================================================
-             *
-             * We will connect this section to your ModuleController
-             * once your Module model/controller is ready.
-             */
+            // =========================================================
+            // SUCCESS
+            // =========================================================
 
             showPopup(
                     "Module Created",
-                    "The module has been created successfully.",
+                    "The module has been added successfully.",
                     true);
 
-            PauseTransition delay =
-                    new PauseTransition(
-                            Duration.seconds(1.2));
+            // =========================================================
+            // RETURN TO MODULE PAGE
+            // =========================================================
 
-            delay.setOnFinished(
-                    e -> goBack());
+            PauseTransition delay = new PauseTransition(
+                    Duration.seconds(1.0));
+
+            delay.setOnFinished(e -> {
+
+                ModulePage modulePage = new ModulePage(course);
+
+                LoginPage.mainStage.setScene(
+                        modulePage.getModuleScene());
+            });
 
             delay.play();
 
@@ -611,12 +607,9 @@ public class AddModuleAdmin {
 
     private void goBack() {
 
-        AdminPage adminPage =
-                new AdminPage();
+        AdminPage adminPage = new AdminPage();
 
-        LoginPage.mainStage.setScene(
-                adminPage.getAdminPage(
-                        "Manage Course"));
+        LoginPage.mainStage.setScene(adminPage.getAdminPage("Manage Course"));
     }
 
     // =========================================================
@@ -625,18 +618,17 @@ public class AddModuleAdmin {
 
     private VBox createCard() {
 
-        VBox card =
-                new VBox(10);
+        VBox card = new VBox(10);
 
         card.setPadding(
                 new Insets(18));
 
         card.setStyle(
                 "-fx-background-color:#101516;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-width:1;" +
-                "-fx-border-radius:8;" +
-                "-fx-background-radius:8;");
+                        "-fx-border-color:#242B2C;" +
+                        "-fx-border-width:1;" +
+                        "-fx-border-radius:8;" +
+                        "-fx-background-radius:8;");
 
         return card;
     }
@@ -648,13 +640,12 @@ public class AddModuleAdmin {
     private Label createHeading(
             String text) {
 
-        Label label =
-                new Label(text);
+        Label label = new Label(text);
 
         label.setStyle(
                 "-fx-text-fill:#EEEEEE;" +
-                "-fx-font-size:16px;" +
-                "-fx-font-weight:bold;");
+                        "-fx-font-size:16px;" +
+                        "-fx-font-weight:bold;");
 
         return label;
     }
@@ -666,13 +657,12 @@ public class AddModuleAdmin {
     private Label createFieldLabel(
             String text) {
 
-        Label label =
-                new Label(text);
+        Label label = new Label(text);
 
         label.setStyle(
                 "-fx-text-fill:#AAAAAA;" +
-                "-fx-font-size:11px;" +
-                "-fx-font-weight:bold;");
+                        "-fx-font-size:11px;" +
+                        "-fx-font-weight:bold;");
 
         return label;
     }
@@ -691,33 +681,39 @@ public class AddModuleAdmin {
 
         field.setStyle(
                 "-fx-background-color:#0D1213;" +
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-prompt-text-fill:#666666;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-width:1;" +
-                "-fx-border-radius:5;" +
-                "-fx-background-radius:5;" +
-                "-fx-font-size:12px;" +
-                "-fx-padding:8;");
+                        "-fx-text-fill:#EEEEEE;" +
+                        "-fx-prompt-text-fill:#666666;" +
+                        "-fx-border-color:#242B2C;" +
+                        "-fx-border-width:1;" +
+                        "-fx-border-radius:5;" +
+                        "-fx-background-radius:5;" +
+                        "-fx-font-size:12px;" +
+                        "-fx-padding:8;");
     }
 
     // =========================================================
     // TEXT AREA STYLE
     // =========================================================
 
-    private void styleTextArea(
-            TextArea area) {
+    private void styleTextArea(TextArea area) {
+
+        area.setPrefHeight(160);
+        area.setMinHeight(120);
+        area.setWrapText(true);
 
         area.setStyle(
-                "-fx-control-inner-background:#0D1213;" +
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-prompt-text-fill:#666666;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-width:1;" +
-                "-fx-border-radius:5;" +
-                "-fx-background-radius:5;" +
-                "-fx-font-size:12px;" +
-                "-fx-padding:8;");
+                "-fx-background-color:#0D1213;" +
+                        "-fx-control-inner-background:#0D1213;" +
+                        "-fx-text-fill:#EEEEEE;" +
+                        "-fx-prompt-text-fill:#666666;" +
+                        "-fx-border-color:#242B2C;" +
+                        "-fx-border-width:1;" +
+                        "-fx-border-radius:5;" +
+                        "-fx-background-radius:5;" +
+                        "-fx-font-size:12px;" +
+                        "-fx-padding:8;" +
+                        "-fx-focus-color:transparent;" +
+                        "-fx-faint-focus-color:transparent;");
     }
 
     // =========================================================
@@ -734,11 +730,11 @@ public class AddModuleAdmin {
 
         box.setStyle(
                 "-fx-background-color:#0D1213;" +
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-width:1;" +
-                "-fx-border-radius:5;" +
-                "-fx-background-radius:5;");
+                        "-fx-text-fill:#EEEEEE;" +
+                        "-fx-border-color:#242B2C;" +
+                        "-fx-border-width:1;" +
+                        "-fx-border-radius:5;" +
+                        "-fx-background-radius:5;");
     }
 
     // =========================================================
@@ -762,11 +758,9 @@ public class AddModuleAdmin {
             String message,
             boolean success) {
 
-        Popup popup =
-                new Popup();
+        Popup popup = new Popup();
 
-        VBox box =
-                new VBox(8);
+        VBox box = new VBox(8);
 
         box.setAlignment(
                 Pos.CENTER);
@@ -774,14 +768,9 @@ public class AddModuleAdmin {
         box.setPrefWidth(320);
         box.setPrefHeight(135);
 
-        box.setPadding(
-                new Insets(15));
+        box.setPadding(new Insets(15));
 
-        Label icon =
-                new Label(
-                        success
-                                ? "✓"
-                                : "!");
+        Label icon = new Label(success ? "✓" : "!");
 
         icon.setPrefSize(
                 42,
@@ -805,20 +794,18 @@ public class AddModuleAdmin {
                         "-fx-font-weight:bold;" +
                         "-fx-background-radius:50%;");
 
-        Label titleLabel =
-                new Label(title);
+        Label titleLabel = new Label(title);
 
         titleLabel.setStyle(
                 "-fx-text-fill:#EEEEEE;" +
-                "-fx-font-size:15px;" +
-                "-fx-font-weight:bold;");
+                        "-fx-font-size:15px;" +
+                        "-fx-font-weight:bold;");
 
-        Label messageLabel =
-                new Label(message);
+        Label messageLabel = new Label(message);
 
         messageLabel.setStyle(
                 "-fx-text-fill:#AAAAAA;" +
-                "-fx-font-size:11px;");
+                        "-fx-font-size:11px;");
 
         messageLabel.setWrapText(true);
 
@@ -829,7 +816,7 @@ public class AddModuleAdmin {
 
         box.setStyle(
                 "-fx-background-color:#101516;" +
-                "-fx-border-color:"
+                        "-fx-border-color:"
                         + (success
                                 ? "#68D34A;"
                                 : "#FF6B6B;")
@@ -840,8 +827,7 @@ public class AddModuleAdmin {
 
         popup.getContent().add(box);
 
-        Window window =
-                LoginPage.mainStage;
+        Window window = LoginPage.mainStage;
 
         popup.show(
                 window,
@@ -850,9 +836,8 @@ public class AddModuleAdmin {
                 window.getY()
                         + (window.getHeight() - 135) / 2);
 
-        PauseTransition delay =
-                new PauseTransition(
-                        Duration.seconds(1.5));
+        PauseTransition delay = new PauseTransition(
+                Duration.seconds(1.5));
 
         delay.setOnFinished(
                 e -> popup.hide());

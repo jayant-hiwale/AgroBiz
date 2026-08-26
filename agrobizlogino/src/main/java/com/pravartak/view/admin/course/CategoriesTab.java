@@ -1,5 +1,7 @@
 package com.pravartak.view.admin.course;
 
+import com.pravartak.view.login.LoginPage;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -26,18 +28,26 @@ public class CategoriesTab {
                 "-fx-text-fill:#AAAAAA;" +
                         "-fx-font-size:10px;");
 
-        Button add = new Button("+ Add Category");
+        Button addCategoryButton = new Button("+ Add Category");
 
-        add.setStyle(
+        addCategoryButton.setOnAction(e->{
+                CategoryAdmin categoryAdmin = new CategoryAdmin();
+
+                LoginPage.mainStage.setScene(categoryAdmin.getCategoryScene());
+        });
+        
+        addCategoryButton.setStyle(
                 "-fx-background-color:#68D34A;" +
                         "-fx-text-fill:#080C0D;" +
                         "-fx-font-weight:bold;" +
-                        "-fx-background-radius:5;");
+                        "-fx-background-radius:5;"+
+                        "-fx-cursor:hand;"
+                );
 
         root.getChildren().addAll(
                 title,
                 subtitle,
-                add);
+                addCategoryButton);
 
         return root;
     }

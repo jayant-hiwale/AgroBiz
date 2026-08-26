@@ -8,10 +8,11 @@ import com.cloudinary.utils.ObjectUtils;
 import com.pravartak.config.CloudinaryConfig;
 
 public class ImageUploadController {
-    public String imageUpload(File file){   
+    public String imageUpload(File file) {
         Cloudinary cloudinary = CloudinaryConfig.getCloudinary();
-        try{
-            Map<String,Object> result = cloudinary.uploader().upload(file,ObjectUtils.asMap("resource_type","image"));
+        try {
+            Map<String, Object> result = cloudinary.uploader().upload(file,
+                    ObjectUtils.asMap("resource_type", "image"));
 
             // System.out.println(result);
             String url = String.valueOf(result.get("secure_url"));
@@ -19,7 +20,7 @@ public class ImageUploadController {
 
             return url;
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
