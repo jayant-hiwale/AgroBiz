@@ -38,9 +38,7 @@ public class BuyerHomepage {
 
         BorderPane root = new BorderPane();
         
-        // 🌾 1. High-Resolution Farm Background Image
-        // टीप: तुमच्या प्रोजेक्टमध्ये assets/farm_bg.jpg किंवा शेताचा फोटो जोडा.
-        // जर ऑनलाईन फोटो वापरायचा नसेल, तर स्थानिक इमेजचा Path द्या.
+       
         try {
             Image bgImage = new Image("https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600&auto=format&fit=crop");
             BackgroundImage backgroundImage = new BackgroundImage(

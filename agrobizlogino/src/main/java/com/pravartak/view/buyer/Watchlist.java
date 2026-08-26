@@ -25,8 +25,7 @@ import javafx.scene.text.FontWeight;
 
 public class Watchlist {
 
-    // 💡 Dummy Flag: प्रॉडक्ट्स लाईक केले आहेत की नाही हे चेक करण्यासाठी
-    // रिअल प्रोजेक्टमध्ये हे तुमच्या डेटाबेस/लिस्ट मधून येईल.
+    
     private boolean hasLikedProducts = true; 
 
     public Scene getWatchlistPage() {

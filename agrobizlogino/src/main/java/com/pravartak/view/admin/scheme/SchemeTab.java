@@ -9,6 +9,7 @@ import com.pravartak.view.login.LoginPage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -26,7 +27,7 @@ public class SchemeTab {
     // MAIN PAGE
     // =========================================================
 
-    public static VBox getSchemesPage() {
+    public static VBox  getSchemesPage() {
 
         VBox root =
                 new VBox(15);
@@ -145,13 +146,10 @@ public class SchemeTab {
                 "-fx-background:#080C0D;" +
                 "-fx-border-color:transparent;");
 
-        VBox.setVgrow(
-                scroll,
-                Priority.ALWAYS);
+        VBox.setVgrow(scroll,Priority.ALWAYS);
 
-        root.getChildren().addAll(
-                header,
-                scroll);
+        root.getChildren().addAll(header,scroll);
+
 
         return root;
     }

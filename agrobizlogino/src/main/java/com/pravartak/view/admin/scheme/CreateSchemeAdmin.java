@@ -2,6 +2,7 @@ package com.pravartak.view.admin.scheme;
 
 import com.pravartak.controller.admincontroller.SchemeController;
 import com.pravartak.view.admin.AdminPage;
+import com.pravartak.view.admin.course.AdminLearning;
 import com.pravartak.model.adminmodel.Scheme;
 import com.pravartak.view.login.LoginPage;
 
@@ -428,11 +429,18 @@ public class CreateSchemeAdmin {
 
     private void goBack() {
 
-        AdminPage adminPage =
-                new AdminPage();
+         AdminPage adminPage =
+                 new AdminPage();
 
-        // LoginPage.mainStage.setScene(
-        //         adminPage.getAdminPage(
-        //                 "Schemes"));
+        LoginPage.mainStage.setScene(
+                adminPage.getAdminPage("Government Schemes"));
+        //SchemeTab st = new SchemeTab();
+        // LoginPage.mainStage.setScene(st.getCreateSchemeScene());
+         
+
+            //LoginPage.mainStage.setScene(st.getSchemesPage());
+        
+
+
     }
 }

@@ -1,31 +1,59 @@
+
 package com.pravartak.dao.admin;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import com.pravartak.controller.admincontroller.SchemeController;
-
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.Query;
-import com.google.cloud.firestore.QuerySnapshot;
-import com.google.firebase.cloud.FirestoreClient;
 
 import com.pravartak.model.adminmodel.Scheme;
 
 public class SchemeDAO {
 
-    private static final String COLLECTION = "schemes";
-
     // =========================================================
-    // GET FIRESTORE
+    // TEMPORARY IN-MEMORY DATABASE
     // =========================================================
 
-    private Firestore getFirestore() {
+    /*
+     * static is important.
+     *
+     * Even if a new SchemeDAO / SchemeController is created,
+     * all pages will use the same list while the application
+     * is running.
+     */
+    private static final List<Scheme> schemes =
+            new ArrayList<>();
 
-        return FirestoreClient.getFirestore();
+    // =========================================================
+    // OPTIONAL SAMPLE DATA
+    // =========================================================
+
+    static {
+
+        /*
+         * You can remove these later.
+         *
+         * They are only here so that the Scheme page
+         * is not empty when the application starts.
+         */
+
+        Scheme scheme1 = new Scheme(
+                UUID.randomUUID().toString(),
+                "Sub-Mission on Agricultural Mechanization (SMAM)",
+                "Farmers\nFarmer groups\nRegistered agricultural organisations",
+                "Financial assistance for agricultural machinery "
+                        + "and modern farm equipment.",
+                true);
+
+        Scheme scheme2 = new Scheme(
+                UUID.randomUUID().toString(),
+                "Pradhan Mantri Krishi Sinchai Yojana",
+                "Farmers with agricultural land",
+                "Supports irrigation development and promotes "
+                        + "efficient use of water in agriculture.",
+                true);
+
+        schemes.add(scheme1);
+        schemes.add(scheme2);
     }
 
     // =========================================================
@@ -36,24 +64,45 @@ public class SchemeDAO {
 
         try {
 
-            Firestore db = getFirestore();
-
-            String schemeId = scheme.getSchemeId();
-
-            if (schemeId == null ||
-                    schemeId.trim().isEmpty()) {
-
-                schemeId =
-                        UUID.randomUUID().toString();
-
-                scheme.setSchemeId(schemeId);
+            if (scheme == null) {
+                return false;
             }
 
-            DocumentReference document =
-                    db.collection(COLLECTION)
-                            .document(schemeId);
+            // ---------------------------------------------
+            // GENERATE ID IF MISSING
+            // ---------------------------------------------
 
-            document.set(scheme).get();
+            if (scheme.getSchemeId() == null ||
+                    scheme.getSchemeId().trim().isEmpty()) {
+
+                scheme.setSchemeId(
+                        UUID.randomUUID().toString());
+            }
+
+            // ---------------------------------------------
+            // CHECK DUPLICATE ID
+            // ---------------------------------------------
+
+            for (Scheme existing : schemes) {
+
+                if (existing.getSchemeId()
+                        .equals(scheme.getSchemeId())) {
+
+                    System.out.println(
+                            "Scheme ID already exists.");
+
+                    return false;
+                }
+            }
+
+            schemes.add(scheme);
+
+            System.out.println(
+                    "Scheme added successfully.");
+
+            System.out.println(
+                    "Total schemes: "
+                            + schemes.size());
 
             return true;
 
@@ -75,127 +124,85 @@ public class SchemeDAO {
 
     public List<Scheme> getAllSchemes() {
 
-        List<Scheme> schemes =
-                new ArrayList<>();
+        /*
+         * Return a new ArrayList so UI code cannot
+         * accidentally destroy the original database list.
+         */
 
-        try {
-
-            Firestore db =
-                    getFirestore();
-
-            ApiFuture<QuerySnapshot> future =
-                    db.collection(COLLECTION)
-                            .orderBy(
-                                    "schemeName",
-                                    Query.Direction.ASCENDING)
-                            .get();
-
-            QuerySnapshot snapshot =
-                    future.get();
-
-            for (DocumentSnapshot document :
-                    snapshot.getDocuments()) {
-
-                Scheme scheme =
-                        document.toObject(
-                                Scheme.class);
-
-                if (scheme != null) {
-
-                    if (scheme.getSchemeId() == null ||
-                            scheme.getSchemeId().isEmpty()) {
-
-                        scheme.setSchemeId(
-                                document.getId());
-                    }
-
-                    schemes.add(scheme);
-                }
-            }
-
-        } catch (Exception e) {
-
-            System.err.println(
-                    "Error loading schemes: "
-                            + e.getMessage());
-
-            e.printStackTrace();
-        }
-
-        return schemes;
+        return new ArrayList<>(schemes);
     }
 
     // =========================================================
     // GET ONE SCHEME
     // =========================================================
 
-    public Scheme getScheme(
-            String schemeId) {
+    public Scheme getScheme(String schemeId) {
 
-        try {
+        if (schemeId == null ||
+                schemeId.trim().isEmpty()) {
 
-            Firestore db =
-                    getFirestore();
+            return null;
+        }
 
-            DocumentSnapshot document =
-                    db.collection(COLLECTION)
-                            .document(schemeId)
-                            .get()
-                            .get();
+        for (Scheme scheme : schemes) {
 
-            if (document.exists()) {
-
-                Scheme scheme =
-                        document.toObject(
-                                Scheme.class);
-
-                if (scheme != null) {
-
-                    if (scheme.getSchemeId() == null ||
-                            scheme.getSchemeId().isEmpty()) {
-
-                        scheme.setSchemeId(
-                                document.getId());
-                    }
-                }
+            if (schemeId.equals(
+                    scheme.getSchemeId())) {
 
                 return scheme;
             }
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
         }
 
         return null;
     }
 
     // =========================================================
-    // UPDATE
+    // UPDATE SCHEME
     // =========================================================
 
-    public boolean updateScheme(
-            Scheme scheme) {
+    public boolean updateScheme(Scheme updatedScheme) {
 
         try {
 
-            if (scheme == null ||
-                    scheme.getSchemeId() == null ||
-                    scheme.getSchemeId().trim().isEmpty()) {
+            if (updatedScheme == null) {
+                return false;
+            }
+
+            String schemeId =
+                    updatedScheme.getSchemeId();
+
+            if (schemeId == null ||
+                    schemeId.trim().isEmpty()) {
 
                 return false;
             }
 
-            Firestore db =
-                    getFirestore();
+            for (int i = 0;
+                    i < schemes.size();
+                    i++) {
 
-            db.collection(COLLECTION)
-                    .document(
-                            scheme.getSchemeId())
-                    .set(scheme)
-                    .get();
+                Scheme existing =
+                        schemes.get(i);
 
-            return true;
+                if (schemeId.equals(
+                        existing.getSchemeId())) {
+
+                    schemes.set(
+                            i,
+                            updatedScheme);
+
+                    System.out.println(
+                            "Scheme updated successfully: "
+                                    + updatedScheme.getSchemeName());
+
+                    return true;
+                }
+            }
+
+            System.out.println(
+                    "Scheme not found for update.");
+
+            return false;
 
         } catch (Exception e) {
 
@@ -210,11 +217,10 @@ public class SchemeDAO {
     }
 
     // =========================================================
-    // DELETE
+    // DELETE SCHEME
     // =========================================================
 
-    public boolean deleteScheme(
-            String schemeId) {
+    public boolean deleteScheme(String schemeId) {
 
         try {
 
@@ -224,15 +230,28 @@ public class SchemeDAO {
                 return false;
             }
 
-            Firestore db =
-                    getFirestore();
+            boolean removed =
+                    schemes.removeIf(
+                            scheme ->
+                                    schemeId.equals(
+                                            scheme.getSchemeId()));
 
-            db.collection(COLLECTION)
-                    .document(schemeId)
-                    .delete()
-                    .get();
+            if (removed) {
 
-            return true;
+                System.out.println(
+                        "Scheme deleted successfully.");
+
+                System.out.println(
+                        "Remaining schemes: "
+                                + schemes.size());
+
+            } else {
+
+                System.out.println(
+                        "Scheme not found for delete.");
+            }
+
+            return removed;
 
         } catch (Exception e) {
 
@@ -244,5 +263,37 @@ public class SchemeDAO {
 
             return false;
         }
+    }
+
+    // =========================================================
+    // CHECK IF SCHEME EXISTS
+    // =========================================================
+
+    public boolean exists(
+            String schemeId) {
+
+        return getScheme(schemeId) != null;
+    }
+
+    // =========================================================
+    // TOTAL SCHEMES
+    // =========================================================
+
+    public int getSchemeCount() {
+
+        return schemes.size();
+    }
+
+    // =========================================================
+    // CLEAR ALL
+    // Mainly useful for testing
+    // =========================================================
+
+    public void clearAll() {
+
+        schemes.clear();
+
+        System.out.println(
+                "All temporary schemes cleared.");
     }
 }
