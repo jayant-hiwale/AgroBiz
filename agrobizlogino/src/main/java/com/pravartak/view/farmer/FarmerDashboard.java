@@ -44,12 +44,12 @@ public class FarmerDashboard {
 
     // COLORS
     private final Color DARK_GREEN = Color.rgb(14, 35, 16);
-    private static final Color GREEN = Color.rgb(230, 143, 28);
+    private static final Color GREEN = Color.DARKGREEN;
     private final Color LIGHT_GREEN = Color.rgb(186, 209, 174);
     private final Color CREAM = Color.rgb(11, 16, 16);
-    private final Color DARK_TEXT = Color.rgb(112, 101, 234);
+    private final Color DARK_TEXT = Color.rgb(247, 247, 250);
     private final Color GREY = Color.rgb(105, 110, 105);
-    private final Color CARD_BACKGROUND = Color.rgb(152, 254, 136);
+    private final Color CARD_BACKGROUND = Color.rgb(0, 100, 0);
     private final Color BORDER_COLOR = Color.rgb(225, 230, 220);
 
     // SIDEBAR BUTTONS
@@ -388,12 +388,13 @@ public class FarmerDashboard {
         card.setPadding(new Insets(20));
         card.setPrefHeight(160);
         HBox.setHgrow(card, Priority.ALWAYS);
-        card.setBackground(new Background(new BackgroundFill(LIGHT_GREEN, new CornerRadii(15), Insets.EMPTY)));
+        card.setBackground(new Background(new BackgroundFill(GREEN, new CornerRadii(15), Insets.EMPTY)));
 
         Label iconLabel = new Label(icon);
+        iconLabel.setTextFill(Color.YELLOW);
         iconLabel.setPrefSize(48, 48);
         iconLabel.setAlignment(Pos.CENTER);
-        iconLabel.setBackground(new Background(new BackgroundFill(LIGHT_GREEN, new CornerRadii(10), Insets.EMPTY)));
+        iconLabel.setBackground(new Background(new BackgroundFill(DARK_GREEN, new CornerRadii(10), Insets.EMPTY)));
 
         Label titleLabel = new Label(title);
         titleLabel.setTextFill(GREY);
@@ -552,17 +553,25 @@ public class FarmerDashboard {
     // PROFILE PAGE
     private VBox createProfilePage() {
         VBox main = new VBox();
-        main.setBackground(new Background(new BackgroundFill(CREAM, CornerRadii.EMPTY, Insets.EMPTY)));
+        main.setBackground(new Background(new BackgroundFill(DARK_GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 
         HBox topBar = createTopBar("Farmer Profile", "Manage your personal and farming information.");
 
         VBox content = new VBox(); 
+        // content.setBackground(new Background(
+        //     new BackgroundFill(
+        //             DARK_GREEN,
+        //             CornerRadii.EMPTY,
+        //             Insets.EMPTY
+        //     )
+    // ));
+
         content.setBackground(new Background(
-            new BackgroundFill(
-                    DARK_GREEN,
-                    CornerRadii.EMPTY,
-                    Insets.EMPTY
-            )
+        new BackgroundFill(
+            Color.web("#050b0a"),
+            CornerRadii.EMPTY,
+            Insets.EMPTY
+        )
     ));
         content.setPadding(new Insets(30, 35, 35, 35));
         content.setSpacing(22);
@@ -572,7 +581,7 @@ public class FarmerDashboard {
         profileHeader.setPadding(new Insets(22));
         profileHeader.setSpacing(18);
         profileHeader.setAlignment(Pos.CENTER_LEFT);
-        profileHeader.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(15), Insets.EMPTY)));
+        profileHeader.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, new CornerRadii(15), Insets.EMPTY)));
 
         Label profileCircle = new Label("G");
         profileCircle.setPrefSize(78, 78);
@@ -608,7 +617,7 @@ public class FarmerDashboard {
         edit.setPrefWidth(110);
         edit.setTextFill(Color.WHITE);
         edit.setFont(Font.font("Arial", FontWeight.BOLD, 12));
-        edit.setBackground(new Background(new BackgroundFill(DARK_GREEN, new CornerRadii(7), Insets.EMPTY)));
+        edit.setBackground(new Background(new BackgroundFill(GREEN, new CornerRadii(7), Insets.EMPTY)));
         edit.setCursor(Cursor.HAND);
 
         profileHeader.getChildren().addAll(profileCircle, profileText, profileSpacer, edit);
@@ -671,11 +680,17 @@ public class FarmerDashboard {
         cards.getChildren().addAll(personalCard, farmCard);
 
         content.getChildren().addAll(profileHeader, cards);
+        
 
         ScrollPane scroll = new ScrollPane(content);
         scroll.setFitToWidth(true);
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scroll.setStyle("-fx-background-color: transparent;");
+        // scroll.setStyle("-fx-background-color: #0d1414;");
+        scroll.setStyle(
+        "-fx-background-color: #050b0a;" +
+        "-fx-background: #050b0a;" +
+        "-fx-control-inner-background: #050b0a;"
+    );
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
         main.getChildren().addAll(topBar, scroll);
@@ -725,108 +740,547 @@ public class FarmerDashboard {
         return tag;
     }
 
-    // AI ADVISOR PAGE
-    private VBox createAIAdvisorPage() {
-        VBox page = createSimplePage("AI Farming Advisor", "Get intelligent recommendations for your farm.");
+    // // AI ADVISOR PAGE
+    // private VBox createAIAdvisorPage() {
+    //     VBox page = createSimplePage("AI Farming Advisor", "Get intelligent recommendations for your farm.");
 
-        VBox card = createWhiteCard();
-        card.setPrefHeight(650);
+    //     VBox card = createWhiteCard();
+    //     card.setPrefHeight(650);
 
-        VBox center = new VBox();
-        center.setAlignment(Pos.TOP_CENTER);
-        center.setSpacing(25);
+    //     VBox center = new VBox();
+    //     center.setAlignment(Pos.TOP_CENTER);
+    //     center.setSpacing(25);
 
-        Label aiIcon = new Label("✦");
-        aiIcon.setPrefSize(70, 70);
-        aiIcon.setAlignment(Pos.CENTER);
-        aiIcon.setTextFill(Color.WHITE);
-        aiIcon.setFont(Font.font("Arial", FontWeight.BOLD, 32));
-        aiIcon.setBackground(new Background(new BackgroundFill(DARK_GREEN, new CornerRadii(50), Insets.EMPTY)));
+    //     Label aiIcon = new Label("✦");
+    //     aiIcon.setPrefSize(70, 70);
+    //     aiIcon.setAlignment(Pos.CENTER);
+    //     aiIcon.setTextFill(Color.WHITE);
+    //     aiIcon.setFont(Font.font("Arial", FontWeight.BOLD, 32));
+    //     aiIcon.setBackground(new Background(new BackgroundFill(DARK_GREEN, new CornerRadii(50), Insets.EMPTY)));
 
-        Label question = new Label("How can Agro Biz AI help your farm?");
-        question.setTextFill(DARK_TEXT);
-        question.setFont(Font.font("Arial", FontWeight.BOLD, 23));
+    //     Label question = new Label("How can Agro Biz AI help your farm?");
+    //     question.setTextFill(Color.WHITE);
+    //     question.setFont(Font.font("Arial", FontWeight.BOLD, 23));
 
-        HBox suggestions = new HBox();
-        suggestions.setSpacing(12);
-        suggestions.setAlignment(Pos.CENTER);
+    //     HBox suggestions = new HBox();
+    //     suggestions.setSpacing(12);
+    //     suggestions.setAlignment(Pos.CENTER);
 
-        suggestions.getChildren().addAll(
-            createSuggestionButton("🌾  Which crop should I grow?"),
-            createSuggestionButton("↗  How can I improve my yield?")
+    //     suggestions.getChildren().addAll(
+    //         createSuggestionButton("🌾  Which crop should I grow?"),
+    //         createSuggestionButton("↗  How can I improve my yield?")
+    //     );
+
+    //     Button irrigation = createSuggestionButton("💧  Optimize irrigation schedule");
+
+    //     center.getChildren().addAll(aiIcon, question, suggestions, irrigation);
+
+    //     HBox message = new HBox();
+    //     message.setSpacing(12);
+    //     message.setPadding(new Insets(20));
+    //     message.setBackground(new Background(new BackgroundFill(Color.rgb(244, 246, 238), new CornerRadii(15), Insets.EMPTY)));
+
+    //     Label assistantIcon = new Label("✦");
+    //     assistantIcon.setPrefSize(42, 42);
+    //     assistantIcon.setAlignment(Pos.CENTER);
+    //     assistantIcon.setTextFill(Color.WHITE);
+    //     assistantIcon.setBackground(new Background(new BackgroundFill(DARK_GREEN, new CornerRadii(50), Insets.EMPTY)));
+
+    //     Label assistantText = new Label("Hello Farmer! 🌱 I can help you make smarter " + "farming decisions based on your current " + "soil data and local weather forecasts. " + "What would you like to analyze today?");
+    //     assistantText.setWrapText(true);
+    //     assistantText.setTextFill(Color.GREY);
+    //     assistantText.setFont(Font.font("Arial", 15));
+    //     HBox.setHgrow(assistantText, Priority.ALWAYS);
+
+    //     message.getChildren().addAll(assistantIcon, assistantText);
+
+    //     Region aiSpacer = new Region();
+    //     VBox.setVgrow(aiSpacer, Priority.ALWAYS);
+
+    //     TextField questionField = new TextField();
+    //     questionField.setPromptText("Ask your farming question...");
+    //     questionField.setPrefHeight(50);
+
+    //     Button askAI = new Button("Ask AI  ➤");
+    //     askAI.setPrefHeight(50);
+    //     askAI.setPrefWidth(120);
+    //     askAI.setTextFill(Color.WHITE);
+    //     askAI.setFont(Font.font("Arial", FontWeight.BOLD, 13));
+    //     askAI.setBackground(new Background(new BackgroundFill(DARK_GREEN, new CornerRadii(9), Insets.EMPTY)));
+
+    //     askAI.setOnAction(event -> {
+    //         if (!questionField.getText().trim().isEmpty()) {
+    //             assistantText.setText("AI Advisor received your question: " + questionField.getText() + "\n\nThis AI response module is ready " + "to be connected with your AI service.");
+    //             questionField.clear();
+    //         }
+    //     });
+
+    //     HBox input = new HBox(questionField, askAI);
+    //     input.setSpacing(12);
+    //     HBox.setHgrow(questionField, Priority.ALWAYS);
+
+    //     center.getChildren().addAll(message, aiSpacer, input);
+    //     card.getChildren().add(center);
+    //     page.getChildren().add(card);
+
+    //     return page;
+    // }
+
+    // // AI SUGGESTION BUTTON
+    // private Button createSuggestionButton(String text) {
+    //     Button button = new Button(text);
+    //     button.setPrefHeight(40);
+    //     button.setTextFill(LIGHT_GREEN);
+    //     button.setFont(Font.font("Arial", 12));
+    //     button.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(20), Insets.EMPTY)));
+    //     button.setBorder(new Border(new BorderStroke(BORDER_COLOR, BorderStrokeStyle.SOLID, new CornerRadii(20), new BorderWidths(1))));
+    //     button.setCursor(Cursor.HAND);
+    //     return button;
+    // }
+
+    // =========================================================
+// AI ADVISOR PAGE
+// =========================================================
+private VBox createAIAdvisorPage() {
+
+    VBox page = new VBox();
+
+    // Same background as the application
+    page.setBackground(
+        new Background(
+            new BackgroundFill(
+                DARK_GREEN,
+                CornerRadii.EMPTY,
+                Insets.EMPTY
+            )
+        )
+    );
+
+    // =====================================================
+    // TOP BAR
+    // =====================================================
+
+    HBox topBar = createTopBar(
+        "AI Farming Advisor",
+        "Get intelligent recommendations for your farm."
+    );
+
+    // IMPORTANT:
+    // Remove any bottom margin/gap from the top bar.
+    VBox.setMargin(topBar, Insets.EMPTY);
+
+
+    // =====================================================
+    // CONTENT
+    // =====================================================
+
+    VBox content = new VBox();
+
+    content.setBackground(
+        new Background(
+            new BackgroundFill(
+                DARK_GREEN,
+                CornerRadii.EMPTY,
+                Insets.EMPTY
+            )
+        )
+    );
+
+    // NO TOP PADDING
+    content.setPadding(
+        new Insets(0, 35, 35, 35)
+    );
+
+    content.setSpacing(0);
+
+
+    // =====================================================
+    // AI CARD
+    // =====================================================
+
+    VBox card = createWhiteCard();
+
+    card.setPrefHeight(650);
+
+    // Keep card directly attached to content
+    VBox.setMargin(card, Insets.EMPTY);
+
+
+    // =====================================================
+    // CENTER
+    // =====================================================
+
+    VBox center = new VBox();
+
+    center.setAlignment(Pos.TOP_CENTER);
+    center.setSpacing(25);
+
+    center.setPadding(
+        new Insets(20)
+    );
+
+
+    // =====================================================
+    // AI ICON
+    // =====================================================
+
+    Label aiIcon = new Label("✦");
+
+    aiIcon.setPrefSize(70, 70);
+    aiIcon.setAlignment(Pos.CENTER);
+
+    aiIcon.setTextFill(Color.WHITE);
+
+    aiIcon.setFont(
+        Font.font(
+            "Arial",
+            FontWeight.BOLD,
+            32
+        )
+    );
+
+    aiIcon.setBackground(
+        new Background(
+            new BackgroundFill(
+                DARK_GREEN,
+                new CornerRadii(50),
+                Insets.EMPTY
+            )
+        )
+    );
+
+
+    // =====================================================
+    // QUESTION
+    // =====================================================
+
+    Label question = new Label(
+        "How can Agro Biz AI help your farm?"
+    );
+
+    question.setTextFill(Color.WHITE);
+
+    question.setFont(
+        Font.font(
+            "Arial",
+            FontWeight.BOLD,
+            23
+        )
+    );
+
+
+    // =====================================================
+    // SUGGESTIONS
+    // =====================================================
+
+    HBox suggestions = new HBox();
+
+    suggestions.setSpacing(12);
+    suggestions.setAlignment(Pos.CENTER);
+
+    suggestions.getChildren().addAll(
+        createSuggestionButton(
+            "🌾  Which crop should I grow?"
+        ),
+        createSuggestionButton(
+            "↗  How can I improve my yield?"
+        )
+    );
+
+
+    Button irrigation =
+        createSuggestionButton(
+            "💧  Optimize irrigation schedule"
         );
 
-        Button irrigation = createSuggestionButton("💧  Optimize irrigation schedule");
 
-        center.getChildren().addAll(aiIcon, question, suggestions, irrigation);
+    center.getChildren().addAll(
+        aiIcon,
+        question,
+        suggestions,
+        irrigation
+    );
 
-        HBox message = new HBox();
-        message.setSpacing(12);
-        message.setPadding(new Insets(20));
-        message.setBackground(new Background(new BackgroundFill(Color.rgb(244, 246, 238), new CornerRadii(15), Insets.EMPTY)));
 
-        Label assistantIcon = new Label("✦");
-        assistantIcon.setPrefSize(42, 42);
-        assistantIcon.setAlignment(Pos.CENTER);
-        assistantIcon.setTextFill(Color.WHITE);
-        assistantIcon.setBackground(new Background(new BackgroundFill(DARK_GREEN, new CornerRadii(50), Insets.EMPTY)));
+    // =====================================================
+    // MESSAGE
+    // =====================================================
 
-        Label assistantText = new Label("Hello Farmer! 🌱 I can help you make smarter " + "farming decisions based on your current " + "soil data and local weather forecasts. " + "What would you like to analyze today?");
-        assistantText.setWrapText(true);
-        assistantText.setTextFill(DARK_TEXT);
-        assistantText.setFont(Font.font("Arial", 15));
-        HBox.setHgrow(assistantText, Priority.ALWAYS);
+    HBox message = new HBox();
 
-        message.getChildren().addAll(assistantIcon, assistantText);
+    message.setSpacing(12);
 
-        Region aiSpacer = new Region();
-        VBox.setVgrow(aiSpacer, Priority.ALWAYS);
+    message.setPadding(
+        new Insets(20)
+    );
 
-        TextField questionField = new TextField();
-        questionField.setPromptText("Ask your farming question...");
-        questionField.setPrefHeight(50);
+    message.setBackground(
+        new Background(
+            new BackgroundFill(
+                Color.rgb(159, 197, 44),
+                new CornerRadii(15),
+                Insets.EMPTY
+            )
+        )
+    );
 
-        Button askAI = new Button("Ask AI  ➤");
-        askAI.setPrefHeight(50);
-        askAI.setPrefWidth(120);
-        askAI.setTextFill(Color.WHITE);
-        askAI.setFont(Font.font("Arial", FontWeight.BOLD, 13));
-        askAI.setBackground(new Background(new BackgroundFill(DARK_GREEN, new CornerRadii(9), Insets.EMPTY)));
 
-        askAI.setOnAction(event -> {
-            if (!questionField.getText().trim().isEmpty()) {
-                assistantText.setText("AI Advisor received your question: " + questionField.getText() + "\n\nThis AI response module is ready " + "to be connected with your AI service.");
-                questionField.clear();
-            }
-        });
+    // Assistant icon
+    Label assistantIcon = new Label("✦");
 
-        HBox input = new HBox(questionField, askAI);
-        input.setSpacing(12);
-        HBox.setHgrow(questionField, Priority.ALWAYS);
+    assistantIcon.setPrefSize(42, 42);
+    assistantIcon.setAlignment(Pos.CENTER);
 
-        center.getChildren().addAll(message, aiSpacer, input);
-        card.getChildren().add(center);
-        page.getChildren().add(card);
+    assistantIcon.setTextFill(Color.WHITE);
 
-        return page;
-    }
+    assistantIcon.setBackground(
+        new Background(
+            new BackgroundFill(
+                DARK_GREEN,
+                new CornerRadii(50),
+                Insets.EMPTY
+            )
+        )
+    );
 
-    // AI SUGGESTION BUTTON
-    private Button createSuggestionButton(String text) {
-        Button button = new Button(text);
-        button.setPrefHeight(40);
-        button.setTextFill(DARK_TEXT);
-        button.setFont(Font.font("Arial", 12));
-        button.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(20), Insets.EMPTY)));
-        button.setBorder(new Border(new BorderStroke(BORDER_COLOR, BorderStrokeStyle.SOLID, new CornerRadii(20), new BorderWidths(1))));
-        button.setCursor(Cursor.HAND);
-        return button;
-    }
+
+    // Assistant text
+    Label assistantText = new Label(
+        "Hello Farmer! 🌱 I can help you make smarter "
+        + "farming decisions based on your current "
+        + "soil data and local weather forecasts. "
+        + "What would you like to analyze today?"
+    );
+
+    assistantText.setWrapText(false);
+
+    assistantText.setTextFill(Color.RED);
+    assistantText.setStyle("-fx-text-fill: gray;");
+
+    assistantText.setFont(
+        Font.font(
+            "Arial",
+            15
+        )
+    );
+
+    HBox.setHgrow(
+        assistantText,
+        Priority.ALWAYS
+    );
+
+
+    message.getChildren().addAll(
+        assistantIcon,
+        assistantText
+    );
+
+
+    // =====================================================
+    // SPACER
+    // =====================================================
+
+    Region aiSpacer = new Region();
+
+    VBox.setVgrow(
+        aiSpacer,
+        Priority.ALWAYS
+    );
+
+
+    // =====================================================
+    // QUESTION FIELD
+    // =====================================================
+
+    TextField questionField =
+        new TextField();
+
+    questionField.setPromptText(
+        "Ask your farming question..."
+    );
+
+    questionField.setPrefHeight(50);
+
+
+    // =====================================================
+    // ASK AI BUTTON
+    // =====================================================
+
+    Button askAI =
+        new Button("Ask AI  ➤");
+
+    askAI.setPrefHeight(50);
+    askAI.setPrefWidth(120);
+
+    askAI.setTextFill(Color.WHITE);
+
+    askAI.setFont(
+        Font.font(
+            "Arial",
+            FontWeight.BOLD,
+            13
+        )
+    );
+
+    askAI.setBackground(
+        new Background(
+            new BackgroundFill(
+                DARK_GREEN,
+                new CornerRadii(9),
+                Insets.EMPTY
+            )
+        )
+    );
+
+
+    // =====================================================
+    // ASK AI ACTION
+    // =====================================================
+
+    askAI.setOnAction(event -> {
+
+        if (!questionField.getText().trim().isEmpty()) {
+
+            assistantText.setText(
+                "AI Advisor received your question: "
+                + questionField.getText()
+                + "\n\nThis AI response module is ready "
+                + "to be connected with your AI service."
+            );
+
+            questionField.clear();
+        }
+    });
+
+
+    // =====================================================
+    // INPUT
+    // =====================================================
+
+    HBox input =
+        new HBox(
+            questionField,
+            askAI
+        );
+
+    input.setSpacing(12);
+
+    HBox.setHgrow(
+        questionField,
+        Priority.ALWAYS
+    );
+
+
+    // =====================================================
+    // ADD EVERYTHING
+    // =====================================================
+
+    center.getChildren().addAll(
+        message,
+        aiSpacer,
+        input
+    );
+
+    card.getChildren().add(center);
+
+    content.getChildren().add(card);
+
+
+    // =====================================================
+    // SCROLL PANE
+    // =====================================================
+
+    ScrollPane scroll =
+        new ScrollPane(content);
+
+    scroll.setFitToWidth(true);
+    scroll.setFitToHeight(true);
+
+    scroll.setHbarPolicy(
+        ScrollPane.ScrollBarPolicy.NEVER
+    );
+
+    scroll.setVbarPolicy(
+        ScrollPane.ScrollBarPolicy.NEVER
+    );
+
+    scroll.setStyle(
+        "-fx-background-color: transparent;"
+        + "-fx-background: transparent;"
+        + "-fx-control-inner-background: transparent;"
+    );
+
+    VBox.setVgrow(
+        scroll,
+        Priority.ALWAYS
+    );
+
+
+    // =====================================================
+    // FINAL PAGE
+    // =====================================================
+
+    page.getChildren().addAll(
+        topBar,
+        scroll
+    );
+
+    return page;
+}
+
+
+// =========================================================
+// AI SUGGESTION BUTTON
+// =========================================================
+private Button createSuggestionButton(String text) {
+
+    Button button = new Button(text);
+
+    button.setPrefHeight(40);
+
+    button.setTextFill(
+        LIGHT_GREEN
+    );
+
+    button.setFont(
+        Font.font(
+            "Arial",
+            12
+        )
+    );
+
+    button.setBackground(
+        new Background(
+            new BackgroundFill(
+                Color.WHITE,
+                new CornerRadii(20),
+                Insets.EMPTY
+            )
+        )
+    );
+
+    button.setBorder(
+        new Border(
+            new BorderStroke(
+                BORDER_COLOR,
+                BorderStrokeStyle.SOLID,
+                new CornerRadii(20),
+                new BorderWidths(1)
+            )
+        )
+    );
+
+    button.setCursor(
+        Cursor.HAND
+    );
+
+    return button;
+}
 
     // MY LEARNING PAGE
     private VBox createLearningPage() {
         VBox page = new VBox();
-        page.setBackground(new Background(new BackgroundFill(CREAM, CornerRadii.EMPTY, Insets.EMPTY)));
+        page.setBackground(new Background(new BackgroundFill(DARK_GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 
         // TOP BAR
         HBox topBar = createTopBar("My Learning", "Learn farming techniques and improve your knowledge.");
@@ -870,6 +1324,7 @@ public class FarmerDashboard {
 
         modules.getColumnConstraints().addAll(column1, column2, column3);
         content.getChildren().add(modules);
+        content.setBackground(new Background(new BackgroundFill(DARK_GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 
         // SCROLL
         ScrollPane scroll = new ScrollPane(content);
@@ -1038,7 +1493,7 @@ public class FarmerDashboard {
         } else {
             learningButton = new Button("Start Learning   ▷");
             learningButton.setTextFill(DARK_TEXT);
-            learningButton.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, new CornerRadii(8), Insets.EMPTY)));
+            learningButton.setBackground(new Background(new BackgroundFill(DARK_GREEN, new CornerRadii(8), Insets.EMPTY)));
             learningButton.setBorder(new Border(new BorderStroke(BORDER_COLOR, BorderStrokeStyle.SOLID, new CornerRadii(8), new BorderWidths(1))));
         }
 
@@ -1117,7 +1572,7 @@ public class FarmerDashboard {
         page.setBackground(
                 new Background(
                         new BackgroundFill(
-                                CREAM,
+                                DARK_GREEN,
                                 CornerRadii.EMPTY,
                                 Insets.EMPTY
                         )
@@ -1132,6 +1587,13 @@ public class FarmerDashboard {
 
         VBox content = new VBox(22);
         content.setPadding(new Insets(30, 35, 35, 35));
+        content.setBackground(new Background(
+                new BackgroundFill(
+                        DARK_GREEN,
+                        CornerRadii.EMPTY,
+                        Insets.EMPTY
+                )
+        ));
 
         HBox tabs = new HBox(35);
         tabs.setAlignment(Pos.CENTER_LEFT);
@@ -1452,8 +1914,16 @@ public class FarmerDashboard {
 
         ScrollPane scroll = new ScrollPane(content);
         scroll.setFitToWidth(true);
+        scroll.setFitToHeight(true);
+
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scroll.setStyle("-fx-background-color: transparent;");
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        scroll.setStyle(
+        "-fx-background-color: #050b0a;" +
+        "-fx-background: #050b0a;" +
+        "-fx-control-inner-background: #050b0a;"
+        );;
 
         VBox.setVgrow(scroll, Priority.ALWAYS);
         page.getChildren().addAll(topBar, scroll);
@@ -1469,7 +1939,7 @@ public class FarmerDashboard {
 
         VBox page = new VBox();
         page.setBackground(new Background(new BackgroundFill(
-                CREAM, CornerRadii.EMPTY, Insets.EMPTY
+                GREEN, CornerRadii.EMPTY, Insets.EMPTY
         )));
 
         HBox topBar = createTopBar(
@@ -1479,6 +1949,9 @@ public class FarmerDashboard {
 
         VBox content = new VBox(20);
         content.setPadding(new Insets(30, 35, 35, 35));
+        content.setBackground(new Background(new BackgroundFill(
+                DARK_GREEN, CornerRadii.EMPTY, Insets.EMPTY
+        )));
 
         // Left card: farm details entered by the farmer.
         VBox calculatorCard = createWhiteCard();
@@ -1808,7 +2281,7 @@ public class FarmerDashboard {
         page.setBackground(
                 new Background(
                         new BackgroundFill(
-                                CREAM,
+                                DARK_GREEN,
                                 CornerRadii.EMPTY,
                                 Insets.EMPTY
                         )
@@ -1821,9 +2294,38 @@ public class FarmerDashboard {
                         subtitleText
                 );
 
+        // VBox content = new VBox();
+
+        // content.setPadding(new Insets(30, 35, 35, 35));
+
+        // content.setSpacing(20);
+
+        // ScrollPane scroll =
+        //         new ScrollPane(content);
+
+        // scroll.setFitToWidth(true);
+
+        // scroll.setHbarPolicy(
+        //         ScrollPane.ScrollBarPolicy.NEVER
+        // );
+
+        // scroll.setStyle(
+        //         "-fx-background-color: transparent;"
+        // );
+
         VBox content = new VBox();
 
-        content.setPadding(new Insets(30, 35, 35, 35));
+        content.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Color.web("#050b0a"),
+                                CornerRadii.EMPTY,
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        content.setPadding(new Insets(0, 35, 35, 35));
 
         content.setSpacing(20);
 
@@ -1837,7 +2339,9 @@ public class FarmerDashboard {
         );
 
         scroll.setStyle(
-                "-fx-background-color: transparent;"
+                "-fx-background-color: DarkGreen;" +
+                "-fx-background: DarkGreen;" +
+                "-fx-control-inner-background: DARKGREEN;"
         );
 
         VBox.setVgrow(
@@ -1933,7 +2437,7 @@ public class FarmerDashboard {
         card.setBackground(
                 new Background(
                         new BackgroundFill(
-                                Color.WHITE,
+                                Color.DARKGREEN,
                                 new CornerRadii(15),
                                 Insets.EMPTY
                         )
