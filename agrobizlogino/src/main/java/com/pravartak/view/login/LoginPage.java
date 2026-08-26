@@ -525,10 +525,10 @@ public class LoginPage extends Application {
 
         mainStage.setScene(loginPageScene);
         mainStage.setTitle("Agro Biz - Login");
-        mainStage.setWidth(1368);
-        mainStage.setHeight(768);
-        mainStage.setMinWidth(1553);
-        mainStage.setMinHeight(839);
+        mainStage.setWidth(1380);
+        mainStage.setHeight(730);
+        // mainStage.setMinWidth(1553);
+        // mainStage.setMinHeight(839);
 
         SplashScreen splash = new SplashScreen();
 
