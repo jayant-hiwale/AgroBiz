@@ -1,9 +1,9 @@
 package com.pravartak.view.admin.scheme;
 
 import com.pravartak.controller.admincontroller.SchemeController;
+import com.pravartak.model.admin.Scheme;
 import com.pravartak.view.admin.AdminPage;
 import com.pravartak.view.admin.course.AdminLearning;
-import com.pravartak.model.adminmodel.Scheme;
 import com.pravartak.view.login.LoginPage;
 
 import javafx.animation.PauseTransition;

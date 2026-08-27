@@ -46,10 +46,6 @@ public class BuyerProfilePage {
     public BuyerProfilePage() {
        
 }
-
-        
-    
-
     // =========================================================
     // PROFILE PAGE SCENE
     // =========================================================

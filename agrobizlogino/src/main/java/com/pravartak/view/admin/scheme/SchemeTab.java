@@ -3,7 +3,7 @@ package com.pravartak.view.admin.scheme;
 import java.util.List;
 
 import com.pravartak.controller.admincontroller.SchemeController;
-import com.pravartak.model.adminmodel.Scheme;
+import com.pravartak.model.admin.Scheme;
 import com.pravartak.view.admin.AdminPage;
 import com.pravartak.view.login.LoginPage;
 
