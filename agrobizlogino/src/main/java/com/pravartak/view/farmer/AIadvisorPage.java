@@ -32,25 +32,6 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 
 public class AIAdvisorPage {
-         public static Scene getAIAdvisorScene() {
-                BorderPane bp = new BorderPane();
-                
-                BorderPane root = new BorderPane();
-
-                root.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                BG,
-                                                                CornerRadii.EMPTY,
-                                                                Insets.EMPTY)));
-
-                root.setTop(createTopBar());
-                root.setCenter(createContent());
-                root.setTop(new NavBar().createNavbar("AI Advisor"));
-                root.setBottom(new Footer().createFooter());
-                bp.setCenter(root);
-                return new Scene(bp, 1368, 768);
-        }
 
         private static final Color BG = Color.rgb(3, 18, 14);
         private static final Color CARD = Color.rgb(7, 39, 30);
@@ -64,7 +45,22 @@ public class AIAdvisorPage {
         private static File selectedImage;
         private static ImageView imageView;
 
-        
+        public static Scene getAIAdvisorScene() {
+
+                BorderPane root = new BorderPane();
+
+                root.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                BG,
+                                                                CornerRadii.EMPTY,
+                                                                Insets.EMPTY)));
+
+                root.setTop(createTopBar());
+                root.setCenter(createContent());
+
+                return new Scene(root, 1368, 768);
+        }
 
         private static HBox createTopBar() {
 
