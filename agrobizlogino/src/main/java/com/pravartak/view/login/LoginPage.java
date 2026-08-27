@@ -361,6 +361,25 @@ public class LoginPage extends Application {
                         new CornerRadii(8), new BorderWidths(1.5))));
         contactField.setOnAction(e -> passwordField.requestFocus());
 
+
+        // =====================================================
+        // LOGIN MESSAGE / ERROR LABEL
+        // =====================================================
+
+        Label messageLabel = new Label();
+
+        messageLabel.setWrapText(true);
+        messageLabel.setMaxWidth(Double.MAX_VALUE);
+        messageLabel.setAlignment(Pos.CENTER);
+
+        messageLabel.setFont(
+                Font.font("Arial", FontWeight.BOLD, 14));
+
+        messageLabel.setTextFill(Color.web("#ff6b6b"));
+
+        messageLabel.setVisible(false);
+        messageLabel.setManaged(false);
+
         // =====================================================
         // LOGIN BUTTON
         // =====================================================
@@ -391,14 +410,39 @@ public class LoginPage extends Application {
         // EMPTY CHECK
         // ==========================================
 
-        if (contact.isEmpty()
-                || password.isEmpty()) {
+        if (contact.isEmpty() || password.isEmpty()) {
 
-                System.out.println(
-                        "Please enter your email and password.");
+        messageLabel.setText(
+                "⚠ Please enter your email and password.");
+
+        messageLabel.setTextFill(
+                Color.web("#ffb74d"));
+
+        messageLabel.setVisible(true);
+        messageLabel.setManaged(true);
+
+        return;
+        }
+
+        // ==========================================
+        // EMAIL VALIDATION
+        // ==========================================
+
+        if (!contact.matches(
+                "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+
+                messageLabel.setText(
+                        "⚠ Please enter a valid email address.");
+
+                messageLabel.setTextFill(
+                        Color.web("#ffb74d"));
+
+                messageLabel.setVisible(true);
+                messageLabel.setManaged(true);
 
                 return;
         }
+
 
         // ==========================================
         // FIREBASE LOGIN
@@ -409,19 +453,32 @@ public class LoginPage extends Application {
                         contact,
                         password);
 
-        if (uid == null) {
+       if (uid == null) {
 
-                System.out.println(
-                        "Invalid email or password.");
+                messageLabel.setText(
+                        "❌ Invalid email or password.");
+
+                messageLabel.setTextFill(
+                        Color.web("#ff6b6b"));
+
+                messageLabel.setVisible(true);
+                messageLabel.setManaged(true);
+
+                passwordField.clear();
 
                 return;
         }
+        
+        // Login successful - hide error message
+        messageLabel.setText("");
+        messageLabel.setVisible(false);
+        messageLabel.setManaged(false);
 
         System.out.println(
                 "Firebase login successful.");
 
-        System.out.println(
-                "UID = " + uid);
+        // System.out.println(
+        //         "UID = " + uid);
 
         // ==========================================
         // GET USER PROFILE
@@ -432,12 +489,17 @@ public class LoginPage extends Application {
 
         if (user == null) {
 
-                System.out.println(
-                        "User profile not found.");
+                messageLabel.setText(
+                        "❌ Account profile not found. Please contact the administrator.");
+
+                messageLabel.setTextFill(
+                        Color.web("#ff6b6b"));
+
+                messageLabel.setVisible(true);
+                messageLabel.setManaged(true);
 
                 return;
         }
-
         String role =
                 user.getRole();
 
@@ -493,6 +555,15 @@ public class LoginPage extends Application {
 
                 return;
         }
+
+        messageLabel.setText(
+        "❌ Your account has an invalid role. Please contact the administrator.");
+
+        messageLabel.setTextFill(
+                Color.web("#ff6b6b"));
+
+        messageLabel.setVisible(true);
+        messageLabel.setManaged(true);
 
         System.out.println(
                 "Unknown user role: " + role);
@@ -582,7 +653,7 @@ public class LoginPage extends Application {
                 logoContainer, space35, welcomeTitle, space8a,
                 welcomeDescription, space32, contactLabel,
                 contactField, space23a, passwordHeader, space8b,
-                passwordField, space23b, space28, loginButton,
+                passwordField,messageLabel,space23b, space28, loginButton,
                 space16, createAccountButton, space30);
 
         rightSection.getChildren().add(loginContainer);

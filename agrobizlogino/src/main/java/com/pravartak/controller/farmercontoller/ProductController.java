@@ -293,4 +293,22 @@ public class ProductController {
                         "Active",
                         4));
     }
+
+    // =====================================================
+    // NEXT PRODUCT ID
+    // =====================================================
+
+    public int getNextProductId() {
+
+        int maxId = 0;
+
+        for (Product product : products) {
+
+            if (product.getProductId() > maxId) {
+                maxId = product.getProductId();
+            }
+        }
+
+        return maxId + 1;
+    }
 }
