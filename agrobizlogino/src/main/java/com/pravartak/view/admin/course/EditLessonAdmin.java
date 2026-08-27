@@ -1056,6 +1056,7 @@ public class EditLessonAdmin {
 
                 boolean updated = lessonController.updateLesson(
                                 lesson.getLessonId(),
+                                module.getModuleId(),
                                 title,
                                 description,
                                 media);

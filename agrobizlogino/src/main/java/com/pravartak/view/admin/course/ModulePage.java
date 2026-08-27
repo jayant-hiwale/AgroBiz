@@ -770,21 +770,6 @@ public class ModulePage {
                                 title,
                                 Priority.ALWAYS);
 
-                // =====================================================
-                // // TYPE
-                // // =====================================================
-
-                // Label type = new Label(safe(lesson.getType()).toUpperCase());
-
-                // type.setStyle(
-                //                 "-fx-text-fill:#777777;" +
-                //                                 "-fx-font-size:8px;" +
-                //                                 "-fx-font-weight:bold;");
-
-                // =====================================================
-                // DELETE BUTTON
-                // =====================================================
-
                 Button delete = new Button("×");
 
                 delete.setStyle(
@@ -792,11 +777,6 @@ public class ModulePage {
                                                 "-fx-text-fill:#777777;" +
                                                 "-fx-font-size:14px;" +
                                                 "-fx-cursor:hand;");
-
-                /*
-                 * Prevent delete click from
-                 * reaching lesson/module click.
-                 */
 
                 delete.addEventFilter(
                                 MouseEvent.MOUSE_CLICKED,
@@ -807,6 +787,7 @@ public class ModulePage {
                         e.consume();
 
                         boolean deleted = lessonController.deleteLesson(
+                                        module.getModuleId(),
                                         lesson.getLessonId());
 
                         if (deleted) {

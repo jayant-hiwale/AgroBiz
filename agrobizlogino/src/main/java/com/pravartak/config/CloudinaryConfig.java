@@ -13,7 +13,7 @@ public class CloudinaryConfig {
     private static Cloudinary cloudinary;
 
     private static final String CONFIG_FILE =
-            "config/cloudinary.properties";
+            "agrobizlogino\\src\\main\\java\\com\\pravartak\\config\\cloudinary.properties";
 
     public static Cloudinary getCloudinary() {
 

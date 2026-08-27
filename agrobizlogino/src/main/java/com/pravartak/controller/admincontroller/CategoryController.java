@@ -1,39 +1,25 @@
 package com.pravartak.controller.admincontroller;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import com.pravartak.dao.admindao.CategoryDAO;
 import com.pravartak.model.admin.Category;
 
 public class CategoryController {
 
     // =========================================================
-    // TEMPORARY CATEGORY LIST
+    // FIRESTORE DAO
     // =========================================================
 
-    private static final List<Category> categories = new ArrayList<>();
-
-    private static int nextId = 1;
+    private final CategoryDAO categoryDAO;
 
     // =========================================================
-    // INITIAL CATEGORIES
+    // CONSTRUCTOR
     // =========================================================
 
-    static {
+    public CategoryController() {
 
-        addInitialCategory("Crop Farming");
-        addInitialCategory("Water Management");
-        addInitialCategory("Hydroponics");
-        addInitialCategory("Organic Farming");
-    }
-
-    private static void addInitialCategory(
-            String name) {
-
-        categories.add(
-                new Category(
-                        nextId++,
-                        name));
+        categoryDAO = new CategoryDAO();
     }
 
     // =========================================================
@@ -42,8 +28,7 @@ public class CategoryController {
 
     public List<Category> getAllCategories() {
 
-        return new ArrayList<>(
-                categories);
+        return categoryDAO.getAllCategories();
     }
 
     // =========================================================
@@ -53,42 +38,8 @@ public class CategoryController {
     public boolean addCategory(
             String categoryName) {
 
-        if (categoryName == null ||
-                categoryName.trim().isEmpty()) {
-
-            return false;
-        }
-
-        categoryName = categoryName.trim();
-
-        // ---------------------------------------------
-        // Prevent duplicate category
-        // ---------------------------------------------
-
-        for (Category category : categories) {
-
-            if (category.getCategoryName()
-                    .equalsIgnoreCase(categoryName)) {
-
-                return false;
-            }
-        }
-
-        // ---------------------------------------------
-        // Create category
-        // ---------------------------------------------
-
-        Category category = new Category(
-                nextId++,
+        return categoryDAO.addCategory(
                 categoryName);
-
-        categories.add(category);
-
-        System.out.println(
-                "Category added: "
-                        + categoryName);
-
-        return true;
     }
 
     // =========================================================
@@ -98,8 +49,8 @@ public class CategoryController {
     public boolean deleteCategory(
             int categoryId) {
 
-        return categories.removeIf(
-                category -> category.getCategoryId() == categoryId);
+        return categoryDAO.deleteCategory(
+                categoryId);
     }
 
     // =========================================================
@@ -109,15 +60,8 @@ public class CategoryController {
     public Category getCategoryById(
             int categoryId) {
 
-        for (Category category : categories) {
-
-            if (category.getCategoryId() == categoryId) {
-
-                return category;
-            }
-        }
-
-        return null;
+        return categoryDAO.getCategoryById(
+                categoryId);
     }
 
     // =========================================================
@@ -128,25 +72,17 @@ public class CategoryController {
             int categoryId,
             String newName) {
 
-        if (newName == null ||
-                newName.trim().isEmpty()) {
+        return categoryDAO.updateCategory(
+                categoryId,
+                newName);
+    }
 
-            return false;
-        }
+    // =========================================================
+    // COUNT
+    // =========================================================
 
-        newName = newName.trim();
+    public int getCategoryCount() {
 
-        for (Category category : categories) {
-
-            if (category.getCategoryId() == categoryId) {
-
-                category.setCategoryName(
-                        newName);
-
-                return true;
-            }
-        }
-
-        return false;
+        return categoryDAO.getCategoryCount();
     }
 }
