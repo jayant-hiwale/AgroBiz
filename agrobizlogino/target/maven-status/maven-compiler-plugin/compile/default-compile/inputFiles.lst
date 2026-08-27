@@ -1,3 +1,34 @@
+<<<<<<< HEAD
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\config\CloudinaryConfig.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\controller\admincontroller\CourseController.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\controller\farmercontoller\ProductController.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\controller\ImageUploadController.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\controller\p1.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\dao\admindao\CourseDAO.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\dao\admindao\TemporaryCourseDAO.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\dao\p1.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\Main.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\model\admin\Course.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\model\farmer_model\Product.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\model\p1.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\admin\AdminDashBoard.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\admin\AdminPage.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\admin\course\AdminLearning.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\admin\course\AnalyticsTab.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\admin\course\CategoriesTab.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\admin\course\CourseTab.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\admin\course\CreateCourseAdmin.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\buyer\p1.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\farmer\AddProductPage.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\farmer\common\Footer.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\farmer\common\NavBar.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\farmer\CommuityPage.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\farmer\MarketPlace.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\farmer\p1.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\login\Login_role_selection.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\login\LoginPage.java
+C:\Users\vivek\Desktop\C2W java\Pravartak(agrobiz)\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\login\SplashScreen.java
+=======
 C:\Users\jayan\OneDrive\Desktop\Superx_AgroBiz\AgroBiz\agrobizlogino\src\main\java\com\pravartak\controller\farmercontoller\ProductController.java
 C:\Users\jayan\OneDrive\Desktop\Superx_AgroBiz\AgroBiz\agrobizlogino\src\main\java\com\pravartak\controller\p1.java
 C:\Users\jayan\OneDrive\Desktop\Superx_AgroBiz\AgroBiz\agrobizlogino\src\main\java\com\pravartak\dao\p1.java
@@ -29,3 +60,4 @@ C:\Users\jayan\OneDrive\Desktop\Superx_AgroBiz\AgroBiz\agrobizlogino\src\main\ja
 C:\Users\jayan\OneDrive\Desktop\Superx_AgroBiz\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\login\Login_role_selection.java
 C:\Users\jayan\OneDrive\Desktop\Superx_AgroBiz\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\login\LoginPage.java
 C:\Users\jayan\OneDrive\Desktop\Superx_AgroBiz\AgroBiz\agrobizlogino\src\main\java\com\pravartak\view\login\SplashScreen.java
+>>>>>>> 43bee0fe1e8a0b8c65747e93498203592283126a

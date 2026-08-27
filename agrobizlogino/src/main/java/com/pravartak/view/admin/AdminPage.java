@@ -314,6 +314,10 @@ public class AdminPage {
                 // TOP BAR COMPONENTS
                 // =====================================================
 
+                // =====================================================
+                // TOP BAR COMPONENTS
+                // =====================================================
+
                 topBar.getChildren().addAll(
                                 headerLogo,
                                 topSpace,

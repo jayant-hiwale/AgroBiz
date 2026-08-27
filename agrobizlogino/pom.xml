@@ -12,18 +12,25 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
-    <dependencies>
-
+    
+<dependencies>
     <dependency>
         <groupId>com.cloudinary</groupId>
         <artifactId>cloudinary-http5</artifactId>
         <version>2.3.2</version>
     </dependency>
 
-    <dependency>
+      <dependency>
         <groupId>com.google.firebase</groupId>
         <artifactId>firebase-admin</artifactId>
         <version>9.7.0</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.json</groupId>
+        <artifactId>json</artifactId>
+        <version>20250517</version>
+        <scope>compile</scope>
     </dependency>
 
 </dependencies>
