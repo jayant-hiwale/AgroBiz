@@ -1,72 +1,70 @@
+
+
 package com.pravartak.config;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
 
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
+import com.google.cloud.firestore.Firestore;
 
 public class FirebaseConfig {
 
-    private static Firestore firestore;
+    private static FirebaseApp firebaseApp;
 
-    private static final String SERVICE_ACCOUNT = "agrobizlogino\\src\\main\\resources\\agrobiz_authentication.json";
+    static {
+        initializeFirebase();
+    }
 
-
-    public static synchronized Firestore getFirestore() {
-
-        if (firestore != null) {
-            return firestore;
-        }
+    private static void initializeFirebase() {
 
         try {
 
-            // =====================================================
-            // CHECK IF FIREBASE IS ALREADY INITIALIZED
-            // =====================================================
-
-            if (FirebaseApp.getApps().isEmpty()) {
-
-                FileInputStream serviceAccount = new FileInputStream(SERVICE_ACCOUNT);
-
-                FirebaseOptions options = FirebaseOptions.builder()
-                        .setCredentials(
-                                GoogleCredentials.fromStream(
-                                        serviceAccount))
-                        .build();
-
-                FirebaseApp.initializeApp(options);
-
-                serviceAccount.close();
-
-                System.out.println("Firebase initialized successfully.");
-
-            } else {
-
-                System.out.println("Firebase was already initialized.");
+            // Prevent duplicate initialization
+            if (!FirebaseApp.getApps().isEmpty()) {
+                firebaseApp = FirebaseApp.getInstance();
+                return;
             }
 
-            // =====================================================
-            // GET FIRESTORE
-            // =====================================================
+            InputStream serviceAccount =
+                    FirebaseConfig.class
+                            .getClassLoader()
+                            .getResourceAsStream("agrobiz_authentication.json");
 
-            firestore = FirestoreClient.getFirestore();
+            if (serviceAccount == null) {
 
-            System.out.println("Firestore connection successful.");
+                throw new RuntimeException(
+                        "Firebase service account file not found!\n"
+                        + "Make sure agrobiz_authentication.json is inside:\n"
+                        + "src/main/resources/");
+            }
 
-            return firestore;
+            FirebaseOptions options =
+                    FirebaseOptions.builder()
+                            .setCredentials(
+                                    GoogleCredentials.fromStream(serviceAccount))
+                            .build();
+
+            firebaseApp = FirebaseApp.initializeApp(options);
+
+            System.out.println("Firebase initialized successfully.");
 
         } catch (Exception e) {
 
             System.err.println("Firebase initialization failed.");
-
             e.printStackTrace();
-
-            throw new RuntimeException(
-                    "Unable to initialize Firebase/Firestore.",
-                    e);
         }
+    }
+
+    public static Firestore getFirestore() {
+
+        if (firebaseApp == null) {
+            throw new IllegalStateException(
+                    "Firebase was not initialized.");
+        }
+
+        return FirestoreClient.getFirestore(firebaseApp);
     }
 }

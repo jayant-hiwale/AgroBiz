@@ -1,7 +1,10 @@
 
 package com.pravartak.view.login;
 
-// import com.pravartak.view.buyer.BuyerAIAdvisorPage;
+import com.pravartak.controller.authentication_contr.AuthController;
+import com.pravartak.dao.UserDAO;
+import com.pravartak.model.UserModel;
+import com.pravartak.view.buyer.BuyerAIAdvisorPage;
 import com.pravartak.view.buyer.BuyerHomepage;
 // import com.pravartak.view.farmer.AIAdvisorPage;
 // import com.pravartak.view.farmer.CommunityPage;
@@ -55,7 +58,13 @@ import javafx.util.Duration;
 
 public class LoginPage extends Application {
 
-    HomePageFarmer homepagefarmer = new HomePageFarmer();
+
+        private final AuthController authController = new AuthController();
+
+        private UserDAO userDAO;
+
+    //HomePageFarmer homepagefarmer = new HomePageFarmer();
+    //private HomePageFarmer homepagefarmer;
     public static Stage mainStage;
     private Scene loginPageScene;
     private String selectedRole = "";
@@ -64,6 +73,9 @@ public class LoginPage extends Application {
     public void start(Stage stage) throws Exception {
 
         mainStage = stage;
+
+        userDAO = new UserDAO();
+
 
         HBox mainLayout = new HBox();
         mainLayout.setPrefSize(1368, 768);
@@ -175,136 +187,136 @@ public class LoginPage extends Application {
         welcomeDescription.setFont(Font.font("Arial", 16));
 
         // =====================================================
-        // FARMER CARD
-        // =====================================================
+        // // FARMER CARD
+        // // =====================================================
 
-        Circle farmerCircle = new Circle(25);
-        farmerCircle.setFill(Color.web("#245d35"));
+        // Circle farmerCircle = new Circle(25);
+        // farmerCircle.setFill(Color.web("#245d35"));
 
-        Label farmerIcon = new Label("🚜");
-        farmerIcon.setStyle("-fx-font-size: 25px; -fx-text-fill: #eaf2e7;");
+        // Label farmerIcon = new Label("🚜");
+        // farmerIcon.setStyle("-fx-font-size: 25px; -fx-text-fill: #eaf2e7;");
 
-        StackPane farmerIconBox = new StackPane(farmerCircle, farmerIcon);
+        // StackPane farmerIconBox = new StackPane(farmerCircle, farmerIcon);
 
-        Label farmerTitle = new Label("Farmer/Learner");
-        farmerTitle.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #F1F3F1;");
+        // Label farmerTitle = new Label("Farmer/Learner");
+        // farmerTitle.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #F1F3F1;");
 
-        VBox farmerCard = new VBox(4, farmerIconBox, farmerTitle);
-        farmerCard.setPrefWidth(190);
-        farmerCard.setPrefHeight(82);
-        farmerCard.setMinWidth(190);
-        farmerCard.setMaxWidth(190);
-        farmerCard.setMinHeight(82);
-        farmerCard.setMaxHeight(82);
-        farmerCard.setAlignment(Pos.CENTER);
-        farmerCard.setStyle(
-                "-fx-background-color: #101718;"
-                + "-fx-background-radius: 10;"
-                + "-fx-border-color: #293334;"
-                + "-fx-border-width: 1;"
-                + "-fx-border-radius: 10;"
-                + "-fx-cursor: hand;"
-                + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0, 0, 5);");
+        // VBox farmerCard = new VBox(4, farmerIconBox, farmerTitle);
+        // farmerCard.setPrefWidth(190);
+        // farmerCard.setPrefHeight(82);
+        // farmerCard.setMinWidth(190);
+        // farmerCard.setMaxWidth(190);
+        // farmerCard.setMinHeight(82);
+        // farmerCard.setMaxHeight(82);
+        // farmerCard.setAlignment(Pos.CENTER);
+        // farmerCard.setStyle(
+        //         "-fx-background-color: #101718;"
+        //         + "-fx-background-radius: 10;"
+        //         + "-fx-border-color: #293334;"
+        //         + "-fx-border-width: 1;"
+        //         + "-fx-border-radius: 10;"
+        //         + "-fx-cursor: hand;"
+        //         + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0, 0, 5);");
 
-        // =====================================================
-        // BUYER CARD
-        // =====================================================
+        // // =====================================================
+        // // BUYER CARD
+        // // =====================================================
 
-        Circle buyerCircle = new Circle(25);
-        buyerCircle.setFill(Color.web("#18351D"));
+        // Circle buyerCircle = new Circle(25);
+        // buyerCircle.setFill(Color.web("#18351D"));
 
-        Label buyerIcon = new Label("🛒");
-        buyerIcon.setStyle("-fx-font-size: 25px; -fx-text-fill: #7ED957;");
+        // Label buyerIcon = new Label("🛒");
+        // buyerIcon.setStyle("-fx-font-size: 25px; -fx-text-fill: #7ED957;");
 
-        StackPane buyerIconBox = new StackPane(buyerCircle, buyerIcon);
+        // StackPane buyerIconBox = new StackPane(buyerCircle, buyerIcon);
 
-        Label buyerTitle = new Label("Buyer");
-        buyerTitle.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #F1F3F1;");
+        // Label buyerTitle = new Label("Buyer");
+        // buyerTitle.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #F1F3F1;");
 
-        VBox buyerCard = new VBox(4, buyerIconBox, buyerTitle);
-        buyerCard.setPrefWidth(190);
-        buyerCard.setPrefHeight(82);
-        buyerCard.setMinWidth(190);
-        buyerCard.setMaxWidth(190);
-        buyerCard.setMinHeight(82);
-        buyerCard.setMaxHeight(82);
-        buyerCard.setAlignment(Pos.CENTER);
-        buyerCard.setStyle(
-                "-fx-background-color: #101718;"
-                + "-fx-background-radius: 10;"
-                + "-fx-border-color: #293334;"
-                + "-fx-border-width: 1;"
-                + "-fx-border-radius: 10;"
-                + "-fx-cursor: hand;"
-                + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0, 0, 5);");
+        // VBox buyerCard = new VBox(4, buyerIconBox, buyerTitle);
+        // buyerCard.setPrefWidth(190);
+        // buyerCard.setPrefHeight(82);
+        // buyerCard.setMinWidth(190);
+        // buyerCard.setMaxWidth(190);
+        // buyerCard.setMinHeight(82);
+        // buyerCard.setMaxHeight(82);
+        // buyerCard.setAlignment(Pos.CENTER);
+        // buyerCard.setStyle(
+        //         "-fx-background-color: #101718;"
+        //         + "-fx-background-radius: 10;"
+        //         + "-fx-border-color: #293334;"
+        //         + "-fx-border-width: 1;"
+        //         + "-fx-border-radius: 10;"
+        //         + "-fx-cursor: hand;"
+        //         + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0, 0, 5);");
 
-        // =====================================================
-        // ROLE SELECTION
-        // =====================================================
+        // // =====================================================
+        // // ROLE SELECTION
+        // // =====================================================
 
-        farmerCard.setOnMouseClicked(event -> {
-            selectedRole = "FARMER";
+        // farmerCard.setOnMouseClicked(event -> {
+        //     selectedRole = "FARMER";
 
-            farmerCard.setStyle(
-                    "-fx-background-color: #1f5c2b;"
-                    + "-fx-background-radius: 10;"
-                    + "-fx-border-color: #68d34a;"
-                    + "-fx-border-width: 2;"
-                    + "-fx-border-radius: 10;"
-                    + "-fx-cursor: hand;"
-                    + "-fx-effect: dropshadow(gaussian, rgba(104,211,74,0.35), 15, 0, 0, 0);");
+        //     farmerCard.setStyle(
+        //             "-fx-background-color: #1f5c2b;"
+        //             + "-fx-background-radius: 10;"
+        //             + "-fx-border-color: #68d34a;"
+        //             + "-fx-border-width: 2;"
+        //             + "-fx-border-radius: 10;"
+        //             + "-fx-cursor: hand;"
+        //             + "-fx-effect: dropshadow(gaussian, rgba(104,211,74,0.35), 15, 0, 0, 0);");
 
-            buyerCard.setStyle(
-                    "-fx-background-color: #101718;"
-                    + "-fx-background-radius: 10;"
-                    + "-fx-border-color: #293334;"
-                    + "-fx-border-width: 1;"
-                    + "-fx-border-radius: 10;"
-                    + "-fx-cursor: hand;"
-                    + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0, 0, 5);");
+        //     buyerCard.setStyle(
+        //             "-fx-background-color: #101718;"
+        //             + "-fx-background-radius: 10;"
+        //             + "-fx-border-color: #293334;"
+        //             + "-fx-border-width: 1;"
+        //             + "-fx-border-radius: 10;"
+        //             + "-fx-cursor: hand;"
+        //             + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0, 0, 5);");
 
-            System.out.println("Farmer selected");
-        });
+        //     System.out.println("Farmer selected");
+        // });
 
-        buyerCard.setOnMouseClicked(event -> {
-            selectedRole = "BUYER";
+        // buyerCard.setOnMouseClicked(event -> {
+        //     selectedRole = "BUYER";
 
-            buyerCard.setStyle(
-                    "-fx-background-color: #1f5c2b;"
-                    + "-fx-background-radius: 10;"
-                    + "-fx-border-color: #68d34a;"
-                    + "-fx-border-width: 2;"
-                    + "-fx-border-radius: 10;"
-                    + "-fx-cursor: hand;"
-                    + "-fx-effect: dropshadow(gaussian, rgba(104,211,74,0.35), 15, 0, 0, 0);");
+        //     buyerCard.setStyle(
+        //             "-fx-background-color: #1f5c2b;"
+        //             + "-fx-background-radius: 10;"
+        //             + "-fx-border-color: #68d34a;"
+        //             + "-fx-border-width: 2;"
+        //             + "-fx-border-radius: 10;"
+        //             + "-fx-cursor: hand;"
+        //             + "-fx-effect: dropshadow(gaussian, rgba(104,211,74,0.35), 15, 0, 0, 0);");
 
-            farmerCard.setStyle(
-                    "-fx-background-color: #101718;"
-                    + "-fx-background-radius: 10;"
-                    + "-fx-border-color: #293334;"
-                    + "-fx-border-width: 1;"
-                    + "-fx-border-radius: 10;"
-                    + "-fx-cursor: hand;"
-                    + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0, 0, 5);");
+        //     farmerCard.setStyle(
+        //             "-fx-background-color: #101718;"
+        //             + "-fx-background-radius: 10;"
+        //             + "-fx-border-color: #293334;"
+        //             + "-fx-border-width: 1;"
+        //             + "-fx-border-radius: 10;"
+        //             + "-fx-cursor: hand;"
+        //             + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0, 0, 5);");
 
-            System.out.println("Buyer selected");
-        });
+        //     System.out.println("Buyer selected");
+        // });
 
-        HBox roles = new HBox(18, farmerCard, buyerCard);
-        roles.setAlignment(Pos.CENTER);
-        roles.setPrefWidth(Double.MAX_VALUE);
-        roles.setPrefHeight(90);
+        // HBox roles = new HBox(18, farmerCard, buyerCard);
+        // roles.setAlignment(Pos.CENTER);
+        // roles.setPrefWidth(Double.MAX_VALUE);
+        // roles.setPrefHeight(90);
 
         // =====================================================
         // CONTACT
         // =====================================================
 
-        Label contactLabel = new Label("Phone number or Email");
+        Label contactLabel = new Label("Email");
         contactLabel.setTextFill(Color.WHITE);
         contactLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
 
         TextField contactField = new TextField();
-        contactField.setPromptText("Enter your registered contact");
+        contactField.setPromptText("Enter your registered email");
         contactField.setPrefHeight(52);
         contactField.setFont(Font.font("Arial", 15));
         contactField.setPadding(new Insets(0, 15, 0, 15));
@@ -367,52 +379,123 @@ public class LoginPage extends Application {
 
         loginButton.setOnMouseExited(e -> loginButton.setBackground(
                 new Background(new BackgroundFill(Color.web("#0f5215"), new CornerRadii(30), Insets.EMPTY))));
-
         loginButton.setOnAction(event -> {
-            String contact = contactField.getText();
-            String password = passwordField.getText();
 
-            String admincontact = "q"; //admin@agrobiz.com
-            String adminPasssword = "q";//admin123
+        String contact =
+                contactField.getText().trim();
 
-            if (contact.isEmpty() || password.isEmpty()) {
-                System.out.println("Please enter your contact and password.");
-                return;
-            }
+        String password =
+                passwordField.getText();
 
-            if (contact.equalsIgnoreCase(admincontact) && password.equals(adminPasssword)) {
-                System.out.println("Admin login Successful!");
+        // ==========================================
+        // EMPTY CHECK
+        // ==========================================
 
-                AdminPage adminPage = new AdminPage();
-                mainStage.setScene(adminPage.getAdminPage("default"));
+        if (contact.isEmpty()
+                || password.isEmpty()) {
 
-                return;
-            }
-
-            if (selectedRole.isEmpty()) {
-                System.out.println("Please select Farmer or Buyer.");
-                return;
-            }
-
-            if (selectedRole.equals("FARMER")) {
-                System.out.println("Farmer login Successful!");
-
-                HomePageFarmer farmerHomePage = new HomePageFarmer();
-                mainStage.setScene(farmerHomePage.getHomePageFarmer());
+                System.out.println(
+                        "Please enter your email and password.");
 
                 return;
-            }
+        }
 
-            if (selectedRole.equals("BUYER")) {
-                System.out.println("Buyer login Successful!");
+        // ==========================================
+        // FIREBASE LOGIN
+        // ==========================================
 
-                BuyerHomepage buyerHomepage = new BuyerHomepage(null);
-                LoginPage.mainStage.setScene(buyerHomepage.getBuyerHomePage());
+        String uid =
+                authController.signIn(
+                        contact,
+                        password);
+
+        if (uid == null) {
+
+                System.out.println(
+                        "Invalid email or password.");
 
                 return;
-            }
-                contactField.setOnAction(e -> passwordField.requestFocus());
-                passwordField.setOnAction(e -> loginButton.fire());
+        }
+
+        System.out.println(
+                "Firebase login successful.");
+
+        System.out.println(
+                "UID = " + uid);
+
+        // ==========================================
+        // GET USER PROFILE
+        // ==========================================
+
+        UserModel user =
+                userDAO.getUserByUid(uid);
+
+        if (user == null) {
+
+                System.out.println(
+                        "User profile not found.");
+
+                return;
+        }
+
+        String role =
+                user.getRole();
+
+        System.out.println(
+                "Logged in user: "
+                        + user.getFullName());
+
+        System.out.println(
+                "Role: " + role);
+
+        // ==========================================
+        // ROLE ROUTING
+        // ==========================================
+
+        if ("FARMER".equalsIgnoreCase(role)) {
+
+                System.out.println(
+                        "Opening Farmer Home.");
+
+                HomePageFarmer farmerHomePage =
+                        new HomePageFarmer();
+
+                mainStage.setScene(
+                        farmerHomePage.getHomePageFarmer());
+
+                return;
+        }
+
+        if ("BUYER".equalsIgnoreCase(role)) {
+
+                System.out.println(
+                        "Opening Buyer Home.");
+
+                BuyerHomepage buyerHomepage =
+                        new BuyerHomepage(null);
+
+                mainStage.setScene(
+                        buyerHomepage.getBuyerHomePage());
+
+                return;
+        }
+
+        if ("ADMIN".equalsIgnoreCase(role)) {
+
+                System.out.println(
+                        "Opening Admin Page.");
+
+                AdminPage adminPage =
+                        new AdminPage();
+
+                mainStage.setScene(
+                        adminPage.getAdminPage("default"));
+
+                return;
+        }
+
+        System.out.println(
+                "Unknown user role: " + role);
         });
 
         // =====================================================
@@ -497,7 +580,7 @@ public class LoginPage extends Application {
 
         loginContainer.getChildren().addAll(
                 logoContainer, space35, welcomeTitle, space8a,
-                welcomeDescription, roles, space32, contactLabel,
+                welcomeDescription, space32, contactLabel,
                 contactField, space23a, passwordHeader, space8b,
                 passwordField, space23b, space28, loginButton,
                 space16, createAccountButton, space30);
