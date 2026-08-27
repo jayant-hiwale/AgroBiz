@@ -1,5 +1,9 @@
 package com.pravartak.model.farmer_model;
 
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class Product {
 
     private int productId;
@@ -139,5 +143,24 @@ public class Product {
 
     public void setOrders(int orders) {
         this.orders = orders;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("productId", productId);
+        map.put("farmerId", farmerId);
+        map.put("productName", productName);
+        map.put("category", category);
+        map.put("description", description);
+        map.put("price", price);
+        map.put("unit", unit);
+        map.put("quantity", quantity);
+        map.put("location", location);
+        map.put("imagePath", imagePath);
+        map.put("status", status);
+        map.put("orders", orders);
+
+        return map;
     }
 }
