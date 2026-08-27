@@ -2343,84 +2343,138 @@ private VBox createInvestmentPage() {
 
     private VBox createSchemesPage() {
 
-        VBox page =
-                createSimplePage(
-                        "Schemes & Subsidies",
-                        "Explore government schemes and agricultural subsidies."
-                );
+    // =========================================================
+    // MAIN PAGE
+    // =========================================================
 
-        VBox card =
-                createWhiteCard();
+    VBox page = new VBox(18);
 
-        Label title =
-                new Label(
-                        "Government & Agriculture Schemes"
-                );
+    page.setPadding(
+            new Insets(22, 28, 22, 28)
+    );
 
-        title.setTextFill(DARK_TEXT);
+    page.setAlignment(
+            Pos.TOP_LEFT
+    );
 
-        title.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        20
-                )
-        );
+    page.setFillWidth(true);
 
-        Label scheme1 =
-                new Label(
-                        "National Livestock Mission (NLM)\n"
-                                + "Support for livestock and animal husbandry."
-                );
+    page.setStyle(
+            "-fx-background-color: #080c0d;"
+    );
 
-        Label scheme2 =
-                new Label(
-                        "Sub-Mission on Agricultural Mechanization (SMAM)\n"
-                                + "Financial assistance for agricultural machinery."
-                );
 
-        Label scheme3 =
-                new Label(
-                        "Pradhan Mantri Fasal Bima Yojana\n"
-                                + "Crop insurance support for farmers."
-                );
+    // =========================================================
+    // PAGE TITLE
+    // =========================================================
 
-        scheme1.setTextFill(DARK_TEXT);
-        scheme2.setTextFill(DARK_TEXT);
-        scheme3.setTextFill(DARK_TEXT);
+    Label pageTitle =
+            new Label("Schemes & Subsidies");
 
-        scheme1.setFont(
-                Font.font(
-                        "Arial",
-                        14
-                )
-        );
+    pageTitle.setFont(
+            Font.font(
+                    "Arial",
+                    FontWeight.BOLD,
+                    27
+            )
+    );
 
-        scheme2.setFont(
-                Font.font(
-                        "Arial",
-                        14
-                )
-        );
+    pageTitle.setTextFill(
+            Color.WHITE
+    );
 
-        scheme3.setFont(
-                Font.font(
-                        "Arial",
-                        14
-                )
-        );
 
-        card.getChildren().addAll(
-                title,
-                scheme1,
-                scheme2,
-                scheme3
-        );
+    // =========================================================
+    // PAGE DESCRIPTION
+    // =========================================================
 
-        page.getChildren().add(card);
+    Label pageDescription =
+            new Label(
+                    "Explore useful government schemes and subsidies for farmers."
+            );
 
-        return page;
-    }
+    pageDescription.setFont(
+            Font.font(
+                    "Arial",
+                    13
+            )
+    );
+
+    pageDescription.setTextFill(
+            Color.web("#A9B7AC")
+    );
+
+    pageDescription.setWrapText(true);
+
+
+    // =========================================================
+    // SCHEME CARD
+    // =========================================================
+
+    VBox card =
+            new VBox(14);
+
+    card.setPadding(
+            new Insets(20)
+    );
+
+    card.setMaxWidth(
+            Double.MAX_VALUE
+    );
+
+    card.setStyle(
+            "-fx-background-color: #121A15;" +
+            "-fx-background-radius: 14;" +
+            "-fx-border-color: #26382B;" +
+            "-fx-border-radius: 14;" +
+            "-fx-border-width: 1;"
+    );
+
+
+    // =========================================================
+    // CARD TITLE
+    // =========================================================
+
+    Label title =
+            new Label(
+                    "Government Agriculture Schemes"
+            );
+
+    title.setFont(
+            Font.font(
+                    "Arial",
+                    FontWeight.BOLD,
+                    18
+            )
+    );
+
+    title.setTextFill(
+            Color.WHITE
+    );
+
+    // =========================================================
+    // ADD SCHEMES
+    // =========================================================
+
+    card.getChildren().addAll(
+            title
+    );
+
+
+    // =========================================================
+    // ADD TO PAGE
+    // =========================================================
+
+    page.getChildren().addAll(
+            pageTitle,
+            pageDescription,
+            card
+    );
+
+
+    return page;
+}
+
 
     // =========================================================
     // SIMPLE PAGE
