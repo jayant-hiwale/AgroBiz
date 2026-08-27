@@ -18,383 +18,361 @@ import javafx.scene.layout.VBox;
 
 public class EditSchemeAdmin {
 
-    private final Scheme scheme;
+        private final Scheme scheme;
 
-    private final SchemeController controller =
-            new SchemeController();
+        private final SchemeController controller = new SchemeController();
 
-    private TextField nameField;
+        private TextField nameField;
 
-    private TextArea eligibilityArea;
+        private TextArea eligibilityArea;
 
-    private TextArea informationArea;
+        private TextArea informationArea;
 
-    // =========================================================
-    // CONSTRUCTOR
-    // =========================================================
+        // =========================================================
+        // CONSTRUCTOR
+        // =========================================================
 
-    public EditSchemeAdmin(
-            Scheme scheme) {
+        public EditSchemeAdmin(
+                        Scheme scheme) {
 
-        this.scheme = scheme;
-    }
+                this.scheme = scheme;
+        }
 
-    // =========================================================
-    // SCENE
-    // =========================================================
+        // =========================================================
+        // SCENE
+        // =========================================================
 
-    public Scene getEditSchemeScene() {
+        public Scene getEditSchemeScene() {
 
-        VBox root =
-                new VBox(15);
+                VBox root = new VBox(15);
 
-        root.setPadding(
-                new Insets(
-                        20,
-                        30,
-                        20,
-                        30));
+                root.setPadding(
+                                new Insets(
+                                                20,
+                                                30,
+                                                20,
+                                                30));
 
-        root.setStyle(
-                "-fx-background-color:#080C0D;");
+                root.setStyle(
+                                "-fx-background-color:#080C0D;");
 
-        // =====================================================
-        // BACK
-        // =====================================================
+                // =====================================================
+                // BACK
+                // =====================================================
 
-        Button back =
-                new Button("← Back");
+                Button back = new Button("← Back");
 
-        back.setStyle(
-                "-fx-background-color:transparent;" +
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-radius:5;" +
-                "-fx-padding:6 14;" +
-                "-fx-cursor:hand;");
+                back.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-padding:6 14;" +
+                                                "-fx-cursor:hand;");
 
-        back.setOnAction(
-                e -> goBack());
+                back.setOnAction(
+                                e -> goBack());
 
-        Label title =
-                new Label("Edit Scheme");
+                Label title = new Label("Edit Scheme");
 
-        title.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-font-size:24px;" +
-                "-fx-font-weight:bold;");
+                title.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:24px;" +
+                                                "-fx-font-weight:bold;");
 
-        // =====================================================
-        // CARD
-        // =====================================================
+                // =====================================================
+                // CARD
+                // =====================================================
 
-        VBox card =
-                new VBox(12);
+                VBox card = new VBox(12);
 
-        card.setMaxWidth(800);
+                card.setMaxWidth(800);
 
-        card.setPadding(
-                new Insets(25));
+                card.setPadding(
+                                new Insets(25));
 
-        card.setStyle(
-                "-fx-background-color:#101516;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-radius:10;" +
-                "-fx-background-radius:10;");
+                card.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:10;" +
+                                                "-fx-background-radius:10;");
 
-        // =====================================================
-        // NAME
-        // =====================================================
+                // =====================================================
+                // NAME
+                // =====================================================
 
-        Label nameLabel =
-                createLabel("Scheme Name");
+                Label nameLabel = createLabel("Scheme Name");
 
-        nameField =
-                new TextField(
-                        safe(
-                                scheme.getSchemeName()));
+                nameField = new TextField(
+                                safe(
+                                                scheme.getSchemeName()));
 
-        styleTextField(
-                nameField);
+                styleTextField(
+                                nameField);
 
-        // =====================================================
-        // ELIGIBILITY
-        // =====================================================
+                // =====================================================
+                // ELIGIBILITY
+                // =====================================================
 
-        Label eligibilityLabel =
-                createLabel("Eligibility");
+                Label eligibilityLabel = createLabel("Eligibility");
 
-        eligibilityArea =
-                new TextArea(
-                        safe(
-                                scheme.getEligibility()));
+                eligibilityArea = new TextArea(
+                                safe(
+                                                scheme.getEligibility()));
 
-        eligibilityArea.setWrapText(true);
+                eligibilityArea.setWrapText(true);
 
-        eligibilityArea.setPrefRowCount(8);
+                eligibilityArea.setPrefRowCount(8);
 
-        styleTextArea(
-                eligibilityArea);
+                styleTextArea(
+                                eligibilityArea);
 
-        // =====================================================
-        // INFORMATION
-        // =====================================================
+                // =====================================================
+                // INFORMATION
+                // =====================================================
 
-        Label informationLabel =
-                createLabel(
-                        "Scheme Information");
+                Label informationLabel = createLabel(
+                                "Scheme Information");
 
-        informationArea =
-                new TextArea(
-                        safe(
-                                scheme.getInformation()));
+                informationArea = new TextArea(
+                                safe(
+                                                scheme.getInformation()));
 
-        informationArea.setWrapText(true);
+                informationArea.setWrapText(true);
 
-        informationArea.setPrefRowCount(10);
+                informationArea.setPrefRowCount(10);
 
-        styleTextArea(
-                informationArea);
+                styleTextArea(
+                                informationArea);
 
-        // =====================================================
+                // =====================================================
+                // SAVE
+                // =====================================================
+
+                Button save = new Button(
+                                "✓  Save Changes");
+
+                save.setPrefWidth(170);
+
+                save.setPrefHeight(42);
+
+                save.setStyle(
+                                "-fx-background-color:#68D34A;" +
+                                                "-fx-text-fill:#080C0D;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-background-radius:6;" +
+                                                "-fx-cursor:hand;");
+
+                save.setOnAction(
+                                e -> saveChanges());
+
+                // =====================================================
+                // CANCEL
+                // =====================================================
+
+                Button cancel = new Button("Cancel");
+
+                cancel.setPrefWidth(120);
+
+                cancel.setPrefHeight(42);
+
+                cancel.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:6;" +
+                                                "-fx-cursor:hand;");
+
+                cancel.setOnAction(
+                                e -> goBack());
+
+                card.getChildren().addAll(
+                                nameLabel,
+                                nameField,
+                                eligibilityLabel,
+                                eligibilityArea,
+                                informationLabel,
+                                informationArea,
+                                save,
+                                cancel);
+
+                // =====================================================
+                // SCROLL
+                // =====================================================
+
+                ScrollPane scroll = new ScrollPane(card);
+
+                scroll.setFitToWidth(true);
+
+                scroll.setHbarPolicy(
+                                ScrollPane.ScrollBarPolicy.NEVER);
+
+                scroll.setVbarPolicy(
+                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+                scroll.setStyle(
+                                "-fx-background-color:#080C0D;" +
+                                                "-fx-background:#080C0D;" +
+                                                "-fx-border-color:transparent;");
+
+                VBox.setVgrow(
+                                scroll,
+                                Priority.ALWAYS);
+
+                root.getChildren().addAll(
+                                back,
+                                title,
+                                scroll);
+
+                return new Scene(
+                                root,
+                                1100,
+                                700);
+        }
+
+        // =========================================================
         // SAVE
-        // =====================================================
+        // =========================================================
 
-        Button save =
-                new Button(
-                        "✓  Save Changes");
+        private void saveChanges() {
 
-        save.setPrefWidth(170);
+                String name = nameField.getText()
+                                .trim();
 
-        save.setPrefHeight(42);
+                String eligibility = eligibilityArea.getText()
+                                .trim();
 
-        save.setStyle(
-                "-fx-background-color:#68D34A;" +
-                "-fx-text-fill:#080C0D;" +
-                "-fx-font-weight:bold;" +
-                "-fx-background-radius:6;" +
-                "-fx-cursor:hand;");
+                String information = informationArea.getText()
+                                .trim();
 
-        save.setOnAction(
-                e -> saveChanges());
+                if (name.isEmpty() ||
+                                eligibility.isEmpty() ||
+                                information.isEmpty()) {
 
-        // =====================================================
-        // CANCEL
-        // =====================================================
+                        showError(
+                                        "Please fill all fields.");
 
-        Button cancel =
-                new Button("Cancel");
+                        return;
+                }
 
-        cancel.setPrefWidth(120);
+                scheme.setSchemeName(
+                                name);
 
-        cancel.setPrefHeight(42);
+                scheme.setEligibility(
+                                eligibility);
 
-        cancel.setStyle(
-                "-fx-background-color:#101516;" +
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-radius:6;" +
-                "-fx-cursor:hand;");
+                scheme.setInformation(
+                                information);
 
-        cancel.setOnAction(
-                e -> goBack());
+                boolean success = controller.updateScheme(
+                                scheme);
 
-        card.getChildren().addAll(
-                nameLabel,
-                nameField,
-                eligibilityLabel,
-                eligibilityArea,
-                informationLabel,
-                informationArea,
-                save,
-                cancel);
+                if (success) {
 
-        // =====================================================
-        // SCROLL
-        // =====================================================
+                        AdminPage adminPage = new AdminPage();
 
-        ScrollPane scroll =
-                new ScrollPane(card);
+                        LoginPage.mainStage.setScene(
+                                        adminPage.getAdminPage("Government Schemes"));
+                } else {
 
-        scroll.setFitToWidth(true);
-
-        scroll.setHbarPolicy(
-                ScrollPane.ScrollBarPolicy.NEVER);
-
-        scroll.setVbarPolicy(
-                ScrollPane.ScrollBarPolicy.AS_NEEDED);
-
-        scroll.setStyle(
-                "-fx-background-color:#080C0D;" +
-                "-fx-background:#080C0D;" +
-                "-fx-border-color:transparent;");
-
-        VBox.setVgrow(
-                scroll,
-                Priority.ALWAYS);
-
-        root.getChildren().addAll(
-                back,
-                title,
-                scroll);
-
-        return new Scene(
-                root,
-                1100,
-                700);
-    }
-
-    // =========================================================
-    // SAVE
-    // =========================================================
-
-    private void saveChanges() {
-
-        String name =
-                nameField.getText()
-                        .trim();
-
-        String eligibility =
-                eligibilityArea.getText()
-                        .trim();
-
-        String information =
-                informationArea.getText()
-                        .trim();
-
-        if (name.isEmpty() ||
-                eligibility.isEmpty() ||
-                information.isEmpty()) {
-
-            showError(
-                    "Please fill all fields.");
-
-            return;
+                        showError(
+                                        "Scheme could not be updated.");
+                }
         }
 
-        scheme.setSchemeName(
-                name);
+        // =========================================================
+        // LABEL
+        // =========================================================
 
-        scheme.setEligibility(
-                eligibility);
+        private Label createLabel(
+                        String text) {
 
-        scheme.setInformation(
-                information);
+                Label label = new Label(text);
 
-        boolean success =
-                controller.updateScheme(
-                        scheme);
+                label.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:12px;" +
+                                                "-fx-font-weight:bold;");
 
-        if (success) {
-
-            AdminPage adminPage = new AdminPage();
-
-LoginPage.mainStage.setScene(
-        adminPage.getAdminPage()
-);
-        } else {
-
-            showError(
-                    "Scheme could not be updated.");
+                return label;
         }
-    }
 
-    // =========================================================
-    // LABEL
-    // =========================================================
+        // =========================================================
+        // TEXT FIELD
+        // =========================================================
 
-    private Label createLabel(
-            String text) {
+        private void styleTextField(
+                        TextField field) {
 
-        Label label =
-                new Label(text);
+                field.setPrefHeight(38);
 
-        label.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-font-size:12px;" +
-                "-fx-font-weight:bold;");
+                field.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-prompt-text-fill:#666666;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:6;" +
+                                                "-fx-background-radius:6;" +
+                                                "-fx-padding:8 12;");
+        }
 
-        return label;
-    }
+        // =========================================================
+        // TEXT AREA
+        // =========================================================
 
-    // =========================================================
-    // TEXT FIELD
-    // =========================================================
+        private void styleTextArea(
+                        TextArea area) {
 
-    private void styleTextField(
-            TextField field) {
+                area.setStyle(
+                                "-fx-control-inner-background:#0D1213;" +
+                                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-prompt-text-fill:#666666;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:6;" +
+                                                "-fx-background-radius:6;" +
+                                                "-fx-font-size:12px;");
+        }
 
-        field.setPrefHeight(38);
+        // =========================================================
+        // ERROR
+        // =========================================================
 
-        field.setStyle(
-                "-fx-background-color:#0D1213;" +
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-prompt-text-fill:#666666;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-radius:6;" +
-                "-fx-background-radius:6;" +
-                "-fx-padding:8 12;");
-    }
+        private void showError(
+                        String message) {
 
-    // =========================================================
-    // TEXT AREA
-    // =========================================================
+                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
+                                javafx.scene.control.Alert.AlertType.ERROR);
 
-    private void styleTextArea(
-            TextArea area) {
+                alert.setTitle("Error");
 
-        area.setStyle(
-                "-fx-control-inner-background:#0D1213;" +
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-prompt-text-fill:#666666;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-radius:6;" +
-                "-fx-background-radius:6;" +
-                "-fx-font-size:12px;");
-    }
+                alert.setHeaderText(null);
 
-    // =========================================================
-    // ERROR
-    // =========================================================
+                alert.setContentText(message);
 
-    private void showError(
-            String message) {
+                alert.showAndWait();
+        }
 
-        javafx.scene.control.Alert alert =
-                new javafx.scene.control.Alert(
-                        javafx.scene.control.Alert.AlertType.ERROR);
+        // =========================================================
+        // BACK
+        // =========================================================
 
-        alert.setTitle("Error");
+        private void goBack() {
 
-        alert.setHeaderText(null);
+                AdminPage adminPage = new AdminPage();
 
-        alert.setContentText(message);
+                LoginPage.mainStage.setScene(
+                                adminPage.getAdminPage("Government Schemes"));
+        }
 
-        alert.showAndWait();
-    }
+        // =========================================================
+        // SAFE
+        // =========================================================
 
-    // =========================================================
-    // BACK
-    // =========================================================
+        private String safe(
+                        String value) {
 
-    private void goBack() {
-
-        AdminPage adminPage = new AdminPage();
-
-LoginPage.mainStage.setScene(
-        adminPage.getAdminPage()
-);
-    }
-
-    // =========================================================
-    // SAFE
-    // =========================================================
-
-    private String safe(
-            String value) {
-
-        return value == null
-                ? ""
-                : value;
-    }
+                return value == null
+                                ? ""
+                                : value;
+        }
 }
