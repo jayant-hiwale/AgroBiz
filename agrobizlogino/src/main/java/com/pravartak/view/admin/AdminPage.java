@@ -288,21 +288,10 @@ public class AdminPage {
                                                 "-fx-padding:10 18;");
 
                 // =====================================================
-                // NOTIFICATION
-                // =====================================================
-
-                Label notification = new Label("♧");
-
-                notification.setStyle(
-                                "-fx-text-fill:#AAAAAA;" +
-                                                "-fx-font-size:23px;" +
-                                                "-fx-cursor:hand;");
-
-                // =====================================================
                 // PROFILE
                 // =====================================================
 
-                Label profile = new Label("A");
+                Button profile = new Button("◎ Profile");
 
                 profile.setAlignment(
                                 Pos.CENTER);
@@ -316,7 +305,11 @@ public class AdminPage {
                                                 "-fx-background-radius:50%;" +
                                                 "-fx-text-fill:#EEEEEE;" +
                                                 "-fx-font-weight:bold;");
-
+                
+                profile.setOnAction(e->{
+                        System.out.println("Profile Button Clicked");
+                        
+                });
                 // =====================================================
                 // TOP BAR COMPONENTS
                 // =====================================================
@@ -325,7 +318,6 @@ public class AdminPage {
                                 headerLogo,
                                 topSpace,
                                 search,
-                                notification,
                                 profile);
 
                 bp.setTop(topBar);

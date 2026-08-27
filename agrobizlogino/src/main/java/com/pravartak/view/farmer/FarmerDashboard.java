@@ -158,12 +158,59 @@ public class FarmerDashboard {
         sidebar.getChildren().add(spacer);
 
         // LOGOUT
-        Button logout = createMenuButton("↪", "Logout");
-        logout.setOnAction(event -> {
-            if (logoutAction != null) {
-                logoutAction.run();
-            }
-        });
+        Button logout = new Button(
+                                "⇥   Logout");
+
+                logout.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                logout.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                logout.setPadding(
+                                new Insets(
+                                                12,
+                                                15,
+                                                12,
+                                                15));
+
+                logout.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-text-fill:#E57373;" +
+                                                "-fx-font-size:14px;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-background-radius:6;" +
+                                                "-fx-cursor:hand;");
+         logout.setOnAction(e -> {
+                        try {
+                                LoginPage loginPage = new LoginPage();
+                                loginPage.start(LoginPage.mainStage);
+                        } catch (Exception ex) {
+                                ex.printStackTrace();
+                        }
+                });
+                 logout.setOnMouseEntered(event -> {
+
+                        logout.setStyle(
+                                        "-fx-background-color:#633333;" +
+                                                        "-fx-text-fill:#E57373;" +
+                                                        "-fx-font-size:14px;" +
+                                                        "-fx-font-weight:bold;" +
+                                                        "-fx-background-radius:6;" +
+                                                        "-fx-cursor:hand;");
+                });
+
+                logout.setOnMouseExited(event -> {
+
+                        logout.setStyle(
+                                        "-fx-background-color:transparent;" +
+                                                        "-fx-text-fill:#E57373;" +
+                                                        "-fx-font-size:14px;" +
+                                                        "-fx-font-weight:bold;" +
+                                                        "-fx-background-radius:6;" +
+                                                        "-fx-cursor:hand;");
+                });
+
 
         sidebar.getChildren().add(logout);
 
@@ -1839,172 +1886,7 @@ page.getChildren().addAll(topBar, scroll);
         return page;
     }
 
-    // =========================================================
-    // INVESTMENT PAGE
-    // =========================================================
-
-   // =========================================================
-// INVESTMENT PAGE
 // =========================================================
-
-    // private VBox createInvestmentPage() {
-    //     VBox page = new VBox();
-    //     page.setBackground(new Background(new BackgroundFill(CREAM, CornerRadii.EMPTY, Insets.EMPTY)));
-
-    //     HBox topBar = createTopBar("Investment Calculator", "Plan your course investment month by month.");
-
-    //     VBox content = new VBox(25);
-    //     content.setPadding(new Insets(30, 35, 35, 35));
-    //     content.setBackground(new Background(new BackgroundFill(CREAM, CornerRadii.EMPTY, Insets.EMPTY)));
-
-    //     VBox inputCard = createWhiteCard();
-    //     inputCard.setMaxWidth(650);
-    //     inputCard.setPadding(new Insets(30));
-    //     inputCard.setSpacing(14);
-
-    //     Label title = new Label("Course Investment");
-    //     title.setTextFill(DARK_TEXT);
-    //     title.setFont(Font.font("Arial", FontWeight.BOLD, 22));
-
-    //     Label courseLabel = new Label("Course Duration (Months)");
-    //     courseLabel.setTextFill(GREY);
-    //     courseLabel.setFont(Font.font("Arial", FontWeight.BOLD, 13));
-
-    //     TextField courseDuration = new TextField();
-    //     courseDuration.setPromptText("Example: 6");
-    //     courseDuration.setPrefHeight(45);
-    //     courseDuration.setFont(Font.font("Arial", 14));
-    //     courseDuration.setStyle("-fx-background-color: #ffffff;" +
-    //             "-fx-background-radius: 8;" +
-    //             "-fx-border-color: #263a2b;" +
-    //             "-fx-border-radius: 8;" +
-    //             "-fx-padding: 0 12;" +
-    //             "-fx-text-fill: #172018;");
-
-    //     Label investmentLabel = new Label("Total Investment");
-    //     investmentLabel.setTextFill(GREY);
-    //     investmentLabel.setFont(Font.font("Arial", FontWeight.BOLD, 13));
-
-    //     TextField totalInvestment = new TextField();
-    //     totalInvestment.setPromptText("Example: 60000");
-    //     totalInvestment.setPrefHeight(45);
-    //     totalInvestment.setFont(Font.font("Arial", 14));
-    //     totalInvestment.setStyle("-fx-background-color: #ffffff;" +
-    //             "-fx-background-radius: 8;" +
-    //             "-fx-border-color: #263a2b;" +
-    //             "-fx-border-radius: 8;" +
-    //             "-fx-padding: 0 12;" +
-    //             "-fx-text-fill: #172018;");
-
-    //     Button calculate = createWishlistActionButton("Calculate Monthly Investment");
-    //     calculate.setTextFill(Color.BLACK);
-    //     calculate.setPrefHeight(48);
-
-    //     Label errorMessage = new Label();
-    //     errorMessage.setTextFill(Color.web("#e57373"));
-    //     errorMessage.setFont(Font.font("Arial", 12));
-
-    //     inputCard.getChildren().addAll(
-    //             title,
-    //             createSpace(8),
-    //             courseLabel,
-    //             courseDuration,
-    //             investmentLabel,
-    //             totalInvestment,
-    //             createSpace(5),
-    //             calculate,
-    //             errorMessage
-    //     );
-
-    //     VBox resultCard = createWhiteCard();
-    //     resultCard.setMaxWidth(650);
-    //     resultCard.setPadding(new Insets(30));
-    //     resultCard.setSpacing(12);
-
-    //     Label resultTitle = new Label("Month-wise Investment");
-    //     resultTitle.setTextFill(DARK_TEXT);
-    //     resultTitle.setFont(Font.font("Arial", FontWeight.BOLD, 22));
-
-    //     VBox monthlyList = new VBox(8);
-
-    //     Label instruction = new Label("Enter course duration and total investment to see your monthly plan.");
-    //     instruction.setTextFill(GREY);
-    //     instruction.setFont(Font.font("Arial", 13));
-    //     instruction.setWrapText(true);
-
-    //     monthlyList.getChildren().add(instruction);
-    //     resultCard.getChildren().addAll(resultTitle, monthlyList);
-
-    //     calculate.setOnAction(event -> {
-    //         try {
-    //             int months = Integer.parseInt(courseDuration.getText().trim());
-    //             double investment = Double.parseDouble(totalInvestment.getText().trim());
-
-    //             if (months <= 0) {
-    //                 errorMessage.setText("Course duration must be greater than 0.");
-    //                 return;
-    //             }
-
-    //             if (investment <= 0) {
-    //                 errorMessage.setText("Total investment must be greater than 0.");
-    //                 return;
-    //             }
-
-    //             errorMessage.setText("");
-    //             monthlyList.getChildren().clear();
-
-    //             double monthlyInvestment = investment / months;
-
-    //             for (int i = 1; i <= months; i++) {
-    //                 HBox monthRow = new HBox();
-    //                 monthRow.setAlignment(Pos.CENTER_LEFT);
-    //                 monthRow.setPadding(new Insets(12, 15, 12, 15));
-    //                 monthRow.setBackground(new Background(
-    //                         new BackgroundFill(
-    //                                 Color.web("#101914"),
-    //                                 new CornerRadii(8),
-    //                                 Insets.EMPTY
-    //                         )
-    //                 ));
-
-    //                 Label monthLabel = new Label("Month " + i);
-    //                 monthLabel.setTextFill(DARK_TEXT);
-    //                 monthLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-
-    //                 Region spacer = new Region();
-    //                 HBox.setHgrow(spacer, Priority.ALWAYS);
-
-    //                 Label amountLabel = new Label(
-    //                         "₹" + String.format("%,.2f", monthlyInvestment)
-    //                 );
-    //                 amountLabel.setTextFill(GREEN);
-    //                 amountLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-
-    //                 monthRow.getChildren().addAll(monthLabel, spacer, amountLabel);
-    //                 monthlyList.getChildren().add(monthRow);
-    //             }
-
-    //         } catch (NumberFormatException exception) {
-    //             errorMessage.setText("Please enter valid numbers.");
-    //         }
-    //     });
-
-    //     VBox wrapper = new VBox(20, inputCard, resultCard);
-    //     wrapper.setAlignment(Pos.TOP_CENTER);
-
-    //     ScrollPane scroll = new ScrollPane(wrapper);
-    //     scroll.setFitToWidth(true);
-    //     scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-    //     scroll.setStyle("-fx-background-color: #080c0d;" +
-    //             "-fx-background: #080c0d;" +
-    //             "-fx-control-inner-background: #080c0d;");
-
-    //     VBox.setVgrow(scroll, Priority.ALWAYS);
-    //     page.getChildren().addAll(topBar, scroll);
-
-    //     return page;
-    // }
-    // =========================================================
 // INVESTMENT PAGE
 // =========================================================
 
