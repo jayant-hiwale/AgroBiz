@@ -7,7 +7,7 @@ public class Lesson {
 
     private String title;
     private String description;
-    private String type;
+    // private String type;
     private String mediaUrl;
 
     private int lessonOrder;
@@ -21,7 +21,7 @@ public class Lesson {
             int moduleId,
             String title,
             String description,
-            String type,
+            // String type,
             String mediaUrl,
             int lessonOrder) {
 
@@ -29,7 +29,7 @@ public class Lesson {
         this.moduleId = moduleId;
         this.title = title;
         this.description = description;
-        this.type = type;
+        // this.type = type;
         this.mediaUrl = mediaUrl;
         this.lessonOrder = lessonOrder;
     }
@@ -66,13 +66,13 @@ public class Lesson {
         this.description = description;
     }
 
-    public String getType() {
-        return type;
-    }
+    // public String getType() {
+    //     return type;
+    // }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+    // public void setType(String type) {
+    //     this.type = type;
+    // }
 
     public String getMediaUrl() {
         return mediaUrl;

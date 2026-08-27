@@ -27,7 +27,7 @@ public class LessonController {
             int moduleId,
             String title,
             String description,
-            String type,
+            // String type,
             String mediaUrl) {
 
         try {
@@ -51,9 +51,7 @@ public class LessonController {
                     description == null
                             ? ""
                             : description.trim(),
-                    type == null
-                            ? "READING"
-                            : type,
+                    // type == null? "READING" : type,
                     mediaUrl == null
                             ? ""
                             : mediaUrl.trim(),
@@ -165,7 +163,7 @@ public class LessonController {
 
         lesson.setTitle(title);
         lesson.setDescription(description);
-        lesson.setType(type);
+        // lesson.setType(type);
         lesson.setMediaUrl(mediaUrl);
 
         return true;

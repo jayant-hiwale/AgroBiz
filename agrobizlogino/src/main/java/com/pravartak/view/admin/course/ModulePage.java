@@ -733,25 +733,23 @@ public class ModulePage {
                 number.setMinWidth(30);
 
                 // =====================================================
-                // ICON
-                // =====================================================
+                // // ICON
+                // // =====================================================
 
-                Label icon = new Label(
-                                getLessonIcon(
-                                                lesson.getType()));
+                // // Label icon = new Label(getLessonIcon( lesson.getType()));
 
-                icon.setPrefSize(
-                                25,
-                                25);
+                // icon.setPrefSize(
+                // 25,
+                // 25);
 
-                icon.setAlignment(
-                                Pos.CENTER);
+                // icon.setAlignment(
+                // Pos.CENTER);
 
-                icon.setStyle(
-                                "-fx-background-color:#14251A;" +
-                                                "-fx-text-fill:#68D34A;" +
-                                                "-fx-background-radius:5;" +
-                                                "-fx-font-size:11px;");
+                // icon.setStyle(
+                // "-fx-background-color:#14251A;" +
+                // "-fx-text-fill:#68D34A;" +
+                // "-fx-background-radius:5;" +
+                // "-fx-font-size:11px;");
 
                 // =====================================================
                 // TITLE
@@ -773,18 +771,15 @@ public class ModulePage {
                                 Priority.ALWAYS);
 
                 // =====================================================
-                // TYPE
-                // =====================================================
+                // // TYPE
+                // // =====================================================
 
-                Label type = new Label(
-                                safe(
-                                                lesson.getType())
-                                                .toUpperCase());
+                // Label type = new Label(safe(lesson.getType()).toUpperCase());
 
-                type.setStyle(
-                                "-fx-text-fill:#777777;" +
-                                                "-fx-font-size:8px;" +
-                                                "-fx-font-weight:bold;");
+                // type.setStyle(
+                //                 "-fx-text-fill:#777777;" +
+                //                                 "-fx-font-size:8px;" +
+                //                                 "-fx-font-weight:bold;");
 
                 // =====================================================
                 // DELETE BUTTON
@@ -842,9 +837,9 @@ public class ModulePage {
 
                 box.getChildren().addAll(
                                 number,
-                                icon,
+                                // icon,
                                 title,
-                                type,
+                                // type,
                                 delete);
 
                 // =====================================================

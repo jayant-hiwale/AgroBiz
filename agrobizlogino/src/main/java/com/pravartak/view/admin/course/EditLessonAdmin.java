@@ -378,24 +378,23 @@ public class EditLessonAdmin {
                 "QUIZ",
                 "ACTIVITY");
 
-        String existingType =
-                lesson.getType();
+        // String existingType =lesson.getType();
 
-        if (existingType != null &&
-                typeBox.getItems()
-                        .contains(existingType)) {
+        // if (existingType != null &&
+        //         typeBox.getItems()
+        //                 .contains(existingType)) {
 
-            typeBox.setValue(
-                    existingType);
+        //     typeBox.setValue(
+        //             existingType);
 
-        } else {
+        // } else {
 
-            typeBox.setValue(
-                    "READING");
-        }
+        //     typeBox.setValue(
+        //             "READING");
+        // }
 
-        styleComboBox(
-                typeBox);
+        // styleComboBox(
+        //         typeBox);
 
         // =====================================================
         // MEDIA
