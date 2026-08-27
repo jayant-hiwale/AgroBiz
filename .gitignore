@@ -1,0 +1,6 @@
+*.json
+.vscode/
+
+# Maven build output
+**/target/
+

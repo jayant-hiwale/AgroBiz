@@ -1,6 +1,9 @@
 
 package com.pravartak.view.login;
 
+import com.pravartak.controller.authentication_contr.AuthController;
+import com.pravartak.dao.UserDAO;
+import com.pravartak.model.UserModel;
 import java.net.URL;
 import java.util.Random;
 
@@ -37,6 +40,12 @@ import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 
 public class Create_Profile {
+
+        private String selectedRole = "";
+
+        private final AuthController authController =new AuthController();
+
+        private final UserDAO userDAO = new UserDAO();
 
     public Scene getCreateProfilePageScene(Runnable callbacktologin) {
 
@@ -133,13 +142,10 @@ public class Create_Profile {
         accountBox.setSpacing(12);
 //account set style
         accountBox.setStyle(
-                "-fx-background-color: rgba(10,20,15,0.94);"
-                        //+ "-fx-background-radius: 18;"
-                        //+ "-fx-border-color: #263a2b;"
-                        //+ "-fx-border-width: 1;"
-                        //+ "-fx-border-radius: 18;"
-                        + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.55), 25, 0, 0, 8);"
-                        +"-fx-background-color: transparent;");
+        "-fx-background-color: rgba(10,20,15,0.94);"
+        + "-fx-background-radius: 18;"
+        + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.55), 25, 0, 0, 8);"
+);
 
         // =====================================================
         // TITLE
@@ -177,12 +183,12 @@ public class Create_Profile {
         // EMAIL
         // =====================================================
 
-        Label emailLabel = new Label("Email or Phone Number");
+        Label emailLabel = new Label("Email");
         emailLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         emailLabel.setTextFill(Color.WHITE);
 
         TextField email = new TextField();
-        email.setPromptText("Enter email or phone");
+        email.setPromptText("Enter your email");
         email.setPrefHeight(51);
         email.setStyle(
                 "-fx-background-color: #f7f9f7;"
@@ -213,11 +219,168 @@ public class Create_Profile {
                         + "-fx-font-size: 16;"
                         + "-fx-padding: 0 15 0 15;");
 
+
+        // =====================================================
+        // ROLE SELECTION
+        // =====================================================
+
+        Label roleLabel = new Label("Choose your role");
+        roleLabel.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        15));
+
+        roleLabel.setTextFill(Color.WHITE);
+
+
+        // =====================================================
+        // FARMER CARD
+        // =====================================================
+
+        Label farmerIcon = new Label("🚜");
+
+        farmerIcon.setStyle(
+                "-fx-font-size: 28px;");
+
+        Label farmerText =
+                new Label("Farmer / Learner");
+
+        farmerText.setTextFill(Color.WHITE);
+
+        farmerText.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        13));
+
+        VBox farmerCard =
+                new VBox(
+                        8,
+                        farmerIcon,
+                        farmerText);
+
+        farmerCard.setAlignment(Pos.CENTER);
+
+        farmerCard.setPrefWidth(210);
+        farmerCard.setPrefHeight(90);
+
+        farmerCard.setStyle(
+                "-fx-background-color: #101718;"
+                + "-fx-background-radius: 10;"
+                + "-fx-border-color: #344b39;"
+                + "-fx-border-width: 1.5;"
+                + "-fx-border-radius: 10;"
+                + "-fx-cursor: hand;");
+
+
+        // =====================================================
+        // BUYER CARD
+        // =====================================================
+
+        Label buyerIcon =
+                new Label("🛒");
+
+        buyerIcon.setStyle(
+                "-fx-font-size: 28px;");
+
+        Label buyerText =
+                new Label("Buyer");
+
+        buyerText.setTextFill(Color.WHITE);
+
+        buyerText.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        13));
+
+        VBox buyerCard =
+                new VBox(
+                        8,
+                        buyerIcon,
+                        buyerText);
+
+        buyerCard.setAlignment(Pos.CENTER);
+
+        buyerCard.setPrefWidth(210);
+        buyerCard.setPrefHeight(90);
+
+        buyerCard.setStyle(
+                "-fx-background-color: #101718;"
+                + "-fx-background-radius: 10;"
+                + "-fx-border-color: #344b39;"
+                + "-fx-border-width: 1.5;"
+                + "-fx-border-radius: 10;"
+                + "-fx-cursor: hand;");
+
+
+        // =====================================================
+        // FARMER CLICK
+        // =====================================================
+
+        farmerCard.setOnMouseClicked(e -> {
+
+        selectedRole = "FARMER";
+
+        farmerCard.setStyle(
+                "-fx-background-color: #1f5c2b;"
+                + "-fx-background-radius: 10;"
+                + "-fx-border-color: #68d34a;"
+                + "-fx-border-width: 2;"
+                + "-fx-border-radius: 10;"
+                + "-fx-cursor: hand;");
+
+        buyerCard.setStyle(
+                "-fx-background-color: #101718;"
+                + "-fx-background-radius: 10;"
+                + "-fx-border-color: #344b39;"
+                + "-fx-border-width: 1.5;"
+                + "-fx-border-radius: 10;"
+                + "-fx-cursor: hand;");
+        });
+
+
+        // =====================================================
+        // BUYER CLICK
+        // =====================================================
+
+        buyerCard.setOnMouseClicked(e -> {
+
+        selectedRole = "BUYER";
+
+        buyerCard.setStyle(
+                "-fx-background-color: #1f5c2b;"
+                + "-fx-background-radius: 10;"
+                + "-fx-border-color: #68d34a;"
+                + "-fx-border-width: 2;"
+                + "-fx-border-radius: 10;"
+                + "-fx-cursor: hand;");
+
+        farmerCard.setStyle(
+                "-fx-background-color: #101718;"
+                + "-fx-background-radius: 10;"
+                + "-fx-border-color: #344b39;"
+                + "-fx-border-width: 1.5;"
+                + "-fx-border-radius: 10;"
+                + "-fx-cursor: hand;");
+        });
+
+
+        HBox roleCards =
+                new HBox(
+                        15,
+                        farmerCard,
+                        buyerCard);
+
+        roleCards.setAlignment(Pos.CENTER);
+
         // =====================================================
         // CREATE ACCOUNT BUTTON
         // =====================================================
 
         Button createAccount = new Button("Create Account     →");
+
         createAccount.setPrefHeight(52);
         createAccount.setMaxWidth(Double.MAX_VALUE);
         createAccount.setFont(Font.font("Arial", FontWeight.BOLD, 17));
@@ -240,6 +403,109 @@ public class Create_Profile {
                     "-fx-background-color: #68d34a;"
                             + "-fx-background-radius: 28;"
                             + "-fx-cursor: hand;");
+        });
+
+        createAccount.setOnAction(e -> {
+
+        String name =
+                fullName.getText().trim();
+
+        String userEmail =
+                email.getText().trim();
+
+        String userPassword =
+                password.getText();
+
+        // ==========================================
+        // VALIDATION
+        // ==========================================
+
+        if (name.isEmpty()
+                || userEmail.isEmpty()
+                || userPassword.isEmpty()) {
+
+                System.out.println(
+                        "Please fill all fields.");
+
+                return;
+        }
+
+        if (selectedRole.isEmpty()) {
+
+                System.out.println(
+                        "Please select Farmer or Buyer.");
+
+                return;
+        }
+
+        if (userPassword.length() < 6) {
+
+                System.out.println(
+                        "Password must contain at least 6 characters.");
+
+                return;
+        }
+
+        // ==========================================
+        // FIREBASE AUTHENTICATION
+        // ==========================================
+
+        String uid =
+                authController.signUp(
+                        userEmail,
+                        userPassword);
+
+        if (uid == null) {
+
+                System.out.println(
+                        "Account creation failed.");
+
+                return;
+        }
+
+        System.out.println(
+                "Firebase account created.");
+
+        System.out.println(
+                "UID = " + uid);
+
+        // ==========================================
+        // CREATE USER MODEL
+        // ==========================================
+
+        UserModel user =
+                new UserModel(
+                        uid,
+                        name,
+                        userEmail,
+                        selectedRole);
+
+        // ==========================================
+        // SAVE USER TO FIRESTORE
+        // ==========================================
+
+        boolean saved =
+                userDAO.saveUser(user);
+
+        if (!saved) {
+
+                System.out.println(
+                        "Account created but profile could not be saved.");
+
+                return;
+        }
+
+        System.out.println(
+                "User profile saved.");
+
+        System.out.println(
+                "Role = " + selectedRole);
+
+        // ==========================================
+        // GO TO LOGIN
+        // ==========================================
+
+        callbacktologin.run();
         });
 
         // =====================================================
@@ -340,6 +606,9 @@ public class Create_Profile {
         Region space8c = new Region();
         space8c.setPrefHeight(8);
 
+        Region space8e = new Region();
+        space8e.setPrefHeight(8);
+
         Region space8d = new Region();
         space8d.setPrefHeight(8);
 
@@ -351,22 +620,38 @@ public class Create_Profile {
         title,
         subtitle,
         space18a,
+
         fullNameLabel,
         fullName,
+
         space8a,
+
         emailLabel,
         email,
+
         space8b,
+
         passwordLabel,
         password,
+
         space8c,
+
+        roleLabel,
+        roleCards,
+
+        space8e,
+
         createAccount,
+
         space18b,
+
         orHBox,
         googleButton,
+
         space8d,
+
         loginHBox
-);
+        );
 
         rightVBox.getChildren().add(accountBox);
         StackPane.setAlignment(accountBox, Pos.CENTER);

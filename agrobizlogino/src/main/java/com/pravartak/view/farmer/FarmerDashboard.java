@@ -398,6 +398,7 @@ public class FarmerDashboard {
 
         Label iconLabel = new Label(icon);
         iconLabel.setTextFill(Color.YELLOW);
+        iconLabel.setTextFill(Color.YELLOW);
         iconLabel.setPrefSize(48, 48);
         iconLabel.setAlignment(Pos.CENTER);
         iconLabel.setBackground(new Background(new BackgroundFill(DARK_GREEN, new CornerRadii(10), Insets.EMPTY)));
