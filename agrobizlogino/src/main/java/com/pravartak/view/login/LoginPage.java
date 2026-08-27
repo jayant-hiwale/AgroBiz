@@ -1,4 +1,3 @@
-
 package com.pravartak.view.login;
 
 import com.pravartak.controller.authentication_contr.AuthController;
@@ -7,15 +6,15 @@ import com.pravartak.model.UserModel;
 import com.pravartak.view.buyer.BuyerAIAdvisorPage;
 import com.pravartak.view.buyer.BuyerHomepage;
 // import com.pravartak.view.farmer.AIAdvisorPage;
-// import com.pravartak.view.farmer.CommunityPage;
+import com.pravartak.view.farmer.CommunityPage;
 
 import java.net.URL;
 import java.util.Random;
 
 import com.pravartak.view.farmer.HomePageFarmer;
-// import com.pravartak.controller.buyercontroller.Contactcontroller;
+import com.pravartak.controller.buyercontroller.Contactcontroller;
 import com.pravartak.view.admin.AdminPage;
-// import com.pravartak.view.farmer.MarketPlace;
+import com.pravartak.view.farmer.MarketPlace;
 
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -46,7 +45,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
-// import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
@@ -186,126 +185,7 @@ public class LoginPage extends Application {
         welcomeDescription.setTextFill(Color.web("#aab8ae"));
         welcomeDescription.setFont(Font.font("Arial", 16));
 
-        // =====================================================
-        // // FARMER CARD
-        // // =====================================================
-
-        // Circle farmerCircle = new Circle(25);
-        // farmerCircle.setFill(Color.web("#245d35"));
-
-        // Label farmerIcon = new Label("🚜");
-        // farmerIcon.setStyle("-fx-font-size: 25px; -fx-text-fill: #eaf2e7;");
-
-        // StackPane farmerIconBox = new StackPane(farmerCircle, farmerIcon);
-
-        // Label farmerTitle = new Label("Farmer/Learner");
-        // farmerTitle.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #F1F3F1;");
-
-        // VBox farmerCard = new VBox(4, farmerIconBox, farmerTitle);
-        // farmerCard.setPrefWidth(190);
-        // farmerCard.setPrefHeight(82);
-        // farmerCard.setMinWidth(190);
-        // farmerCard.setMaxWidth(190);
-        // farmerCard.setMinHeight(82);
-        // farmerCard.setMaxHeight(82);
-        // farmerCard.setAlignment(Pos.CENTER);
-        // farmerCard.setStyle(
-        //         "-fx-background-color: #101718;"
-        //         + "-fx-background-radius: 10;"
-        //         + "-fx-border-color: #293334;"
-        //         + "-fx-border-width: 1;"
-        //         + "-fx-border-radius: 10;"
-        //         + "-fx-cursor: hand;"
-        //         + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0, 0, 5);");
-
-        // // =====================================================
-        // // BUYER CARD
-        // // =====================================================
-
-        // Circle buyerCircle = new Circle(25);
-        // buyerCircle.setFill(Color.web("#18351D"));
-
-        // Label buyerIcon = new Label("🛒");
-        // buyerIcon.setStyle("-fx-font-size: 25px; -fx-text-fill: #7ED957;");
-
-        // StackPane buyerIconBox = new StackPane(buyerCircle, buyerIcon);
-
-        // Label buyerTitle = new Label("Buyer");
-        // buyerTitle.setStyle("-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #F1F3F1;");
-
-        // VBox buyerCard = new VBox(4, buyerIconBox, buyerTitle);
-        // buyerCard.setPrefWidth(190);
-        // buyerCard.setPrefHeight(82);
-        // buyerCard.setMinWidth(190);
-        // buyerCard.setMaxWidth(190);
-        // buyerCard.setMinHeight(82);
-        // buyerCard.setMaxHeight(82);
-        // buyerCard.setAlignment(Pos.CENTER);
-        // buyerCard.setStyle(
-        //         "-fx-background-color: #101718;"
-        //         + "-fx-background-radius: 10;"
-        //         + "-fx-border-color: #293334;"
-        //         + "-fx-border-width: 1;"
-        //         + "-fx-border-radius: 10;"
-        //         + "-fx-cursor: hand;"
-        //         + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0, 0, 5);");
-
-        // // =====================================================
-        // // ROLE SELECTION
-        // // =====================================================
-
-        // farmerCard.setOnMouseClicked(event -> {
-        //     selectedRole = "FARMER";
-
-        //     farmerCard.setStyle(
-        //             "-fx-background-color: #1f5c2b;"
-        //             + "-fx-background-radius: 10;"
-        //             + "-fx-border-color: #68d34a;"
-        //             + "-fx-border-width: 2;"
-        //             + "-fx-border-radius: 10;"
-        //             + "-fx-cursor: hand;"
-        //             + "-fx-effect: dropshadow(gaussian, rgba(104,211,74,0.35), 15, 0, 0, 0);");
-
-        //     buyerCard.setStyle(
-        //             "-fx-background-color: #101718;"
-        //             + "-fx-background-radius: 10;"
-        //             + "-fx-border-color: #293334;"
-        //             + "-fx-border-width: 1;"
-        //             + "-fx-border-radius: 10;"
-        //             + "-fx-cursor: hand;"
-        //             + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0, 0, 5);");
-
-        //     System.out.println("Farmer selected");
-        // });
-
-        // buyerCard.setOnMouseClicked(event -> {
-        //     selectedRole = "BUYER";
-
-        //     buyerCard.setStyle(
-        //             "-fx-background-color: #1f5c2b;"
-        //             + "-fx-background-radius: 10;"
-        //             + "-fx-border-color: #68d34a;"
-        //             + "-fx-border-width: 2;"
-        //             + "-fx-border-radius: 10;"
-        //             + "-fx-cursor: hand;"
-        //             + "-fx-effect: dropshadow(gaussian, rgba(104,211,74,0.35), 15, 0, 0, 0);");
-
-        //     farmerCard.setStyle(
-        //             "-fx-background-color: #101718;"
-        //             + "-fx-background-radius: 10;"
-        //             + "-fx-border-color: #293334;"
-        //             + "-fx-border-width: 1;"
-        //             + "-fx-border-radius: 10;"
-        //             + "-fx-cursor: hand;"
-        //             + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 12, 0, 0, 5);");
-
-        //     System.out.println("Buyer selected");
-        // });
-
-        // HBox roles = new HBox(18, farmerCard, buyerCard);
-        // roles.setAlignment(Pos.CENTER);
-        // roles.setPrefWidth(Double.MAX_VALUE);
-        // roles.setPrefHeight(90);
+        
 
         // =====================================================
         // CONTACT
@@ -679,10 +559,10 @@ public class LoginPage extends Application {
 
         mainStage.setScene(loginPageScene);
         mainStage.setTitle("Agro Biz - Login");
-        mainStage.setWidth(1380);
-        mainStage.setHeight(730);
-        // mainStage.setMinWidth(1553);
-        // mainStage.setMinHeight(839);
+        mainStage.setWidth(1368);
+        mainStage.setHeight(768);
+        mainStage.setMinWidth(1553);
+        mainStage.setMinHeight(839);
 
         SplashScreen splash = new SplashScreen();
 

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.pravartak.dao.admin.SchemeDAO;
-import com.pravartak.model.adminmodel.Scheme;
+import com.pravartak.model.admin.Scheme;
 
 public class SchemeController {
 

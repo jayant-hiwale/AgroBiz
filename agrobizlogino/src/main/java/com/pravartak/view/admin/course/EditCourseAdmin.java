@@ -1,7 +1,10 @@
 package com.pravartak.view.admin.course;
 
 import java.io.File;
+import java.util.Map;
 
+import com.cloudinary.utils.ObjectUtils;
+import com.pravartak.config.CloudinaryConfig;
 import com.pravartak.controller.admincontroller.CourseController;
 import com.pravartak.model.admin.Course;
 import com.pravartak.view.admin.AdminPage;
@@ -61,7 +64,24 @@ public class EditCourseAdmin {
         // THUMBNAIL
         // =========================================================
 
+        /*
+         * Stores the currently selected image.
+         *
+         * If the user selects a new image:
+         * local file path is stored temporarily here.
+         *
+         * If the course already has an image:
+         * Cloudinary URL is stored here.
+         */
         private String thumbnailPath = "";
+
+        /*
+         * True only when the user selected a NEW image.
+         *
+         * This is important because we don't want to upload the
+         * existing Cloudinary URL again.
+         */
+        private boolean newThumbnailSelected = false;
 
         // =========================================================
         // CONSTRUCTOR
@@ -86,7 +106,11 @@ public class EditCourseAdmin {
                 VBox root = new VBox(16);
 
                 root.setPadding(
-                                new Insets(15, 30, 18, 30));
+                                new Insets(
+                                                15,
+                                                30,
+                                                18,
+                                                30));
 
                 root.setStyle(
                                 "-fx-background-color:#080C0D;");
@@ -139,14 +163,18 @@ public class EditCourseAdmin {
                 VBox pageContent = new VBox(16);
 
                 pageContent.setPadding(
-                                new Insets(0, 5, 20, 0));
+                                new Insets(
+                                                0,
+                                                5,
+                                                20,
+                                                0));
 
                 pageContent.getChildren().addAll(
                                 content,
                                 actionButtons);
 
                 // =====================================================
-                // SCROLL PANE
+                // SCROLL
                 // =====================================================
 
                 ScrollPane scrollPane = new ScrollPane(pageContent);
@@ -258,7 +286,8 @@ public class EditCourseAdmin {
 
                 VBox card = createCard();
 
-                Label heading = createHeading("Course Information");
+                Label heading = createHeading(
+                                "Course Information");
 
                 Separator separator = new Separator();
 
@@ -266,7 +295,8 @@ public class EditCourseAdmin {
                 // TITLE
                 // =====================================================
 
-                Label titleLabel = createFieldLabel("Course Title");
+                Label titleLabel = createFieldLabel(
+                                "Course Title");
 
                 titleField = new TextField();
 
@@ -285,7 +315,8 @@ public class EditCourseAdmin {
                 // CATEGORY
                 // =====================================================
 
-                Label categoryLabel = createFieldLabel("Category");
+                Label categoryLabel = createFieldLabel(
+                                "Category");
 
                 categoryBox = new ComboBox<>();
 
@@ -297,7 +328,9 @@ public class EditCourseAdmin {
 
                 if (course != null &&
                                 course.getCategory() != null &&
-                                !course.getCategory().trim().isEmpty()) {
+                                !course.getCategory()
+                                                .trim()
+                                                .isEmpty()) {
 
                         categoryBox.setValue(
                                         course.getCategory());
@@ -368,7 +401,8 @@ public class EditCourseAdmin {
                 // =====================================================
 
                 uploadArea.setOnMouseClicked(
-                                e -> selectThumbnail(uploadArea));
+                                e -> selectThumbnail(
+                                                uploadArea));
 
                 // =====================================================
                 // HINT
@@ -423,7 +457,19 @@ public class EditCourseAdmin {
 
                 if (file != null) {
 
+                        /*
+                         * Store LOCAL path temporarily.
+                         *
+                         * It will be uploaded to Cloudinary
+                         * when Save Changes is pressed.
+                         */
                         thumbnailPath = file.getAbsolutePath();
+
+                        newThumbnailSelected = true;
+
+                        // -------------------------------------------------
+                        // Show preview
+                        // -------------------------------------------------
 
                         loadThumbnail(
                                         uploadArea);
@@ -440,6 +486,10 @@ public class EditCourseAdmin {
                 uploadArea.getChildren()
                                 .clear();
 
+                // =====================================================
+                // NO IMAGE
+                // =====================================================
+
                 if (thumbnailPath == null ||
                                 thumbnailPath.trim().isEmpty()) {
 
@@ -454,11 +504,13 @@ public class EditCourseAdmin {
                         Image image;
 
                         // =================================================
-                        // CLOUDINARY / HTTP
+                        // CLOUDINARY / HTTP IMAGE
                         // =================================================
 
-                        if (thumbnailPath.startsWith("http://") ||
-                                        thumbnailPath.startsWith("https://")) {
+                        if (thumbnailPath.startsWith(
+                                        "http://") ||
+                                        thumbnailPath.startsWith(
+                                                        "https://")) {
 
                                 image = new Image(
                                                 thumbnailPath,
@@ -467,7 +519,6 @@ public class EditCourseAdmin {
                                                 false,
                                                 true,
                                                 true);
-
                         }
 
                         // =================================================
@@ -476,7 +527,8 @@ public class EditCourseAdmin {
 
                         else {
 
-                                File file = new File(thumbnailPath);
+                                File file = new File(
+                                                thumbnailPath);
 
                                 if (!file.exists()) {
 
@@ -502,18 +554,24 @@ public class EditCourseAdmin {
 
                         if (!image.isError()) {
 
-                                ImageView imageView = new ImageView(image);
+                                ImageView imageView = new ImageView(
+                                                image);
 
-                                imageView.setFitWidth(260);
+                                imageView.setFitWidth(
+                                                260);
 
-                                imageView.setFitHeight(200);
+                                imageView.setFitHeight(
+                                                200);
 
-                                imageView.setPreserveRatio(true);
+                                imageView.setPreserveRatio(
+                                                true);
 
-                                imageView.setSmooth(true);
+                                imageView.setSmooth(
+                                                true);
 
                                 uploadArea.getChildren()
-                                                .add(imageView);
+                                                .add(
+                                                                imageView);
 
                                 return;
                         }
@@ -575,12 +633,14 @@ public class EditCourseAdmin {
 
                 difficultyGroup = new ToggleGroup();
 
-                RadioButton beginner = new RadioButton("Beginner");
+                RadioButton beginner = new RadioButton(
+                                "Beginner");
 
                 RadioButton intermediate = new RadioButton(
                                 "Intermediate");
 
-                RadioButton advanced = new RadioButton("Advanced");
+                RadioButton advanced = new RadioButton(
+                                "Advanced");
 
                 beginner.setToggleGroup(
                                 difficultyGroup);
@@ -598,16 +658,19 @@ public class EditCourseAdmin {
                 if (difficulty.equalsIgnoreCase(
                                 "Beginner")) {
 
-                        beginner.setSelected(true);
+                        beginner.setSelected(
+                                        true);
 
                 } else if (difficulty.equalsIgnoreCase(
                                 "Advanced")) {
 
-                        advanced.setSelected(true);
+                        advanced.setSelected(
+                                        true);
 
                 } else {
 
-                        intermediate.setSelected(true);
+                        intermediate.setSelected(
+                                        true);
                 }
 
                 String radioStyle = "-fx-text-fill:#AAAAAA;" +
@@ -758,9 +821,9 @@ public class EditCourseAdmin {
 
                 try {
 
-                        // =====================================================
+                        // =================================================
                         // COURSE CHECK
-                        // =====================================================
+                        // =================================================
 
                         if (course == null) {
 
@@ -772,11 +835,12 @@ public class EditCourseAdmin {
                                 return;
                         }
 
-                        // =====================================================
+                        // =================================================
                         // TITLE
-                        // =====================================================
+                        // =================================================
 
-                        String title = titleField.getText()
+                        String title = titleField
+                                        .getText()
                                         .trim();
 
                         if (title.isEmpty()) {
@@ -791,9 +855,9 @@ public class EditCourseAdmin {
                                 return;
                         }
 
-                        // =====================================================
+                        // =================================================
                         // CATEGORY
-                        // =====================================================
+                        // =================================================
 
                         String category = categoryBox.getValue();
 
@@ -808,9 +872,9 @@ public class EditCourseAdmin {
                                 return;
                         }
 
-                        // =====================================================
+                        // =================================================
                         // LANGUAGE
-                        // =====================================================
+                        // =================================================
 
                         String language = languageBox.getValue();
 
@@ -820,9 +884,9 @@ public class EditCourseAdmin {
                                 language = "English";
                         }
 
-                        // =====================================================
+                        // =================================================
                         // DIFFICULTY
-                        // =====================================================
+                        // =================================================
 
                         RadioButton selected = (RadioButton) difficultyGroup
                                         .getSelectedToggle();
@@ -831,41 +895,82 @@ public class EditCourseAdmin {
                                         ? selected.getText()
                                         : "Intermediate";
 
-                        // =====================================================
+                        // =================================================
                         // STATUS
-                        // =====================================================
+                        // =================================================
 
                         boolean published = "Published".equals(
                                         statusBox.getValue());
 
-                        // =====================================================
-                        // UPDATE EXISTING COURSE OBJECT
-                        // =====================================================
+                        // =================================================
+                        // CLOUDINARY IMAGE
+                        // =================================================
 
-                        course.setTitle(title);
+                        String finalThumbnailUrl = thumbnailPath;
 
-                        course.setCategory(category);
+                        /*
+                         * Only upload when the user selected
+                         * a NEW local image.
+                         */
+                        if (newThumbnailSelected) {
 
-                        course.setDifficulty(difficulty);
+                                showPopup(
+                                                "Uploading Image",
+                                                "Uploading thumbnail to Cloudinary...",
+                                                true);
 
-                        course.setLanguage(language);
+                                finalThumbnailUrl = uploadThumbnailToCloudinary(
+                                                thumbnailPath);
+
+                                /*
+                                 * Upload failed.
+                                 */
+                                if (finalThumbnailUrl == null ||
+                                                finalThumbnailUrl
+                                                                .trim()
+                                                                .isEmpty()) {
+
+                                        showPopup(
+                                                        "Upload Failed",
+                                                        "Course thumbnail could not be uploaded to Cloudinary.",
+                                                        false);
+
+                                        return;
+                                }
+                        }
+
+                        // =================================================
+                        // UPDATE COURSE OBJECT
+                        // =================================================
+
+                        course.setTitle(
+                                        title);
+
+                        course.setCategory(
+                                        category);
+
+                        course.setDifficulty(
+                                        difficulty);
+
+                        course.setLanguage(
+                                        language);
 
                         course.setThumbnailUrl(
-                                        thumbnailPath);
+                                        finalThumbnailUrl);
 
                         course.setStatus(
                                         published);
 
-                        // =====================================================
-                        // CONTROLLER
-                        // =====================================================
+                        // =================================================
+                        // UPDATE FIRESTORE
+                        // =================================================
 
                         boolean success = courseController.updateCourse(
                                         course);
 
-                        // =====================================================
+                        // =================================================
                         // SUCCESS
-                        // =====================================================
+                        // =================================================
 
                         if (success) {
 
@@ -875,7 +980,8 @@ public class EditCourseAdmin {
                                                 true);
 
                                 PauseTransition delay = new PauseTransition(
-                                                Duration.seconds(1.3));
+                                                Duration.seconds(
+                                                                1.5));
 
                                 delay.setOnFinished(
                                                 e -> goBack());
@@ -898,6 +1004,94 @@ public class EditCourseAdmin {
                                         "Error",
                                         "Something went wrong while updating the course.",
                                         false);
+                }
+        }
+
+        // =========================================================
+        // CLOUDINARY UPLOAD
+        // =========================================================
+
+        private String uploadThumbnailToCloudinary(
+                        String filePath) {
+
+                try {
+
+                        // =================================================
+                        // FILE CHECK
+                        // =================================================
+
+                        if (filePath == null ||
+                                        filePath.trim().isEmpty()) {
+
+                                return "";
+                        }
+
+                        File file = new File(filePath);
+
+                        if (!file.exists()) {
+
+                                System.out.println(
+                                                "Thumbnail file not found: "
+                                                                + filePath);
+
+                                return "";
+                        }
+
+                        // =================================================
+                        // CLOUDINARY
+                        // =================================================
+
+                        System.out.println(
+                                        "Uploading course thumbnail to Cloudinary...");
+
+                        /*
+                         * Uses your existing CloudinaryConfig.
+                         *
+                         * No CloudinaryService is required.
+                         */
+                        Map<?, ?> result = CloudinaryConfig
+                                        .getCloudinary()
+                                        .uploader()
+                                        .upload(
+                                                        file,
+                                                        ObjectUtils.asMap(
+                                                                        "folder",
+                                                                        "agrobiz/courses"));
+
+                        // =================================================
+                        // GET SECURE URL
+                        // =================================================
+
+                        Object secureUrl = result.get(
+                                        "secure_url");
+
+                        if (secureUrl != null) {
+
+                                String url = secureUrl.toString();
+
+                                System.out.println(
+                                                "Course thumbnail uploaded successfully.");
+
+                                System.out.println(
+                                                "Cloudinary URL: "
+                                                                + url);
+
+                                return url;
+                        }
+
+                        System.out.println(
+                                        "Cloudinary upload completed but secure_url was not returned.");
+
+                        return "";
+
+                } catch (Exception e) {
+
+                        System.out.println(
+                                        "Cloudinary upload failed.");
+
+                        e.printStackTrace();
+
+                        return "";
                 }
         }
 
@@ -976,7 +1170,8 @@ public class EditCourseAdmin {
         private void styleTextField(
                         TextField field) {
 
-                field.setPrefHeight(34);
+                field.setPrefHeight(
+                                34);
 
                 field.setMaxWidth(
                                 Double.MAX_VALUE);
@@ -999,7 +1194,8 @@ public class EditCourseAdmin {
         private void styleComboBox(
                         ComboBox<String> box) {
 
-                box.setPrefHeight(34);
+                box.setPrefHeight(
+                                34);
 
                 box.setMaxWidth(
                                 Double.MAX_VALUE);
@@ -1037,30 +1233,45 @@ public class EditCourseAdmin {
 
                 VBox box = new VBox(8);
 
-                box.setAlignment(Pos.CENTER);
+                box.setAlignment(
+                                Pos.CENTER);
 
-                box.setPrefWidth(320);
+                box.setPrefWidth(
+                                320);
 
-                box.setPrefHeight(135);
+                box.setPrefHeight(
+                                135);
 
-                box.setPadding(new Insets(15));
+                box.setPadding(
+                                new Insets(15));
 
                 // =====================================================
                 // ICON
                 // =====================================================
 
-                Label icon = new Label(success ? "✓" : "!");
+                Label icon = new Label(
+                                success
+                                                ? "✓"
+                                                : "!");
 
                 icon.setPrefSize(
                                 42,
                                 42);
 
-                icon.setAlignment(Pos.CENTER);
+                icon.setAlignment(
+                                Pos.CENTER);
 
                 icon.setStyle(
                                 "-fx-background-color:"
-                                                + (success ? "#245D35;" : "#3A2525;") +
-                                                "-fx-text-fill:" + (success ? "#68D34A;" : "#FF6B6B;") +
+                                                + (success
+                                                                ? "#245D35;"
+                                                                : "#3A2525;")
+                                                +
+                                                "-fx-text-fill:"
+                                                + (success
+                                                                ? "#68D34A;"
+                                                                : "#FF6B6B;")
+                                                +
                                                 "-fx-font-size:22px;" +
                                                 "-fx-font-weight:bold;" +
                                                 "-fx-background-radius:50%;");
@@ -1069,7 +1280,8 @@ public class EditCourseAdmin {
                 // TITLE
                 // =====================================================
 
-                Label titleLabel = new Label(title);
+                Label titleLabel = new Label(
+                                title);
 
                 titleLabel.setStyle(
                                 "-fx-text-fill:#EEEEEE;" +
@@ -1080,15 +1292,18 @@ public class EditCourseAdmin {
                 // MESSAGE
                 // =====================================================
 
-                Label messageLabel = new Label(message);
+                Label messageLabel = new Label(
+                                message);
 
                 messageLabel.setStyle(
                                 "-fx-text-fill:#AAAAAA;" +
                                                 "-fx-font-size:11px;");
 
-                messageLabel.setWrapText(true);
+                messageLabel.setWrapText(
+                                true);
 
-                messageLabel.setAlignment(Pos.CENTER);
+                messageLabel.setAlignment(
+                                Pos.CENTER);
 
                 // =====================================================
                 // ADD
@@ -1110,7 +1325,8 @@ public class EditCourseAdmin {
                                                 "-fx-border-radius:8;" +
                                                 "-fx-background-radius:8;");
 
-                popup.getContent().add(box);
+                popup.getContent()
+                                .add(box);
 
                 // =====================================================
                 // SHOW
@@ -1118,14 +1334,21 @@ public class EditCourseAdmin {
 
                 Window window = LoginPage.mainStage;
 
-                popup.show(window, window.getX() + (window.getWidth() - 320) / 2,
-                                window.getY() + (window.getHeight() - 135) / 2);
+                popup.show(
+                                window,
+                                window.getX()
+                                                + (window.getWidth()
+                                                                - 320) / 2,
+                                window.getY()
+                                                + (window.getHeight()
+                                                                - 135) / 2);
 
                 // =====================================================
                 // AUTO HIDE
                 // =====================================================
 
-                PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
+                PauseTransition delay = new PauseTransition(
+                                Duration.seconds(1.5));
 
                 delay.setOnFinished(
                                 e -> popup.hide());

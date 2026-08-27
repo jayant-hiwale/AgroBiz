@@ -733,25 +733,23 @@ public class ModulePage {
                 number.setMinWidth(30);
 
                 // =====================================================
-                // ICON
-                // =====================================================
+                // // ICON
+                // // =====================================================
 
-                Label icon = new Label(
-                                getLessonIcon(
-                                                lesson.getType()));
+                // // Label icon = new Label(getLessonIcon( lesson.getType()));
 
-                icon.setPrefSize(
-                                25,
-                                25);
+                // icon.setPrefSize(
+                // 25,
+                // 25);
 
-                icon.setAlignment(
-                                Pos.CENTER);
+                // icon.setAlignment(
+                // Pos.CENTER);
 
-                icon.setStyle(
-                                "-fx-background-color:#14251A;" +
-                                                "-fx-text-fill:#68D34A;" +
-                                                "-fx-background-radius:5;" +
-                                                "-fx-font-size:11px;");
+                // icon.setStyle(
+                // "-fx-background-color:#14251A;" +
+                // "-fx-text-fill:#68D34A;" +
+                // "-fx-background-radius:5;" +
+                // "-fx-font-size:11px;");
 
                 // =====================================================
                 // TITLE
@@ -772,24 +770,6 @@ public class ModulePage {
                                 title,
                                 Priority.ALWAYS);
 
-                // =====================================================
-                // TYPE
-                // =====================================================
-
-                Label type = new Label(
-                                safe(
-                                                lesson.getType())
-                                                .toUpperCase());
-
-                type.setStyle(
-                                "-fx-text-fill:#777777;" +
-                                                "-fx-font-size:8px;" +
-                                                "-fx-font-weight:bold;");
-
-                // =====================================================
-                // DELETE BUTTON
-                // =====================================================
-
                 Button delete = new Button("×");
 
                 delete.setStyle(
@@ -797,11 +777,6 @@ public class ModulePage {
                                                 "-fx-text-fill:#777777;" +
                                                 "-fx-font-size:14px;" +
                                                 "-fx-cursor:hand;");
-
-                /*
-                 * Prevent delete click from
-                 * reaching lesson/module click.
-                 */
 
                 delete.addEventFilter(
                                 MouseEvent.MOUSE_CLICKED,
@@ -812,6 +787,7 @@ public class ModulePage {
                         e.consume();
 
                         boolean deleted = lessonController.deleteLesson(
+                                        module.getModuleId(),
                                         lesson.getLessonId());
 
                         if (deleted) {
@@ -842,9 +818,9 @@ public class ModulePage {
 
                 box.getChildren().addAll(
                                 number,
-                                icon,
+                                // icon,
                                 title,
-                                type,
+                                // type,
                                 delete);
 
                 // =====================================================
