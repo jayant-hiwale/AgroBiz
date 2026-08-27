@@ -11,6 +11,17 @@ public class Module {
     private int moduleOrder;
     private boolean published;
 
+    // =========================================================
+    // REQUIRED BY FIRESTORE
+    // =========================================================
+
+    public Module() {
+    }
+
+    // =========================================================
+    // CONSTRUCTOR
+    // =========================================================
+
     public Module(
             int moduleId,
             int courseId,
@@ -26,6 +37,10 @@ public class Module {
         this.moduleOrder = moduleOrder;
         this.published = published;
     }
+
+    // =========================================================
+    // GETTERS
+    // =========================================================
 
     public int getModuleId() {
         return moduleId;

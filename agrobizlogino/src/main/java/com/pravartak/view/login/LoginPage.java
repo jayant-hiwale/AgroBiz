@@ -372,8 +372,8 @@ public class LoginPage extends Application {
             String contact = contactField.getText();
             String password = passwordField.getText();
 
-            String admincontact = "admin@agrobiz.com";
-            String adminPasssword = "admin123";
+            String admincontact = "q"; //admin@agrobiz.com
+            String adminPasssword = "q";//admin123
 
             if (contact.isEmpty() || password.isEmpty()) {
                 System.out.println("Please enter your contact and password.");

@@ -510,6 +510,7 @@ public class ModulePage {
                                                                         + module.getModuleId());
 
                                         boolean deleted = moduleController.deleteModule(
+                                                        course.getCourseId(),
                                                         module.getModuleId());
 
                                         if (deleted) {
@@ -647,23 +648,19 @@ public class ModulePage {
         // CREATE LESSONS
         // =========================================================
 
+        // =========================================================
+        // CREATE LESSONS
+        // =========================================================
+
         private VBox createLessons(
                         Module module,
                         int moduleNumber) {
 
                 VBox lessons = new VBox(6);
 
-                // =====================================================
-                // GET LESSONS FROM DATABASE
-                // =====================================================
-
                 List<Lesson> lessonList = lessonController
                                 .getLessonsByModule(
                                                 module.getModuleId());
-
-                // =====================================================
-                // NO LESSONS
-                // =====================================================
 
                 if (lessonList.isEmpty()) {
 
@@ -678,19 +675,20 @@ public class ModulePage {
                         lessons.getChildren().add(
                                         empty);
 
-                        return lessons;
-                }
+                } else {
 
-                // =====================================================
-                // CREATE LESSON ROWS
-                // =====================================================
+                        // =================================================
+                        // LESSON ROWS
+                        // =================================================
 
-                for (Lesson lesson : lessonList) {
+                        for (Lesson lesson : lessonList) {
 
-                        lessons.getChildren().add(
-                                        createLesson(
-                                                        lesson,
-                                                        moduleNumber));
+                                lessons.getChildren().add(
+                                                createLesson(
+                                                                lesson,
+                                                                module,
+                                                                moduleNumber));
+                        }
                 }
 
                 return lessons;
@@ -702,6 +700,7 @@ public class ModulePage {
 
         private HBox createLesson(
                         Lesson lesson,
+                        Module module,
                         int moduleNumber) {
 
                 HBox box = new HBox(10);
@@ -788,7 +787,7 @@ public class ModulePage {
                                                 "-fx-font-weight:bold;");
 
                 // =====================================================
-                // DELETE
+                // DELETE BUTTON
                 // =====================================================
 
                 Button delete = new Button("×");
@@ -801,7 +800,7 @@ public class ModulePage {
 
                 /*
                  * Prevent delete click from
-                 * reaching module card.
+                 * reaching lesson/module click.
                  */
 
                 delete.addEventFilter(
@@ -810,10 +809,30 @@ public class ModulePage {
 
                 delete.setOnAction(e -> {
 
-                        if (lessonController.deleteLesson(
-                                        lesson.getLessonId())) {
+                        e.consume();
+
+                        boolean deleted = lessonController.deleteLesson(
+                                        lesson.getLessonId());
+
+                        if (deleted) {
 
                                 refreshPage();
+
+                        } else {
+
+                                Alert error = new Alert(
+                                                Alert.AlertType.ERROR);
+
+                                error.setTitle(
+                                                "Delete Failed");
+
+                                error.setHeaderText(
+                                                "Unable to delete lesson");
+
+                                error.setContentText(
+                                                "The lesson could not be deleted.");
+
+                                error.showAndWait();
                         }
                 });
 
@@ -829,7 +848,7 @@ public class ModulePage {
                                 delete);
 
                 // =====================================================
-                // LESSON CLICK
+                // LESSON CLICK → EDIT LESSON
                 // =====================================================
 
                 box.addEventFilter(
@@ -837,20 +856,32 @@ public class ModulePage {
                                 e -> {
 
                                         /*
-                                         * Prevent lesson click
-                                         * from collapsing module.
+                                         * Stop this click from
+                                         * reaching the module card.
                                          */
 
                                         e.consume();
 
                                         System.out.println(
-                                                        "Clicked lesson: "
+                                                        "Opening lesson editor: "
                                                                         + lesson.getLessonId());
 
-                                        /*
-                                         * Add your lesson edit/view
-                                         * page here later.
-                                         */
+                                        System.out.println(
+                                                        "Module ID: "
+                                                                        + module.getModuleId());
+
+                                        // =================================================
+                                        // OPEN EDIT LESSON PAGE
+                                        // =================================================
+
+                                        EditLessonAdmin editLessonPage = new EditLessonAdmin(
+                                                        course,
+                                                        module,
+                                                        lesson);
+
+                                        LoginPage.mainStage.setScene(
+                                                        editLessonPage
+                                                                        .getEditLessonScene());
                                 });
 
                 // =====================================================

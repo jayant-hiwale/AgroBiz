@@ -22,7 +22,11 @@ public class AdminLearning {
         // CONTROLLER
         // =========================================================
 
-        private static final CourseController courseController = new CourseController();
+        private final CourseController courseController;
+
+        public AdminLearning() {
+                courseController = new CourseController();
+        }
 
         // =========================================================
         // MAIN PAGE

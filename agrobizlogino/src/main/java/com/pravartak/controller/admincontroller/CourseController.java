@@ -3,7 +3,7 @@ package com.pravartak.controller.admincontroller;
 import java.util.List;
 
 import com.pravartak.dao.admindao.CourseDAO;
-import com.pravartak.dao.admindao.TemporaryCourseDAO;
+import com.pravartak.dao.admindao.FirebaseCourseDAO;
 import com.pravartak.model.admin.Course;
 
 public class CourseController {
@@ -16,7 +16,7 @@ public class CourseController {
 
     public CourseController() {
 
-        courseDAO = new TemporaryCourseDAO();
+        courseDAO = new FirebaseCourseDAO();
     }
 
     // =========================================================
@@ -39,7 +39,8 @@ public class CourseController {
                 thumbnailUrl,
                 status);
 
-        return courseDAO.addCourse(course);
+        return courseDAO.addCourse(
+                course);
     }
 
     // =========================================================
@@ -48,34 +49,43 @@ public class CourseController {
 
     public List<Course> getAllCourses() {
 
-        return courseDAO.getAllCourses();
+        return courseDAO
+                .getAllCourses();
     }
 
     // =========================================================
     // GET COURSE
     // =========================================================
 
-    public Course getCourseById(int courseId) {
+    public Course getCourseById(
+            int courseId) {
 
-        return courseDAO.getCourseById(courseId);
+        return courseDAO
+                .getCourseById(
+                        courseId);
     }
 
     // =========================================================
-    // UPDATE
+    // UPDATE COURSE
     // =========================================================
 
-    public boolean updateCourse(Course course) {
+    public boolean updateCourse(
+            Course course) {
 
-        return courseDAO.updateCourse(course);
+        return courseDAO
+                .updateCourse(
+                        course);
     }
 
     // =========================================================
-    // DELETE
+    // DELETE COURSE
     // =========================================================
 
-    public boolean deleteCourse(int courseId) {
+    public boolean deleteCourse(
+            int courseId) {
 
-        return courseDAO.deleteCourse(courseId);
+        return courseDAO
+                .deleteCourse(
+                        courseId);
     }
-
 }

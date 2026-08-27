@@ -11,7 +11,10 @@ import com.pravartak.view.login.LoginPage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -37,7 +40,11 @@ public class CourseTab {
                 VBox root = new VBox(15);
 
                 root.setPadding(
-                                new Insets(15, 0, 20, 0));
+                                new Insets(
+                                                15,
+                                                0,
+                                                20,
+                                                0));
 
                 root.setStyle(
                                 "-fx-background-color:#080C0D;");
@@ -71,18 +78,13 @@ public class CourseTab {
                 VBox courseList = new VBox(12);
 
                 courseList.setPadding(
-                                new Insets(10, 5, 20, 5));
+                                new Insets(
+                                                10,
+                                                5,
+                                                20,
+                                                5));
 
                 courseList.setFillWidth(true);
-
-                /*
-                 * IMPORTANT
-                 *
-                 * Do NOT put VBox.setVgrow(courseList, ALWAYS)
-                 * here.
-                 *
-                 * The ScrollPane should grow instead.
-                 */
 
                 // =====================================================
                 // LOAD COURSES
@@ -92,7 +94,8 @@ public class CourseTab {
 
                 try {
 
-                        courses = courseController.getAllCourses();
+                        courses = courseController
+                                        .getAllCourses();
 
                 } catch (Exception e) {
 
@@ -102,10 +105,11 @@ public class CourseTab {
                 }
 
                 // =====================================================
-                // EMPTY / NULL
+                // EMPTY
                 // =====================================================
 
-                if (courses == null || courses.isEmpty()) {
+                if (courses == null ||
+                                courses.isEmpty()) {
 
                         courseList.getChildren().add(
                                         createEmptyCourseView());
@@ -113,7 +117,8 @@ public class CourseTab {
                 } else {
 
                         System.out.println(
-                                        "Courses loaded: " + courses.size());
+                                        "Courses loaded: "
+                                                        + courses.size());
 
                         // =================================================
                         // CREATE COURSE CARDS
@@ -125,22 +130,29 @@ public class CourseTab {
                                         continue;
                                 }
 
-                                HBox card = createCourseCard(course);
+                                HBox card = createCourseCard(
+                                                course);
 
                                 if (card != null) {
 
-                                        courseList.getChildren().add(card);
+                                        courseList
+                                                        .getChildren()
+                                                        .add(card);
                                 }
                         }
 
                         // =================================================
-                        // SAFETY CHECK
+                        // SAFETY
                         // =================================================
 
-                        if (courseList.getChildren().isEmpty()) {
+                        if (courseList
+                                        .getChildren()
+                                        .isEmpty()) {
 
-                                courseList.getChildren().add(
-                                                createEmptyCourseView());
+                                courseList
+                                                .getChildren()
+                                                .add(
+                                                                createEmptyCourseView());
                         }
                 }
 
@@ -148,52 +160,32 @@ public class CourseTab {
                 // SCROLL PANE
                 // =====================================================
 
-                ScrollPane scrollPane = new ScrollPane(courseList);
+                ScrollPane scrollPane = new ScrollPane(
+                                courseList);
 
-                /*
-                 * Allow cards to use complete width.
-                 */
                 scrollPane.setFitToWidth(true);
 
-                /*
-                 * Vertical scrolling enabled.
-                 */
                 scrollPane.setVbarPolicy(
                                 ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-                /*
-                 * No horizontal scrolling.
-                 */
                 scrollPane.setHbarPolicy(
                                 ScrollPane.ScrollBarPolicy.NEVER);
 
-                /*
-                 * Allow mouse dragging.
-                 */
                 scrollPane.setPannable(true);
 
-                /*
-                 * ScrollPane fills remaining height.
-                 */
                 VBox.setVgrow(
                                 scrollPane,
                                 Priority.ALWAYS);
 
-                /*
-                 * Remove default ugly background.
-                 */
                 scrollPane.setStyle(
                                 "-fx-background-color:#080C0D;" +
                                                 "-fx-background:#080C0D;" +
                                                 "-fx-border-color:transparent;");
 
-                /*
-                 * Make viewport background dark.
-                 */
                 scrollPane.setFitToHeight(false);
 
                 // =====================================================
-                // ADD TO ROOT
+                // ROOT
                 // =====================================================
 
                 root.getChildren().addAll(
@@ -254,6 +246,7 @@ public class CourseTab {
                         Course course) {
 
                 if (course == null) {
+
                         return null;
                 }
 
@@ -262,18 +255,10 @@ public class CourseTab {
                 card.setAlignment(
                                 Pos.CENTER_LEFT);
 
-                /*
-                 * Fixed card height.
-                 *
-                 * This prevents VBox cards from becoming compressed.
-                 */
                 card.setPrefHeight(105);
                 card.setMinHeight(105);
                 card.setMaxHeight(105);
 
-                /*
-                 * Card uses full available width.
-                 */
                 card.setMaxWidth(
                                 Double.MAX_VALUE);
 
@@ -352,7 +337,8 @@ public class CourseTab {
                                 course.getCategory(),
                                 "Uncategorized");
 
-                Label category = new Label(categoryText);
+                Label category = new Label(
+                                categoryText);
 
                 category.setStyle(
                                 "-fx-background-color:#10302A;" +
@@ -374,7 +360,8 @@ public class CourseTab {
                                 course.getTitle(),
                                 "Untitled Course");
 
-                Label courseTitle = new Label(titleText);
+                Label courseTitle = new Label(
+                                titleText);
 
                 courseTitle.setStyle(
                                 "-fx-text-fill:#EEEEEE;" +
@@ -383,7 +370,17 @@ public class CourseTab {
 
                 courseTitle.setMaxWidth(500);
 
-               
+                // =====================================================
+                // COURSE ID
+                // =====================================================
+
+                Label courseId = new Label(
+                                "Course ID: "
+                                                + course.getCourseId());
+
+                courseId.setStyle(
+                                "-fx-text-fill:#777777;" +
+                                                "-fx-font-size:9px;");
 
                 // =====================================================
                 // ADD INFORMATION
@@ -391,8 +388,8 @@ public class CourseTab {
 
                 information.getChildren().addAll(
                                 tags,
-                                courseTitle
-                                );
+                                courseTitle,
+                                courseId);
 
                 // =====================================================
                 // ACTIONS
@@ -404,28 +401,23 @@ public class CourseTab {
                 // ADD COMPONENTS
                 // =====================================================
 
-                card.getChildren().add(
-                                thumbnailBox);
-
-                card.getChildren().add(
-                                information);
-
-                card.getChildren().add(
+                card.getChildren().addAll(
+                                thumbnailBox,
+                                information,
                                 actions);
 
                 // =====================================================
-                // HOVER EFFECT
+                // HOVER
                 // =====================================================
 
                 card.setOnMouseEntered(e -> {
 
                         card.setStyle(
                                         "-fx-background-color:#101612;" +
-                                                        "-fx-border-color:#242B2C;" +
+                                                        "-fx-border-color:#2B4735;" +
                                                         "-fx-border-width:1;" +
                                                         "-fx-border-radius:8;" +
-                                                        "-fx-background-radius:8;" +
-                                                        "-fx-cursor:hand;");
+                                                        "-fx-background-radius:8;");
                 });
 
                 card.setOnMouseExited(e -> {
@@ -438,10 +430,16 @@ public class CourseTab {
                                                         "-fx-background-radius:8;");
                 });
 
+                // =====================================================
+                // OPEN COURSE
+                // =====================================================
+
                 card.setOnMouseClicked(e -> {
 
-                        // Ignore clicks coming from buttons
+                        // Ignore button clicks
+
                         if (e.getTarget() instanceof Button) {
+
                                 return;
                         }
 
@@ -449,7 +447,8 @@ public class CourseTab {
 
                         Scene moduleScene = modulePage.getModuleScene();
 
-                        LoginPage.mainStage.setScene(moduleScene);
+                        LoginPage.mainStage
+                                        .setScene(moduleScene);
                 });
 
                 return card;
@@ -459,7 +458,8 @@ public class CourseTab {
         // THUMBNAIL
         // =========================================================
 
-        private static VBox createThumbnail(Course course) {
+        private static VBox createThumbnail(
+                        Course course) {
 
                 VBox box = new VBox();
 
@@ -471,7 +471,8 @@ public class CourseTab {
                 box.setMinHeight(75);
                 box.setMaxHeight(75);
 
-                box.setAlignment(Pos.CENTER);
+                box.setAlignment(
+                                Pos.CENTER);
 
                 box.setStyle(
                                 "-fx-background-color:#0D1213;" +
@@ -491,11 +492,13 @@ public class CourseTab {
                                 Image image = null;
 
                                 // =================================================
-                                // CLOUDINARY / INTERNET URL
+                                // CLOUDINARY / INTERNET
                                 // =================================================
 
-                                if (thumbnail.startsWith("http://") ||
-                                                thumbnail.startsWith("https://")) {
+                                if (thumbnail.startsWith(
+                                                "http://") ||
+                                                thumbnail.startsWith(
+                                                                "https://")) {
 
                                         image = new Image(
                                                         thumbnail,
@@ -504,20 +507,20 @@ public class CourseTab {
                                                         false,
                                                         true,
                                                         true);
-                                }
 
-                                // =================================================
-                                // LOCAL IMAGE
-                                // =================================================
+                                } else {
 
-                                else {
+                                        // =============================================
+                                        // LOCAL IMAGE
+                                        // =============================================
 
                                         File file = new File(thumbnail);
 
                                         if (file.exists()) {
 
                                                 image = new Image(
-                                                                file.toURI().toString(),
+                                                                file.toURI()
+                                                                                .toString(),
                                                                 100,
                                                                 75,
                                                                 false,
@@ -530,7 +533,8 @@ public class CourseTab {
                                 // ADD IMAGE
                                 // =================================================
 
-                                if (image != null && !image.isError()) {
+                                if (image != null &&
+                                                !image.isError()) {
 
                                         ImageView imageView = new ImageView(image);
 
@@ -538,15 +542,17 @@ public class CourseTab {
                                         imageView.setFitHeight(75);
 
                                         imageView.setPreserveRatio(false);
-
                                         imageView.setSmooth(true);
 
-                                        box.getChildren().add(imageView);
+                                        box.getChildren()
+                                                        .add(imageView);
                                 }
 
                         } catch (Exception e) {
 
-                                System.out.println("Thumbnail loading failed: " + e.getMessage());
+                                System.out.println(
+                                                "Thumbnail loading failed: "
+                                                                + e.getMessage());
                         }
                 }
 
@@ -562,7 +568,8 @@ public class CourseTab {
                                         "-fx-text-fill:#68D34A;" +
                                                         "-fx-font-size:28px;");
 
-                        box.getChildren().add(placeholder);
+                        box.getChildren()
+                                        .add(placeholder);
                 }
 
                 return box;
@@ -572,21 +579,23 @@ public class CourseTab {
         // ACTIONS
         // =========================================================
 
-        private static VBox createActions(Course course) {
+        private static VBox createActions(
+                        Course course) {
 
                 VBox actions = new VBox(8);
 
-                actions.setAlignment(Pos.CENTER_RIGHT);
+                actions.setAlignment(
+                                Pos.CENTER_RIGHT);
 
                 actions.setPrefWidth(190);
-
                 actions.setMinWidth(190);
 
                 // =====================================================
                 // EDIT BUTTON
                 // =====================================================
 
-                Button editButton = new Button("Edit Details");
+                Button editButton = new Button(
+                                "Edit Details");
 
                 editButton.setPrefWidth(110);
                 editButton.setPrefHeight(30);
@@ -601,13 +610,10 @@ public class CourseTab {
                                                 "-fx-font-size:9px;" +
                                                 "-fx-cursor:hand;");
 
-                // =====================================================
-                // EDIT ACTION
-                // =====================================================
-
                 editButton.setOnAction(e -> {
 
                         if (course == null) {
+
                                 return;
                         }
 
@@ -615,20 +621,20 @@ public class CourseTab {
                                         "Edit course: "
                                                         + course.getCourseId());
 
-                        /*
-                         * Open Edit Course page
-                         */
                         EditCourseAdmin editPage = new EditCourseAdmin(course);
 
-                        LoginPage.mainStage.setScene(
-                                        editPage.getEditCourseScene());
+                        LoginPage.mainStage
+                                        .setScene(
+                                                        editPage
+                                                                        .getEditCourseScene());
                 });
 
                 // =====================================================
                 // ADD MODULE BUTTON
                 // =====================================================
 
-                Button moduleButton = new Button("⊕  Add Module");
+                Button moduleButton = new Button(
+                                "⊕  Add Module");
 
                 moduleButton.setPrefWidth(110);
                 moduleButton.setPrefHeight(30);
@@ -644,15 +650,145 @@ public class CourseTab {
                                                 "-fx-font-weight:bold;" +
                                                 "-fx-cursor:hand;");
 
-                // =====================================================
-                // MODULE ACTION
-                // =====================================================
-
                 moduleButton.setOnAction(e -> {
 
                         AddModuleAdmin addModulePage = new AddModuleAdmin(course);
 
-                        LoginPage.mainStage.setScene(addModulePage.getAddModuleScene());
+                        LoginPage.mainStage
+                                        .setScene(
+                                                        addModulePage
+                                                                        .getAddModuleScene());
+                });
+
+                // =====================================================
+                // REMOVE COURSE BUTTON
+                // =====================================================
+
+                Button removeButton = new Button(
+                                "×  Remove Course");
+
+                removeButton.setPrefWidth(110);
+                removeButton.setPrefHeight(30);
+
+                removeButton.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-text-fill:#E57373;" +
+                                                "-fx-border-color:#633333;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-font-size:9px;" +
+                                                "-fx-cursor:hand;");
+
+                // =====================================================
+                // REMOVE ACTION
+                // =====================================================
+
+                removeButton.setOnAction(e -> {
+
+                        if (course == null) {
+
+                                return;
+                        }
+
+                        // =================================================
+                        // CONFIRMATION
+                        // =================================================
+
+                        Alert alert = new Alert(
+                                        Alert.AlertType.CONFIRMATION);
+
+                        alert.setTitle(
+                                        "Remove Course");
+
+                        alert.setHeaderText(
+                                        "Remove this course?");
+
+                        alert.setContentText(
+                                        "Course: "
+                                                        + safeText(
+                                                                        course.getTitle(),
+                                                                        "Untitled Course")
+                                                        + "\n\n"
+                                                        + "Course ID: "
+                                                        + course.getCourseId()
+                                                        + "\n\n"
+                                                        + "This will permanently delete the "
+                                                        + "course, its modules and its lessons.");
+
+                        ButtonType remove = new ButtonType(
+                                        "Remove");
+
+                        ButtonType cancel = new ButtonType(
+                                        "Cancel",
+                                        ButtonBar.ButtonData.CANCEL_CLOSE);
+
+                        alert.getButtonTypes()
+                                        .setAll(
+                                                        remove,
+                                                        cancel);
+
+                        alert.showAndWait()
+                                        .ifPresent(response -> {
+
+                                                if (response == remove) {
+
+                                                        // =====================================
+                                                        // DELETE FROM FIRESTORE
+                                                        // =====================================
+
+                                                        boolean deleted = courseController
+                                                                        .deleteCourse(
+                                                                                        course.getCourseId());
+
+                                                        // =====================================
+                                                        // SUCCESS
+                                                        // =====================================
+
+                                                        if (deleted) {
+
+                                                                System.out.println(
+                                                                                "Course removed from UI: "
+                                                                                                + course.getCourseId());
+
+                                                                /*
+                                                                 * Reload Manage Course.
+                                                                 *
+                                                                 * This causes CourseTab to read
+                                                                 * Firestore again.
+                                                                 */
+
+                                                                AdminPage adminPage = new AdminPage();
+
+                                                                LoginPage.mainStage
+                                                                                .setScene(
+                                                                                                adminPage
+                                                                                                                .getAdminPage(
+                                                                                                                                "Manage Course"));
+
+                                                        } else {
+
+                                                                // =================================
+                                                                // FAILURE
+                                                                // =================================
+
+                                                                Alert error = new Alert(
+                                                                                Alert.AlertType.ERROR);
+
+                                                                error.setTitle(
+                                                                                "Remove Failed");
+
+                                                                error.setHeaderText(
+                                                                                "Unable to remove course");
+
+                                                                error.setContentText(
+                                                                                "The course could not be removed "
+                                                                                                + "from Firebase.");
+
+                                                                error.showAndWait();
+                                                        }
+                                                }
+                                        });
                 });
 
                 // =====================================================
@@ -661,7 +797,8 @@ public class CourseTab {
 
                 actions.getChildren().addAll(
                                 editButton,
-                                moduleButton);
+                                moduleButton,
+                                removeButton);
 
                 return actions;
         }

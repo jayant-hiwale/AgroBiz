@@ -1,23 +1,22 @@
 package com.pravartak.controller.admincontroller;
 
-import java.util.*;
-// import java.util.ArrayList;
-// import java.util.Comparator;
-// import java.util.HashMap;
-// import java.util.List;
-// import java.util.Map;
+import java.util.List;
 
+import com.pravartak.dao.admindao.FirestoreModuleDAO;
 import com.pravartak.model.admin.Module;
 
 public class ModuleController {
 
+    private final FirestoreModuleDAO moduleDAO;
+
     // =========================================================
-    // MODULE STORAGE
+    // CONSTRUCTOR
     // =========================================================
 
-    private static final Map<Integer, List<Module>> courseModules = new HashMap<>();
+    public ModuleController() {
 
-    private static int nextModuleId = 1;
+        moduleDAO = new FirestoreModuleDAO();
+    }
 
     // =========================================================
     // ADD MODULE
@@ -28,62 +27,21 @@ public class ModuleController {
             String title,
             String description) {
 
-        try {
-
-            if (title == null ||
-                    title.trim().isEmpty()) {
-                return false;
-            }
-
-            List<Module> modules = courseModules.computeIfAbsent(courseId, k -> new ArrayList<>());
-
-            int order = modules.size() + 1;
-
-            Module module = new Module(
-                    nextModuleId++,
-                    courseId,
-                    title.trim(),
-                    description == null ? "" : description.trim(),
-                    order,
-                    false);
-
-            modules.add(module);
-
-            System.out.println(
-                    "Module added: " +
-                            module.getTitle() +
-                            " | Course ID: " +
-                            courseId);
-
-            return true;
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-            return false;
-        }
+        return moduleDAO.addModule(
+                courseId,
+                title,
+                description);
     }
 
     // =========================================================
-    // GET MODULES FOR COURSE
+    // GET MODULES
     // =========================================================
 
     public List<Module> getModulesByCourse(
             int courseId) {
 
-        List<Module> modules = courseModules.get(courseId);
-
-        if (modules == null) {
-
-            return new ArrayList<>();
-        }
-
-        modules.sort(
-                Comparator.comparingInt(
-                        Module::getModuleOrder));
-
-        return new ArrayList<>(modules);
+        return moduleDAO.getModulesByCourse(
+                courseId);
     }
 
     // =========================================================
@@ -91,20 +49,12 @@ public class ModuleController {
     // =========================================================
 
     public Module getModule(
+            int courseId,
             int moduleId) {
 
-        for (List<Module> modules : courseModules.values()) {
-
-            for (Module module : modules) {
-
-                if (module.getModuleId() == moduleId) {
-
-                    return module;
-                }
-            }
-        }
-
-        return null;
+        return moduleDAO.getModule(
+                courseId,
+                moduleId);
     }
 
     // =========================================================
@@ -112,25 +62,12 @@ public class ModuleController {
     // =========================================================
 
     public boolean deleteModule(
+            int courseId,
             int moduleId) {
 
-        for (List<Module> modules : courseModules.values()) {
-
-            for (int i = 0; i < modules.size(); i++) {
-
-                if (modules.get(i)
-                        .getModuleId() == moduleId) {
-
-                    modules.remove(i);
-
-                    refreshOrder(modules);
-
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return moduleDAO.deleteModule(
+                courseId,
+                moduleId);
     }
 
     // =========================================================
@@ -138,46 +75,28 @@ public class ModuleController {
     // =========================================================
 
     public boolean updateModule(
+            int courseId,
             int moduleId,
             String title,
             String description,
             boolean published) {
 
-        Module module = getModule(moduleId);
-
-        if (module == null) {
-
-            return false;
-        }
-
-        module.setTitle(title);
-        module.setDescription(description);
-        module.setPublished(published);
-
-        return true;
+        return moduleDAO.updateModule(
+                courseId,
+                moduleId,
+                title,
+                description,
+                published);
     }
 
     // =========================================================
-    // REORDER
-    // =========================================================
-
-    private void refreshOrder(
-            List<Module> modules) {
-
-        for (int i = 0; i < modules.size(); i++) {
-
-            modules.get(i)
-                    .setModuleOrder(i + 1);
-        }
-    }
-
-    // =========================================================
-    // MODULE COUNT
+    // COUNT MODULES
     // =========================================================
 
     public int getModuleCount(
             int courseId) {
 
-        return getModulesByCourse(courseId).size();
+        return moduleDAO.getModuleCount(
+                courseId);
     }
 }
