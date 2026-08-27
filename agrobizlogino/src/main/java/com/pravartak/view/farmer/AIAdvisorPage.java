@@ -2,6 +2,9 @@ package com.pravartak.view.farmer;
 
 import java.io.File;
 
+import com.pravartak.view.farmer.common.Footer;
+import com.pravartak.view.farmer.common.NavBar;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
