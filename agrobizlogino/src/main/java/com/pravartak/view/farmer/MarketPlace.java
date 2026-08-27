@@ -2,6 +2,10 @@ package com.pravartak.view.farmer;
 
 import java.util.List;
 
+import java.io.File;
+
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import com.pravartak.controller.farmercontoller.ProductController;
 import com.pravartak.model.farmer_model.Product;
 import com.pravartak.view.farmer.common.Footer;
@@ -203,18 +207,78 @@ public class MarketPlace {
                                                 "-fx-border-radius: 12;" +
                                                 "-fx-background-radius: 12;");
 
+                // // Image
+                // StackPane image = new StackPane();
+
+                // image.setPrefHeight(135);
+
+                // image.setStyle("-fx-background-color: #1b2425;-fx-background-radius: 12 12 0 0;");
+
+                // Label imageText = new Label("Product Image");
+
+                // imageText.setStyle("-fx-text-fill: #666666;-fx-font-size: 13px;");
+
+                // image.getChildren().add(imageText);
+
                 // Image
                 StackPane image = new StackPane();
 
                 image.setPrefHeight(135);
 
-                image.setStyle("-fx-background-color: #1b2425;-fx-background-radius: 12 12 0 0;");
+                image.setStyle(
+                        "-fx-background-color: #1b2425;" +
+                        "-fx-background-radius: 12 12 0 0;");
 
-                Label imageText = new Label("Product Image");
+                // =====================================================
+                // DISPLAY PRODUCT IMAGE
+                // =====================================================
 
-                imageText.setStyle("-fx-text-fill: #666666;-fx-font-size: 13px;");
+                String imagePath = product.getImagePath();
+
+                if (imagePath != null
+                        && !imagePath.trim().isEmpty()) {
+
+                try {
+
+                        Image productImage =
+                                new Image(
+                                        new File(imagePath)
+                                                .toURI()
+                                                .toString());
+
+                        ImageView imageView =
+                                new ImageView(productImage);
+
+                        imageView.setFitWidth(250);
+                        imageView.setFitHeight(135);
+
+                        imageView.setPreserveRatio(false);
+
+                        image.getChildren().add(imageView);
+
+                } catch (Exception ex) {
+
+                        Label imageText =
+                                new Label("Product Image");
+
+                        imageText.setStyle(
+                                "-fx-text-fill: #666666;" +
+                                "-fx-font-size: 13px;");
+
+                        image.getChildren().add(imageText);
+                }
+
+                } else {
+
+                Label imageText =
+                        new Label("Product Image");
+
+                imageText.setStyle(
+                        "-fx-text-fill: #666666;" +
+                        "-fx-font-size: 13px;");
 
                 image.getChildren().add(imageText);
+                }
 
                 // Status
                 Label status = new Label(product.getStatus());
@@ -263,11 +327,11 @@ public class MarketPlace {
 
                 quantity.setStyle("-fx-text-fill: #aaaaaa;" + "-fx-font-size: 12px;");
 
-                Label orders = new Label("Orders: " + product.getOrders());
+               // Label orders = new Label("Orders: " + product.getOrders());
 
-                orders.setStyle(
-                                "-fx-text-fill: #888888;" +
-                                                "-fx-font-size: 11px;");
+                        // orders.setStyle(
+                        //                 "-fx-text-fill: #888888;" +
+                        //                                 "-fx-font-size: 11px;");
 
                 // Buttons
                 Button edit = new Button("Edit");
@@ -310,7 +374,7 @@ public class MarketPlace {
                                 category,
                                 price,
                                 quantity,
-                                orders,
+                                // orders,
                                 buttons);
 
                 card.getChildren().addAll(
@@ -362,7 +426,7 @@ public class MarketPlace {
         // ================= ADD PRODUCT =================
 
         private void openAddProductPage() {
-                AddProductPage page = new AddProductPage();
+                AddProductPage page = new AddProductPage(productController);
 
                 Scene scene = page.getAddProductScene(() -> {
                         // Reload products after adding
@@ -379,7 +443,7 @@ public class MarketPlace {
 
                 System.out.println("Edit product: " + product.getProductName());
 
-                AddProductPage page = new AddProductPage();
+                AddProductPage page = new AddProductPage(productController);
 
                 Runnable callback = () -> {
                         backToMarket();
