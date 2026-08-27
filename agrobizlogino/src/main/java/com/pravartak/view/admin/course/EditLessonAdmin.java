@@ -10,721 +10,1245 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditLessonAdmin {
 
-    // =========================================================
-    // DATA
-    // =========================================================
+        // =========================================================
+        // DATA
+        // =========================================================
 
-    private final Course course;
-    private final Module module;
-    private final Lesson lesson;
+        private final Course course;
+        private final Module module;
+        private final Lesson lesson;
 
-    private final LessonController lessonController =
-            new LessonController();
+        private final LessonController lessonController = new LessonController();
 
-    // =========================================================
-    // FIELDS
-    // =========================================================
+        // =========================================================
+        // FIELDS
+        // =========================================================
 
-    private TextField titleField;
+        private TextField titleField;
 
-    private TextArea descriptionField;
+        private TextArea descriptionField;
 
-    private ComboBox<String> typeBox;
+        private TextField mediaField;
 
-    private TextField mediaField;
+        private VBox contentBlocks;
 
-    // =========================================================
-    // CONSTRUCTOR
-    // =========================================================
+        // =========================================================
+        // CONTENT BLOCKS
+        // =========================================================
 
-    public EditLessonAdmin(
-            Course course,
-            Module module,
-            Lesson lesson) {
+        private final List<VBox> blocks = new ArrayList<>();
 
-        this.course = course;
-        this.module = module;
-        this.lesson = lesson;
-    }
+        // =========================================================
+        // CONSTRUCTOR
+        // =========================================================
 
-    // =========================================================
-    // SCENE
-    // =========================================================
+        public EditLessonAdmin(
+                        Course course,
+                        Module module,
+                        Lesson lesson) {
 
-    public Scene getEditLessonScene() {
+                this.course = course;
+                this.module = module;
+                this.lesson = lesson;
+        }
 
-        VBox root = new VBox(15);
+        // =========================================================
+        // SCENE
+        // =========================================================
 
-        root.setPadding(
-                new Insets(20, 30, 20, 30));
+        public Scene getEditLessonScene() {
 
-        root.setStyle(
-                "-fx-background-color:#080C0D;");
+                BorderPane root = new BorderPane();
 
-        // =====================================================
+                root.setStyle(
+                                "-fx-background-color:#080C0D;");
+
+                // =====================================================
+                // HEADER
+                // =====================================================
+
+                VBox header = createHeader();
+
+                root.setTop(header);
+
+                // =====================================================
+                // MAIN CONTENT
+                // =====================================================
+
+                VBox page = new VBox(15);
+
+                page.setPadding(
+                                new Insets(
+                                                10,
+                                                30,
+                                                30,
+                                                30));
+
+                // =====================================================
+                // COURSE / MODULE INFORMATION
+                // =====================================================
+
+                page.getChildren().add(
+                                createCourseInfo());
+
+                // =====================================================
+                // LESSON INFORMATION
+                // =====================================================
+
+                HBox information = new HBox(15);
+
+                VBox lessonInformation = createLessonInformation();
+
+                HBox.setHgrow(
+                                lessonInformation,
+                                Priority.ALWAYS);
+
+                information.getChildren().add(
+                                lessonInformation);
+
+                page.getChildren().add(
+                                information);
+
+                // =====================================================
+                // MEDIA
+                // =====================================================
+
+                page.getChildren().add(
+                                createMediaSection());
+
+                // =====================================================
+                // CONTENT
+                // =====================================================
+
+                page.getChildren().add(
+                                createContentEditor());
+
+                // =====================================================
+                // ACTIONS
+                // =====================================================
+
+                page.getChildren().add(
+                                createActions());
+
+                // =====================================================
+                // SCROLL
+                // =====================================================
+
+                ScrollPane scroll = new ScrollPane(page);
+
+                scroll.setFitToWidth(true);
+
+                scroll.setHbarPolicy(
+                                ScrollPane.ScrollBarPolicy.NEVER);
+
+                scroll.setVbarPolicy(
+                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+                scroll.setPannable(true);
+
+                scroll.setStyle(
+                                "-fx-background-color:#080C0D;" +
+                                                "-fx-background:#080C0D;" +
+                                                "-fx-border-color:transparent;");
+
+                root.setCenter(scroll);
+
+                return new Scene(
+                                root,
+                                1100,
+                                700);
+        }
+
+        // =========================================================
         // HEADER
-        // =====================================================
+        // =========================================================
 
-        HBox header = new HBox(15);
+        private VBox createHeader() {
 
-        header.setAlignment(
-                Pos.CENTER_LEFT);
+                VBox container = new VBox();
 
-        Button back = new Button("← Back");
+                container.setPadding(
+                                new Insets(
+                                                15,
+                                                30,
+                                                10,
+                                                30));
 
-        back.setStyle(
-                "-fx-background-color:transparent;" +
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-width:1;" +
-                "-fx-border-radius:5;" +
-                "-fx-background-radius:5;" +
-                "-fx-padding:7 14;" +
-                "-fx-cursor:hand;");
+                HBox header = new HBox(15);
 
-        back.setOnAction(
-                e -> goBack());
+                header.setAlignment(
+                                Pos.CENTER_LEFT);
 
-        VBox heading = new VBox(3);
+                // =====================================================
+                // BACK
+                // =====================================================
 
-        Label title = new Label(
-                "Edit Lesson");
+                Button back = new Button("← Back");
 
-        title.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-font-size:24px;" +
-                "-fx-font-weight:bold;");
+                back.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-padding:7 14;" +
+                                                "-fx-cursor:hand;");
 
-        Label subtitle = new Label(
-                "Edit the content of this lesson.");
+                back.setOnAction(
+                                e -> goBack());
 
-        subtitle.setStyle(
-                "-fx-text-fill:#777777;" +
-                "-fx-font-size:11px;");
+                // =====================================================
+                // TITLE
+                // =====================================================
 
-        heading.getChildren().addAll(
-                title,
-                subtitle);
+                VBox titleBox = new VBox(3);
 
-        header.getChildren().addAll(
-                back,
-                heading);
+                Label title = new Label("Edit Lesson");
 
-        // =====================================================
-        // COURSE / MODULE INFO
-        // =====================================================
+                title.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:24px;" +
+                                                "-fx-font-weight:bold;");
 
-        HBox courseInfo = createCourseInfo();
+                Label subtitle = new Label(
+                                "Edit and manage lesson content.");
 
-        // =====================================================
-        // CONTENT
-        // =====================================================
+                subtitle.setStyle(
+                                "-fx-text-fill:#777777;" +
+                                                "-fx-font-size:11px;");
 
-        HBox content = new HBox(15);
+                titleBox.getChildren().addAll(
+                                title,
+                                subtitle);
 
-        VBox lessonInformation =
-                createLessonInformation();
+                // =====================================================
+                // SPACER
+                // =====================================================
 
-        VBox lessonSettings =
-                createLessonSettings();
+                Region spacer = new Region();
 
-        HBox.setHgrow(
-                lessonInformation,
-                Priority.ALWAYS);
+                HBox.setHgrow(
+                                spacer,
+                                Priority.ALWAYS);
 
-        content.getChildren().addAll(
-                lessonInformation,
-                lessonSettings);
+                // =====================================================
+                // SAVE
+                // =====================================================
 
-        // =====================================================
+                Button save = new Button("✓  Save Changes");
+
+                save.setStyle(
+                                "-fx-background-color:#68D34A;" +
+                                                "-fx-text-fill:#080C0D;" +
+                                                "-fx-border-color:#68D34A;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-padding:8 18;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-cursor:hand;");
+
+                save.setOnAction(
+                                e -> updateLesson());
+
+                header.getChildren().addAll(
+                                back,
+                                titleBox,
+                                spacer,
+                                save);
+
+                container.getChildren().add(
+                                header);
+
+                return container;
+        }
+
+        // =========================================================
+        // COURSE INFORMATION
+        // =========================================================
+
+        private HBox createCourseInfo() {
+
+                HBox box = new HBox(10);
+
+                box.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                box.setPadding(
+                                new Insets(12));
+
+                box.setStyle(
+                                "-fx-background-color:#101612;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:7;" +
+                                                "-fx-background-radius:7;");
+
+                Label courseLabel = new Label(
+                                "Course: "
+                                                + safe(course.getTitle()));
+
+                courseLabel.setStyle(
+                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-font-size:10px;" +
+                                                "-fx-font-weight:bold;");
+
+                Label separator = new Label("•");
+
+                separator.setStyle(
+                                "-fx-text-fill:#555555;");
+
+                Label moduleLabel = new Label(
+                                "Module: "
+                                                + safe(module.getTitle()));
+
+                moduleLabel.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:10px;" +
+                                                "-fx-font-weight:bold;");
+
+                Label separator2 = new Label("•");
+
+                separator2.setStyle(
+                                "-fx-text-fill:#555555;");
+
+                Label lessonLabel = new Label(
+                                "Lesson: "
+                                                + safe(lesson.getTitle()));
+
+                lessonLabel.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:10px;" +
+                                                "-fx-font-weight:bold;");
+
+                box.getChildren().addAll(
+                                courseLabel,
+                                separator,
+                                moduleLabel,
+                                separator2,
+                                lessonLabel);
+
+                return box;
+        }
+
+        // =========================================================
+        // LESSON INFORMATION
+        // =========================================================
+
+        private VBox createLessonInformation() {
+
+                VBox card = createCard();
+
+                Label heading = createHeading(
+                                "Lesson Information");
+
+                Separator separator = new Separator();
+
+                // =====================================================
+                // TITLE
+                // =====================================================
+
+                Label titleLabel = createFieldLabel(
+                                "Lesson Title");
+
+                titleField = new TextField();
+
+                titleField.setPromptText(
+                                "Enter lesson title");
+
+                // IMPORTANT:
+                // Load existing lesson title
+
+                titleField.setText(
+                                safe(lesson.getTitle()));
+
+                styleTextField(
+                                titleField);
+
+                // =====================================================
+                // DESCRIPTION
+                // =====================================================
+
+                Label descriptionLabel = createFieldLabel(
+                                "Lesson Description");
+
+                descriptionField = new TextArea();
+
+                descriptionField.setPromptText(
+                                "Describe what students will learn in this lesson...");
+
+                // IMPORTANT:
+                // Load existing lesson description
+
+                descriptionField.setText(
+                                safe(lesson.getDescription()));
+
+                descriptionField.setWrapText(true);
+
+                descriptionField.setPrefHeight(
+                                160);
+
+                descriptionField.setMinHeight(
+                                160);
+
+                descriptionField.setMaxHeight(
+                                220);
+
+                styleTextArea(
+                                descriptionField);
+
+                card.getChildren().addAll(
+                                heading,
+                                separator,
+                                titleLabel,
+                                titleField,
+                                descriptionLabel,
+                                descriptionField);
+
+                return card;
+        }
+
+        // =========================================================
+        // MEDIA SECTION
+        // =========================================================
+
+        private VBox createMediaSection() {
+
+                VBox card = createCard();
+
+                Label heading = createHeading(
+                                "Media Gallery");
+
+                Separator separator = new Separator();
+
+                FlowPane mediaCards = new FlowPane();
+
+                mediaCards.setHgap(10);
+
+                mediaCards.setVgap(10);
+
+                mediaCards.getChildren().addAll(
+
+                                createMediaCard(
+                                                "IMAGE",
+                                                "▧",
+                                                "Add Image"),
+
+                                createMediaCard(
+                                                "VIDEO",
+                                                "▶",
+                                                "Add Video"),
+
+                                createMediaCard(
+                                                "DOCUMENT",
+                                                "▤",
+                                                "Add Document"));
+
+                card.getChildren().addAll(
+                                heading,
+                                separator,
+                                mediaCards);
+
+                return card;
+        }
+
+        // =========================================================
+        // MEDIA CARD
+        // =========================================================
+
+        private VBox createMediaCard(
+                        String type,
+                        String iconText,
+                        String text) {
+
+                VBox card = new VBox(7);
+
+                card.setAlignment(
+                                Pos.CENTER);
+
+                card.setPrefSize(
+                                180,
+                                110);
+
+                card.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:6;" +
+                                                "-fx-background-radius:6;" +
+                                                "-fx-cursor:hand;");
+
+                Label icon = new Label(iconText);
+
+                icon.setStyle(
+                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-font-size:24px;");
+
+                Label label = new Label(text);
+
+                label.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:10px;");
+
+                card.getChildren().addAll(
+                                icon,
+                                label);
+
+                card.setOnMouseClicked(
+                                e -> {
+
+                                        if (type.equals("IMAGE")) {
+
+                                                addImageBlock();
+
+                                        } else if (type.equals("VIDEO")) {
+
+                                                addVideoBlock();
+
+                                        } else {
+
+                                                addDocumentBlock();
+                                        }
+                                });
+
+                return card;
+        }
+
+        // =========================================================
+        // CONTENT EDITOR
+        // =========================================================
+
+        private VBox createContentEditor() {
+
+                VBox card = createCard();
+
+                Label heading = createHeading(
+                                "Lesson Content");
+
+                Separator separator = new Separator();
+
+                contentBlocks = new VBox(10);
+
+                contentBlocks.setFillWidth(
+                                true);
+
+                // =====================================================
+                // EXISTING LESSON CONTENT
+                // =====================================================
+
+                /*
+                 * Your current Lesson model/DAO stores the basic lesson
+                 * fields. The content blocks are not currently being
+                 * saved by AddLessonAdmin.
+                 *
+                 * Therefore we don't invent old blocks here.
+                 */
+
+                addTextBlock();
+
+                // =====================================================
+                // ADD BLOCK BUTTONS
+                // =====================================================
+
+                HBox addButtons = new HBox(8);
+
+                addButtons.setAlignment(
+                                Pos.CENTER);
+
+                Button text = createAddButton(
+                                "+ Text");
+
+                text.setOnAction(
+                                e -> addTextBlock());
+
+                Button image = createAddButton(
+                                "+ Image");
+
+                image.setOnAction(
+                                e -> addImageBlock());
+
+                Button video = createAddButton(
+                                "+ Video");
+
+                video.setOnAction(
+                                e -> addVideoBlock());
+
+                Button document = createAddButton(
+                                "+ Document");
+
+                document.setOnAction(
+                                e -> addDocumentBlock());
+
+                addButtons.getChildren().addAll(
+                                text,
+                                image,
+                                video,
+                                document);
+
+                card.getChildren().addAll(
+                                heading,
+                                separator,
+                                contentBlocks,
+                                addButtons);
+
+                return card;
+        }
+
+        // =========================================================
+        // TEXT BLOCK
+        // =========================================================
+
+        private void addTextBlock() {
+
+                VBox block = createContentBlock(
+                                "TEXT");
+
+                TextArea textArea = new TextArea();
+
+                textArea.setPromptText(
+                                "Write lesson content here...");
+
+                textArea.setWrapText(true);
+
+                textArea.setPrefHeight(
+                                150);
+
+                styleTextArea(
+                                textArea);
+
+                block.getChildren().add(
+                                textArea);
+
+                addBlock(
+                                block);
+        }
+
+        // =========================================================
+        // IMAGE BLOCK
+        // =========================================================
+
+        private void addImageBlock() {
+
+                VBox block = createContentBlock(
+                                "IMAGE");
+
+                TextField url = new TextField();
+
+                url.setPromptText(
+                                "Enter image URL");
+
+                styleTextField(
+                                url);
+
+                ImageView preview = new ImageView();
+
+                preview.setFitWidth(
+                                300);
+
+                preview.setFitHeight(
+                                160);
+
+                preview.setPreserveRatio(
+                                true);
+
+                StackPane previewBox = new StackPane(
+                                preview);
+
+                previewBox.setPrefHeight(
+                                170);
+
+                previewBox.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-style:dashed;" +
+                                                "-fx-border-radius:5;");
+
+                Button previewButton = new Button(
+                                "Preview Image");
+
+                previewButton.setStyle(
+                                "-fx-background-color:#14251A;" +
+                                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-border-color:#245D35;" +
+                                                "-fx-border-radius:4;");
+
+                previewButton.setOnAction(
+                                e -> {
+
+                                        try {
+
+                                                if (!url.getText()
+                                                                .trim()
+                                                                .isEmpty()) {
+
+                                                        preview.setImage(
+                                                                        new Image(
+                                                                                        url.getText()
+                                                                                                        .trim(),
+                                                                                        true));
+                                                }
+
+                                        } catch (Exception ex) {
+
+                                                System.out.println(
+                                                                "Invalid image URL");
+                                        }
+                                });
+
+                block.getChildren().addAll(
+                                url,
+                                previewButton,
+                                previewBox);
+
+                addBlock(
+                                block);
+        }
+
+        // =========================================================
+        // VIDEO BLOCK
+        // =========================================================
+
+        private void addVideoBlock() {
+
+                VBox block = createContentBlock(
+                                "VIDEO");
+
+                TextField url = new TextField();
+
+                url.setPromptText(
+                                "Enter YouTube or video URL");
+
+                styleTextField(
+                                url);
+
+                Label preview = new Label(
+                                "▶\n\nVideo Preview");
+
+                preview.setAlignment(
+                                Pos.CENTER);
+
+                preview.setPrefHeight(
+                                180);
+
+                preview.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                preview.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-text-fill:#555555;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-font-size:12px;");
+
+                block.getChildren().addAll(
+                                url,
+                                preview);
+
+                addBlock(
+                                block);
+        }
+
+        // =========================================================
+        // DOCUMENT BLOCK
+        // =========================================================
+
+        private void addDocumentBlock() {
+
+                VBox block = createContentBlock(
+                                "DOCUMENT");
+
+                TextField url = new TextField();
+
+                url.setPromptText(
+                                "Enter PDF / document URL");
+
+                styleTextField(
+                                url);
+
+                Label info = new Label(
+                                "Students will be able to open this document.");
+
+                info.setStyle(
+                                "-fx-text-fill:#777777;" +
+                                                "-fx-font-size:10px;");
+
+                block.getChildren().addAll(
+                                url,
+                                info);
+
+                addBlock(
+                                block);
+        }
+
+        // =========================================================
+        // CONTENT BLOCK
+        // =========================================================
+
+        private VBox createContentBlock(
+                        String type) {
+
+                VBox block = new VBox(8);
+
+                block.setPadding(
+                                new Insets(12));
+
+                block.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-border-color:#202A25;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:6;" +
+                                                "-fx-background-radius:6;");
+
+                HBox header = new HBox(8);
+
+                header.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                Region spacer = new Region();
+
+                HBox.setHgrow(
+                                spacer,
+                                Priority.ALWAYS);
+
+                Button up = new Button("↑");
+
+                Button down = new Button("↓");
+
+                Button delete = new Button("×");
+
+                styleSmallButton(up);
+
+                styleSmallButton(down);
+
+                styleSmallButton(delete);
+
+                up.setOnAction(
+                                e -> moveBlock(
+                                                block,
+                                                -1));
+
+                down.setOnAction(
+                                e -> moveBlock(
+                                                block,
+                                                1));
+
+                delete.setOnAction(
+                                e -> removeBlock(
+                                                block));
+
+                header.getChildren().addAll(
+                                spacer,
+                                up,
+                                down,
+                                delete);
+
+                block.getChildren().add(
+                                header);
+
+                return block;
+        }
+
+        // =========================================================
+        // ADD BLOCK
+        // =========================================================
+
+        private void addBlock(
+                        VBox block) {
+
+                blocks.add(
+                                block);
+
+                contentBlocks.getChildren().add(
+                                block);
+        }
+
+        // =========================================================
+        // REMOVE BLOCK
+        // =========================================================
+
+        private void removeBlock(
+                        VBox block) {
+
+                blocks.remove(
+                                block);
+
+                contentBlocks.getChildren().remove(
+                                block);
+        }
+
+        // =========================================================
+        // MOVE BLOCK
+        // =========================================================
+
+        private void moveBlock(
+                        VBox block,
+                        int direction) {
+
+                int index = blocks.indexOf(block);
+
+                if (index < 0) {
+                        return;
+                }
+
+                int newIndex = index + direction;
+
+                if (newIndex < 0 ||
+                                newIndex >= blocks.size()) {
+
+                        return;
+                }
+
+                blocks.remove(index);
+
+                blocks.add(
+                                newIndex,
+                                block);
+
+                contentBlocks
+                                .getChildren()
+                                .clear();
+
+                contentBlocks
+                                .getChildren()
+                                .addAll(
+                                                blocks);
+        }
+
+        // =========================================================
         // ACTIONS
-        // =====================================================
-
-        HBox actions = createActions();
-
-        // =====================================================
-        // PAGE
-        // =====================================================
-
-        VBox page = new VBox(15);
-
-        page.getChildren().addAll(
-                courseInfo,
-                content,
-                actions);
-
-        ScrollPane scroll = new ScrollPane(page);
-
-        scroll.setFitToWidth(true);
-
-        scroll.setHbarPolicy(
-                ScrollPane.ScrollBarPolicy.NEVER);
-
-        scroll.setVbarPolicy(
-                ScrollPane.ScrollBarPolicy.AS_NEEDED);
-
-        scroll.setStyle(
-                "-fx-background-color:#080C0D;" +
-                "-fx-background:#080C0D;" +
-                "-fx-border-color:transparent;");
-
-        VBox.setVgrow(
-                scroll,
-                Priority.ALWAYS);
-
-        root.getChildren().addAll(
-                header,
-                scroll);
-
-        return new Scene(
-                root,
-                1100,
-                700);
-    }
-
-    // =========================================================
-    // COURSE INFORMATION
-    // =========================================================
-
-    private HBox createCourseInfo() {
-
-        HBox box = new HBox(10);
-
-        box.setAlignment(
-                Pos.CENTER_LEFT);
-
-        box.setPadding(
-                new Insets(12));
-
-        box.setStyle(
-                "-fx-background-color:#101612;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-width:1;" +
-                "-fx-border-radius:7;" +
-                "-fx-background-radius:7;");
-
-        Label courseLabel = new Label(
-                "Course: " +
-                safe(course.getTitle()));
-
-        courseLabel.setStyle(
-                "-fx-text-fill:#68D34A;" +
-                "-fx-font-size:10px;" +
-                "-fx-font-weight:bold;");
-
-        Label separator = new Label("•");
-
-        separator.setStyle(
-                "-fx-text-fill:#555555;");
-
-        Label moduleLabel = new Label(
-                "Module: " +
-                safe(module.getTitle()));
-
-        moduleLabel.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-font-size:10px;" +
-                "-fx-font-weight:bold;");
-
-        Label separator2 = new Label("•");
-
-        separator2.setStyle(
-                "-fx-text-fill:#555555;");
-
-        Label lessonLabel = new Label(
-                "Lesson: " +
-                safe(lesson.getTitle()));
-
-        lessonLabel.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-font-size:10px;" +
-                "-fx-font-weight:bold;");
-
-        box.getChildren().addAll(
-                courseLabel,
-                separator,
-                moduleLabel,
-                separator2,
-                lessonLabel);
-
-        return box;
-    }
-
-    // =========================================================
-    // LESSON INFORMATION
-    // =========================================================
-
-    private VBox createLessonInformation() {
-
-        VBox card = createCard();
-
-        Label heading =
-                createHeading("Lesson Information");
-
-        Separator separator =
-                new Separator();
-
-        // =====================================================
-        // TITLE
-        // =====================================================
-
-        Label titleLabel =
-                createFieldLabel("Lesson Title");
-
-        titleField = new TextField();
-
-        titleField.setPromptText(
-                "Enter lesson title");
-
-        titleField.setText(
-                safe(lesson.getTitle()));
-
-        styleTextField(
-                titleField);
-
-        // =====================================================
-        // DESCRIPTION
-        // =====================================================
-
-        Label descriptionLabel =
-                createFieldLabel(
-                        "Lesson Description");
-
-        descriptionField =
-                new TextArea();
-
-        descriptionField.setPromptText(
-                "Describe what students will learn in this lesson...");
-
-        descriptionField.setText(
-                safe(lesson.getDescription()));
-
-        descriptionField.setWrapText(true);
-
-        descriptionField.setPrefRowCount(10);
-
-        descriptionField.setPrefHeight(220);
-
-        descriptionField.setMinHeight(180);
-
-        descriptionField.setMaxWidth(
-                Double.MAX_VALUE);
-
-        styleTextArea(
-                descriptionField);
-
-        // =====================================================
-        // CONTENT
-        // =====================================================
-
-        card.getChildren().addAll(
-                heading,
-                separator,
-                titleLabel,
-                titleField,
-                descriptionLabel,
-                descriptionField);
-
-        VBox.setVgrow(
-                descriptionField,
-                Priority.ALWAYS);
-
-        return card;
-    }
-
-    // =========================================================
-    // SETTINGS
-    // =========================================================
-
-    private VBox createLessonSettings() {
-
-        VBox card = createCard();
-
-        card.setPrefWidth(280);
-
-        card.setMinWidth(280);
-
-        Label heading =
-                createHeading("Lesson Settings");
-
-        Separator separator =
-                new Separator();
-
-        // =====================================================
-        // TYPE
-        // =====================================================
-
-        Label typeLabel =
-                createFieldLabel(
-                        "Lesson Type");
-
-        typeBox = new ComboBox<>();
-
-        typeBox.getItems().addAll(
-                "VIDEO",
-                "READING",
-                "QUIZ",
-                "ACTIVITY");
-
-        // String existingType =lesson.getType();
-
-        // if (existingType != null &&
-        //         typeBox.getItems()
-        //                 .contains(existingType)) {
-
-        //     typeBox.setValue(
-        //             existingType);
-
-        // } else {
-
-        //     typeBox.setValue(
-        //             "READING");
-        // }
-
-        // styleComboBox(
-        //         typeBox);
-
-        // =====================================================
-        // MEDIA
-        // =====================================================
-
-        Label mediaLabel =
-                createFieldLabel(
-                        "Topic Media");
-
-        mediaField =
-                new TextField();
-
-        mediaField.setPromptText(
-                "Image / video URL");
-
-        mediaField.setText(
-                safe(lesson.getMediaUrl()));
-
-        styleTextField(
-                mediaField);
-
-        // =====================================================
-        // ORDER
-        // =====================================================
-
-        Label orderLabel =
-                createFieldLabel(
-                        "Lesson Order");
-
-        Label order =
-                new Label(
-                        String.valueOf(
-                                module.getModuleOrder()
-                                        + "."
-                                        + lesson.getLessonOrder()));
-
-        order.setStyle(
-                "-fx-text-fill:#68D34A;" +
-                "-fx-font-size:12px;" +
-                "-fx-font-weight:bold;");
-
-        // =====================================================
-        // ADD
-        // =====================================================
-
-        card.getChildren().addAll(
-                heading,
-                separator,
-                typeLabel,
-                typeBox,
-                mediaLabel,
-                mediaField,
-                orderLabel,
-                order);
-
-        return card;
-    }
-
-    // =========================================================
-    // ACTIONS
-    // =========================================================
-
-    private HBox createActions() {
-
-        HBox box = new HBox(10);
-
-        box.setAlignment(
-                Pos.CENTER_RIGHT);
-
-        Button cancel =
-                new Button("Cancel");
-
-        cancel.setStyle(
-                "-fx-background-color:#101516;" +
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-width:1;" +
-                "-fx-border-radius:5;" +
-                "-fx-background-radius:5;" +
-                "-fx-padding:8 22;" +
-                "-fx-cursor:hand;");
-
-        cancel.setOnAction(
-                e -> goBack());
-
-        Button save =
-                new Button("✓  Save Changes");
-
-        save.setStyle(
-                "-fx-background-color:#68D34A;" +
-                "-fx-text-fill:#080C0D;" +
-                "-fx-border-color:#68D34A;" +
-                "-fx-border-radius:5;" +
-                "-fx-background-radius:5;" +
-                "-fx-padding:8 24;" +
-                "-fx-font-weight:bold;" +
-                "-fx-cursor:hand;");
-
-        save.setOnAction(
-                e -> updateLesson());
-
-        box.getChildren().addAll(
-                cancel,
-                save);
-
-        return box;
-    }
-
-    // =========================================================
-    // UPDATE
-    // =========================================================
-
-    private void updateLesson() {
-
-        String title =
-                titleField.getText().trim();
-
-        String description =
-                descriptionField.getText().trim();
-
-        String type =
-                typeBox.getValue();
-
-        String media =
-                mediaField.getText().trim();
-
-        // =====================================================
-        // VALIDATION
-        // =====================================================
-
-        if (title.isEmpty()) {
-
-            System.out.println(
-                    "Lesson title required.");
-
-            return;
+        // =========================================================
+
+        private HBox createActions() {
+
+                HBox box = new HBox(10);
+
+                box.setAlignment(
+                                Pos.CENTER_RIGHT);
+
+                // =====================================================
+                // CANCEL
+                // =====================================================
+
+                Button cancel = new Button("Cancel");
+
+                cancel.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-padding:8 22;" +
+                                                "-fx-cursor:hand;");
+
+                cancel.setOnAction(
+                                e -> goBack());
+
+                // =====================================================
+                // SAVE
+                // =====================================================
+
+                Button save = new Button(
+                                "✓  Save Changes");
+
+                save.setStyle(
+                                "-fx-background-color:#68D34A;" +
+                                                "-fx-text-fill:#080C0D;" +
+                                                "-fx-border-color:#68D34A;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-padding:8 24;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-cursor:hand;");
+
+                save.setOnAction(
+                                e -> updateLesson());
+
+                box.getChildren().addAll(
+                                cancel,
+                                save);
+
+                return box;
         }
 
-        if (description.isEmpty()) {
+        // =========================================================
+        // UPDATE LESSON
+        // =========================================================
 
-            System.out.println(
-                    "Lesson description required.");
+        private void updateLesson() {
 
-            return;
+                // =====================================================
+                // SAFETY
+                // =====================================================
+
+                if (lesson == null ||
+                                course == null ||
+                                module == null) {
+
+                        System.out.println(
+                                        "Course, module or lesson not found.");
+
+                        return;
+                }
+
+                // =====================================================
+                // GET DATA
+                // =====================================================
+
+                String title = titleField.getText()
+                                .trim();
+
+                String description = descriptionField.getText()
+                                .trim();
+
+                String media = mediaField != null
+                                ? mediaField.getText()
+                                                .trim()
+                                : safe(lesson.getMediaUrl());
+
+                // =====================================================
+                // VALIDATION
+                // =====================================================
+
+                if (title.isEmpty()) {
+
+                        System.out.println(
+                                        "Lesson title required.");
+
+                        titleField.requestFocus();
+
+                        return;
+                }
+
+                if (description.isEmpty()) {
+
+                        System.out.println(
+                                        "Lesson description required.");
+
+                        descriptionField.requestFocus();
+
+                        return;
+                }
+
+                // =====================================================
+                // UPDATE
+                // =====================================================
+
+                boolean updated = lessonController.updateLesson(
+                                lesson.getLessonId(),
+                                title,
+                                description,
+                                media);
+
+                if (!updated) {
+
+                        System.out.println(
+                                        "Lesson could not be updated.");
+
+                        return;
+                }
+
+                System.out.println(
+                                "Lesson updated successfully.");
+
+                // =====================================================
+                // RETURN TO MODULE PAGE
+                // =====================================================
+
+                goBack();
         }
 
-        if (type == null ||
-                type.trim().isEmpty()) {
+        // =========================================================
+        // ADD BUTTON
+        // =========================================================
 
-            type = "READING";
+        private Button createAddButton(
+                        String text) {
+
+                Button button = new Button(text);
+
+                button.setStyle(
+                                "-fx-background-color:#101612;" +
+                                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-border-color:#245D35;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-padding:7 14;" +
+                                                "-fx-font-size:10px;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-cursor:hand;");
+
+                return button;
         }
 
-        // =====================================================
-        // UPDATE
-        // =====================================================
+        // =========================================================
+        // SMALL BUTTON
+        // =========================================================
 
-        boolean updated =
-                lessonController.updateLesson(
-                        lesson.getLessonId(),
-                        title,
-                        description,
-                        type,
-                        media);
+        private void styleSmallButton(
+                        Button button) {
 
-        if (!updated) {
-
-            System.out.println(
-                    "Lesson could not be updated.");
-
-            return;
+                button.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-text-fill:#777777;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:4;" +
+                                                "-fx-background-radius:4;" +
+                                                "-fx-padding:3 7;" +
+                                                "-fx-cursor:hand;");
         }
 
-        System.out.println(
-                "Lesson updated successfully.");
+        // =========================================================
+        // CARD
+        // =========================================================
 
-        // =====================================================
-        // RETURN
-        // =====================================================
+        private VBox createCard() {
 
-        goBack();
-    }
+                VBox card = new VBox(10);
 
-    // =========================================================
-    // BACK
-    // =========================================================
+                card.setPadding(
+                                new Insets(18));
 
-    private void goBack() {
+                card.setMaxWidth(
+                                Double.MAX_VALUE);
 
-        ModulePage modulePage =
-                new ModulePage(course);
+                card.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:8;" +
+                                                "-fx-background-radius:8;");
 
-        LoginPage.mainStage.setScene(
-                modulePage.getModuleScene());
-    }
+                return card;
+        }
 
-    // =========================================================
-    // CARD
-    // =========================================================
+        // =========================================================
+        // HEADING
+        // =========================================================
 
-    private VBox createCard() {
+        private Label createHeading(
+                        String text) {
 
-        VBox card =
-                new VBox(10);
+                Label label = new Label(text);
 
-        card.setPadding(
-                new Insets(18));
+                label.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:15px;" +
+                                                "-fx-font-weight:bold;");
 
-        card.setStyle(
-                "-fx-background-color:#101516;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-width:1;" +
-                "-fx-border-radius:8;" +
-                "-fx-background-radius:8;");
+                return label;
+        }
 
-        return card;
-    }
+        // =========================================================
+        // FIELD LABEL
+        // =========================================================
 
-    // =========================================================
-    // HEADING
-    // =========================================================
+        private Label createFieldLabel(
+                        String text) {
 
-    private Label createHeading(
-            String text) {
+                Label label = new Label(text);
 
-        Label label =
-                new Label(text);
+                label.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:10px;" +
+                                                "-fx-font-weight:bold;");
 
-        label.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-font-size:16px;" +
-                "-fx-font-weight:bold;");
+                return label;
+        }
 
-        return label;
-    }
+        // =========================================================
+        // TEXT FIELD
+        // =========================================================
 
-    // =========================================================
-    // LABEL
-    // =========================================================
+        private void styleTextField(
+                        TextField field) {
 
-    private Label createFieldLabel(
-            String text) {
+                field.setPrefHeight(36);
 
-        Label label =
-                new Label(text);
+                field.setMaxWidth(
+                                Double.MAX_VALUE);
 
-        label.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-font-size:10px;" +
-                "-fx-font-weight:bold;");
+                field.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-prompt-text-fill:#666666;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-focus-color:transparent;" +
+                                                "-fx-faint-focus-color:transparent;" +
+                                                "-fx-padding:8;" +
+                                                "-fx-font-size:12px;");
+        }
 
-        return label;
-    }
+        // =========================================================
+        // TEXT AREA
+        // =========================================================
 
-    // =========================================================
-    // TEXT FIELD
-    // =========================================================
+        private void styleTextArea(
+                        TextArea area) {
 
-    private void styleTextField(
-            TextField field) {
+                area.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-prompt-text-fill:#666666;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:6;" +
+                                                "-fx-background-radius:6;" +
+                                                "-fx-focus-color:transparent;" +
+                                                "-fx-faint-focus-color:transparent;" +
+                                                "-fx-font-size:12px;" +
+                                                "-fx-padding:10px;" +
+                                                "-fx-control-inner-background:#0D1213;" +
+                                                "-fx-control-inner-background-alt:#0D1213;");
 
-        field.setPrefHeight(36);
+                area.setWrapText(true);
+        }
 
-        field.setMaxWidth(
-                Double.MAX_VALUE);
+        // =========================================================
+        // SAFE
+        // =========================================================
 
-        field.setStyle(
-                "-fx-background-color:#0D1213;" +
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-prompt-text-fill:#666666;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-width:1;" +
-                "-fx-border-radius:5;" +
-                "-fx-background-radius:5;" +
-                "-fx-padding:8;" +
-                "-fx-font-size:12px;");
-    }
+        private String safe(
+                        String value) {
 
-    // =========================================================
-    // TEXT AREA
-    // =========================================================
+                return value == null
+                                ? ""
+                                : value;
+        }
 
-    private void styleTextArea(
-            TextArea area) {
+        // =========================================================
+        // BACK
+        // =========================================================
 
-        area.setWrapText(true);
+        private void goBack() {
 
-        area.setStyle(
-                "-fx-control-inner-background:#0D1213;" +
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-prompt-text-fill:#666666;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-width:1;" +
-                "-fx-border-radius:5;" +
-                "-fx-background-radius:5;" +
-                "-fx-font-size:12px;" +
-                "-fx-padding:8;");
+                ModulePage modulePage = new ModulePage(course);
 
-        area.setPrefHeight(220);
-    }
-
-    // =========================================================
-    // COMBO BOX
-    // =========================================================
-
-    private void styleComboBox(
-            ComboBox<String> box) {
-
-        box.setPrefHeight(36);
-
-        box.setMaxWidth(
-                Double.MAX_VALUE);
-
-        box.setStyle(
-                "-fx-background-color:#0D1213;" +
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-width:1;" +
-                "-fx-border-radius:5;" +
-                "-fx-background-radius:5;");
-    }
-
-    // =========================================================
-    // SAFE
-    // =========================================================
-
-    private String safe(
-            String value) {
-
-        return value == null
-                ? ""
-                : value;
-    }
+                LoginPage.mainStage.setScene(
+                                modulePage.getModuleScene());
+        }
 }

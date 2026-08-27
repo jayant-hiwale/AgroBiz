@@ -151,7 +151,7 @@ public class LessonController {
             int lessonId,
             String title,
             String description,
-            String type,
+            // String type,
             String mediaUrl) {
 
         Lesson lesson = getLesson(lessonId);

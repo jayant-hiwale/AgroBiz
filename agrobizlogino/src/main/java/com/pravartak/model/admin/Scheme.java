@@ -1,4 +1,4 @@
-package com.pravartak.model.adminmodel;
+package com.pravartak.model.admin;
 
 public class Scheme {
 

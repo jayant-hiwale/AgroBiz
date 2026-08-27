@@ -859,25 +859,19 @@ public class AddLessonAdmin {
                                 "-fx-text-fill:#777777;" +
                                                 "-fx-font-size:10px;");
 
-                block.getChildren().addAll(
-                                url,
-                                info);
+                block.getChildren().addAll(url, info);
 
-                addBlock(
-                                block);
+                addBlock(block);
         }
 
         // =========================================================
         // CONTENT BLOCK
         // =========================================================
 
-        private VBox createContentBlock(
-                        String type) {
+        private VBox createContentBlock(String type) {
 
                 VBox block = new VBox(8);
-
-                block.setPadding(
-                                new Insets(12));
+                block.setPadding(new Insets(12));
 
                 block.setStyle(
                                 "-fx-background-color:#0D1213;" +
@@ -892,14 +886,11 @@ public class AddLessonAdmin {
 
                 HBox header = new HBox(8);
 
-                header.setAlignment(
-                                Pos.CENTER_LEFT);
+                header.setAlignment(Pos.CENTER_LEFT);
 
                 Region spacer = new Region();
 
-                HBox.setHgrow(
-                                spacer,
-                                Priority.ALWAYS);
+                HBox.setHgrow(spacer, Priority.ALWAYS);
 
                 Button up = new Button("↑");
 
@@ -914,21 +905,15 @@ public class AddLessonAdmin {
                 styleSmallButton(delete);
 
                 up.setOnAction(
-                                e -> moveBlock(
-                                                block,
-                                                -1));
+                                e -> moveBlock(block, -1));
 
                 down.setOnAction(
-                                e -> moveBlock(
-                                                block,
-                                                1));
+                                e -> moveBlock(block, 1));
 
                 delete.setOnAction(
-                                e -> removeBlock(
-                                                block));
+                                e -> removeBlock(block));
 
                 header.getChildren().addAll(
-                                // typeLabel,
                                 spacer,
                                 up,
                                 down,
@@ -944,37 +929,29 @@ public class AddLessonAdmin {
         // ADD BLOCK
         // =========================================================
 
-        private void addBlock(
-                        VBox block) {
+        private void addBlock(VBox block) {
 
-                blocks.add(
-                                block);
+                blocks.add(block);
 
-                contentBlocks.getChildren().add(
-                                block);
+                contentBlocks.getChildren().add(block);
         }
 
         // =========================================================
         // REMOVE BLOCK
         // =========================================================
 
-        private void removeBlock(
-                        VBox block) {
+        private void removeBlock(VBox block) {
 
-                blocks.remove(
-                                block);
+                blocks.remove(block);
 
-                contentBlocks.getChildren().remove(
-                                block);
+                contentBlocks.getChildren().remove(block);
         }
 
         // =========================================================
         // MOVE BLOCK
         // =========================================================
 
-        private void moveBlock(
-                        VBox block,
-                        int direction) {
+        private void moveBlock(VBox block, int direction) {
 
                 int index = blocks.indexOf(block);
 
@@ -984,23 +961,18 @@ public class AddLessonAdmin {
 
                 int newIndex = index + direction;
 
-                if (newIndex < 0 ||
-                                newIndex >= blocks.size()) {
+                if (newIndex < 0 || newIndex >= blocks.size()) {
 
                         return;
                 }
 
                 blocks.remove(index);
 
-                blocks.add(
-                                newIndex,
-                                block);
+                blocks.add(newIndex, block);
 
-                contentBlocks.getChildren()
-                                .clear();
+                contentBlocks.getChildren().clear();
 
-                contentBlocks.getChildren()
-                                .addAll(blocks);
+                contentBlocks.getChildren().addAll(blocks);
         }
 
         // =========================================================
@@ -1011,36 +983,32 @@ public class AddLessonAdmin {
 
                 HBox box = new HBox(10);
 
-                box.setAlignment(
-                                Pos.CENTER_RIGHT);
+                box.setAlignment(Pos.CENTER_RIGHT);
 
                 Button cancel = new Button("Cancel");
 
-                cancel.setStyle(
-                                "-fx-background-color:#101516;" +
-                                                "-fx-text-fill:#AAAAAA;" +
-                                                "-fx-border-color:#242B2C;" +
-                                                "-fx-border-width:1;" +
-                                                "-fx-border-radius:5;" +
-                                                "-fx-background-radius:5;" +
-                                                "-fx-padding:8 22;" +
-                                                "-fx-cursor:hand;");
+                cancel.setStyle("-fx-background-color:#101516;" +
+                                "-fx-text-fill:#AAAAAA;" +
+                                "-fx-border-color:#242B2C;" +
+                                "-fx-border-width:1;" +
+                                "-fx-border-radius:5;" +
+                                "-fx-background-radius:5;" +
+                                "-fx-padding:8 22;" +
+                                "-fx-cursor:hand;");
 
                 cancel.setOnAction(
                                 e -> goBack());
 
-                Button save = new Button(
-                                "✓  Save Lesson");
+                Button save = new Button("✓  Save Lesson");
 
-                save.setStyle(
-                                "-fx-background-color:#68D34A;" +
-                                                "-fx-text-fill:#080C0D;" +
-                                                "-fx-border-color:#68D34A;" +
-                                                "-fx-border-radius:5;" +
-                                                "-fx-background-radius:5;" +
-                                                "-fx-padding:8 24;" +
-                                                "-fx-font-weight:bold;" +
-                                                "-fx-cursor:hand;");
+                save.setStyle("-fx-background-color:#68D34A;" +
+                                "-fx-text-fill:#080C0D;" +
+                                "-fx-border-color:#68D34A;" +
+                                "-fx-border-radius:5;" +
+                                "-fx-background-radius:5;" +
+                                "-fx-padding:8 24;" +
+                                "-fx-font-weight:bold;" +
+                                "-fx-cursor:hand;");
 
                 save.setOnAction(
                                 e -> saveLesson());
@@ -1061,24 +1029,16 @@ public class AddLessonAdmin {
                 if (course == null ||
                                 module == null) {
 
-                        System.out.println(
-                                        "Course or module not found.");
+                        System.out.println("Course or module not found.");
 
                         return;
                 }
 
-                String title = titleField.getText()
-                                .trim();
+                String title = titleField.getText().trim();
 
-                String description = descriptionField.getText()
-                                .trim();
+                String description = descriptionField.getText().trim();
 
-                // String type = typeBox.getValue();
-
-                String media = mediaField != null
-                                ? mediaField.getText()
-                                                .trim()
-                                : "";
+                String media = mediaField != null ? mediaField.getText().trim() : "";
 
                 // =====================================================
                 // VALIDATION
@@ -1086,8 +1046,7 @@ public class AddLessonAdmin {
 
                 if (title.isEmpty()) {
 
-                        System.out.println(
-                                        "Lesson title required.");
+                        System.out.println("Lesson title required.");
 
                         titleField.requestFocus();
 
@@ -1096,8 +1055,7 @@ public class AddLessonAdmin {
 
                 if (description.isEmpty()) {
 
-                        System.out.println(
-                                        "Lesson description required.");
+                        System.out.println("Lesson description required.");
 
                         descriptionField.requestFocus();
 
@@ -1112,19 +1070,14 @@ public class AddLessonAdmin {
                                 module.getModuleId(),
                                 title,
                                 description,
-                                // type,
                                 media);
 
                 if (!saved) {
-
-                        System.out.println(
-                                        "Lesson could not be created.");
-
+                        System.out.println("Lesson could not be created.");
                         return;
                 }
 
-                System.out.println(
-                                "Lesson created successfully.");
+                System.out.println("Lesson created successfully.");
 
                 // =====================================================
                 // RETURN
@@ -1132,23 +1085,7 @@ public class AddLessonAdmin {
 
                 ModulePage modulePage = new ModulePage(course);
 
-                LoginPage.mainStage.setScene(
-                                modulePage.getModuleScene());
-        }
-
-        // =========================================================
-        // TOOLBAR SEPARATOR
-        // =========================================================
-
-        private Separator createToolbarSeparator() {
-
-                Separator separator = new Separator();
-
-                separator.setOrientation(  javafx.geometry.Orientation.VERTICAL);
-
-                separator.setPrefHeight( 22);
-
-                return separator;
+                LoginPage.mainStage.setScene(modulePage.getModuleScene());
         }
 
         // =========================================================
@@ -1159,16 +1096,16 @@ public class AddLessonAdmin {
 
                 Button button = new Button(text);
 
-                button.setStyle( "-fx-background-color:#101612;" +
-                                                "-fx-text-fill:#68D34A;" +
-                                                "-fx-border-color:#245D35;" +
-                                                "-fx-border-width:1;" +
-                                                "-fx-border-radius:5;" +
-                                                "-fx-background-radius:5;" +
-                                                "-fx-padding:7 14;" +
-                                                "-fx-font-size:10px;" +
-                                                "-fx-font-weight:bold;" +
-                                                "-fx-cursor:hand;");
+                button.setStyle("-fx-background-color:#101612;" +
+                                "-fx-text-fill:#68D34A;" +
+                                "-fx-border-color:#245D35;" +
+                                "-fx-border-width:1;" +
+                                "-fx-border-radius:5;" +
+                                "-fx-background-radius:5;" +
+                                "-fx-padding:7 14;" +
+                                "-fx-font-size:10px;" +
+                                "-fx-font-weight:bold;" +
+                                "-fx-cursor:hand;");
 
                 return button;
         }
