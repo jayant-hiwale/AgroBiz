@@ -1,6 +1,7 @@
 
 package com.pravartak.view.admin;
 
+import com.pravartak.view.admin.community.AdminCommunityPage;
 import com.pravartak.view.admin.course.AdminLearning;
 import com.pravartak.view.admin.scheme.SchemeTab;
 import com.pravartak.view.login.LoginPage;
@@ -452,12 +453,14 @@ public class AdminPage {
 
                         case "Community":
 
-                                Text community = createPageTitle(
-                                                "Community");
+        AdminCommunityPage adminCommunityPage =
+                new AdminCommunityPage();
 
-                                bp.setCenter(community);
+        bp.setCenter(
+                adminCommunityPage.getCommunityPage()
+        );
 
-                                break;
+        break;
 
                         // =================================================
                         // GOVERNMENT SCHEMES

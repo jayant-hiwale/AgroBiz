@@ -75,8 +75,8 @@ public class NavBar {
         }
         community.setOnAction(e -> {
 
-            // CommuityPage commuityPageScene = new CommuityPage();
-            // LoginPage.mainStage.setScene(commuityPageScene.getCommunityScene());
+            CommuityPage commuityPageScene = new CommuityPage();
+            LoginPage.mainStage.setScene(commuityPageScene.getCommunityScene());
         });
 
         if (currentPage.equals("Learning")) {

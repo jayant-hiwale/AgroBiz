@@ -4,18 +4,21 @@ public class Product {
 
     private int productId;
     private int farmerId;
+
     private String productName;
     private String category;
     private String description;
+
     private double price;
     private String unit;
     private double quantity;
+
     private String location;
     private String imagePath;
-    private String status;
-    private int orders;
 
-    // public Product() {}
+    public Product() {
+        // Required by Firestore
+    }
 
     public Product(
             int productId,
@@ -27,9 +30,7 @@ public class Product {
             String unit,
             double quantity,
             String location,
-            String imagePath,
-            String status,
-            int orders) {
+            String imagePath) {
 
         this.productId = productId;
         this.farmerId = farmerId;
@@ -41,8 +42,6 @@ public class Product {
         this.quantity = quantity;
         this.location = location;
         this.imagePath = imagePath;
-        this.status = status;
-        this.orders = orders;
     }
 
     public int getProductId() {
@@ -123,21 +122,5 @@ public class Product {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public int getOrders() {
-        return orders;
-    }
-
-    public void setOrders(int orders) {
-        this.orders = orders;
     }
 }

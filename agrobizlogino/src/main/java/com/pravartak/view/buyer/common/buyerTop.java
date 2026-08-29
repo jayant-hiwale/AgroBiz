@@ -3,11 +3,12 @@ package com.pravartak.view.buyer.common;
 import com.pravartak.view.buyer.Ai;
 import com.pravartak.view.buyer.BuyerHomepage;
 import com.pravartak.view.buyer.BuyerProfilePage;
-import com.pravartak.view.buyer.Market;
+import com.pravartak.view.buyer.BuyerMarketPlace;
 import com.pravartak.view.buyer.Watchlist;
 import com.pravartak.view.login.LoginPage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -49,9 +50,9 @@ public class buyerTop {
         }
         market.setOnAction(e -> {
             
-            Market marketPage = new Market(null);
-            LoginPage.mainStage.setScene(marketPage.getMarketPage());
-        });
+             BuyerMarketPlace marketplace = new BuyerMarketPlace();
+            LoginPage.mainStage.setScene(new Scene(marketplace.getMarketplacePage()));
+         });
 
         if (currentPage.equals("Watchlist")) {
             watchlist.setStyle(navButtonActive());

@@ -208,8 +208,8 @@ public class Watchlist {
         );
 
         marketBtn.setOnAction(e -> {
-            Market market = new Market(null);
-            LoginPage.mainStage.setScene(market.getMarketPage());
+            BuyerMarketPlace market = new BuyerMarketPlace();
+            LoginPage.mainStage.setScene(new Scene(market.getMarketplacePage()));
         });
 
         VBox emptyBox = new VBox(14, iconLabel, message, subMessage, marketBtn);

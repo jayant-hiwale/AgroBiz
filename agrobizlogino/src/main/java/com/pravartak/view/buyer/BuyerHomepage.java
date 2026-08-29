@@ -12,7 +12,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import com.pravartak.controller.Buyercontroller;
+//import com.pravartak.controller.Buyercontroller;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -133,8 +133,8 @@ public class BuyerHomepage {
         });
 
         viewMarketButton.setOnAction(e -> {
-            Market market = new Market(controller);
-            LoginPage.mainStage.setScene(market.getMarketPage());
+            BuyerMarketPlace market = new BuyerMarketPlace();
+            LoginPage.mainStage.setScene(new Scene(market.getMarketplacePage()));
         });
 
         // --- Category Header ---
