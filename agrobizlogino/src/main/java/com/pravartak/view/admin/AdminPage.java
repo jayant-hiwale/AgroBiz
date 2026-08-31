@@ -3,6 +3,7 @@ package com.pravartak.view.admin;
 
 import com.pravartak.view.admin.community.AdminCommunityPage;
 import com.pravartak.view.admin.course.AdminLearning;
+import com.pravartak.view.admin.marketplace.AdminMarketplacePage;
 import com.pravartak.view.admin.scheme.SchemeTab;
 import com.pravartak.view.login.LoginPage;
 
@@ -306,10 +307,10 @@ public class AdminPage {
                                                 "-fx-background-radius:50%;" +
                                                 "-fx-text-fill:#EEEEEE;" +
                                                 "-fx-font-weight:bold;");
-                
-                profile.setOnAction(e->{
+
+                profile.setOnAction(e -> {
                         System.out.println("Profile Button Clicked");
-                        
+
                 });
                 // =====================================================
                 // TOP BAR COMPONENTS
@@ -417,11 +418,10 @@ public class AdminPage {
 
                         case "Users":
 
-                                Text users = createPageTitle(
-                                                "Users");
+                                AdminUsersPage usersPage = new AdminUsersPage();
 
-                                bp.setCenter(users);
-
+                                bp.setCenter(
+                                                usersPage.getUsersPage());
                                 break;
 
                         // =================================================
@@ -430,10 +430,8 @@ public class AdminPage {
 
                         case "Marketplace":
 
-                                Text marketplace = createPageTitle(
-                                                "Marketplace");
-
-                                bp.setCenter(marketplace);
+                                AdminMarketplacePage marketplacePage = new AdminMarketplacePage();
+                                bp.setCenter(marketplacePage.getMarketplacePage());
 
                                 break;
 
@@ -453,14 +451,12 @@ public class AdminPage {
 
                         case "Community":
 
-        AdminCommunityPage adminCommunityPage =
-                new AdminCommunityPage();
+                                AdminCommunityPage adminCommunityPage = new AdminCommunityPage();
 
-        bp.setCenter(
-                adminCommunityPage.getCommunityPage()
-        );
+                                bp.setCenter(
+                                                adminCommunityPage.getCommunityPage());
 
-        break;
+                                break;
 
                         // =================================================
                         // GOVERNMENT SCHEMES

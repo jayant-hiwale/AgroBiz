@@ -472,12 +472,40 @@ public class Create_Profile {
         // CREATE USER MODEL
         // ==========================================
 
-        UserModel user =
-                new UserModel(
-                        uid,
-                        name,
-                        userEmail,
-                        selectedRole);
+        // UserModel user =
+        //         new UserModel(
+        //                 uid,
+        //                 name,
+        //                 userEmail,
+        //                 selectedRole);
+        // ==========================================
+// CREATE USER MODEL
+// ==========================================
+
+int farmerId = 0;
+
+if ("FARMER".equalsIgnoreCase(selectedRole)) {
+
+    farmerId =
+            (int) (
+                    System.currentTimeMillis()
+                    % Integer.MAX_VALUE
+            );
+
+    System.out.println(
+            "Generated Farmer ID = "
+            + farmerId
+    );
+}
+
+UserModel user =
+        new UserModel(
+                uid,
+                name,
+                userEmail,
+                selectedRole,
+                farmerId
+        );
 
         // ==========================================
         // SAVE USER TO FIRESTORE

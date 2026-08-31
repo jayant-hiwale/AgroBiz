@@ -35,6 +35,10 @@ public class HomePageFarmer {
     
     // ANIMATED BACKGROUND
     
+    public HomePageFarmer(int farmerId, String firebaseUid) {
+       
+}
+
     private StackPane createAnimatedBackground() {
         StackPane backgroundPane = new StackPane();
         // Main dark green background

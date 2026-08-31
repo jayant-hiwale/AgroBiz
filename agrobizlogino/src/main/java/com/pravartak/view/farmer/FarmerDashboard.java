@@ -1,19 +1,25 @@
 
 package com.pravartak.view.farmer;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.net.URL;
 
+import com.pravartak.controller.farmercontoller.FarmerProfileController;
+import com.pravartak.model.farmer_model.FarmerProfile;
 import com.pravartak.view.login.LoginPage;
 import javafx.scene.control.ProgressBar;
+import com.pravartak.dao.UserDAO;
+import com.pravartak.model.UserModel;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -39,13 +45,36 @@ import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.FileChooser;
+import java.io.File;
+import java.util.Base64;
 
-public class FarmerDashboard {
+ public class FarmerDashboard {
+            private final int farmerId;
+            private final String firebaseUid;
 
-    // LOGOUT CALLBACK
-    private final Runnable logoutAction;
+            private final FarmerProfileController profileController;
+            private final UserDAO userDAO;
+            private String selectedProfileImageBase64;
+// //     // LOGOUT CALLBACK
+// //     private final Runnable logoutAction;
 
-    // COLORS
+    private TextField nameField;
+    private TextField emailField;
+    private TextField phoneField;
+
+    private TextField addressField;
+    private TextField villageField;
+    private TextField districtField;
+    private TextField stateField;
+
+    private TextField farmNameField;
+    private TextField farmAreaField;
+    private ComboBox<String> farmingTypeBox;
+    private TextField primaryCropsField;
+    private String imageBase64 = "";
+
+// //     // COLORS
     private final Color DARK_GREEN = Color.rgb(14, 35, 16);
     private static final Color GREEN = Color.DARKGREEN;
     private final Color LIGHT_GREEN = Color.rgb(186, 209, 174);
@@ -55,7 +84,7 @@ public class FarmerDashboard {
     private final Color CARD_BACKGROUND = Color.rgb(0,100,0);
     private final Color BORDER_COLOR = Color.rgb(225, 230, 220);
 
-    // SIDEBAR BUTTONS
+// //     // SIDEBAR BUTTONS
     private Button homepageButton;
     private Button dashboardButton;
     private Button profileButton;
@@ -65,13 +94,72 @@ public class FarmerDashboard {
     private Button investmentButton;
     private Button schemesButton;
 
-    // MAIN BORDER PANE
+// //     // MAIN BORDER PANE
     private BorderPane root;
+private StackPane profileImageContainer;
 
-    // CONSTRUCTOR
-    public FarmerDashboard(Runnable logoutAction) {
-        this.logoutAction = logoutAction;
+// =============================================================
+// CONSTRUCTOR
+// =============================================================
+
+public FarmerDashboard(
+        int farmerId,
+        String firebaseUid) {
+
+    if (farmerId <= 0) {
+
+        throw new IllegalArgumentException(
+                "Invalid farmer ID: " + farmerId
+        );
     }
+
+    if (firebaseUid == null ||
+            firebaseUid.trim().isEmpty()) {
+
+        throw new IllegalArgumentException(
+                "Firebase UID is missing."
+        );
+    }
+
+    this.farmerId = farmerId;
+    this.firebaseUid = firebaseUid;
+
+    this.profileController =
+            new FarmerProfileController();
+
+    this.userDAO =
+            new UserDAO();
+
+    System.out.println(
+            "FarmerDashboard opened"
+    );
+
+    System.out.println(
+            "Farmer ID = " + this.farmerId
+    );
+
+    System.out.println(
+            "Firebase UID = " + this.firebaseUid
+    );
+}
+// =============================================================
+// GET FARMER ID
+// =============================================================
+
+public int getFarmerId() {
+
+    return farmerId;
+}
+
+
+// =============================================================
+// GET FIREBASE UID
+// =============================================================
+
+public String getFirebaseUid() {
+
+    return firebaseUid;
+}
 
     // SCENE
     public Scene getDashboardScene() {
@@ -117,7 +205,7 @@ public class FarmerDashboard {
         homepageButton = createMenuButton("⌂", "Home");
 
         homepageButton.setOnAction(event -> {
-            HomePageFarmer homePageFarmer = new HomePageFarmer();
+            HomePageFarmer homePageFarmer = new HomePageFarmer(farmerId,firebaseUid);
             LoginPage.mainStage.setScene(homePageFarmer.getHomePageFarmer());
         });
 
@@ -249,48 +337,1018 @@ public class FarmerDashboard {
             button.setBackground(Background.EMPTY);
         }
 
-        // selectedButton.setTextFill(DARK_GREEN);
-        // selectedButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        // selectedButton.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(10), Insets.EMPTY)));
         selectedButton.setTextFill(Color.WHITE);
         selectedButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         selectedButton.setBackground(new Background(new BackgroundFill(GREEN, new CornerRadii(10), Insets.EMPTY)));
     }
 
     // PAGE NAVIGATION
-    private void showPage(String page) {
-        if (page.equals("dashboard")) {
+   // =========================================================
+// PAGE NAVIGATION
+// =========================================================
+
+private void showPage(String page) {
+
+    switch (page) {
+
+        case "dashboard":
+
             setSelectedMenuButton(dashboardButton);
-            root.setCenter(createDashboardPage());
-        } else if (page.equals("profile")) {
+
+            root.setCenter(
+                    createDashboardPage()
+            );
+
+            break;
+
+
+        case "profile":
+
             setSelectedMenuButton(profileButton);
-            root.setCenter(createProfilePage());
-        } else if (page.equals("ai")) {
+
+            // IMPORTANT:
+            // Profile menu opens READ-ONLY profile page.
+            root.setCenter(
+                    createProfileView()
+            );
+
+            break;
+
+
+        case "editProfile":
+
+            setSelectedMenuButton(profileButton);
+
+            // Edit Profile opens editable form.
+            root.setCenter(
+                    createProfileCard()
+            );
+
+            break;
+
+
+        case "ai":
+
             setSelectedMenuButton(aiAdvisorButton);
-            root.setCenter(createAIAdvisorPage());
-        } else if (page.equals("learning")) {
+
+            root.setCenter(
+                    createAIAdvisorPage()
+            );
+
+            break;
+
+
+        case "learning":
+
             setSelectedMenuButton(learningButton);
-            root.setCenter(createLearningPage());
-        } else if (page.equals("wishlist")) {
+
+            root.setCenter(
+                    createLearningPage()
+            );
+
+            break;
+
+
+        case "wishlist":
+
             setSelectedMenuButton(wishlistButton);
-            root.setCenter(createWishlistPage());
-        } else if (page.equals("investment")) {
+
+            root.setCenter(
+                    createWishlistPage()
+            );
+
+            break;
+
+
+        case "investment":
+
             setSelectedMenuButton(investmentButton);
-            root.setCenter(createInvestmentPage());
-        } else if (page.equals("schemes")) {
+
+            root.setCenter(
+                    createInvestmentPage()
+            );
+
+            break;
+
+
+        case "schemes":
+
             setSelectedMenuButton(schemesButton);
-            root.setCenter(createSchemesPage());
-        }else if (page.equals("Homepage")) {
+
+            root.setCenter(
+                    createSchemesPage()
+            );
+
+            break;
+
+
+        case "Homepage":
+
             setSelectedMenuButton(homepageButton);
-            HomePageFarmer homePageFarmer = new HomePageFarmer();
-            LoginPage.mainStage.setScene(homePageFarmer.getHomePageFarmer());
-        } else {
-            // Default to dashboard if unknown page
+
+            HomePageFarmer homePageFarmer =
+                    new HomePageFarmer(
+                            farmerId,
+                            firebaseUid
+                    );
+
+            LoginPage.mainStage.setScene(
+                    homePageFarmer.getHomePageFarmer()
+            );
+
+            break;
+
+
+        default:
+
             setSelectedMenuButton(dashboardButton);
-            root.setCenter(createDashboardPage());  
-            
-        }
+
+            root.setCenter(
+                    createDashboardPage()
+            );
+
+            break;
     }
+}
+// =========================================================
+// PROFILE VIEW PAGE - READ ONLY
+// =========================================================
+
+private VBox createProfileView() {
+
+    VBox main = new VBox();
+
+    main.setBackground(
+            new Background(
+                    new BackgroundFill(
+                            DARK_GREEN,
+                            CornerRadii.EMPTY,
+                            Insets.EMPTY
+                    )
+            )
+    );
+
+    HBox topBar =
+            createTopBar(
+                    "Farmer Profile",
+                    "View your personal and farming information."
+            );
+
+    VBox content =
+            new VBox();
+
+    content.setPadding(
+            new Insets(
+                    30,
+                    35,
+                    35,
+                    35
+            )
+    );
+
+    content.setSpacing(22);
+
+    content.setBackground(
+            new Background(
+                    new BackgroundFill(
+                            Color.web("#050b0a"),
+                            CornerRadii.EMPTY,
+                            Insets.EMPTY
+                    )
+            )
+    );
+
+    // =====================================================
+    // GET PROFILE
+    // =====================================================
+
+    FarmerProfile profile = null;
+
+    try {
+
+        profile =
+                profileController.getProfile(
+                        farmerId
+                );
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
+
+    // =====================================================
+    // GET FIREBASE USER
+    // =====================================================
+
+    UserModel firebaseUser = null;
+
+    try {
+
+        firebaseUser =
+                userDAO.getUserByUid(
+                        firebaseUid
+                );
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
+
+    // =====================================================
+    // NAME
+    // =====================================================
+
+    String farmerName = "";
+
+    if (profile != null &&
+            profile.getName() != null &&
+            !profile.getName().trim().isEmpty()) {
+
+        farmerName =
+                profile.getName().trim();
+
+    } else if (firebaseUser != null &&
+            firebaseUser.getFullName() != null &&
+            !firebaseUser.getFullName().trim().isEmpty()) {
+
+        farmerName =
+                firebaseUser.getFullName().trim();
+
+    } else {
+
+        farmerName = "Farmer";
+    }
+
+    // =====================================================
+    // EMAIL
+    // =====================================================
+
+    String farmerEmail = "";
+
+    if (profile != null &&
+            profile.getEmail() != null &&
+            !profile.getEmail().trim().isEmpty()) {
+
+        farmerEmail =
+                profile.getEmail().trim();
+
+    } else if (firebaseUser != null &&
+            firebaseUser.getEmail() != null &&
+            !firebaseUser.getEmail().trim().isEmpty()) {
+
+        farmerEmail =
+                firebaseUser.getEmail().trim();
+
+    } else {
+
+        farmerEmail = "Not provided";
+    }
+
+    // =====================================================
+    // PROFILE HEADER
+    // =====================================================
+
+    HBox profileHeader =
+            new HBox();
+
+    profileHeader.setPrefHeight(
+            135
+    );
+
+    profileHeader.setPadding(
+            new Insets(22)
+    );
+
+    profileHeader.setSpacing(
+            18
+    );
+
+    profileHeader.setAlignment(
+            Pos.CENTER_LEFT
+    );
+
+    profileHeader.setBackground(
+            new Background(
+                    new BackgroundFill(
+                            Color.DARKGREEN,
+                            new CornerRadii(15),
+                            Insets.EMPTY
+                    )
+            )
+    );
+
+    // =====================================================
+    // PROFILE IMAGE
+    // =====================================================
+
+    StackPane profileImage =
+            new StackPane();
+
+    profileImage.setPrefSize(
+            90,
+            90
+    );
+
+    profileImage.setMinSize(
+            90,
+            90
+    );
+
+    profileImage.setMaxSize(
+            90,
+            90
+    );
+
+    profileImage.setStyle(
+            "-fx-background-color:#1B2420;" +
+            "-fx-background-radius:50;"
+    );
+
+    if (profile != null &&
+            profile.getImageBase64() != null &&
+            !profile.getImageBase64()
+                    .trim()
+                    .isEmpty()) {
+
+        try {
+
+            byte[] bytes =
+                    Base64.getDecoder()
+                            .decode(
+                                    profile.getImageBase64()
+                            );
+
+            Image image =
+                    new Image(
+                            new java.io.ByteArrayInputStream(
+                                    bytes
+                            )
+                    );
+
+            ImageView imageView =
+                    new ImageView(
+                            image
+                    );
+
+            imageView.setFitWidth(90);
+            imageView.setFitHeight(90);
+            imageView.setPreserveRatio(false);
+
+            Circle clip =
+                    new Circle(
+                            45,
+                            45,
+                            45
+                    );
+
+            imageView.setClip(
+                    clip
+            );
+
+            profileImage
+                    .getChildren()
+                    .add(
+                            imageView
+                    );
+
+        } catch (Exception e) {
+
+            addDefaultProfileIcon(
+                    profileImage,
+                    farmerName
+            );
+        }
+
+    } else {
+
+        addDefaultProfileIcon(
+                profileImage,
+                farmerName
+        );
+    }
+
+    // =====================================================
+    // PROFILE TEXT
+    // =====================================================
+
+    VBox profileText =
+            new VBox(
+                    5
+            );
+
+    Label nameLabel =
+            new Label(
+                    farmerName
+            );
+
+    nameLabel.setTextFill(
+            DARK_TEXT
+    );
+
+    nameLabel.setFont(
+            Font.font(
+                    "Arial",
+                    FontWeight.BOLD,
+                    21
+            )
+    );
+
+    Label roleLabel =
+            new Label(
+                    "Farm Owner"
+            );
+
+    roleLabel.setTextFill(
+            LIGHT_GREEN
+    );
+
+    roleLabel.setFont(
+            Font.font(
+                    "Arial",
+                    13
+            )
+    );
+
+    Label descriptionLabel =
+            new Label(
+                    "Your profile information is visible to buyers."
+            );
+
+    descriptionLabel.setTextFill(
+            GREY
+    );
+
+    descriptionLabel.setFont(
+            Font.font(
+                    "Arial",
+                    12
+            )
+    );
+
+    profileText
+            .getChildren()
+            .addAll(
+                    nameLabel,
+                    roleLabel,
+                    descriptionLabel
+            );
+
+    // =====================================================
+    // SPACER
+    // =====================================================
+
+    Region profileSpacer =
+            new Region();
+
+    HBox.setHgrow(
+            profileSpacer,
+            Priority.ALWAYS
+    );
+
+    // =====================================================
+    // EDIT BUTTON
+    // =====================================================
+
+    Button edit =
+            new Button(
+                    "✎  Edit Profile"
+            );
+
+    edit.setPrefHeight(
+            42
+    );
+
+    edit.setPrefWidth(
+            130
+    );
+
+    edit.setTextFill(
+            Color.WHITE
+    );
+
+    edit.setFont(
+            Font.font(
+                    "Arial",
+                    FontWeight.BOLD,
+                    12
+            )
+    );
+
+    edit.setBackground(
+            new Background(
+                    new BackgroundFill(
+                            GREEN,
+                            new CornerRadii(7),
+                            Insets.EMPTY
+                    )
+            )
+    );
+
+    edit.setCursor(
+            Cursor.HAND
+    );
+
+    edit.setOnAction(
+            e -> {
+
+                root.setCenter(
+                        createProfileCard()
+                );
+            }
+    );
+
+    profileHeader
+            .getChildren()
+            .addAll(
+                    profileImage,
+                    profileText,
+                    profileSpacer,
+                    edit
+            );
+
+    // =====================================================
+    // PERSONAL CARD
+    // =====================================================
+
+    VBox personalCard =
+            createProfileViewCard(
+                    "♙  Personal Information"
+            );
+
+    GridPane personalGrid =
+            new GridPane();
+
+    personalGrid.setHgap(20);
+    personalGrid.setVgap(15);
+
+    personalGrid.add(
+            createProfileViewField(
+                    "Full Name",
+                    farmerName
+            ),
+            0,
+            0
+    );
+
+    personalGrid.add(
+            createProfileViewField(
+                    "Email Address",
+                    farmerEmail
+            ),
+            1,
+            0
+    );
+
+    personalGrid.add(
+            createProfileViewField(
+                    "Phone Number",
+                    getProfileValue(
+                            profile == null
+                                    ? null
+                                    : profile.getPhone()
+                    )
+            ),
+            0,
+            1
+    );
+
+    personalGrid.add(
+            createProfileViewField(
+                    "Address",
+                    getProfileValue(
+                            profile == null
+                                    ? null
+                                    : profile.getAddress()
+                    )
+            ),
+            1,
+            1
+    );
+
+    personalGrid.add(
+            createProfileViewField(
+                    "Village",
+                    getProfileValue(
+                            profile == null
+                                    ? null
+                                    : profile.getVillage()
+                    )
+            ),
+            0,
+            2
+    );
+
+    personalGrid.add(
+            createProfileViewField(
+                    "District",
+                    getProfileValue(
+                            profile == null
+                                    ? null
+                                    : profile.getDistrict()
+                    )
+            ),
+            1,
+            2
+    );
+
+    personalGrid.add(
+            createProfileViewField(
+                    "State",
+                    getProfileValue(
+                            profile == null
+                                    ? null
+                                    : profile.getState()
+                    )
+            ),
+            0,
+            3
+    );
+
+    personalCard
+            .getChildren()
+            .add(
+                    personalGrid
+            );
+
+    // =====================================================
+    // FARM CARD
+    // =====================================================
+
+    VBox farmCard =
+            createProfileViewCard(
+                    "♧  Farm Information"
+            );
+
+    GridPane farmGrid =
+            new GridPane();
+
+    farmGrid.setHgap(20);
+    farmGrid.setVgap(15);
+
+    farmGrid.add(
+            createProfileViewField(
+                    "Farm Name",
+                    getProfileValue(
+                            profile == null
+                                    ? null
+                                    : profile.getFarmName()
+                    )
+            ),
+            0,
+            0
+    );
+
+    farmGrid.add(
+            createProfileViewField(
+                    "Farm Area",
+                    getProfileValue(
+                            profile == null
+                                    ? null
+                                    : profile.getFarmArea()
+                    )
+            ),
+            1,
+            0
+    );
+
+    farmGrid.add(
+            createProfileViewField(
+                    "Farming Type",
+                    getProfileValue(
+                            profile == null
+                                    ? null
+                                    : profile.getFarmingType()
+                    )
+            ),
+            0,
+            1
+    );
+
+    farmGrid.add(
+            createProfileViewField(
+                    "Primary Crops",
+                    getProfileValue(
+                            profile == null
+                                    ? null
+                                    : profile.getPrimaryCrops()
+                    )
+            ),
+            1,
+            1
+    );
+
+    farmCard
+            .getChildren()
+            .add(
+                    farmGrid
+            );
+
+    // =====================================================
+    // FARMER ID / UID CARD
+    // =====================================================
+
+    VBox accountCard =
+            createProfileViewCard(
+                    "🔐  Account Information"
+            );
+
+    GridPane accountGrid =
+            new GridPane();
+
+    accountGrid.setHgap(20);
+    accountGrid.setVgap(15);
+
+    accountGrid.add(
+            createProfileViewField(
+                    "Farmer ID",
+                    String.valueOf(
+                            farmerId
+                    )
+            ),
+            0,
+            0
+    );
+
+    accountGrid.add(
+            createProfileViewField(
+                    "Firebase UID",
+                    firebaseUid
+            ),
+            1,
+            0
+    );
+
+    accountCard
+            .getChildren()
+            .add(
+                    accountGrid
+            );
+
+    // =====================================================
+    // COLUMN WIDTH
+    // =====================================================
+
+    columnConstraintsHelper(
+            personalGrid
+    );
+
+    columnConstraintsHelper(
+            farmGrid
+    );
+
+    columnConstraintsHelper(
+            accountGrid
+    );
+
+    // =====================================================
+    // ADD CONTENT
+    // =====================================================
+
+    content.getChildren()
+            .addAll(
+                    profileHeader,
+                    personalCard,
+                    farmCard,
+                    accountCard
+            );
+
+    // =====================================================
+    // SCROLL
+    // =====================================================
+
+    ScrollPane scroll =
+            new ScrollPane(
+                    content
+            );
+
+    scroll.setFitToWidth(
+            true
+    );
+
+    scroll.setHbarPolicy(
+            ScrollPane.ScrollBarPolicy.NEVER
+    );
+
+    scroll.setVbarPolicy(
+            ScrollPane.ScrollBarPolicy.AS_NEEDED
+    );
+
+    scroll.setStyle(
+            "-fx-background-color:#050b0a;" +
+            "-fx-background:#050b0a;" +
+            "-fx-control-inner-background:#050b0a;"
+    );
+
+    VBox.setVgrow(
+            scroll,
+            Priority.ALWAYS
+    );
+
+    main.getChildren()
+            .addAll(
+                    topBar,
+                    scroll
+            );
+
+    return main;
+}
+
+    private void addDefaultProfileIcon(
+        StackPane container,
+        String farmerName) {
+
+    String initial = "F";
+
+    if (farmerName != null &&
+            !farmerName.trim().isEmpty()) {
+
+        initial =
+                farmerName
+                        .trim()
+                        .substring(0, 1)
+                        .toUpperCase();
+    }
+
+    Label icon =
+            new Label(
+                    initial
+            );
+
+    icon.setPrefSize(
+            90,
+            90
+    );
+
+    icon.setAlignment(
+            Pos.CENTER
+    );
+
+    icon.setTextFill(
+            Color.WHITE
+    );
+
+    icon.setFont(
+            Font.font(
+                    "Arial",
+                    FontWeight.BOLD,
+                    28
+            )
+    );
+
+    icon.setBackground(
+            new Background(
+                    new BackgroundFill(
+                            DARK_GREEN,
+                            new CornerRadii(50),
+                            Insets.EMPTY
+                    )
+            )
+    );
+
+    container
+            .getChildren()
+            .add(
+                    icon
+            );
+}
+private VBox createProfileViewCard(
+        String titleText) {
+
+    VBox card =
+            new VBox(
+                    18
+            );
+
+    card.setPadding(
+            new Insets(
+                    22
+            )
+    );
+
+    card.setMaxWidth(
+            Double.MAX_VALUE
+    );
+
+    card.setStyle(
+            "-fx-background-color:#0D1213;" +
+            "-fx-background-radius:15;" +
+            "-fx-border-color:#26382B;" +
+            "-fx-border-radius:15;" +
+            "-fx-border-width:1;"
+    );
+
+    Label title =
+            new Label(
+                    titleText
+            );
+
+    title.setTextFill(
+            Color.WHITE
+    );
+
+    title.setFont(
+            Font.font(
+                    "Arial",
+                    FontWeight.BOLD,
+                    18
+            )
+    );
+
+    card.getChildren()
+            .add(
+                    title
+            );
+
+    return card;
+}
+    private VBox createProfileViewField(
+        String title,
+        String value) {
+
+    VBox box =
+            new VBox(
+                    6
+            );
+
+    Label titleLabel =
+            new Label(
+                    title
+            );
+
+    titleLabel.setTextFill(
+            Color.web("#A9B7AC")
+    );
+
+    titleLabel.setFont(
+            Font.font(
+                    "Arial",
+                    FontWeight.BOLD,
+                    11
+            )
+    );
+
+    Label valueLabel =
+            new Label(
+                    getProfileValue(value)
+            );
+
+    valueLabel.setTextFill(
+            Color.WHITE
+    );
+
+    valueLabel.setFont(
+            Font.font(
+                    "Arial",
+                    14
+            )
+    );
+
+    valueLabel.setWrapText(
+            true
+    );
+
+    valueLabel.setMaxWidth(
+            Double.MAX_VALUE
+    );
+
+    box.setPadding(
+            new Insets(
+                    12
+            )
+    );
+
+    box.setStyle(
+            "-fx-background-color:#101516;" +
+            "-fx-background-radius:7;" +
+            "-fx-border-color:#303839;" +
+            "-fx-border-radius:7;"
+    );
+
+    box.getChildren()
+            .addAll(
+                    titleLabel,
+                    valueLabel
+            );
+
+    GridPane.setHgrow(
+            box,
+            Priority.ALWAYS
+    );
+
+    return box;
+}
+private String getProfileValue(
+        String value) {
+
+    if (value == null ||
+            value.trim().isEmpty()) {
+
+        return "Not provided";
+    }
+
+    return value.trim();
+}
+
 
     // DASHBOARD PAGE
     private VBox createDashboardPage() {
@@ -312,7 +1370,7 @@ public class FarmerDashboard {
         return main;
     }
 
-    // TOP BAR
+// //     // TOP BAR
     private HBox createTopBar(String titleText, String subtitleText) {
         HBox bar = new HBox();
         bar.setPrefHeight(100);
@@ -603,196 +1661,944 @@ public class FarmerDashboard {
         button.setCursor(Cursor.HAND);
         return button;
     }
+    private void loadFirebaseUserData() {
 
-    // PROFILE PAGE
-    private VBox createProfilePage() {
-        VBox main = new VBox();
-        main.setBackground(new Background(new BackgroundFill(DARK_GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+    try {
 
-        HBox topBar = createTopBar("Farmer Profile", "Manage your personal and farming information.");
+        UserModel user =
+                userDAO.getUserByUid(
+                        firebaseUid
+                );
 
-        VBox content = new VBox(); 
-        // content.setBackground(new Background(
-        //     new BackgroundFill(
-        //             DARK_GREEN,
-        //             CornerRadii.EMPTY,
-        //             Insets.EMPTY
-        //     )
-    // ));
+        if (user == null) {
 
-        content.setBackground(new Background(
-        new BackgroundFill(
-            Color.web("#050b0a"),
-            CornerRadii.EMPTY,
-            Insets.EMPTY
-        )
-    ));
-        content.setPadding(new Insets(30, 35, 35, 35));
-        content.setSpacing(22);
+            System.out.println(
+                    "Firebase user not found for UID = "
+                            + firebaseUid
+            );
 
-        HBox profileHeader = new HBox();
-        profileHeader.setPrefHeight(125);
-        profileHeader.setPadding(new Insets(22));
-        profileHeader.setSpacing(18);
-        profileHeader.setAlignment(Pos.CENTER_LEFT);
-        profileHeader.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, new CornerRadii(15), Insets.EMPTY)));
+            return;
+        }
 
-        Label profileCircle = new Label("G");
-        profileCircle.setPrefSize(78, 78);
-        profileCircle.setMinSize(78, 78);
-        profileCircle.setMaxSize(78, 78);
-        profileCircle.setAlignment(Pos.CENTER);
-        profileCircle.setTextFill(Color.WHITE);
-        profileCircle.setFont(Font.font("Arial", FontWeight.BOLD, 28));
-        profileCircle.setBackground(new Background(new BackgroundFill(DARK_GREEN, new CornerRadii(50), Insets.EMPTY)));
+        // =================================================
+        // NAME FROM FIREBASE
+        // =================================================
 
-        VBox profileText = new VBox();
-        profileText.setSpacing(5);
+        if (user.getFullName() != null &&
+                !user.getFullName().trim().isEmpty()) {
 
-        Label name = new Label("Farmer");
-        name.setTextFill(DARK_TEXT);
-        name.setFont(Font.font("Arial", FontWeight.BOLD, 21));
+            nameField.setText(
+                    user.getFullName().trim()
+            );
+        }
 
-        Label role = new Label("Farm Owner");
-        role.setTextFill(GREEN);
-        role.setFont(Font.font("Arial", FontWeight.NORMAL, 13));
+        // =================================================
+        // EMAIL FROM FIREBASE
+        // =================================================
 
-        Label description = new Label("Manage your profile and farming information.");
-        description.setTextFill(GREY);
-        description.setFont(Font.font("Arial", 12));
+        if (user.getEmail() != null &&
+                !user.getEmail().trim().isEmpty()) {
 
-        profileText.getChildren().addAll(name, role, description);
+            emailField.setText(
+                    user.getEmail().trim()
+            );
+        }
 
-        Region profileSpacer = new Region();
-        HBox.setHgrow(profileSpacer, Priority.ALWAYS);
+        System.out.println(
+                "Firebase name loaded = "
+                        + user.getFullName()
+        );
 
-        Button edit = new Button("Edit Profile");
-        edit.setPrefHeight(40);
-        edit.setPrefWidth(110);
-        edit.setTextFill(Color.WHITE);
-        edit.setFont(Font.font("Arial", FontWeight.BOLD, 12));
-        edit.setBackground(new Background(new BackgroundFill(GREEN, new CornerRadii(7), Insets.EMPTY)));
-        edit.setCursor(Cursor.HAND);
+        System.out.println(
+                "Firebase email loaded = "
+                        + user.getEmail()
+        );
 
-        profileHeader.getChildren().addAll(profileCircle, profileText, profileSpacer, edit);
+    } catch (Exception e) {
 
-        HBox cards = new HBox();
-        cards.setSpacing(22);
+        e.printStackTrace();
 
-        VBox personalCard = createWhiteCard();
-        personalCard.setPrefHeight(275);
-        personalCard.setPadding(new Insets(20));
+        System.out.println(
+                "Unable to load Firebase user information."
+        );
+    }
+}
 
-        Label personalTitle = new Label("♙  Personal Information");
-        personalTitle.setTextFill(DARK_TEXT);
-        personalTitle.setFont(Font.font("Arial", FontWeight.BOLD, 17));
+ 
+ private VBox createProfileCard() {
 
-        GridPane personalGrid = new GridPane();
-        personalGrid.setHgap(15);
-        personalGrid.setVgap(12);
+        VBox card =
+                createCard();
 
-        personalGrid.add(createProfileField("Full Name", "Farmer User"), 0, 0);
-        personalGrid.add(createProfileField("Email Address", "farmer@agrobiz.com"), 1, 0);
-        personalGrid.add(createProfileField("Phone Number", "+91 555 123-4567"), 0, 1);
-        personalGrid.add(createProfileField("Location", "Maharashtra, India"), 1, 1);
+        // =====================================================
+        // CARD TITLE
+        // =====================================================
 
-        columnConstraintsHelper(personalGrid);
-        personalCard.getChildren().addAll(personalTitle, personalGrid);
+        Label cardTitle =
+                new Label(
+                        "👨‍🌾 Personal & Farm Profile"
+                );
 
-        VBox farmCard = createWhiteCard();
-        farmCard.setPrefHeight(275);
-        farmCard.setPadding(new Insets(20));
+        cardTitle.setStyle(
+                "-fx-text-fill:#68D34A;" +
+                "-fx-font-size:21px;" +
+                "-fx-font-weight:bold;"
+        );
 
-        Label farmTitle = new Label("♧  Farm Details");
-        farmTitle.setTextFill(DARK_TEXT);
-        farmTitle.setFont(Font.font("Arial", FontWeight.BOLD, 17));
+        Label cardSubtitle =
+                new Label(
+                        "Your information is saved using your unique farmer ID."
+                );
 
-        VBox farmName = createProfileField("Farm Name", "Green Valley Farm");
+        cardSubtitle.setStyle(
+                "-fx-text-fill:#888888;" +
+                "-fx-font-size:13px;"
+        );
 
-        GridPane farmGrid = new GridPane();
-        farmGrid.setHgap(15);
-        farmGrid.setVgap(12);
+        // =====================================================
+        // PROFILE IMAGE
+        // =====================================================
 
-        farmGrid.add(createProfileField("Farm Area", "15.6 Acres"), 0, 0);
-        farmGrid.add(createProfileField("Farming Type", "Mixed Farming"), 1, 0);
+        profileImageContainer =
+                new StackPane();
 
-        columnConstraintsHelper(farmGrid);
+        profileImageContainer.setPrefSize(
+                150,
+                150
+        );
 
-        Label cropTitle = new Label("Primary Crops");
-        cropTitle.setTextFill(GREY);
-        cropTitle.setFont(Font.font("Arial", FontWeight.BOLD, 11));
+        profileImageContainer.setMinSize(
+                150,
+                150
+        );
 
-        HBox cropTags = new HBox();
-        cropTags.setSpacing(8);
-        cropTags.getChildren().addAll(createCropTag("Wheat"), createCropTag("Soybean"), createCropTag("Vegetables"));
+        profileImageContainer.setMaxSize(
+                150,
+                150
+        );
 
-        farmCard.getChildren().addAll(farmTitle, farmName, farmGrid, cropTitle, cropTags);
+        profileImageContainer.setStyle(
+                "-fx-background-color:#1B2425;" +
+                "-fx-background-radius:100;"
+        );
 
-        HBox.setHgrow(personalCard, Priority.ALWAYS);
-        HBox.setHgrow(farmCard, Priority.ALWAYS);
+        showDefaultProfileImage();
 
-        cards.getChildren().addAll(personalCard, farmCard);
+        Button changeImage =
+                new Button(
+                        "📷 Change Profile Image"
+                );
 
-        content.getChildren().addAll(profileHeader, cards);
-        
+        changeImage.setStyle(
+                "-fx-background-color:transparent;" +
+                "-fx-text-fill:#68D34A;" +
+                "-fx-border-color:#68D34A;" +
+                "-fx-border-radius:6;" +
+                "-fx-background-radius:6;" +
+                "-fx-padding:8 12;" +
+                "-fx-cursor:hand;"
+        );
 
-        ScrollPane scroll = new ScrollPane(content);
-        scroll.setFitToWidth(true);
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        // scroll.setStyle("-fx-background-color: #0d1414;");
-        scroll.setStyle(
-        "-fx-background-color: #050b0a;" +
-        "-fx-background: #050b0a;" +
-        "-fx-control-inner-background: #050b0a;"
+        changeImage.setOnAction(
+                e -> chooseProfileImage()
+        );
+
+        VBox imageBox =
+                new VBox(
+                        12,
+                        profileImageContainer,
+                        changeImage
+                );
+
+        imageBox.setAlignment(
+                Pos.CENTER
+        );
+
+        // =====================================================
+        // LOAD EXISTING PROFILE
+        // =====================================================
+
+      
+
+        // =====================================================
+        // FORM
+        // =====================================================
+
+        GridPane form =
+                new GridPane();
+
+        form.setHgap(
+                20
+        );
+
+        form.setVgap(
+                15
+        );
+
+        form.setPadding(
+                new Insets(
+                        10,
+                        0,
+                        10,
+                        0
+                )
+        );
+
+        form.setMaxWidth(
+                Double.MAX_VALUE
+        );
+
+        // =====================================================
+        // CREATE FIELDS
+        // =====================================================
+
+       nameField = createTextField(
+        "Enter your full name"
+);
+
+emailField = createTextField(
+        "Enter your email"
+);
+
+phoneField = createTextField(
+        "Enter phone number"
+);
+
+addressField = createTextField(
+        "Enter complete address"
+);
+
+villageField = createTextField(
+        "Enter village"
+);
+
+districtField = createTextField(
+        "Enter district"
+);
+
+stateField = createTextField(
+        "Enter state"
+);
+
+farmNameField = createTextField(
+        "Enter farm name"
+);
+
+farmAreaField = createTextField(
+        "Example: 5 acres"
+);
+
+farmingTypeBox = new ComboBox<>();
+
+farmingTypeBox.getItems().addAll(
+        "Organic",
+        "Conventional",
+        "Mixed Farming",
+        "Natural Farming",
+        "Other"
+);
+
+farmingTypeBox.setPromptText(
+        "Select farming type"
+);
+
+farmingTypeBox.setMaxWidth(
+        Double.MAX_VALUE
+);
+
+styleComboBox(
+        farmingTypeBox
+);
+
+primaryCropsField = createTextField(
+        "Example: Wheat, Onion, Tomato"
+);
+
+loadExistingProfile();
+loadFirebaseUserData();
+        // =====================================================
+        // ADD FIELDS
+        // =====================================================
+
+        addField(
+                form,
+                "Full Name",
+                nameField,
+                0,
+                0
+        );
+
+        addField(
+                form,
+                "Email",
+                emailField,
+                1,
+                0
+        );
+
+        addField(
+                form,
+                "Phone",
+                phoneField,
+                0,
+                1
+        );
+
+        addField(
+                form,
+                "Address",
+                addressField,
+                1,
+                1
+        );
+
+        addField(
+                form,
+                "Village",
+                villageField,
+                0,
+                2
+        );
+
+        addField(
+                form,
+                "District",
+                districtField,
+                1,
+                2
+        );
+
+        addField(
+                form,
+                "State",
+                stateField,
+                0,
+                3
+        );
+
+        addField(
+                form,
+                "Farm Name",
+                farmNameField,
+                1,
+                3
+        );
+
+        addField(
+                form,
+                "Farm Area",
+                farmAreaField,
+                0,
+                4
+        );
+
+        addField(
+                form,
+                "Farming Type",
+                farmingTypeBox,
+                1,
+                4
+        );
+
+        addField(
+                form,
+                "Primary Crops",
+                primaryCropsField,
+                0,
+                5
+        );
+
+        // =====================================================
+        // SAVE BUTTON
+        // =====================================================
+
+        Button saveButton =
+                new Button(
+                        "✓ Save Profile"
+                );
+
+        saveButton.setPrefHeight(
+                42
+        );
+
+        saveButton.setPrefWidth(
+                180
+        );
+
+        saveButton.setStyle(
+                "-fx-background-color:#68D34A;" +
+                "-fx-text-fill:#080C0D;" +
+                "-fx-font-size:14px;" +
+                "-fx-font-weight:bold;" +
+                "-fx-background-radius:7;" +
+                "-fx-cursor:hand;"
+        );
+
+        saveButton.setOnAction(
+                e -> saveProfile()
+        );
+
+        // =====================================================
+        // FORM LAYOUT
+        // =====================================================
+
+        HBox mainProfile =
+                new HBox(
+                        35,
+                        imageBox,
+                        form
+                );
+
+        mainProfile.setAlignment(
+                Pos.TOP_CENTER
+        );
+
+        HBox.setHgrow(
+                form,
+                Priority.ALWAYS
+        );
+
+        card.getChildren()
+                .addAll(
+                        cardTitle,
+                        cardSubtitle,
+                        mainProfile,
+                        saveButton
+                );
+
+        return card;
+    }
+
+    // =========================================================
+    // LOAD EXISTING PROFILE
+    // =========================================================
+
+  // =========================================================
+// LOAD EXISTING FARMER PROFILE
+// =========================================================
+
+private void loadExistingProfile() {
+
+    try {
+
+        FarmerProfile profile =
+                profileController.getProfile(
+                        farmerId
+                );
+
+        if (profile == null) {
+
+            System.out.println(
+                    "No farmer profile found for Farmer ID = "
+                            + farmerId
+            );
+
+            return;
+        }
+
+        System.out.println(
+                "Farmer profile loaded."
+        );
+
+        System.out.println(
+                "Farmer ID = "
+                        + farmerId
+        );
+
+        System.out.println(
+                "Firebase UID = "
+                        + firebaseUid
+        );
+
+
+        // =================================================
+        // DO NOT USE PROFILE NAME/EMAIL HERE
+        // =================================================
+        //
+        // Name and Email must come from Firebase.
+        // loadFirebaseUserData() is called after this method.
+        // =================================================
+
+
+        phoneField.setText(
+                safeEmpty(
+                        profile.getPhone()
+                )
+        );
+
+        addressField.setText(
+                safeEmpty(
+                        profile.getAddress()
+                )
+        );
+
+        villageField.setText(
+                safeEmpty(
+                        profile.getVillage()
+                )
+        );
+
+        districtField.setText(
+                safeEmpty(
+                        profile.getDistrict()
+                )
+        );
+
+        stateField.setText(
+                safeEmpty(
+                        profile.getState()
+                )
+        );
+
+        farmNameField.setText(
+                safeEmpty(
+                        profile.getFarmName()
+                )
+        );
+
+        farmAreaField.setText(
+                safeEmpty(
+                        profile.getFarmArea()
+                )
+        );
+
+
+        // =================================================
+        // FARMING TYPE
+        // =================================================
+
+        if (profile.getFarmingType() != null
+                && !profile.getFarmingType()
+                        .trim()
+                        .isEmpty()) {
+
+            farmingTypeBox.setValue(
+                    profile.getFarmingType().trim()
+            );
+        }
+
+
+        // =================================================
+        // PRIMARY CROPS
+        // =================================================
+
+        primaryCropsField.setText(
+                safeEmpty(
+                        profile.getPrimaryCrops()
+                )
+        );
+
+
+        // =================================================
+        // PROFILE IMAGE
+        // =================================================
+
+        imageBase64 =
+                profile.getImageBase64();
+
+        if (imageBase64 != null
+                && !imageBase64.trim().isEmpty()) {
+
+            showProfileImage(
+                    imageBase64
+            );
+        }
+
+
+    } catch (Exception e) {
+
+        System.err.println(
+                "Unable to load farmer profile."
+        );
+
+        e.printStackTrace();
+    }
+}
+private String safeEmpty(
+        String value) {
+
+    if (value == null) {
+        return "";
+    }
+
+    return value;
+}
+
+    // =========================================================
+    // SAVE PROFILE
+    // =========================================================
+
+    private void saveProfile() {
+
+        String name =
+                nameField.getText().trim();
+
+        String email =
+                emailField.getText().trim();
+
+        String phone =
+                phoneField.getText().trim();
+
+        String address =
+                addressField.getText().trim();
+
+        String village =
+                villageField.getText().trim();
+
+        String district =
+                districtField.getText().trim();
+
+        String state =
+                stateField.getText().trim();
+
+        String farmName =
+                farmNameField.getText().trim();
+
+        String farmArea =
+                farmAreaField.getText().trim();
+
+        String farmingType =
+                farmingTypeBox.getValue();
+
+        String primaryCrops =
+                primaryCropsField.getText().trim();
+
+        // =====================================================
+        // VALIDATION
+        // =====================================================
+
+        if (name.isEmpty()) {
+
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "Please enter your name."
+            );
+
+            return;
+        }
+
+        if (email.isEmpty()) {
+
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "Please enter your email."
+            );
+
+            return;
+        }
+
+        if (phone.isEmpty()) {
+
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "Please enter your phone number."
+            );
+
+            return;
+        }
+
+        // =====================================================
+        // CREATE PROFILE
+        // =====================================================
+
+        FarmerProfile profile =
+                new FarmerProfile();
+
+        profile.setFarmerId(
+                farmerId
+        );
+
+        profile.setUid(
+                firebaseUid
+        );
+
+        profile.setName(
+                name
+        );
+
+        profile.setEmail(
+                email
+        );
+
+        profile.setPhone(
+                phone
+        );
+
+        profile.setAddress(
+                address
+        );
+
+        profile.setVillage(
+                village
+        );
+
+        profile.setDistrict(
+                district
+        );
+
+        profile.setState(
+                state
+        );
+
+        profile.setFarmName(
+                farmName
+        );
+
+        profile.setFarmArea(
+                farmArea
+        );
+
+        profile.setFarmingType(
+                farmingType
+        );
+
+        profile.setPrimaryCrops(
+                primaryCrops
+        );
+
+        profile.setImageBase64(
+                imageBase64
+        );
+
+        // =====================================================
+        // SAVE FIREBASE
+        // =====================================================
+
+        boolean saved =
+                profileController.saveProfile(
+                        profile
+                );
+
+        if (saved) {
+
+    System.out.println(
+            "Profile saved for farmer ID = "
+                    + farmerId
     );
-        VBox.setVgrow(scroll, Priority.ALWAYS);
 
-        main.getChildren().addAll(topBar, scroll);
-        return main;
+    showAlert(
+            Alert.AlertType.INFORMATION,
+            "Profile saved successfully!"
+    );
+
+    // =================================================
+    // GO BACK TO READ-ONLY PROFILE
+    // =================================================
+
+    root.setCenter(
+            createProfileView()
+    );
+
+} else {
+
+    showAlert(
+            Alert.AlertType.ERROR,
+            "Profile could not be saved.\n"
+                    + "Please check Firebase."
+    );
+}
     }
 
-    // PROFILE FIELD
-    private VBox createProfileField(String title, String value) {
-        VBox box = new VBox();
-        box.setSpacing(5);
-        box.setMaxWidth(Double.MAX_VALUE);
+    // =========================================================
+    // CHOOSE PROFILE IMAGE
+    // =========================================================
 
-        Label titleLabel = new Label(title);
-        titleLabel.setTextFill(GREY);
-        titleLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 10));
+    private void chooseProfileImage() {
 
-        TextField field = new TextField(value);
-        field.setPrefHeight(36);
-        field.setMaxWidth(Double.MAX_VALUE);
-        field.setEditable(false);
-        field.setStyle("-fx-background-color: #F5F7F3;" + "-fx-background-radius: 7;" + "-fx-border-color: #E0E6DC;" + "-fx-border-radius: 7;" + "-fx-padding: 0 10;" + "-fx-font-size: 11px;" + "-fx-text-fill: #4A504A;");
+        FileChooser chooser =
+                new FileChooser();
 
-        box.getChildren().addAll(titleLabel, field);
-        GridPane.setHgrow(box, Priority.ALWAYS);
-        return box;
+        chooser.setTitle(
+                "Select Farmer Profile Image"
+        );
+
+        chooser.getExtensionFilters()
+                .add(
+                        new FileChooser.ExtensionFilter(
+                                "Image Files",
+                                "*.png",
+                                "*.jpg",
+                                "*.jpeg",
+                                "*.webp"
+                        )
+                );
+
+        File file =
+                chooser.showOpenDialog(
+                        LoginPage.mainStage
+                );
+
+        if (file == null) {
+            return;
+        }
+
+        try {
+
+            FileInputStream input =
+                    new FileInputStream(
+                            file
+                    );
+
+            ByteArrayOutputStream output =
+                    new ByteArrayOutputStream();
+
+            byte[] buffer =
+                    new byte[8192];
+
+            int bytesRead;
+
+            while (
+                    (bytesRead =
+                            input.read(buffer))
+                            != -1
+            ) {
+
+                output.write(
+                        buffer,
+                        0,
+                        bytesRead
+                );
+            }
+
+            input.close();
+
+            byte[] imageBytes =
+                    output.toByteArray();
+
+            imageBase64 =
+                    Base64.getEncoder()
+                            .encodeToString(
+                                    imageBytes
+                            );
+
+            showProfileImage(
+                    imageBase64
+            );
+
+            System.out.println(
+                    "Profile image selected."
+            );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            showAlert(
+                    Alert.AlertType.ERROR,
+                    "Unable to load profile image."
+            );
+        }
     }
 
-    // GRID WIDTH
-    private void columnConstraintsHelper(GridPane grid) {
-        ColumnConstraints c1 = new ColumnConstraints();
-        ColumnConstraints c2 = new ColumnConstraints();
+    // =========================================================
+    // SHOW PROFILE IMAGE
+    // =========================================================
 
-        c1.setPercentWidth(50);
-        c2.setPercentWidth(50);
+    private void showProfileImage(
+            String base64) {
 
-        grid.getColumnConstraints().addAll(c1, c2);
+        if (base64 == null ||
+                base64.trim().isEmpty()) {
+
+            showDefaultProfileImage();
+
+            return;
+        }
+
+        try {
+
+            byte[] bytes =
+                    Base64.getDecoder()
+                            .decode(
+                                    base64
+                            );
+
+            Image image =
+                    new Image(
+                            new java.io.ByteArrayInputStream(
+                                    bytes
+                            )
+                    );
+
+            if (image.isError()) {
+
+                throw new Exception(
+                        "Invalid image"
+                );
+            }
+
+            ImageView imageView =
+                    new ImageView(
+                            image
+                    );
+
+            imageView.setFitWidth(
+                    150
+            );
+
+            imageView.setFitHeight(
+                    150
+            );
+
+            imageView.setPreserveRatio(
+                    false
+            );
+
+            Circle clip =
+                    new Circle(
+                            75,
+                            75,
+                            75
+                    );
+
+            imageView.setClip(
+                    clip
+            );
+
+            profileImageContainer
+                    .getChildren()
+                    .clear();
+
+            profileImageContainer
+                    .getChildren()
+                    .add(
+                            imageView
+                    );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            showDefaultProfileImage();
+        }
     }
 
-    // CROP TAG
-    private Label createCropTag(String text) {
-        Label tag = new Label(text);
-        tag.setTextFill(DARK_GREEN);
-        tag.setFont(Font.font("Arial", FontWeight.BOLD, 10));
-        tag.setPadding(new Insets(5, 10, 5, 10));
-        tag.setBackground(new Background(new BackgroundFill(Color.rgb(225, 235, 215), new CornerRadii(12), Insets.EMPTY)));
-        tag.setBorder(new Border(new BorderStroke(Color.rgb(195, 210, 185), BorderStrokeStyle.SOLID, new CornerRadii(12), new BorderWidths(1))));
-        return tag;
+    // =========================================================
+    // DEFAULT IMAGE
+    // =========================================================
+
+    private void showDefaultProfileImage() {
+
+        profileImageContainer
+                .getChildren()
+                .clear();
+
+        Label icon =
+                new Label(
+                        "👨‍🌾"
+                );
+
+        icon.setStyle(
+                "-fx-font-size:60px;"
+        );
+
+        profileImageContainer
+                .getChildren()
+                .add(
+                        icon
+                );
     }
+
 
 // =========================================================
 // AI ADVISOR PAGE
@@ -2630,6 +4436,45 @@ private VBox createInvestmentPage() {
     }
 
     // =========================================================
+// GRID COLUMN WIDTH HELPER
+// =========================================================
+
+private void columnConstraintsHelper(
+        GridPane grid) {
+
+    ColumnConstraints column1 =
+            new ColumnConstraints();
+
+    ColumnConstraints column2 =
+            new ColumnConstraints();
+
+    column1.setPercentWidth(
+            50
+    );
+
+    column2.setPercentWidth(
+            50
+    );
+
+    column1.setHgrow(
+            Priority.ALWAYS
+    );
+
+    column2.setHgrow(
+            Priority.ALWAYS
+    );
+
+    grid.getColumnConstraints()
+            .clear();
+
+    grid.getColumnConstraints()
+            .addAll(
+                    column1,
+                    column2
+            );
+}
+
+    // =========================================================
     // WHITE CARD
     // =========================================================
 
@@ -2695,5 +4540,183 @@ private VBox createInvestmentPage() {
         space.setMaxWidth(width);
 
         return space;
+    }
+        private String safe(
+            String value) {
+
+        if (value == null ||
+                value.trim().isEmpty()) {
+
+            return "Not provided";
+        }
+
+        return value;
+    }
+
+    // =========================================================
+    // CARD
+    // =========================================================
+
+    private VBox createCard() {
+
+        VBox card =
+                new VBox(
+                        15
+                );
+
+        card.setPadding(
+                new Insets(
+                        22
+                )
+        );
+
+        card.setMaxWidth(
+                Double.MAX_VALUE
+        );
+
+        card.setStyle(
+                "-fx-background-color:#0D1213;" +
+                "-fx-border-color:#242B2C;" +
+                "-fx-border-radius:14;" +
+                "-fx-background-radius:14;"
+        );
+
+        return card;
+    }
+
+    // =========================================================
+    // ADD FIELD
+    // =========================================================
+
+    private void addField(
+            GridPane grid,
+            String title,
+            javafx.scene.Node field,
+            int column,
+            int row) {
+
+        VBox box =
+                new VBox(
+                        6
+                );
+
+        Label label =
+                new Label(
+                        title
+                );
+
+        label.setStyle(
+                "-fx-text-fill:#BBBBBB;" +
+                "-fx-font-size:13px;"
+        );
+
+        box.getChildren()
+                .addAll(
+                        label,
+                        field
+                );
+
+        grid.add(
+                box,
+                column,
+                row
+        );
+
+        GridPane.setHgrow(
+                box,
+                Priority.ALWAYS
+        );
+    }
+
+    // =========================================================
+    // TEXT FIELD
+    // =========================================================
+
+    private TextField createTextField(
+            String prompt) {
+
+        TextField field =
+                new TextField();
+
+        field.setPromptText(
+                prompt
+        );
+
+        field.setPrefHeight(
+                38
+        );
+
+        field.setMaxWidth(
+                Double.MAX_VALUE
+        );
+
+        styleTextField(
+                field
+        );
+
+        return field;
+    }
+
+    // =========================================================
+    // TEXT FIELD STYLE
+    // =========================================================
+
+    private void styleTextField(
+            TextField field) {
+
+        field.setStyle(
+                "-fx-background-color:#101516;" +
+                "-fx-text-fill:#EEEEEE;" +
+                "-fx-prompt-text-fill:#777777;" +
+                "-fx-border-color:#303839;" +
+                "-fx-border-radius:6;" +
+                "-fx-background-radius:6;" +
+                "-fx-padding:8 10;"
+        );
+    }
+
+    // =========================================================
+    // COMBO BOX STYLE
+    // =========================================================
+
+    private void styleComboBox(
+            ComboBox<String> box) {
+
+        box.setStyle(
+                "-fx-background-color:#101516;" +
+                "-fx-text-fill:#EEEEEE;" +
+                "-fx-border-color:#303839;" +
+                "-fx-border-radius:6;" +
+                "-fx-background-radius:6;"
+        );
+    }
+
+
+    // =========================================================
+    // ALERT
+    // =========================================================
+
+    private void showAlert(
+            Alert.AlertType type,
+            String message) {
+
+        Alert alert =
+                new Alert(
+                        type
+                );
+
+        alert.setTitle(
+                "AgroBiz"
+        );
+
+        alert.setHeaderText(
+                null
+        );
+
+        alert.setContentText(
+                message
+        );
+
+        alert.showAndWait();
     }
 }
