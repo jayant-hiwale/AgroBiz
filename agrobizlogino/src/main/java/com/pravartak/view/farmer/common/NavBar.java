@@ -120,7 +120,7 @@ public class NavBar {
         }
         profile.setOnAction(e->{
             System.out.println("Profile button Clicked");;
-            FarmerDashboard fm = new FarmerDashboard(null);
+            FarmerDashboard fm = new FarmerDashboard();
             LoginPage.mainStage.setScene(fm.getDashboardScene());
         });
 
