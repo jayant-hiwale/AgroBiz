@@ -2,11 +2,13 @@ package com.pravartak.view.buyer.common;
 
 import com.pravartak.view.buyer.Ai;
 import com.pravartak.view.buyer.BuyerHomepage;
-import com.pravartak.view.buyer.Market;
+import com.pravartak.view.buyer.BuyerProfilePage;
+//import com.pravartak.view.buyer.BuyerMarketPlace;
 import com.pravartak.view.buyer.Watchlist;
 import com.pravartak.view.login.LoginPage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -31,7 +33,7 @@ public class buyerTop {
         Button home =  navButton("Home");
         Button market = navButton("Market");
         Button watchlist = navButton("Watchlist");
-        Button Aiadvisor = navButton("Aiadvisor");
+        Button Aiadvisor = navButton("AI Advisor");
         
 
         if (currentPage.equals("Home")) {
@@ -48,9 +50,9 @@ public class buyerTop {
         }
         market.setOnAction(e -> {
             
-            Market marketPage = new Market(null);
-            LoginPage.mainStage.setScene(marketPage.getMarketPage());
-        });
+         //    BuyerMarketPlace marketplace = new BuyerMarketPlace();
+           // LoginPage.mainStage.setScene(new Scene(marketplace.getMarketplacePage()));
+         });
 
         if (currentPage.equals("Watchlist")) {
             watchlist.setStyle(navButtonActive());
@@ -59,8 +61,9 @@ public class buyerTop {
            Watchlist watchlistPage = new Watchlist();
            LoginPage.mainStage.setScene(watchlistPage.getWatchlistPage());
         });
-         if (currentPage.equals("Watchlist")) {
-            watchlist.setStyle(navButtonActive());
+        
+         if (currentPage.equals("AI Advisor")) {
+            Aiadvisor.setStyle(navButtonActive());
         }
         Aiadvisor.setOnAction(e -> {
            Ai AiPage = new Ai();
@@ -71,30 +74,16 @@ public class buyerTop {
         HBox center = new HBox(25,home,market,watchlist,Aiadvisor);
         center.setAlignment(Pos.CENTER);
 
-        // Right
-        Button sell = new Button("◇ List for Sale");
+        Button profile = navButton("◎ Profile");
+        if (currentPage.equals("◎ Profile")) {
+            profile.setStyle(navButtonActive());
+        }
+        profile.setOnAction(e -> {
+           BuyerProfilePage bpp = new BuyerProfilePage();
+           LoginPage.mainStage.setScene(bpp.getProfilePageScene());
+        });
 
-        sell.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-text-fill: #68d34a;" +
-                        "-fx-border-color: #68d34a;" +
-                        "-fx-border-radius: 5;" +
-                        "-fx-cursor: hand;");
-
-        // sell.setOnAction(e -> openAddProductPage());
-
-        Label notification = new Label("♧");
-        Label profile = new Label("◎");
-        Label login = new Label("Login");
-
-        notification.setStyle(
-                "-fx-text-fill: #bbbbbb; -fx-font-size: 18px;");
-
-        profile.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 18px;");
-
-        login.setStyle("-fx-text-fill: #bbbbbb;");
-
-        HBox right = new HBox(15,sell,notification,profile,login);
+        HBox right = new HBox(15,profile);
 
         right.setAlignment(Pos.CENTER_RIGHT);
         right.setPrefWidth(450);
