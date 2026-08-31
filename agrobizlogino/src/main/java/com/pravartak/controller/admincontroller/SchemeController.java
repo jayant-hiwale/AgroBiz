@@ -246,7 +246,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import com.pravartak.dao.admin.SchemeDAO;
+import com.pravartak.dao.admindao.SchemeDAO;
 import com.pravartak.model.admin.Scheme;
 
 public class SchemeController {
@@ -264,86 +264,103 @@ public class SchemeController {
     }
 
     // =========================================================
-    // ADD SCHEME
-    // =========================================================
+// ADD SCHEME
+// =========================================================
 
-    public boolean addScheme(
-            String schemeName,
-            String eligibility,
-            String information) {
+public boolean addScheme(
+        String schemeName,
+        String eligibility,
+        String information,
+        String applyUrl) {
 
-        // -----------------------------------------------------
-        // VALIDATION
-        // -----------------------------------------------------
+    // -----------------------------------------------------
+    // VALIDATION
+    // -----------------------------------------------------
 
-        if (schemeName == null ||
-                schemeName.trim().isEmpty()) {
+    if (schemeName == null ||
+            schemeName.trim().isEmpty()) {
 
-            return false;
-        }
-
-        if (eligibility == null ||
-                eligibility.trim().isEmpty()) {
-
-            return false;
-        }
-
-        if (information == null ||
-                information.trim().isEmpty()) {
-
-            return false;
-        }
-
-        try {
-
-            Scheme scheme =
-                    new Scheme();
-
-            // -------------------------------------------------
-            // ID
-            // -------------------------------------------------
-
-            scheme.setSchemeId(
-                    UUID.randomUUID()
-                            .toString());
-
-            // -------------------------------------------------
-            // DATA
-            // -------------------------------------------------
-
-            scheme.setSchemeName(
-                    schemeName.trim());
-
-            scheme.setEligibility(
-                    eligibility.trim());
-
-            scheme.setInformation(
-                    information.trim());
-
-            // -------------------------------------------------
-            // ACTIVE
-            // -------------------------------------------------
-
-            scheme.setActive(true);
-
-            // -------------------------------------------------
-            // DAO
-            // -------------------------------------------------
-
-            return schemeDAO.addScheme(
-                    scheme);
-
-        } catch (Exception e) {
-
-            System.err.println(
-                    "Controller error while adding scheme.");
-
-            e.printStackTrace();
-
-            return false;
-        }
+        return false;
     }
 
+    if (eligibility == null ||
+            eligibility.trim().isEmpty()) {
+
+        return false;
+    }
+
+    if (information == null ||
+            information.trim().isEmpty()) {
+
+        return false;
+    }
+
+    if (applyUrl == null ||
+            applyUrl.trim().isEmpty()) {
+
+        return false;
+    }
+
+    // -----------------------------------------------------
+    // SAVE
+    // -----------------------------------------------------
+
+    try {
+
+        Scheme scheme =
+                new Scheme();
+
+        // -------------------------------------------------
+        // ID
+        // -------------------------------------------------
+
+        scheme.setSchemeId(
+                UUID.randomUUID()
+                        .toString());
+
+        // -------------------------------------------------
+        // DATA
+        // -------------------------------------------------
+
+        scheme.setSchemeName(
+                schemeName.trim());
+
+        scheme.setEligibility(
+                eligibility.trim());
+
+        scheme.setInformation(
+                information.trim());
+
+        // -------------------------------------------------
+        // APPLY URL
+        // -------------------------------------------------
+
+        scheme.setApplyUrl(
+                applyUrl.trim());
+
+        // -------------------------------------------------
+        // ACTIVE
+        // -------------------------------------------------
+
+        scheme.setActive(true);
+
+        // -------------------------------------------------
+        // DAO
+        // -------------------------------------------------
+
+        return schemeDAO.addScheme(
+                scheme);
+
+    } catch (Exception e) {
+
+        System.err.println(
+                "Controller error while adding scheme.");
+
+        e.printStackTrace();
+
+        return false;
+    }
+}
     // =========================================================
     // GET ALL
     // =========================================================
@@ -407,6 +424,12 @@ public class SchemeController {
             return false;
         }
 
+        if (scheme.getApplyUrl() == null ||
+                scheme.getApplyUrl().trim().isEmpty()) {
+
+                    return false;
+        }
+
         if (scheme.getSchemeName() == null ||
                 scheme.getSchemeName()
                         .trim()
@@ -447,6 +470,10 @@ public class SchemeController {
 
             scheme.setInformation(
                     scheme.getInformation()
+                            .trim());
+            
+            scheme.setApplyUrl(
+                    scheme.getApplyUrl()
                             .trim());
 
             return schemeDAO.updateScheme(

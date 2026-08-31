@@ -31,6 +31,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import java.awt.Desktop;
+import java.net.URI;
 
 public class SchemesPage {
 
@@ -842,7 +844,7 @@ public class SchemesPage {
 
         Button actionButton =
                 new Button(
-                        "Check Eligibility"
+                        "Applay Now "
                 );
 
         actionButton.setPrefHeight(
@@ -879,7 +881,7 @@ public class SchemesPage {
         actionButton.setOnAction(
                 event -> {
 
-                    showSchemeDetails(
+                    openSchemeWebsite(
                             scheme
                     );
                 }
@@ -929,55 +931,73 @@ public class SchemesPage {
 
         return schemeCard;
     }
+    // =========================================================
+// OPEN SCHEME WEBSITE
+// =========================================================
+
+private static void openSchemeWebsite(
+        Scheme scheme) {
+
+    String url =
+            safeText(
+                    scheme.getApplyUrl(),
+                    "");
+
+    if (url.isEmpty()) {
+
+        showMessage(
+                "Application Link",
+                "Application link is not available for this scheme.");
+
+        return;
+    }
+
+    try {
+
+        if (!url.startsWith("http://") &&
+                !url.startsWith("https://")) {
+
+            url = "https://" + url;
+        }
+
+        if (!Desktop.isDesktopSupported()) {
+
+            showMessage(
+                    "Application Link",
+                    "Your computer does not support opening web links.");
+
+            return;
+        }
+
+        Desktop desktop =
+                Desktop.getDesktop();
+
+        if (!desktop.isSupported(
+                Desktop.Action.BROWSE)) {
+
+            showMessage(
+                    "Application Link",
+                    "Your system cannot open web links.");
+
+            return;
+        }
+
+        desktop.browse(
+                new URI(url));
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+
+        showMessage(
+                "Application Link",
+                "Unable to open the application website.");
+    }
+}
 
     // =========================================================
     // SCHEME DETAILS
     // =========================================================
-
-    private static void showSchemeDetails(
-            Scheme scheme) {
-
-        String schemeName =
-                safeText(
-                        scheme.getSchemeName(),
-                        "Government Scheme"
-                );
-
-        String eligibility =
-                safeText(
-                        scheme.getEligibility(),
-                        "Not available."
-                );
-
-        String information =
-                safeText(
-                        scheme.getInformation(),
-                        "Not available."
-                );
-
-        Alert alert =
-                new Alert(
-                        Alert.AlertType.INFORMATION
-                );
-
-        alert.setTitle(
-                schemeName
-        );
-
-        alert.setHeaderText(
-                schemeName
-        );
-
-        alert.setContentText(
-                "ELIGIBILITY\n\n"
-                + eligibility
-                + "\n\n"
-                + "SCHEME INFORMATION\n\n"
-                + information
-        );
-
-        alert.showAndWait();
-    }
 
     // =========================================================
     // CATEGORY BUTTON

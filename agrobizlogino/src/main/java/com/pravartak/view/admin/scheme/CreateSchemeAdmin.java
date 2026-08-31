@@ -30,6 +30,7 @@ public class CreateSchemeAdmin {
 
     private TextArea informationArea;
 
+        private TextField applyUrlField;
     // =========================================================
     // SCENE
     // =========================================================
@@ -164,6 +165,24 @@ public class CreateSchemeAdmin {
         styleTextArea(
                 informationArea);
 
+
+        // =====================================================
+        // APPLY URL
+        // =====================================================
+
+        Label applyUrlLabel =
+        createLabel(
+                "Official Application URL");
+
+        applyUrlField =
+        new TextField();
+
+        applyUrlField.setPromptText(
+        "https://example.gov.in/apply");
+
+        styleTextField(
+                applyUrlField);
+
         // =====================================================
         // SAVE
         // =====================================================
@@ -221,6 +240,8 @@ public class CreateSchemeAdmin {
                 eligibilityArea,
                 informationLabel,
                 informationArea,
+                applyUrlLabel,
+                applyUrlField,
                 saveButton,
                 cancelButton);
 
@@ -276,6 +297,9 @@ public class CreateSchemeAdmin {
                 informationArea.getText()
                         .trim();
 
+        String applyUrl =
+                applyUrlField.getText()
+                        .trim();
         // =====================================================
         // VALIDATION
         // =====================================================
@@ -306,6 +330,14 @@ public class CreateSchemeAdmin {
 
             return;
         }
+        if (applyUrl.isEmpty()) {
+
+    showMessage(
+            "Please enter official application URL.",
+            false);
+
+    return;
+}
 
         // =====================================================
         // DATABASE
@@ -315,7 +347,8 @@ public class CreateSchemeAdmin {
                 controller.addScheme(
                         name,
                         eligibility,
-                        information);
+                        information,
+                        applyUrl);
 
         if (success) {
 

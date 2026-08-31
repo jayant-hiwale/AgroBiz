@@ -1,7 +1,7 @@
 
 package com.pravartak.view.farmer;
 
-import com.pravartak.service.AIService;
+//import com.pravartak.service.AIService;
 import com.pravartak.view.farmer.common.Footer;
 import com.pravartak.view.farmer.common.NavBar;
 
@@ -20,8 +20,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class AIAdvisorPage {
-        private static final AIService aiService =
-        new AIService();
+        // private static final AIService aiService =
+        // new AIService();
 
     // =========================================================
     // AGROBIZ DARK THEME
@@ -449,13 +449,13 @@ public class AIAdvisorPage {
     );
 
 
-    String answer =
-            aiService.askAI(question);
+//     String answer =
+//             aiService.askAI(question);
 
 
-    responseBox.setText(
-            answer
-    );
+//     responseBox.setText(
+//             answer
+//     );
 });
 
 

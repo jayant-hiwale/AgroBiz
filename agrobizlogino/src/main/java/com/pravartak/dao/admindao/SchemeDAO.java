@@ -298,7 +298,7 @@
 //                 "All temporary schemes cleared.");
 //     }
 // }
-package com.pravartak.dao.admin;
+package com.pravartak.dao.admindao;
 
 import java.util.ArrayList;
 import java.util.List;
