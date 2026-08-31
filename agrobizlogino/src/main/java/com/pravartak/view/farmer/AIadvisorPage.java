@@ -1,4 +1,3 @@
-
 package com.pravartak.view.farmer;
 
 //import com.pravartak.service.AIService;
@@ -18,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import java.io.File;
 
 public class AIAdvisorPage {
         // private static final AIService aiService =
