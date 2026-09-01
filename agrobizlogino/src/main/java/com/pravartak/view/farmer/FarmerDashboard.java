@@ -6,6 +6,17 @@ import java.net.URL;
 import com.pravartak.view.login.LoginPage;
 import javafx.scene.control.ProgressBar;
 
+import com.pravartak.services.GroqService;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+
+
+
+import java.util.ArrayList;
+import java.util.List;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -43,7 +54,7 @@ import javafx.scene.text.FontWeight;
 public class FarmerDashboard {
 
     // LOGOUT CALLBACK
-    private final Runnable logoutAction;
+    //private final Runnable logoutAction;
 
     // COLORS
     private final Color DARK_GREEN = Color.rgb(14, 35, 16);
@@ -68,10 +79,48 @@ public class FarmerDashboard {
     // MAIN BORDER PANE
     private BorderPane root;
 
-    // CONSTRUCTOR
-    public FarmerDashboard(Runnable logoutAction) {
-        this.logoutAction = logoutAction;
-    }
+        // =========================================================
+    // AI FARMING PLAN GENERATOR
+    // =========================================================
+
+    private final GroqService groqService =
+            new GroqService();
+
+    private final Map<String, String> farmingPlanAnswers =
+            new LinkedHashMap<>();
+
+    private final List<String> currentFarmingQuestionKeys =
+            new ArrayList<>();
+
+    private final List<String> currentFarmingQuestions =
+            new ArrayList<>();
+
+    private String selectedFarmingType = null;
+
+    private int farmingQuestionIndex = 0;
+
+    // AI PAGE CONTROLS
+    private Label aiAssistantText;
+    private TextField aiQuestionField;
+    private Button aiAskButton;
+    private Button generatePlanButton;
+
+    // =========================================================
+    // AI FARMING PLAN UI REFERENCES
+    // =========================================================
+
+    private VBox aiPlanContent;
+    private ScrollPane aiPlanScroll;
+    private Label aiPlanText;
+    private VBox aiCard;
+    private VBox aiCenter;
+    private Button aiNewPlanButton;
+
+
+    private VBox planContent;
+    private ScrollPane planScroll;
+    private Label planText;
+    private Button newPlanButton;
 
     // SCENE
     public Scene getDashboardScene() {
@@ -157,15 +206,15 @@ public class FarmerDashboard {
         VBox.setVgrow(spacer, Priority.ALWAYS);
         sidebar.getChildren().add(spacer);
 
-        // LOGOUT
-        Button logout = createMenuButton("↪", "Logout");
-        logout.setOnAction(event -> {
-            if (logoutAction != null) {
-                logoutAction.run();
-            }
-        });
+        // // LOGOUT
+        // Button logout = createMenuButton("↪", "Logout");
+        // logout.setOnAction(event -> {
+        //     if (logoutAction != null) {
+        //         logoutAction.run();
+        //     }
+        // });
 
-        sidebar.getChildren().add(logout);
+        // sidebar.getChildren().add(logout);
 
         // Dashboard selected by default
         setSelectedMenuButton(dashboardButton);
@@ -747,22 +796,2655 @@ public class FarmerDashboard {
         return tag;
     }
 
+// // =========================================================
+// // AI ADVISOR PAGE
+// // =========================================================
+// private VBox createAIAdvisorPage() {
+
+//     VBox page = new VBox();
+
+//     // Same background as the application
+//     page.setBackground(
+//         new Background(
+//             new BackgroundFill(
+//                 DARK_GREEN,
+//                 CornerRadii.EMPTY,
+//                 Insets.EMPTY
+//             )
+//         )
+//     );
+
+//     // =====================================================
+//     // TOP BAR
+//     // =====================================================
+
+//     HBox topBar = createTopBar(
+//         "AI Farming Advisor",
+//         "Get intelligent recommendations for your farm."
+//     );
+
+//     // IMPORTANT:
+//     // Remove any bottom margin/gap from the top bar.
+//     VBox.setMargin(topBar, Insets.EMPTY);
+
+
+//     // =====================================================
+//     // CONTENT
+//     // =====================================================
+
+//     VBox content = new VBox();
+
+//     content.setBackground(
+//         new Background(
+//             new BackgroundFill(
+//                 DARK_GREEN,
+//                 CornerRadii.EMPTY,
+//                 Insets.EMPTY
+//             )
+//         )
+//     );
+
+//     // NO TOP PADDING
+//     content.setPadding(
+//         new Insets(0, 35, 35, 35)
+//     );
+
+//     content.setSpacing(0);
+
+
+//     // =====================================================
+//     // AI CARD
+//     // =====================================================
+
+//     VBox card = createWhiteCard();
+
+//     card.setPrefHeight(650);
+
+//     // Keep card directly attached to content
+//     VBox.setMargin(card, Insets.EMPTY);
+
+
+//     // =====================================================
+//     // CENTER
+//     // =====================================================
+
+//     VBox center = new VBox();
+
+//     center.setAlignment(Pos.TOP_CENTER);
+//     center.setSpacing(25);
+
+//     center.setPadding(
+//         new Insets(20)
+//     );
+
+
+//     // =====================================================
+//     // AI ICON
+//     // =====================================================
+
+//     Label aiIcon = new Label("✦");
+
+//     aiIcon.setPrefSize(70, 70);
+//     aiIcon.setAlignment(Pos.CENTER);
+
+//     aiIcon.setTextFill(Color.WHITE);
+
+//     aiIcon.setFont(
+//         Font.font(
+//             "Arial",
+//             FontWeight.BOLD,
+//             32
+//         )
+//     );
+
+//     aiIcon.setBackground(
+//         new Background(
+//             new BackgroundFill(
+//                 DARK_GREEN,
+//                 new CornerRadii(50),
+//                 Insets.EMPTY
+//             )
+//         )
+//     );
+
+
+//     // =====================================================
+//     // QUESTION
+//     // =====================================================
+
+//     Label question = new Label(
+//         "How can Agro Biz AI help your farm?"
+//     );
+
+//     question.setTextFill(Color.WHITE);
+
+//     question.setFont(
+//         Font.font(
+//             "Arial",
+//             FontWeight.BOLD,
+//             23
+//         )
+//     );
+
+
+//     // =====================================================
+//     // SUGGESTIONS
+//     // =====================================================
+
+//     HBox suggestions = new HBox();
+
+    
+//         suggestions.setSpacing(12);
+//         suggestions.setAlignment(Pos.CENTER);
+
+//         suggestions.getChildren().addAll(
+//             createSuggestionButton("🌾  Which crop should I grow?"),
+//             createSuggestionButton("↗  How can I improve my yield?")
+//         );
+
+//         Button irrigation = createSuggestionButton("💧  Optimize irrigation schedule");
+
+
+
+//     center.getChildren().addAll(
+//         aiIcon,
+//         question,
+//         suggestions,
+//         irrigation
+//     );
+
+
+//     // =====================================================
+//     // MESSAGE
+//     // =====================================================
+
+//     HBox message = new HBox();
+
+//     message.setSpacing(12);
+
+//     message.setPadding(
+//         new Insets(20)
+//     );
+
+//     message.setBackground(
+//         new Background(
+//             new BackgroundFill(
+//                 Color.rgb(244, 246, 238),
+//                 new CornerRadii(15),
+//                 Insets.EMPTY
+//             )
+//         )
+//     );
+
+
+//     // Assistant icon
+//     Label assistantIcon = new Label("✦");
+
+//     assistantIcon.setPrefSize(42, 42);
+//     assistantIcon.setAlignment(Pos.CENTER);
+
+//     assistantIcon.setTextFill(Color.WHITE);
+
+//     assistantIcon.setBackground(
+//         new Background(
+//             new BackgroundFill(
+//                 DARK_GREEN,
+//                 new CornerRadii(50),
+//                 Insets.EMPTY
+//             )
+//         )
+//     );
+
+
+//     // Assistant text
+//     Label assistantText = new Label(
+//         "Hello Farmer! 🌱 I can help you make smarter "
+//         + "farming decisions based on your current "
+//         + "soil data and local weather forecasts. "
+//         + "What would you like to analyze today?"
+//     );
+
+//     assistantText.setWrapText(true);
+
+//     assistantText.setTextFill(Color.GREY);
+
+//     assistantText.setFont(
+//         Font.font(
+//             "Arial",
+//             15
+//         )
+//     );
+
+//     HBox.setHgrow(
+//         assistantText,
+//         Priority.ALWAYS
+//     );
+
+
+//     message.getChildren().addAll(
+//         assistantIcon,
+//         assistantText
+//     );
+
+
+//     // =====================================================
+//     // SPACER
+//     // =====================================================
+
+//     Region aiSpacer = new Region();
+
+//     VBox.setVgrow(
+//         aiSpacer,
+//         Priority.ALWAYS
+//     );
+
+
+//     // =====================================================
+//     // QUESTION FIELD
+//     // =====================================================
+
+//     TextField questionField =
+//         new TextField();
+
+//     questionField.setPromptText(
+//         "Ask your farming question..."
+//     );
+
+//     questionField.setPrefHeight(50);
+
+
+//     // =====================================================
+//     // ASK AI BUTTON
+//     // =====================================================
+
+//     Button askAI = new Button("Ask AI  ➤");
+//         askAI.setPrefHeight(50);
+//         askAI.setPrefWidth(120);
+//         askAI.setTextFill(Color.WHITE);
+//         askAI.setFont(Font.font("Arial", FontWeight.BOLD, 13));
+//         askAI.setBackground(new Background(new BackgroundFill(DARK_GREEN, new CornerRadii(9), Insets.EMPTY)));
+
+
+
+//     // =====================================================
+//     // ASK AI ACTION
+//     // =====================================================
+
+//     askAI.setOnAction(event -> {
+
+//         if (!questionField.getText().trim().isEmpty()) {
+
+//             assistantText.setText(
+//                 "AI Advisor received your question: "
+//                 + questionField.getText()
+//                 + "\n\nThis AI response module is ready "
+//                 + "to be connected with your AI service."
+//             );
+
+//             questionField.clear();
+//         }
+//     });
+
+
+//     // =====================================================
+//     // INPUT
+//     // =====================================================
+
+//     HBox input =
+//         new HBox(
+//             questionField,
+//             askAI
+//         );
+
+//     input.setSpacing(12);
+
+//     HBox.setHgrow(
+//         questionField,
+//         Priority.ALWAYS
+//     );
+
+
+//     // =====================================================
+//     // ADD EVERYTHING
+//     // =====================================================
+
+//     center.getChildren().addAll(
+//         message,
+//         aiSpacer,
+//         input
+//     );
+
+//     card.getChildren().add(center);
+
+//     content.getChildren().add(card);
+
+
+//     // =====================================================
+//     // SCROLL PANE
+//     // =====================================================
+
+//     ScrollPane scroll =
+//         new ScrollPane(content);
+
+//     scroll.setFitToWidth(true);
+//     scroll.setFitToHeight(true);
+
+//     scroll.setHbarPolicy(
+//         ScrollPane.ScrollBarPolicy.NEVER
+//     );
+
+//     scroll.setVbarPolicy(
+//         ScrollPane.ScrollBarPolicy.NEVER
+//     );
+
+//     scroll.setStyle(
+//         "-fx-background-color: transparent;"
+//         + "-fx-background: transparent;"
+//         + "-fx-control-inner-background: transparent;"
+//     );
+
+//     VBox.setVgrow(
+//         scroll,
+//         Priority.ALWAYS
+//     );
+
+
+//     // =====================================================
+//     // FINAL PAGE
+//     // =====================================================
+
+//     page.getChildren().addAll(
+//         topBar,
+//         scroll
+//     );
+
+//     return page;
+// }
+
+
+// // =========================================================
+// // AI SUGGESTION BUTTON
+// // =========================================================
+// private Button createSuggestionButton(String text) {
+
+//     Button button = new Button(text);
+
+//     button.setPrefHeight(40);
+
+//     button.setTextFill(
+//         LIGHT_GREEN
+//     );
+
+//     button.setFont(
+//         Font.font(
+//             "Arial",
+//             12
+//         )
+//     );
+
+//     button.setBackground(
+//         new Background(
+//             new BackgroundFill(
+//                 Color.WHITE,
+//                 new CornerRadii(20),
+//                 Insets.EMPTY
+//             )
+//         )
+//     );
+
+//     button.setBorder(
+//         new Border(
+//             new BorderStroke(
+//                 BORDER_COLOR,
+//                 BorderStrokeStyle.SOLID,
+//                 new CornerRadii(20),
+//                 new BorderWidths(1)
+//             )
+//         )
+//     );
+
+//     button.setCursor(
+//         Cursor.HAND
+//     );
+
+//     return button;
+// }
+
+// // =========================================================
+// // AI ADVISOR PAGE
+// // =========================================================
+
+// private VBox createAIAdvisorPage() {
+
+//     // =====================================================
+//     // RESET FARMING PLAN STATE
+//     // =====================================================
+
+//     selectedFarmingType = null;
+
+//     farmingQuestionIndex = 0;
+
+//     farmingPlanAnswers.clear();
+
+//     currentFarmingQuestionKeys.clear();
+
+//     currentFarmingQuestions.clear();
+
+//     // =====================================================
+//     // MAIN PAGE
+//     // =====================================================
+
+//     VBox page = new VBox();
+
+//     page.setBackground(
+//             new Background(
+//                     new BackgroundFill(
+//                             DARK_GREEN,
+//                             CornerRadii.EMPTY,
+//                             Insets.EMPTY
+//                     )
+//             )
+//     );
+
+//     // =====================================================
+//     // FARMING PLAN VIEWER
+//     // =====================================================
+
+//     VBox planContent = new VBox();
+
+//     planContent.setSpacing(18);
+
+//     planContent.setPadding(
+//             new Insets(25)
+//     );
+
+//     planContent.setFillWidth(true);
+
+//     ScrollPane planScroll = new ScrollPane(
+//             planContent
+//     );
+
+//     planScroll.setFitToWidth(true);
+
+//     planScroll.setHbarPolicy(
+//             ScrollPane.ScrollBarPolicy.NEVER
+//     );
+
+//     planScroll.setVbarPolicy(
+//             ScrollPane.ScrollBarPolicy.AS_NEEDED
+//     );
+
+//     planScroll.setVisible(false);
+
+//     planScroll.setManaged(false);
+
+//     planScroll.setStyle(
+//             "-fx-background-color: transparent;"
+//             + "-fx-background: transparent;"
+//             + "-fx-control-inner-background: transparent;"
+//     );
+
+//     // =====================================================
+//     // TOP BAR
+//     // =====================================================
+
+//     HBox topBar = createTopBar(
+//             "AI Farming Advisor",
+//             "Get intelligent recommendations for your farm."
+//     );
+
+//     VBox.setMargin(
+//             topBar,
+//             Insets.EMPTY
+//     );
+
+//     // =====================================================
+//     // CONTENT
+//     // =====================================================
+
+//     VBox content = new VBox();
+
+//     content.setBackground(
+//             new Background(
+//                     new BackgroundFill(
+//                             DARK_GREEN,
+//                             CornerRadii.EMPTY,
+//                             Insets.EMPTY
+//                     )
+//             )
+//     );
+
+//     content.setPadding(
+//             new Insets(0, 35, 35, 35)
+//     );
+
+//     content.setSpacing(0);
+
+//     // =====================================================
+//     // AI CARD
+//     // =====================================================
+
+//     VBox card = createWhiteCard();
+
+//     card.setPrefHeight(650);
+
+//     card.setMaxHeight(
+//             Double.MAX_VALUE
+//     );
+
+//     VBox.setMargin(
+//             card,
+//             Insets.EMPTY
+//     );
+
+//     // =====================================================
+//     // CENTER
+//     // =====================================================
+
+//     VBox center = new VBox();
+
+//     center.setAlignment(
+//             Pos.TOP_CENTER
+//     );
+
+//     center.setSpacing(25);
+
+//     center.setPadding(
+//             new Insets(20)
+//     );
+
+//     center.setFillWidth(true);
+
+//     // =====================================================
+//     // AI ICON
+//     // =====================================================
+
+//     Label aiIcon = new Label("✦");
+
+//     aiIcon.setPrefSize(
+//             70,
+//             70
+//     );
+
+//     aiIcon.setAlignment(
+//             Pos.CENTER
+//     );
+
+//     aiIcon.setTextFill(
+//             Color.WHITE
+//     );
+
+//     aiIcon.setFont(
+//             Font.font(
+//                     "Arial",
+//                     FontWeight.BOLD,
+//                     32
+//             )
+//     );
+
+//     aiIcon.setBackground(
+//             new Background(
+//                     new BackgroundFill(
+//                             DARK_GREEN,
+//                             new CornerRadii(50),
+//                             Insets.EMPTY
+//                     )
+//             )
+//     );
+
+//     // =====================================================
+//     // PAGE TITLE
+//     // =====================================================
+
+//     Label question =
+//             new Label(
+//                     "How can Agro Biz AI help your farm?"
+//             );
+
+//     question.setTextFill(
+//             Color.WHITE
+//     );
+
+//     question.setFont(
+//             Font.font(
+//                     "Arial",
+//                     FontWeight.BOLD,
+//                     23
+//             )
+//     );
+
+//     question.setWrapText(
+//             true
+//     );
+
+//     question.setAlignment(
+//             Pos.CENTER
+//     );
+
+//     question.setMaxWidth(
+//             700
+//     );
+
+//     // =====================================================
+//     // QUICK SUGGESTIONS
+//     // =====================================================
+
+//     HBox suggestions =
+//             new HBox();
+
+//     suggestions.setSpacing(
+//             12
+//     );
+
+//     suggestions.setAlignment(
+//             Pos.CENTER
+//     );
+
+//     Button cropButton =
+//             createSuggestionButton(
+//                     "🌾  Which crop should I grow?"
+//             );
+
+//     Button yieldButton =
+//             createSuggestionButton(
+//                     "↗  How can I improve my yield?"
+//             );
+
+//     Button irrigationButton =
+//             createSuggestionButton(
+//                     "💧  Optimize irrigation schedule"
+//             );
+
+//     suggestions.getChildren().addAll(
+//             cropButton,
+//             yieldButton,
+//             irrigationButton
+//     );
+
+//     // =====================================================
+//     // GENERATE PLAN BUTTON
+//     // =====================================================
+
+//     generatePlanButton =
+//             new Button(
+//                     "📋  Generate Personalized Farming Plan"
+//             );
+
+//     generatePlanButton.setPrefHeight(
+//             48
+//     );
+
+//     generatePlanButton.setPrefWidth(
+//             330
+//     );
+
+//     generatePlanButton.setTextFill(
+//             Color.WHITE
+//     );
+
+//     generatePlanButton.setFont(
+//             Font.font(
+//                     "Arial",
+//                     FontWeight.BOLD,
+//                     14
+//             )
+//     );
+
+//     generatePlanButton.setBackground(
+//             new Background(
+//                     new BackgroundFill(
+//                             DARK_GREEN,
+//                             new CornerRadii(10),
+//                             Insets.EMPTY
+//                     )
+//             )
+//     );
+
+//     generatePlanButton.setCursor(
+//             Cursor.HAND
+//     );
+
+//     // =====================================================
+//     // INITIAL CENTER CONTENT
+//     // =====================================================
+
+//     center.getChildren().addAll(
+//             aiIcon,
+//             question,
+//             suggestions,
+//             generatePlanButton
+//     );
+
+//     // =====================================================
+//     // MESSAGE AREA
+//     // =====================================================
+
+//     HBox message =
+//             new HBox();
+
+//     message.setMaxWidth(
+//             Double.MAX_VALUE
+//     );
+
+//     message.setSpacing(
+//             12
+//     );
+
+//     message.setPadding(
+//             new Insets(20)
+//     );
+
+//     message.setBackground(
+//             new Background(
+//                     new BackgroundFill(
+//                             Color.rgb(
+//                                     86,
+//                                     108,
+//                                     22
+//                             ),
+//                             new CornerRadii(15),
+//                             Insets.EMPTY
+//                     )
+//             )
+//     );
+
+//     // =====================================================
+//     // ASSISTANT ICON
+//     // =====================================================
+
+//     Label assistantIcon =
+//             new Label("✦");
+
+//     assistantIcon.setPrefSize(
+//             42,
+//             42
+//     );
+
+//     assistantIcon.setMinSize(
+//             42,
+//             42
+//     );
+
+//     assistantIcon.setAlignment(
+//             Pos.CENTER
+//     );
+
+//     assistantIcon.setTextFill(
+//             Color.WHITE
+//     );
+
+//     assistantIcon.setBackground(
+//             new Background(
+//                     new BackgroundFill(
+//                             DARK_GREEN,
+//                             new CornerRadii(50),
+//                             Insets.EMPTY
+//                     )
+//             )
+//     );
+
+//     // =====================================================
+//     // ASSISTANT TEXT
+//     // =====================================================
+
+//     aiAssistantText =
+//             new Label(
+//                     "Hello Farmer! 🌱\n\n"
+//                     + "I can help you make smarter farming "
+//                     + "decisions and create a personalized "
+//                     + "farming plan based on your farm "
+//                     + "resources, capacity and goals."
+//             );
+
+//     aiAssistantText.setWrapText(
+//             true
+//     );
+
+//     aiAssistantText.setTextFill(
+//             GREY
+//     );
+
+//     aiAssistantText.setFont(
+//             Font.font(
+//                     "Arial",
+//                     15
+//             )
+//     );
+
+//     aiAssistantText.setMaxWidth(
+//             Double.MAX_VALUE
+//     );
+
+//     HBox.setHgrow(
+//             aiAssistantText,
+//             Priority.ALWAYS
+//     );
+
+//     message.getChildren().addAll(
+//             assistantIcon,
+//             aiAssistantText
+//     );
+
+//     // =====================================================
+//     // GENERATED FARMING PLAN TEXT
+//     // =====================================================
+
+//     Label planText =
+//             new Label();
+
+//     planText.setWrapText(
+//             true
+//     );
+
+//     planText.setMaxWidth(
+//             Double.MAX_VALUE
+//     );
+
+//     planText.setTextFill(
+//             Color.DARKSLATEGRAY
+//     );
+
+//     planText.setFont(
+//             Font.font(
+//                     "Arial",
+//                     15
+//             )
+//     );
+
+//     planText.setPadding(
+//             new Insets(5)
+//     );
+
+//     // =====================================================
+//     // NEW FARMING PLAN BUTTON
+//     // =====================================================
+
+//     Button newPlanButton =
+//             new Button(
+//                     "← New Farming Plan"
+//             );
+
+//     newPlanButton.setPrefHeight(
+//             45
+//     );
+
+//     newPlanButton.setPrefWidth(
+//             180
+//     );
+
+//     newPlanButton.setTextFill(
+//             Color.WHITE
+//     );
+
+//     newPlanButton.setFont(
+//             Font.font(
+//                     "Arial",
+//                     FontWeight.BOLD,
+//                     13
+//             )
+//     );
+
+//     newPlanButton.setBackground(
+//             new Background(
+//                     new BackgroundFill(
+//                             DARK_GREEN,
+//                             new CornerRadii(9),
+//                             Insets.EMPTY
+//                     )
+//             )
+//     );
+
+//     newPlanButton.setCursor(
+//             Cursor.HAND
+//     );
+
+//     // =====================================================
+//     // SHOW NORMAL CENTER
+//     // =====================================================
+
+//     Runnable showNormalCenter = () -> {
+
+//         planContent.getChildren().clear();
+
+//         planScroll.setVisible(
+//                 false
+//         );
+
+//         planScroll.setManaged(
+//                 false
+//         );
+
+//         center.setVisible(
+//                 true
+//         );
+
+//         center.setManaged(
+//                 true
+//         );
+
+//         card.getChildren().clear();
+
+//         card.getChildren().add(
+//                 center
+//         );
+//     };
+
+//     // =====================================================
+//     // NEW PLAN ACTION
+//     // =====================================================
+
+//     newPlanButton.setOnAction(
+//             event -> {
+
+//                 selectedFarmingType = null;
+
+//                 farmingQuestionIndex = 0;
+
+//                 farmingPlanAnswers.clear();
+
+//                 currentFarmingQuestionKeys.clear();
+
+//                 currentFarmingQuestions.clear();
+
+//                 question.setText(
+//                         "How can Agro Biz AI help your farm?"
+//                 );
+
+//                 suggestions.getChildren().clear();
+
+//                 suggestions.getChildren().addAll(
+//                         cropButton,
+//                         yieldButton,
+//                         irrigationButton
+//                 );
+
+//                 generatePlanButton.setVisible(
+//                         true
+//                 );
+
+//                 generatePlanButton.setManaged(
+//                         true
+//                 );
+
+//                 aiAssistantText.setText(
+//                         "Hello Farmer! 🌱\n\n"
+//                         + "I can help you make smarter farming "
+//                         + "decisions and create a personalized "
+//                         + "farming plan based on your farm "
+//                         + "resources, capacity and goals."
+//                 );
+
+//                 aiQuestionField.clear();
+
+//                 aiQuestionField.setDisable(
+//                         false
+//                 );
+
+//                 aiAskButton.setDisable(
+//                         false
+//                 );
+
+//                 aiAskButton.setText(
+//                         "Ask AI  ➤"
+//                 );
+
+//                 aiQuestionField.setPromptText(
+//                         "Ask your farming question..."
+//                 );
+
+//                 showNormalCenter.run();
+//             }
+//     );
+
+//     // =====================================================
+//     // SHOW GENERATED PLAN
+//     // =====================================================
+
+//     Runnable showGenerayestedPlan = () -> {
+
+//         planContent.getChildren().clear();
+
+//         planContent.getChildren().add(
+//                 planText
+//         );
+
+//         planScroll.setVisible(
+//                 true
+//         );
+
+//         planScroll.setManaged(
+//                 true
+//         );
+
+//         center.setVisible(
+//                 false
+//         );
+
+//         center.setManaged(
+//                 false
+//         );
+
+//         VBox.setVgrow(
+//                 planScroll,
+//                 Priority.ALWAYS
+//         );
+
+//         card.getChildren().clear();
+
+//         card.getChildren().add(
+//                 planScroll
+//         );
+
+//         card.getChildren().add(
+//                 newPlanButton
+//         );
+//     };
+
+//     // =====================================================
+//     // SPACER
+//     // =====================================================
+
+//     Region aiSpacer =
+//             new Region();
+
+//     VBox.setVgrow(
+//             aiSpacer,
+//             Priority.ALWAYS
+//     );
+
+//     // =====================================================
+//     // QUESTION FIELD
+//     // =====================================================
+
+//     aiQuestionField =
+//             new TextField();
+
+//     aiQuestionField.setPromptText(
+//             "Ask your farming question..."
+//     );
+
+//     aiQuestionField.setPrefHeight(
+//             50
+//     );
+
+//     aiQuestionField.setFont(
+//             Font.font(
+//                     "Arial",
+//                     14
+//             )
+//     );
+
+//     // =====================================================
+//     // ASK AI BUTTON
+//     // =====================================================
+
+//     aiAskButton =
+//             new Button(
+//                     "Ask AI  ➤"
+//             );
+
+//     aiAskButton.setPrefHeight(
+//             50
+//     );
+
+//     aiAskButton.setPrefWidth(
+//             120
+//     );
+
+//     aiAskButton.setTextFill(
+//             Color.WHITE
+//     );
+
+//     aiAskButton.setFont(
+//             Font.font(
+//                     "Arial",
+//                     FontWeight.BOLD,
+//                     13
+//             )
+//     );
+
+//     aiAskButton.setBackground(
+//             new Background(
+//                     new BackgroundFill(
+//                             DARK_GREEN,
+//                             new CornerRadii(9),
+//                             Insets.EMPTY
+//                     )
+//             )
+//     );
+
+//     aiAskButton.setCursor(
+//             Cursor.HAND
+//     );
+
+//     // =====================================================
+//     // QUESTION FIELD ENTER ACTION
+//     // =====================================================
+
+//     aiQuestionField.setOnAction(
+//             event -> {
+
+//                 if (aiAskButton != null &&
+//                         !aiAskButton.isDisabled()) {
+
+//                     aiAskButton.fire();
+//                 }
+//             }
+//     );
+
+//     // =====================================================
+//     // ASK AI ACTION
+//     // =====================================================
+
+//     aiAskButton.setOnAction(
+//             event -> {
+
+//                 String userQuestion =
+//                         aiQuestionField
+//                                 .getText()
+//                                 .trim();
+
+//                 if (userQuestion.isEmpty()) {
+
+//                     return;
+//                 }
+
+//                 // =========================================
+//                 // FARMING PLAN MODE
+//                 // =========================================
+
+//                 if (selectedFarmingType != null) {
+
+//                     processFarmingPlanAnswer();
+
+//                     return;
+//                 }
+
+//                 // =========================================
+//                 // NORMAL AI MODE
+//                 // =========================================
+
+//                 askNormalAIQuestion(
+//                         userQuestion
+//                 );
+//             }
+//     );
+
+//     // =====================================================
+//     // INPUT
+//     // =====================================================
+
+//     HBox input =
+//             new HBox(
+//                     aiQuestionField,
+//                     aiAskButton
+//             );
+
+//     input.setSpacing(
+//             12
+//     );
+
+//     HBox.setHgrow(
+//             aiQuestionField,
+//             Priority.ALWAYS
+//     );
+
+//     // =====================================================
+//     // QUICK QUESTION ACTIONS
+//     // =====================================================
+
+//     cropButton.setOnAction(
+//             event -> {
+
+//                 aiQuestionField.setText(
+//                         "Which crop should I grow?"
+//                 );
+
+//                 aiAskButton.fire();
+//             }
+//     );
+
+//     yieldButton.setOnAction(
+//             event -> {
+
+//                 aiQuestionField.setText(
+//                         "How can I improve my yield?"
+//                 );
+
+//                 aiAskButton.fire();
+//             }
+//     );
+
+//     irrigationButton.setOnAction(
+//             event -> {
+
+//                 aiQuestionField.setText(
+//                         "How can I optimize my irrigation schedule?"
+//                 );
+
+//                 aiAskButton.fire();
+//             }
+//     );
+
+//     // =====================================================
+//     // START PLAN BUTTON
+//     // =====================================================
+
+//     generatePlanButton.setOnAction(
+//             event -> {
+
+//                 startFarmingPlan(
+//                         center,
+//                         question,
+//                         suggestions,
+//                         generatePlanButton
+//                 );
+//             }
+//     );
+
+//     // =====================================================
+//     // ADD MESSAGE + INPUT
+//     // =====================================================
+
+//     center.getChildren().addAll(
+//             message,
+//             aiSpacer,
+//             input
+//     );
+
+//     // =====================================================
+//     // CARD
+//     // =====================================================
+
+//     card.getChildren().add(
+//             center
+//     );
+
+//     content.getChildren().add(
+//             card
+//     );
+
+//     // =====================================================
+//     // SCROLL
+//     // =====================================================
+
+//     ScrollPane scroll =
+//             new ScrollPane(
+//                     content
+//             );
+
+//     scroll.setFitToWidth(
+//             true
+//     );
+
+//     scroll.setFitToHeight(
+//             true
+//     );
+
+//     scroll.setHbarPolicy(
+//             ScrollPane.ScrollBarPolicy.NEVER
+//     );
+
+//     scroll.setVbarPolicy(
+//             ScrollPane.ScrollBarPolicy.AS_NEEDED
+//     );
+
+//     scroll.setStyle(
+//             "-fx-background-color: transparent;"
+//             + "-fx-background: transparent;"
+//             + "-fx-control-inner-background: transparent;"
+//     );
+
+//     VBox.setVgrow(
+//             scroll,
+//             Priority.ALWAYS
+//     );
+
+//     // =====================================================
+//     // FINAL PAGE
+//     // =====================================================
+
+//     page.getChildren().addAll(
+//             topBar,
+//             scroll
+//     );
+
+//     return page;
+// }
+
+
+// // =========================================================
+// // AI SUGGESTION BUTTON
+// // =========================================================
+
+// private Button createSuggestionButton(
+//         String text) {
+
+//     Button button =
+//             new Button(text);
+
+//     button.setPrefHeight(
+//             40
+//     );
+
+//     button.setTextFill(
+//             LIGHT_GREEN
+//     );
+
+//     button.setFont(
+//             Font.font(
+//                     "Arial",
+//                     12
+//             )
+//     );
+
+//     button.setBackground(
+//             new Background(
+//                     new BackgroundFill(
+//                             Color.WHITE,
+//                             new CornerRadii(20),
+//                             Insets.EMPTY
+//                     )
+//             )
+//     );
+
+//     button.setBorder(
+//             new Border(
+//                     new BorderStroke(
+//                             BORDER_COLOR,
+//                             BorderStrokeStyle.SOLID,
+//                             new CornerRadii(20),
+//                             new BorderWidths(1)
+//                     )
+//             )
+//     );
+
+//     button.setCursor(
+//             Cursor.HAND
+//     );
+
+//     return button;
+// }
+
+
+// // =========================================================
+// // NORMAL AI QUESTION
+// // =========================================================
+
+// private void askNormalAIQuestion(
+//         String userQuestion) {
+
+//     if (userQuestion == null ||
+//             userQuestion.trim().isEmpty()) {
+
+//         return;
+//     }
+
+//     aiAssistantText.setText(
+//             "🌱 AgroBiz AI is thinking..."
+//     );
+
+//     aiAskButton.setDisable(
+//             true
+//     );
+
+//     aiQuestionField.setDisable(
+//             true
+//     );
+
+//     Task<String> task =
+//             new Task<String>() {
+
+//         @Override
+//         protected String call()
+//                 throws Exception {
+
+//             return groqService.askQuestion(
+//                     userQuestion
+//             );
+//         }
+//     };
+
+//     task.setOnSucceeded(
+//             event -> {
+
+//                 String result =
+//                         task.getValue();
+
+//                 if (result == null ||
+//                         result.trim().isEmpty()) {
+
+//                     result =
+//                             "Sorry Farmer, I received an empty response.";
+//                 }
+
+//                 aiAssistantText.setText(
+//                         result
+//                 );
+
+//                 aiAskButton.setDisable(
+//                         false
+//                 );
+
+//                 aiQuestionField.setDisable(
+//                         false
+//                 );
+
+//                 aiQuestionField.clear();
+
+//                 aiQuestionField.setPromptText(
+//                         "Ask your farming question..."
+//                 );
+//             }
+//     );
+
+//     task.setOnFailed(
+//             event -> {
+
+//                 Throwable error =
+//                         task.getException();
+
+//                 String errorMessage =
+//                         "Unable to contact AgroBiz AI.";
+
+//                 if (error != null &&
+//                         error.getMessage() != null) {
+
+//                     errorMessage +=
+//                             "\n\nError: "
+//                             + error.getMessage();
+//                 }
+
+//                 aiAssistantText.setText(
+//                         errorMessage
+//                 );
+
+//                 aiAskButton.setDisable(
+//                         false
+//                 );
+
+//                 aiQuestionField.setDisable(
+//                         false
+//                 );
+//             }
+//     );
+
+//     Thread thread =
+//             new Thread(task);
+
+//     thread.setDaemon(
+//             true
+//     );
+
+//     thread.start();
+// }
+
+
+// // =========================================================
+// // START FARMING PLAN
+// // =========================================================
+
+// private void startFarmingPlan(
+//         VBox center,
+//         Label question,
+//         HBox suggestions,
+//         Button planButton) {
+
+//     selectedFarmingType = null;
+
+//     farmingQuestionIndex = 0;
+
+//     farmingPlanAnswers.clear();
+
+//     currentFarmingQuestionKeys.clear();
+
+//     currentFarmingQuestions.clear();
+
+//     // =====================================================
+//     // CHANGE TITLE
+//     // =====================================================
+
+//     question.setText(
+//             "Let's create your personalized "
+//             + "farming plan 🌱"
+//     );
+
+//     // =====================================================
+//     // ASSISTANT MESSAGE
+//     // =====================================================
+
+//     aiAssistantText.setText(
+//             "Great! 🌱\n\n"
+//             + "I will ask you a few questions about "
+//             + "your farm. Your answers will be used "
+//             + "to prepare a practical farming plan "
+//             + "with setup requirements, estimated "
+//             + "costs, timeline, risks and management steps."
+//     );
+
+//     // =====================================================
+//     // HIDE ORIGINAL PLAN BUTTON
+//     // =====================================================
+
+//     planButton.setVisible(
+//             false
+//     );
+
+//     planButton.setManaged(
+//             false
+//     );
+
+//     // =====================================================
+//     // REMOVE QUICK SUGGESTIONS
+//     // =====================================================
+
+//     suggestions.getChildren().clear();
+
+//     // =====================================================
+//     // SHOW FARMING TYPES
+//     // =====================================================
+
+//     createFarmingTypeButtons(
+//             center,
+//             question,
+//             planButton
+//     );
+
+//     // =====================================================
+//     // DISABLE TEXT INPUT UNTIL TYPE SELECTED
+//     // =====================================================
+
+//     aiQuestionField.setDisable(
+//             true
+//     );
+
+//     aiAskButton.setDisable(
+//             true
+//     );
+
+//     aiQuestionField.setPromptText(
+//             "Select a farming type above..."
+//     );
+// }
+
+
+// // =========================================================
+// // FARMING TYPE BUTTONS
+// // =========================================================
+
+// private void createFarmingTypeButtons(
+//         VBox center,
+//         Label question,
+//         Button planButton) {
+
+//     GridPane farmingGrid =
+//             new GridPane();
+
+//     farmingGrid.setHgap(
+//             12
+//     );
+
+//     farmingGrid.setVgap(
+//             12
+//     );
+
+//     farmingGrid.setAlignment(
+//             Pos.CENTER
+//     );
+
+//     String[][] farmingTypes = {
+
+//             {
+//                     "🐔 Poultry",
+//                     "Poultry"
+//             },
+
+//             {
+//                     "🐐 Goat",
+//                     "Goat"
+//             },
+
+//             {
+//                     "🍄 Mushroom",
+//                     "Mushroom"
+//             },
+
+//             {
+//                     "🐄 Dairy / Cow",
+//                     "Dairy / Cow"
+//             },
+
+//             {
+//                     "🦪 Pearl",
+//                     "Pearl"
+//             },
+
+//             {
+//                     "🐟 Fish",
+//                     "Fish"
+//             },
+
+//             {
+//                     "🌿 Moringa",
+//                     "Moringa"
+//             },
+
+//             {
+//                     "🌾 Crop",
+//                     "Crop"
+//             }
+//     };
+
+//     int column = 0;
+
+//     int row = 0;
+
+//     for (String[] farmingType :
+//             farmingTypes) {
+
+//         Button button =
+//                 createFarmingTypeButton(
+//                         farmingType[0]
+//                 );
+
+//         button.setOnAction(
+//                 event -> {
+
+//                     selectFarmingType(
+//                             farmingType[1],
+//                             question,
+//                             farmingGrid,
+//                             planButton
+//                     );
+//                 }
+//         );
+
+//         farmingGrid.add(
+//                 button,
+//                 column,
+//                 row
+//         );
+
+//         column++;
+
+//         if (column == 2) {
+
+//             column = 0;
+
+//             row++;
+//         }
+//     }
+
+//     // Insert after icon + title.
+//     center.getChildren().add(
+//             2,
+//             farmingGrid
+//     );
+// }
+
+
+// // =========================================================
+// // FARMING TYPE BUTTON
+// // =========================================================
+
+// private Button createFarmingTypeButton(
+//         String text) {
+
+//     Button button =
+//             new Button(text);
+
+//     button.setPrefWidth(
+//             230
+//     );
+
+//     button.setPrefHeight(
+//             48
+//     );
+
+//     button.setTextFill(
+//             DARK_GREEN
+//     );
+
+//     button.setFont(
+//             Font.font(
+//                     "Arial",
+//                     FontWeight.BOLD,
+//                     13
+//             )
+//     );
+
+//     button.setBackground(
+//             new Background(
+//                     new BackgroundFill(
+//                             Color.WHITE,
+//                             new CornerRadii(12),
+//                             Insets.EMPTY
+//                     )
+//             )
+//     );
+
+//     button.setBorder(
+//             new Border(
+//                     new BorderStroke(
+//                             BORDER_COLOR,
+//                             BorderStrokeStyle.SOLID,
+//                             new CornerRadii(12),
+//                             new BorderWidths(1)
+//                     )
+//             )
+//     );
+
+//     button.setCursor(
+//             Cursor.HAND
+//     );
+
+//     return button;
+// }
+
+
+// // =========================================================
+// // SELECT FARMING TYPE
+// // =========================================================
+
+// private void selectFarmingType(
+//         String farmingType,
+//         Label question,
+//         GridPane farmingGrid,
+//         Button planButton) {
+
+//     selectedFarmingType =
+//             farmingType;
+
+//     farmingQuestionIndex = 0;
+
+//     farmingPlanAnswers.clear();
+
+//     currentFarmingQuestionKeys.clear();
+
+//     currentFarmingQuestions.clear();
+
+//     // =====================================================
+//     // SAVE FARMING TYPE
+//     // =====================================================
+
+//     farmingPlanAnswers.put(
+//             "Farming Type",
+//             farmingType
+//     );
+
+//     // =====================================================
+//     // CREATE QUESTIONS
+//     // =====================================================
+
+//     buildFarmingQuestions(
+//             farmingType
+//     );
+
+//     // =====================================================
+//     // SAFETY CHECK
+//     // =====================================================
+
+//     if (currentFarmingQuestions.isEmpty()) {
+
+//         aiAssistantText.setText(
+//                 "No questions are available for "
+//                 + farmingType
+//                 + "."
+//         );
+
+//         return;
+//     }
+
+//     // =====================================================
+//     // SHOW FIRST QUESTION
+//     // =====================================================
+
+//     question.setText(
+//             "Selected: "
+//             + farmingType
+//             + "\n\n"
+//             + currentFarmingQuestions.get(0)
+//     );
+
+//     aiAssistantText.setText(
+//             "Excellent choice! 🌱\n\n"
+//             + "I will now collect the information "
+//             + "required to prepare your "
+//             + farmingType
+//             + " farming plan."
+//     );
+
+//     aiQuestionField.clear();
+
+//     aiQuestionField.setDisable(
+//             false
+//     );
+
+//     aiAskButton.setDisable(
+//             false
+//     );
+
+//     aiAskButton.setText(
+//             "Next  ➤"
+//     );
+
+//     aiQuestionField.setPromptText(
+//             "Enter your answer..."
+//     );
+
+//     // =====================================================
+//     // DISABLE FARMING TYPE BUTTONS
+//     // =====================================================
+
+//     farmingGrid.setDisable(
+//             true
+//     );
+
+//     planButton.setVisible(
+//             false
+//     );
+
+//     planButton.setManaged(
+//             false
+//     );
+// }
+
+
+// // =========================================================
+// // BUILD FARMING QUESTIONS
+// // =========================================================
+
+// private void buildFarmingQuestions(
+//         String farmingType) {
+
+//     currentFarmingQuestionKeys.clear();
+
+//     currentFarmingQuestions.clear();
+
+//     // =====================================================
+//     // COMMON QUESTIONS
+//     // =====================================================
+
+//     addFarmingQuestion(
+//             "Location",
+//             "Which district and state is your farm located in?"
+//     );
+
+//     addFarmingQuestion(
+//             "Area",
+//             "How much land or farming area do you have?"
+//     );
+
+//     addFarmingQuestion(
+//             "Capacity",
+//             "What capacity are you planning for this farm?"
+//     );
+
+//     addFarmingQuestion(
+//             "Budget",
+//             "What is your approximate budget in Indian Rupees?"
+//     );
+
+//     addFarmingQuestion(
+//             "Water",
+//             "Do you have a reliable water source? Please describe it."
+//     );
+
+//     addFarmingQuestion(
+//             "Electricity",
+//             "Is electricity available at your farm?"
+//     );
+
+//     addFarmingQuestion(
+//             "Infrastructure",
+//             "Do you already have any shed, pond, room, equipment or other infrastructure?"
+//     );
+
+//     addFarmingQuestion(
+//             "Labour",
+//             "How many people can work on the farm?"
+//     );
+
+//     addFarmingQuestion(
+//             "Experience",
+//             "What is your farming experience level? Beginner, some experience, or experienced?"
+//     );
+
+//     addFarmingQuestion(
+//             "Market",
+//             "How do you plan to sell your farm products?"
+//     );
+
+//     // =====================================================
+//     // FARMING-SPECIFIC QUESTIONS
+//     // =====================================================
+
+//     switch (farmingType) {
+
+//         case "Poultry":
+
+//             addFarmingQuestion(
+//                     "Poultry Purpose",
+//                     "Is your poultry farm for meat, eggs, or both?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Bird Number",
+//                     "How many birds are you planning to rear?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Poultry Breed",
+//                     "Do you have a preferred poultry breed or type?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Poultry Shed",
+//                     "Do you already have a poultry shed? If yes, describe its approximate size."
+//             );
+
+//             addFarmingQuestion(
+//                     "Feed",
+//                     "Do you have access to poultry feed or local feed ingredients?"
+//             );
+
+//             break;
+
+//         case "Goat":
+
+//             addFarmingQuestion(
+//                     "Goat Purpose",
+//                     "Is your goat farm mainly for meat, breeding, milk, or a combination?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Goat Number",
+//                     "How many goats are you planning to keep?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Goat Breed",
+//                     "Do you have a preferred goat breed?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Grazing",
+//                     "Do you have grazing land or access to fodder?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Goat Shed",
+//                     "Do you already have a goat shed?"
+//             );
+
+//             break;
+
+//         case "Mushroom":
+
+//             addFarmingQuestion(
+//                     "Mushroom Type",
+//                     "Which mushroom do you want to cultivate?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Growing Area",
+//                     "How much growing-room area is available?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Growing Room",
+//                     "Do you already have a suitable mushroom growing room?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Substrate",
+//                     "What substrate or agricultural waste materials are available to you?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Temperature",
+//                     "Do you have facilities for temperature and humidity management?"
+//             );
+
+//             break;
+
+//         case "Dairy / Cow":
+
+//             addFarmingQuestion(
+//                     "Cattle Number",
+//                     "How many cattle are you planning to keep?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Dairy Purpose",
+//                     "Is your main goal milk production, breeding, or both?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Cattle Breed",
+//                     "Do you have a preferred cattle breed?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Fodder",
+//                     "Do you have access to green fodder or other feed resources?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Cattle Shed",
+//                     "Do you already have a cattle shed?"
+//             );
+
+//             break;
+
+//         case "Pearl":
+
+//             addFarmingQuestion(
+//                     "Water Area",
+//                     "How much pond or suitable water area is available?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Pearl Method",
+//                     "Do you have a preferred pearl culture method?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Water Quality",
+//                     "Do you know the current water quality or water source?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Mussel Availability",
+//                     "Do you have access to suitable freshwater mussels?"
+//             );
+
+//             break;
+
+//         case "Fish":
+
+//             addFarmingQuestion(
+//                     "Pond Area",
+//                     "What is the available pond area?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Fish Species",
+//                     "Which fish species do you want to culture?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Pond Condition",
+//                     "Is the pond already constructed and suitable for fish culture?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Water Source",
+//                     "What is the main source of water for the pond?"
+//             );
+
+//             break;
+
+//         case "Moringa":
+
+//             addFarmingQuestion(
+//                     "Moringa Purpose",
+//                     "Are you growing moringa mainly for leaves, pods, seed, or another purpose?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Moringa Variety",
+//                     "Do you have a preferred moringa variety?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Planting Time",
+//                     "When are you planning to start planting?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Irrigation",
+//                     "What irrigation facility is available?"
+//             );
+
+//             break;
+
+//         case "Crop":
+
+//             addFarmingQuestion(
+//                     "Crop Type",
+//                     "Which crop or group of crops are you considering?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Soil",
+//                     "Do you know your soil type or recent soil-test results?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Season",
+//                     "Which season are you planning to cultivate?"
+//             );
+
+//             addFarmingQuestion(
+//                     "Irrigation",
+//                     "What irrigation facility is available?"
+//             );
+
+//             break;
+
+//         default:
+
+//             break;
+//     }
+// }
+
+
+// // =========================================================
+// // ADD FARMING QUESTION
+// // =========================================================
+
+// private void addFarmingQuestion(
+//         String key,
+//         String question) {
+
+//     currentFarmingQuestionKeys.add(
+//             key
+//     );
+
+//     currentFarmingQuestions.add(
+//             question
+//     );
+// }
+
+
+// // =========================================================
+// // PROCESS FARMING PLAN ANSWER
+// // =========================================================
+
+// private void processFarmingPlanAnswer() {
+
+//     String answer =
+//             aiQuestionField
+//                     .getText()
+//                     .trim();
+
+//     if (answer.isEmpty()) {
+
+//         return;
+//     }
+
+//     // =====================================================
+//     // SAFETY CHECK
+//     // =====================================================
+
+//     if (farmingQuestionIndex < 0 ||
+//             farmingQuestionIndex >=
+//                     currentFarmingQuestions.size()) {
+
+//         return;
+//     }
+
+//     // =====================================================
+//     // GET CURRENT QUESTION KEY
+//     // =====================================================
+
+//     String key =
+//             currentFarmingQuestionKeys.get(
+//                     farmingQuestionIndex
+//             );
+
+//     // =====================================================
+//     // SAVE ANSWER
+//     // =====================================================
+
+//     farmingPlanAnswers.put(
+//             key,
+//             answer
+//     );
+
+//     farmingQuestionIndex++;
+
+//     aiQuestionField.clear();
+
+//     // =====================================================
+//     // MORE QUESTIONS
+//     // =====================================================
+
+//     if (farmingQuestionIndex <
+//             currentFarmingQuestions.size()) {
+
+//         String nextQuestion =
+//                 currentFarmingQuestions.get(
+//                         farmingQuestionIndex
+//                 );
+
+//         aiAssistantText.setText(
+//                 "Thank you! 🌱\n\n"
+//                 + "Your answer has been recorded.\n\n"
+//                 + "Please answer the next question."
+//         );
+
+//         updateFarmingQuestionDisplay(
+//                 nextQuestion
+//         );
+
+//         aiAskButton.setText(
+//                 "Next  ➤"
+//         );
+
+//         return;
+//     }
+
+//     // =====================================================
+//     // ALL QUESTIONS COMPLETE
+//     // =====================================================
+
+//     finishFarmingPlanQuestions();
+// }
+
+
+// // =========================================================
+// // UPDATE FARMING QUESTION DISPLAY
+// // =========================================================
+
+// private void updateFarmingQuestionDisplay(
+//         String question) {
+
+//     aiAssistantText.setText(
+//             "🌱 " + question
+//     );
+
+//     aiQuestionField.setPromptText(
+//             "Type your answer here..."
+//     );
+// }
+
+
+// // =========================================================
+// // FINISH FARMING QUESTIONS
+// // =========================================================
+
+// private void finishFarmingPlanQuestions() {
+
+//     StringBuilder summary =
+//             new StringBuilder();
+
+//     summary.append(
+//             "Great! 🌱\n\n"
+//     );
+
+//     summary.append(
+//             "I have collected the information needed "
+//             + "for your "
+//             + selectedFarmingType
+//             + " farming plan.\n\n"
+//     );
+
+//     summary.append(
+//             "Your information:\n\n"
+//     );
+
+//     for (Map.Entry<String, String> entry :
+//             farmingPlanAnswers.entrySet()) {
+
+//         summary.append(
+//                 "• "
+//                 + entry.getKey()
+//                 + ": "
+//                 + entry.getValue()
+//                 + "\n"
+//         );
+//     }
+
+//     summary.append(
+//             "\nEverything looks ready."
+//     );
+
+//     summary.append(
+//             "\n\nClick \"Generate Plan\" to create "
+//             + "your personalized farming plan."
+//     );
+
+//     aiAssistantText.setText(
+//             summary.toString()
+//     );
+
+//     aiQuestionField.clear();
+
+//     aiQuestionField.setDisable(
+//             true
+//     );
+
+//     aiAskButton.setText(
+//             "Generate Plan"
+//     );
+
+//     aiAskButton.setDisable(
+//             false
+//     );
+
+//     // =====================================================
+//     // GENERATE BUTTON ACTION
+//     // =====================================================
+
+//     aiAskButton.setOnAction(
+//             event -> {
+
+//                 generateFinalFarmingPlan();
+//             }
+//     );
+// }
+
+
+// // =========================================================
+// // GENERATE FINAL FARMING PLAN
+// // =========================================================
+
+// private void generateFinalFarmingPlan() {
+
+//     if (selectedFarmingType == null ||
+//             selectedFarmingType.isBlank()) {
+
+//         return;
+//     }
+
+//     if (farmingPlanAnswers.isEmpty()) {
+
+//         return;
+//     }
+
+//     // =====================================================
+//     // UI
+//     // =====================================================
+
+//     aiAssistantText.setText(
+//             "🌱 AgroBiz AI is preparing your "
+//             + selectedFarmingType
+//             + " farming plan...\n\n"
+//             + "Please wait."
+//     );
+
+//     aiAskButton.setText(
+//             "Generating..."
+//     );
+
+//     aiAskButton.setDisable(
+//             true
+//     );
+
+//     aiQuestionField.setDisable(
+//             true
+//     );
+
+//     // =====================================================
+//     // COPY VALUES FOR BACKGROUND THREAD
+//     // =====================================================
+
+//     final String finalFarmingType =
+//             selectedFarmingType;
+
+//     final Map<String, String> finalFarmingPlanAnswers =
+//             new LinkedHashMap<>(
+//                     farmingPlanAnswers
+//             );
+
+//     // =====================================================
+//     // BACKGROUND TASK
+//     // =====================================================
+
+//     Task<String> task =
+//             new Task<String>() {
+
+//         @Override
+//         protected String call()
+//                 throws Exception {
+
+//             return groqService.generateFarmingPlan(
+//                     finalFarmingType,
+//                     finalFarmingPlanAnswers
+//             );
+//         }
+//     };
+
+//     // =====================================================
+//     // SUCCESS
+//     // =====================================================
+
+//    task.setOnSucceeded(
+//         event -> {
+
+//             String result =
+//                     task.getValue();
+
+//             // =================================================
+//             // SHOW GENERATED PLAN INSIDE SCROLLABLE AREA
+//             // =================================================
+
+//             aiPlanText.setText(
+//                     result
+//             );
+
+//             aiPlanContent.getChildren().clear();
+
+//             aiPlanContent.getChildren().add(
+//                     aiPlanText
+//             );
+
+//             aiPlanScroll.setVisible(
+//                     true
+//             );
+
+//             aiPlanScroll.setManaged(
+//                     true
+//             );
+
+//             aiCenter.setVisible(
+//                     false
+//             );
+
+//             aiCenter.setManaged(
+//                     false
+//             );
+
+//             aiCard.getChildren().clear();
+
+//             aiCard.getChildren().add(
+//                     aiPlanScroll
+//             );
+
+//             aiCard.getChildren().add(
+//                     aiNewPlanButton
+//             );
+
+//             // =================================================
+//             // RESET AI BUTTON STATE
+//             // =================================================
+
+//             aiAskButton.setText(
+//                     "Ask AI  ➤"
+//             );
+
+//             aiAskButton.setDisable(
+//                     false
+//             );
+
+//             aiQuestionField.setDisable(
+//                     false
+//             );
+
+//             aiQuestionField.clear();
+
+//             aiQuestionField.setPromptText(
+//                     "Ask another farming question..."
+//             );
+
+//             // =================================================
+//             // RETURN TO NORMAL AI MODE
+//             // =================================================
+
+//             selectedFarmingType =
+//                     null;
+
+//             farmingQuestionIndex =
+//                     0;
+
+//             farmingPlanAnswers.clear();
+
+//             currentFarmingQuestionKeys.clear();
+
+//             currentFarmingQuestions.clear();
+
+//             aiAskButton.setOnAction(
+//                     e -> {
+
+//                         String newQuestion =
+//                                 aiQuestionField
+//                                         .getText()
+//                                         .trim();
+
+//                         if (!newQuestion.isEmpty()) {
+
+//                             askNormalAIQuestion(
+//                                     newQuestion
+//                             );
+//                         }
+//                     }
+//             );
+//         }
+// );
+//     // =====================================================
+//     // FAILURE
+//     // =====================================================
+
+//     task.setOnFailed(
+//             event -> {
+
+//                 Throwable error =
+//                         task.getException();
+
+//                 String errorMessage =
+//                         "Sorry Farmer, I could not "
+//                         + "generate your farming plan.";
+
+//                 if (error != null &&
+//                         error.getMessage() != null) {
+
+//                     errorMessage +=
+//                             "\n\nError: "
+//                             + error.getMessage();
+//                 }
+
+//                 aiAssistantText.setText(
+//                         errorMessage
+//                 );
+
+//                 aiAskButton.setText(
+//                         "Generate Plan"
+//                 );
+
+//                 aiAskButton.setDisable(
+//                         false
+//                 );
+
+//                 aiQuestionField.setDisable(
+//                         true
+//                 );
+//             }
+//     );
+
+//     // =====================================================
+//     // START THREAD
+//     // =====================================================
+
+//     Thread thread =
+//             new Thread(task);
+
+//     thread.setDaemon(
+//             true
+//     );
+
+//     thread.start();
+// }
+
+
 // =========================================================
 // AI ADVISOR PAGE
 // =========================================================
+
 private VBox createAIAdvisorPage() {
+
+    // =====================================================
+    // RESET FARMING PLAN STATE
+    // =====================================================
+
+    selectedFarmingType = null;
+
+    farmingQuestionIndex = 0;
+
+    farmingPlanAnswers.clear();
+
+    currentFarmingQuestionKeys.clear();
+
+    currentFarmingQuestions.clear();
+
+    // =====================================================
+    // MAIN PAGE
+    // =====================================================
 
     VBox page = new VBox();
 
-    // Same background as the application
     page.setBackground(
-        new Background(
-            new BackgroundFill(
-                DARK_GREEN,
-                CornerRadii.EMPTY,
-                Insets.EMPTY
+            new Background(
+                    new BackgroundFill(
+                            DARK_GREEN,
+                            CornerRadii.EMPTY,
+                            Insets.EMPTY
+                    )
             )
-        )
+    );
+
+    // =====================================================
+    // FARMING PLAN VIEWER
+    // =====================================================
+
+    planContent = new VBox();
+
+    planContent.setSpacing(18);
+
+    planContent.setPadding(
+            new Insets(25)
+    );
+
+    planContent.setFillWidth(true);
+
+    planScroll = new ScrollPane(
+            planContent
+    );
+
+    planScroll.setFitToWidth(true);
+
+    planScroll.setHbarPolicy(
+            ScrollPane.ScrollBarPolicy.NEVER
+    );
+
+    planScroll.setVbarPolicy(
+            ScrollPane.ScrollBarPolicy.AS_NEEDED
+    );
+
+    planScroll.setVisible(false);
+
+    planScroll.setManaged(false);
+
+    planScroll.setStyle(
+            "-fx-background-color: transparent;"
+            + "-fx-background: transparent;"
+            + "-fx-control-inner-background: transparent;"
+    );
+
+    VBox.setVgrow(
+            planScroll,
+            Priority.ALWAYS
     );
 
     // =====================================================
@@ -770,14 +3452,14 @@ private VBox createAIAdvisorPage() {
     // =====================================================
 
     HBox topBar = createTopBar(
-        "AI Farming Advisor",
-        "Get intelligent recommendations for your farm."
+            "AI Farming Advisor",
+            "Get intelligent recommendations for your farm."
     );
 
-    // IMPORTANT:
-    // Remove any bottom margin/gap from the top bar.
-    VBox.setMargin(topBar, Insets.EMPTY);
-
+    VBox.setMargin(
+            topBar,
+            Insets.EMPTY
+    );
 
     // =====================================================
     // CONTENT
@@ -786,22 +3468,25 @@ private VBox createAIAdvisorPage() {
     VBox content = new VBox();
 
     content.setBackground(
-        new Background(
-            new BackgroundFill(
-                DARK_GREEN,
-                CornerRadii.EMPTY,
-                Insets.EMPTY
+            new Background(
+                    new BackgroundFill(
+                            DARK_GREEN,
+                            CornerRadii.EMPTY,
+                            Insets.EMPTY
+                    )
             )
-        )
     );
 
-    // NO TOP PADDING
     content.setPadding(
-        new Insets(0, 35, 35, 35)
+            new Insets(0, 35, 35, 35)
     );
 
     content.setSpacing(0);
 
+    VBox.setVgrow(
+            content,
+            Priority.ALWAYS
+    );
 
     // =====================================================
     // AI CARD
@@ -811,9 +3496,19 @@ private VBox createAIAdvisorPage() {
 
     card.setPrefHeight(650);
 
-    // Keep card directly attached to content
-    VBox.setMargin(card, Insets.EMPTY);
+    card.setMaxHeight(
+            Double.MAX_VALUE
+    );
 
+    VBox.setVgrow(
+            card,
+            Priority.ALWAYS
+    );
+
+    VBox.setMargin(
+            card,
+            Insets.EMPTY
+    );
 
     // =====================================================
     // CENTER
@@ -821,13 +3516,24 @@ private VBox createAIAdvisorPage() {
 
     VBox center = new VBox();
 
-    center.setAlignment(Pos.TOP_CENTER);
-    center.setSpacing(25);
-
-    center.setPadding(
-        new Insets(20)
+    center.setAlignment(
+            Pos.TOP_CENTER
     );
 
+    center.setSpacing(
+            25
+    );
+
+    center.setPadding(
+            new Insets(20)
+    );
+
+    center.setFillWidth(true);
+
+    VBox.setVgrow(
+            center,
+            Priority.ALWAYS
+    );
 
     // =====================================================
     // AI ICON
@@ -835,278 +3541,636 @@ private VBox createAIAdvisorPage() {
 
     Label aiIcon = new Label("✦");
 
-    aiIcon.setPrefSize(70, 70);
-    aiIcon.setAlignment(Pos.CENTER);
+    aiIcon.setPrefSize(
+            70,
+            70
+    );
 
-    aiIcon.setTextFill(Color.WHITE);
+    aiIcon.setAlignment(
+            Pos.CENTER
+    );
+
+    aiIcon.setTextFill(
+            Color.WHITE
+    );
 
     aiIcon.setFont(
-        Font.font(
-            "Arial",
-            FontWeight.BOLD,
-            32
-        )
+            Font.font(
+                    "Arial",
+                    FontWeight.BOLD,
+                    32
+            )
     );
 
     aiIcon.setBackground(
-        new Background(
-            new BackgroundFill(
-                DARK_GREEN,
-                new CornerRadii(50),
-                Insets.EMPTY
+            new Background(
+                    new BackgroundFill(
+                            DARK_GREEN,
+                            new CornerRadii(50),
+                            Insets.EMPTY
+                    )
             )
-        )
     );
 
-
     // =====================================================
-    // QUESTION
+    // PAGE TITLE
     // =====================================================
 
-    Label question = new Label(
-        "How can Agro Biz AI help your farm?"
+    Label question =
+            new Label(
+                    "How can Agro Biz AI help your farm?"
+            );
+
+    question.setTextFill(
+            Color.WHITE
     );
-
-    question.setTextFill(Color.WHITE);
 
     question.setFont(
-        Font.font(
-            "Arial",
-            FontWeight.BOLD,
-            23
-        )
+            Font.font(
+                    "Arial",
+                    FontWeight.BOLD,
+                    23
+            )
     );
 
+    question.setWrapText(
+            true
+    );
+
+    question.setAlignment(
+            Pos.CENTER
+    );
 
     // =====================================================
-    // SUGGESTIONS
+    // QUICK SUGGESTIONS
     // =====================================================
 
-    HBox suggestions = new HBox();
+    HBox suggestions =
+            new HBox();
 
-    
-        suggestions.setSpacing(12);
-        suggestions.setAlignment(Pos.CENTER);
+    suggestions.setSpacing(
+            12
+    );
 
-        suggestions.getChildren().addAll(
-            createSuggestionButton("🌾  Which crop should I grow?"),
-            createSuggestionButton("↗  How can I improve my yield?")
-        );
+    suggestions.setAlignment(
+            Pos.CENTER
+    );
 
-        Button irrigation = createSuggestionButton("💧  Optimize irrigation schedule");
+    Button cropButton =
+            createSuggestionButton(
+                    "🌾  Which crop should I grow?"
+            );
 
+    Button yieldButton =
+            createSuggestionButton(
+                    "↗  How can I improve my yield?"
+            );
 
+    Button irrigationButton =
+            createSuggestionButton(
+                    "💧  Optimize irrigation schedule"
+            );
+
+    suggestions.getChildren().addAll(
+            cropButton,
+            yieldButton,
+            irrigationButton
+    );
+
+    // =====================================================
+    // GENERATE PLAN BUTTON
+    // =====================================================
+
+    generatePlanButton =
+            new Button(
+                    "📋  Generate Personalized Farming Plan"
+            );
+
+    generatePlanButton.setPrefHeight(
+            48
+    );
+
+    generatePlanButton.setPrefWidth(
+            330
+    );
+
+    generatePlanButton.setTextFill(
+            Color.WHITE
+    );
+
+    generatePlanButton.setFont(
+            Font.font(
+                    "Arial",
+                    FontWeight.BOLD,
+                    14
+            )
+    );
+
+    generatePlanButton.setBackground(
+            new Background(
+                    new BackgroundFill(
+                            DARK_GREEN,
+                            new CornerRadii(10),
+                            Insets.EMPTY
+                    )
+            )
+    );
+
+    generatePlanButton.setCursor(
+            Cursor.HAND
+    );
+
+    // =====================================================
+    // INITIAL CENTER CONTENT
+    // =====================================================
 
     center.getChildren().addAll(
-        aiIcon,
-        question,
-        suggestions,
-        irrigation
+            aiIcon,
+            question,
+            suggestions,
+            generatePlanButton
     );
 
-
     // =====================================================
-    // MESSAGE
+    // MESSAGE AREA
     // =====================================================
 
-    HBox message = new HBox();
+    HBox message =
+            new HBox();
 
-    message.setSpacing(12);
+    message.setMaxWidth(
+            Double.MAX_VALUE
+    );
+
+    message.setSpacing(
+            12
+    );
 
     message.setPadding(
-        new Insets(20)
+            new Insets(20)
     );
 
     message.setBackground(
-        new Background(
-            new BackgroundFill(
-                Color.rgb(244, 246, 238),
-                new CornerRadii(15),
-                Insets.EMPTY
+            new Background(
+                    new BackgroundFill(
+                            Color.rgb(86, 108, 22),
+                            new CornerRadii(15),
+                            Insets.EMPTY
+                    )
             )
-        )
     );
 
+    // =====================================================
+    // ASSISTANT ICON
+    // =====================================================
 
-    // Assistant icon
-    Label assistantIcon = new Label("✦");
+    Label assistantIcon =
+            new Label("✦");
 
-    assistantIcon.setPrefSize(42, 42);
-    assistantIcon.setAlignment(Pos.CENTER);
+    assistantIcon.setPrefSize(
+            42,
+            42
+    );
 
-    assistantIcon.setTextFill(Color.WHITE);
+    assistantIcon.setMinSize(
+            42,
+            42
+    );
+
+    assistantIcon.setAlignment(
+            Pos.CENTER
+    );
+
+    assistantIcon.setTextFill(
+            Color.WHITE
+    );
 
     assistantIcon.setBackground(
-        new Background(
-            new BackgroundFill(
-                DARK_GREEN,
-                new CornerRadii(50),
-                Insets.EMPTY
+            new Background(
+                    new BackgroundFill(
+                            DARK_GREEN,
+                            new CornerRadii(50),
+                            Insets.EMPTY
+                    )
             )
-        )
     );
 
+    // =====================================================
+    // ASSISTANT TEXT
+    // =====================================================
 
-    // Assistant text
-    Label assistantText = new Label(
-        "Hello Farmer! 🌱 I can help you make smarter "
-        + "farming decisions based on your current "
-        + "soil data and local weather forecasts. "
-        + "What would you like to analyze today?"
+    aiAssistantText =
+            new Label(
+                    "Hello Farmer! 🌱\n\n"
+                    + "I can help you make smarter farming "
+                    + "decisions and create a personalized "
+                    + "farming plan based on your farm "
+                    + "resources, capacity and goals."
+            );
+
+    aiAssistantText.setWrapText(
+            true
     );
 
-    assistantText.setWrapText(true);
+    aiAssistantText.setTextFill(
+            GREY
+    );
 
-    assistantText.setTextFill(Color.GREY);
-
-    assistantText.setFont(
-        Font.font(
-            "Arial",
-            15
-        )
+    aiAssistantText.setFont(
+            Font.font(
+                    "Arial",
+                    15
+            )
     );
 
     HBox.setHgrow(
-        assistantText,
-        Priority.ALWAYS
+            aiAssistantText,
+            Priority.ALWAYS
     );
-
 
     message.getChildren().addAll(
-        assistantIcon,
-        assistantText
+            assistantIcon,
+            aiAssistantText
     );
 
-
     // =====================================================
-    // SPACER
+    // GENERATED FARMING PLAN TEXT
     // =====================================================
 
-    Region aiSpacer = new Region();
+    planText =
+            new Label();
 
-    VBox.setVgrow(
-        aiSpacer,
-        Priority.ALWAYS
+    planText.setWrapText(
+            true
     );
 
+    planText.setMaxWidth(
+            Double.MAX_VALUE
+    );
+
+    planText.setTextFill(
+            Color.DARKSLATEGRAY
+    );
+
+    planText.setFont(
+            Font.font(
+                    "Arial",
+                    15
+            )
+    );
+
+    planText.setPadding(
+            new Insets(5)
+    );
+
+    // =====================================================
+    // NEW FARMING PLAN BUTTON
+    // =====================================================
+
+    newPlanButton = new Button(
+            "← New Farming Plan"
+    );
+
+    newPlanButton.setPrefHeight(
+            45
+    );
+
+    newPlanButton.setPrefWidth(
+            180
+    );
+
+    newPlanButton.setTextFill(
+            Color.WHITE
+    );
+
+    newPlanButton.setFont(
+            Font.font(
+                    "Arial",
+                    FontWeight.BOLD,
+                    13
+            )
+    );
+
+    newPlanButton.setBackground(
+            new Background(
+                    new BackgroundFill(
+                            DARK_GREEN,
+                            new CornerRadii(9),
+                            Insets.EMPTY
+                    )
+            )
+    );
+
+    newPlanButton.setCursor(
+            Cursor.HAND
+    );
+
+    // =====================================================
+    // NEW PLAN ACTION
+    // =====================================================
+
+    newPlanButton.setOnAction(
+            event -> {
+
+                planContent.getChildren().clear();
+
+                planText.setText("");
+
+                planScroll.setVisible(
+                        false
+                );
+
+                planScroll.setManaged(
+                        false
+                );
+
+                center.setVisible(
+                        true
+                );
+
+                center.setManaged(
+                        true
+                );
+
+                card.getChildren().clear();
+
+                card.getChildren().add(
+                        center
+                );
+            }
+    );
 
     // =====================================================
     // QUESTION FIELD
     // =====================================================
 
-    TextField questionField =
-        new TextField();
+    aiQuestionField =
+            new TextField();
 
-    questionField.setPromptText(
-        "Ask your farming question..."
+    aiQuestionField.setPromptText(
+            "Ask your farming question..."
     );
 
-    questionField.setPrefHeight(50);
+    aiQuestionField.setPrefHeight(
+            50
+    );
 
+    aiQuestionField.setFont(
+            Font.font(
+                    "Arial",
+                    14
+            )
+    );
+
+    aiQuestionField.setOnAction(
+            event -> {
+
+                if (aiAskButton != null) {
+
+                    aiAskButton.fire();
+                }
+            }
+    );
 
     // =====================================================
     // ASK AI BUTTON
     // =====================================================
 
-    Button askAI = new Button("Ask AI  ➤");
-        askAI.setPrefHeight(50);
-        askAI.setPrefWidth(120);
-        askAI.setTextFill(Color.WHITE);
-        askAI.setFont(Font.font("Arial", FontWeight.BOLD, 13));
-        askAI.setBackground(new Background(new BackgroundFill(DARK_GREEN, new CornerRadii(9), Insets.EMPTY)));
+    aiAskButton =
+            new Button(
+                    "Ask AI  ➤"
+            );
 
+    aiAskButton.setPrefHeight(
+            50
+    );
 
+    aiAskButton.setPrefWidth(
+            120
+    );
+
+    aiAskButton.setTextFill(
+            Color.WHITE
+    );
+
+    aiAskButton.setFont(
+            Font.font(
+                    "Arial",
+                    FontWeight.BOLD,
+                    13
+            )
+    );
+
+    aiAskButton.setBackground(
+            new Background(
+                    new BackgroundFill(
+                            DARK_GREEN,
+                            new CornerRadii(9),
+                            Insets.EMPTY
+                    )
+            )
+    );
+
+    aiAskButton.setCursor(
+            Cursor.HAND
+    );
 
     // =====================================================
     // ASK AI ACTION
     // =====================================================
 
-    askAI.setOnAction(event -> {
+    aiAskButton.setOnAction(
+            event -> {
 
-        if (!questionField.getText().trim().isEmpty()) {
+                String userQuestion =
+                        aiQuestionField
+                                .getText()
+                                .trim();
 
-            assistantText.setText(
-                "AI Advisor received your question: "
-                + questionField.getText()
-                + "\n\nThis AI response module is ready "
-                + "to be connected with your AI service."
-            );
+                if (userQuestion.isEmpty()) {
 
-            questionField.clear();
-        }
-    });
+                    return;
+                }
 
+                // =============================================
+                // FARMING PLAN MODE
+                // =============================================
+
+                if (selectedFarmingType != null) {
+
+                    processFarmingPlanAnswer();
+
+                    return;
+                }
+
+                // =============================================
+                // NORMAL AI MODE
+                // =============================================
+
+                askNormalAIQuestion(
+                        userQuestion
+                );
+            }
+    );
 
     // =====================================================
     // INPUT
     // =====================================================
 
     HBox input =
-        new HBox(
-            questionField,
-            askAI
-        );
+            new HBox(
+                    aiQuestionField,
+                    aiAskButton
+            );
 
-    input.setSpacing(12);
-
-    HBox.setHgrow(
-        questionField,
-        Priority.ALWAYS
+    input.setSpacing(
+            12
     );
 
+    HBox.setHgrow(
+            aiQuestionField,
+            Priority.ALWAYS
+    );
 
     // =====================================================
-    // ADD EVERYTHING
+    // QUICK QUESTION ACTIONS
+    // =====================================================
+
+    cropButton.setOnAction(
+            event -> {
+
+                aiQuestionField.setText(
+                        "Which crop should I grow?"
+                );
+
+                aiAskButton.fire();
+            }
+    );
+
+    yieldButton.setOnAction(
+            event -> {
+
+                aiQuestionField.setText(
+                        "How can I improve my yield?"
+                );
+
+                aiAskButton.fire();
+            }
+    );
+
+    irrigationButton.setOnAction(
+            event -> {
+
+                aiQuestionField.setText(
+                        "How can I optimize my irrigation schedule?"
+                );
+
+                aiAskButton.fire();
+            }
+    );
+
+    // =====================================================
+    // START PLAN BUTTON
+    // =====================================================
+
+    generatePlanButton.setOnAction(
+            event -> {
+
+                startFarmingPlan(
+                        center,
+                        question,
+                        suggestions,
+                        generatePlanButton
+                );
+            }
+    );
+
+    // =====================================================
+    // ADD MESSAGE + INPUT
     // =====================================================
 
     center.getChildren().addAll(
-        message,
-        aiSpacer,
-        input
+            message,
+            new Region(),
+            input
     );
 
-    card.getChildren().add(center);
+    Region aiSpacer =
+            (Region) center.getChildren()
+                    .get(
+                            center.getChildren().size() - 2
+                    );
 
-    content.getChildren().add(card);
-
+    VBox.setVgrow(
+            aiSpacer,
+            Priority.ALWAYS
+    );
 
     // =====================================================
-    // SCROLL PANE
+    // CARD
     // =====================================================
 
-    ScrollPane scroll =
-        new ScrollPane(content);
-
-    scroll.setFitToWidth(true);
-    scroll.setFitToHeight(true);
-
-    scroll.setHbarPolicy(
-        ScrollPane.ScrollBarPolicy.NEVER
+    card.getChildren().add(
+            center
     );
 
-    scroll.setVbarPolicy(
-        ScrollPane.ScrollBarPolicy.NEVER
-    );
-
-    scroll.setStyle(
-        "-fx-background-color: transparent;"
-        + "-fx-background: transparent;"
-        + "-fx-control-inner-background: transparent;"
+    content.getChildren().add(
+            card
     );
 
     VBox.setVgrow(
-        scroll,
-        Priority.ALWAYS
+            card,
+            Priority.ALWAYS
     );
 
+    // =====================================================
+    // MAIN SCROLL
+    // =====================================================
+
+    ScrollPane scroll =
+            new ScrollPane(
+                    content
+            );
+
+    scroll.setFitToWidth(
+            true
+    );
+
+    scroll.setFitToHeight(
+            true
+    );
+
+    scroll.setHbarPolicy(
+            ScrollPane.ScrollBarPolicy.NEVER
+    );
+
+    scroll.setVbarPolicy(
+            ScrollPane.ScrollBarPolicy.AS_NEEDED
+    );
+
+    scroll.setStyle(
+            "-fx-background-color: transparent;"
+            + "-fx-background: transparent;"
+            + "-fx-control-inner-background: transparent;"
+    );
+
+    VBox.setVgrow(
+            scroll,
+            Priority.ALWAYS
+    );
 
     // =====================================================
     // FINAL PAGE
     // =====================================================
 
     page.getChildren().addAll(
-        topBar,
-        scroll
+            topBar,
+            scroll
+    );
+
+    VBox.setVgrow(
+            scroll,
+            Priority.ALWAYS
     );
 
     return page;
@@ -1116,50 +4180,1238 @@ private VBox createAIAdvisorPage() {
 // =========================================================
 // AI SUGGESTION BUTTON
 // =========================================================
-private Button createSuggestionButton(String text) {
 
-    Button button = new Button(text);
+private Button createSuggestionButton(
+        String text) {
 
-    button.setPrefHeight(40);
+    Button button =
+            new Button(text);
+
+    button.setPrefHeight(
+            40
+    );
 
     button.setTextFill(
-        LIGHT_GREEN
+            LIGHT_GREEN
     );
 
     button.setFont(
-        Font.font(
-            "Arial",
-            12
-        )
+            Font.font(
+                    "Arial",
+                    12
+            )
     );
 
     button.setBackground(
-        new Background(
-            new BackgroundFill(
-                Color.WHITE,
-                new CornerRadii(20),
-                Insets.EMPTY
+            new Background(
+                    new BackgroundFill(
+                            Color.WHITE,
+                            new CornerRadii(20),
+                            Insets.EMPTY
+                    )
             )
-        )
     );
 
     button.setBorder(
-        new Border(
-            new BorderStroke(
-                BORDER_COLOR,
-                BorderStrokeStyle.SOLID,
-                new CornerRadii(20),
-                new BorderWidths(1)
+            new Border(
+                    new BorderStroke(
+                            BORDER_COLOR,
+                            BorderStrokeStyle.SOLID,
+                            new CornerRadii(20),
+                            new BorderWidths(1)
+                    )
             )
-        )
     );
 
     button.setCursor(
-        Cursor.HAND
+            Cursor.HAND
     );
 
     return button;
 }
+
+
+// =========================================================
+// NORMAL AI QUESTION
+// =========================================================
+
+private void askNormalAIQuestion(
+        String userQuestion) {
+
+    if (userQuestion == null ||
+            userQuestion.trim().isEmpty()) {
+
+        return;
+    }
+
+    aiAssistantText.setText(
+            "🌱 AgroBiz AI is thinking..."
+    );
+
+    aiAskButton.setDisable(
+            true
+    );
+
+    aiQuestionField.setDisable(
+            true
+    );
+
+    Task<String> task =
+            new Task<String>() {
+
+                @Override
+                protected String call()
+                        throws Exception {
+
+                    return groqService.askQuestion(
+                            userQuestion
+                    );
+                }
+            };
+
+    task.setOnSucceeded(
+            event -> {
+
+                aiAssistantText.setText(
+                        task.getValue()
+                );
+
+                aiAskButton.setDisable(
+                        false
+                );
+
+                aiQuestionField.setDisable(
+                        false
+                );
+
+                aiQuestionField.clear();
+            }
+    );
+
+    task.setOnFailed(
+            event -> {
+
+                Throwable error =
+                        task.getException();
+
+                String errorMessage =
+                        "Unable to contact AgroBiz AI.";
+
+                if (error != null &&
+                        error.getMessage() != null) {
+
+                    errorMessage +=
+                            "\n\nError: "
+                            + error.getMessage();
+                }
+
+                aiAssistantText.setText(
+                        errorMessage
+                );
+
+                aiAskButton.setDisable(
+                        false
+                );
+
+                aiQuestionField.setDisable(
+                        false
+                );
+            }
+    );
+
+    Thread thread =
+            new Thread(task);
+
+    thread.setDaemon(
+            true
+    );
+
+    thread.start();
+}
+
+
+// =========================================================
+// START FARMING PLAN
+// =========================================================
+
+private void startFarmingPlan(
+        VBox center,
+        Label question,
+        HBox suggestions,
+        Button planButton) {
+
+    selectedFarmingType = null;
+
+    farmingQuestionIndex = 0;
+
+    farmingPlanAnswers.clear();
+
+    currentFarmingQuestionKeys.clear();
+
+    currentFarmingQuestions.clear();
+
+    // =====================================================
+    // CHANGE TITLE
+    // =====================================================
+
+    question.setText(
+            "Let's create your personalized "
+            + "farming plan 🌱"
+    );
+
+    // =====================================================
+    // ASSISTANT MESSAGE
+    // =====================================================
+
+    aiAssistantText.setText(
+            "Great! 🌱\n\n"
+            + "I will ask you a few questions about "
+            + "your farm. Your answers will be used "
+            + "to prepare a practical farming plan "
+            + "with setup requirements, estimated "
+            + "costs, timeline, risks and management steps."
+    );
+
+    // =====================================================
+    // HIDE ORIGINAL PLAN BUTTON
+    // =====================================================
+
+    planButton.setVisible(
+            false
+    );
+
+    planButton.setManaged(
+            false
+    );
+
+    // =====================================================
+    // REMOVE QUICK SUGGESTIONS
+    // =====================================================
+
+    suggestions.getChildren().clear();
+
+    // =====================================================
+    // SHOW FARMING TYPES
+    // =====================================================
+
+    createFarmingTypeButtons(
+            center,
+            question,
+            planButton
+    );
+
+    // =====================================================
+    // DISABLE TEXT INPUT UNTIL TYPE SELECTED
+    // =====================================================
+
+    aiQuestionField.setDisable(
+            true
+    );
+
+    aiAskButton.setDisable(
+            true
+    );
+
+    aiQuestionField.setPromptText(
+            "Select a farming type above..."
+    );
+}
+
+
+// =========================================================
+// FARMING TYPE BUTTONS
+// =========================================================
+
+private void createFarmingTypeButtons(
+        VBox center,
+        Label question,
+        Button planButton) {
+
+    GridPane farmingGrid =
+            new GridPane();
+
+    farmingGrid.setHgap(
+            12
+    );
+
+    farmingGrid.setVgap(
+            12
+    );
+
+    farmingGrid.setAlignment(
+            Pos.CENTER
+    );
+
+    String[][] farmingTypes = {
+
+            {
+                    "🐔 Poultry",
+                    "Poultry"
+            },
+
+            {
+                    "🐐 Goat",
+                    "Goat"
+            },
+
+            {
+                    "🍄 Mushroom",
+                    "Mushroom"
+            },
+
+            {
+                    "🐄 Dairy / Cow",
+                    "Dairy / Cow"
+            },
+
+            {
+                    "🦪 Pearl",
+                    "Pearl"
+            },
+
+            {
+                    "🐟 Fish",
+                    "Fish"
+            },
+
+            {
+                    "🌿 Moringa",
+                    "Moringa"
+            },
+
+            {
+                    "🌾 Crop",
+                    "Crop"
+            }
+    };
+
+    int column = 0;
+
+    int row = 0;
+
+    for (String[] farmingType :
+            farmingTypes) {
+
+        Button button =
+                createFarmingTypeButton(
+                        farmingType[0]
+                );
+
+        button.setOnAction(
+                event -> {
+
+                    selectFarmingType(
+                            farmingType[1],
+                            question,
+                            farmingGrid,
+                            planButton
+                    );
+                }
+        );
+
+        farmingGrid.add(
+                button,
+                column,
+                row
+        );
+
+        column++;
+
+        if (column == 2) {
+
+            column = 0;
+
+            row++;
+        }
+    }
+
+    center.getChildren().add(
+            2,
+            farmingGrid
+    );
+}
+
+
+// =========================================================
+// FARMING TYPE BUTTON
+// =========================================================
+
+private Button createFarmingTypeButton(
+        String text) {
+
+    Button button =
+            new Button(text);
+
+    button.setPrefWidth(
+            230
+    );
+
+    button.setPrefHeight(
+            48
+    );
+
+    button.setTextFill(
+            DARK_GREEN
+    );
+
+    button.setFont(
+            Font.font(
+                    "Arial",
+                    FontWeight.BOLD,
+                    13
+            )
+    );
+
+    button.setBackground(
+            new Background(
+                    new BackgroundFill(
+                            Color.WHITE,
+                            new CornerRadii(12),
+                            Insets.EMPTY
+                    )
+            )
+    );
+
+    button.setBorder(
+            new Border(
+                    new BorderStroke(
+                            BORDER_COLOR,
+                            BorderStrokeStyle.SOLID,
+                            new CornerRadii(12),
+                            new BorderWidths(1)
+                    )
+            )
+    );
+
+    button.setCursor(
+            Cursor.HAND
+    );
+
+    return button;
+}
+
+
+// =========================================================
+// SELECT FARMING TYPE
+// =========================================================
+
+private void selectFarmingType(
+        String farmingType,
+        Label question,
+        GridPane farmingGrid,
+        Button planButton) {
+
+    selectedFarmingType =
+            farmingType;
+
+    farmingQuestionIndex = 0;
+
+    farmingPlanAnswers.clear();
+
+    currentFarmingQuestionKeys.clear();
+
+    currentFarmingQuestions.clear();
+
+    // =====================================================
+    // SAVE FARMING TYPE
+    // =====================================================
+
+    farmingPlanAnswers.put(
+            "Farming Type",
+            farmingType
+    );
+
+    // =====================================================
+    // CREATE QUESTIONS
+    // =====================================================
+
+    buildFarmingQuestions(
+            farmingType
+    );
+
+    // =====================================================
+    // SHOW FIRST QUESTION
+    // =====================================================
+
+    question.setText(
+            "Selected: "
+            + farmingType
+            + "\n\n"
+            + currentFarmingQuestions.get(0)
+    );
+
+    aiAssistantText.setText(
+            "Excellent choice! 🌱\n\n"
+            + "I will now collect the information "
+            + "required to prepare your "
+            + farmingType
+            + " farming plan."
+    );
+
+    aiQuestionField.clear();
+
+    aiQuestionField.setDisable(
+            false
+    );
+
+    aiAskButton.setDisable(
+            false
+    );
+
+    aiAskButton.setText(
+            "Next  ➤"
+    );
+
+    aiQuestionField.setPromptText(
+            "Enter your answer..."
+    );
+
+    // =====================================================
+    // DISABLE FARMING TYPE BUTTONS
+    // =====================================================
+
+    farmingGrid.setDisable(
+            true
+    );
+
+    planButton.setVisible(
+            false
+    );
+
+    planButton.setManaged(
+            false
+    );
+}
+
+
+// =========================================================
+// BUILD FARMING QUESTIONS
+// =========================================================
+
+private void buildFarmingQuestions(
+        String farmingType) {
+
+    currentFarmingQuestionKeys.clear();
+
+    currentFarmingQuestions.clear();
+
+    // =====================================================
+    // COMMON QUESTIONS
+    // =====================================================
+
+    addFarmingQuestion(
+            "Location",
+            "Which district and state is your farm located in?"
+    );
+
+    addFarmingQuestion(
+            "Area",
+            "How much land or farming area do you have?"
+    );
+
+    addFarmingQuestion(
+            "Capacity",
+            "What capacity are you planning for this farm?"
+    );
+
+    addFarmingQuestion(
+            "Budget",
+            "What is your approximate budget in Indian Rupees?"
+    );
+
+    addFarmingQuestion(
+            "Water",
+            "Do you have a reliable water source? Please describe it."
+    );
+
+    addFarmingQuestion(
+            "Electricity",
+            "Is electricity available at your farm?"
+    );
+
+    addFarmingQuestion(
+            "Infrastructure",
+            "Do you already have any shed, pond, room, equipment or other infrastructure?"
+    );
+
+    addFarmingQuestion(
+            "Labour",
+            "How many people can work on the farm?"
+    );
+
+    addFarmingQuestion(
+            "Experience",
+            "What is your farming experience level? Beginner, some experience, or experienced?"
+    );
+
+    addFarmingQuestion(
+            "Market",
+            "How do you plan to sell your farm products?"
+    );
+
+    // =====================================================
+    // FARMING-SPECIFIC QUESTIONS
+    // =====================================================
+
+    switch (farmingType) {
+
+        case "Poultry":
+
+            addFarmingQuestion(
+                    "Poultry Purpose",
+                    "Is your poultry farm for meat, eggs, or both?"
+            );
+
+            addFarmingQuestion(
+                    "Bird Number",
+                    "How many birds are you planning to rear?"
+            );
+
+            addFarmingQuestion(
+                    "Poultry Breed",
+                    "Do you have a preferred poultry breed or type?"
+            );
+
+            addFarmingQuestion(
+                    "Poultry Shed",
+                    "Do you already have a poultry shed? If yes, describe its approximate size."
+            );
+
+            addFarmingQuestion(
+                    "Feed",
+                    "Do you have access to poultry feed or local feed ingredients?"
+            );
+
+            break;
+
+        case "Goat":
+
+            addFarmingQuestion(
+                    "Goat Purpose",
+                    "Is your goat farm mainly for meat, breeding, milk, or a combination?"
+            );
+
+            addFarmingQuestion(
+                    "Goat Number",
+                    "How many goats are you planning to keep?"
+            );
+
+            addFarmingQuestion(
+                    "Goat Breed",
+                    "Do you have a preferred goat breed?"
+            );
+
+            addFarmingQuestion(
+                    "Grazing",
+                    "Do you have grazing land or access to fodder?"
+            );
+
+            addFarmingQuestion(
+                    "Goat Shed",
+                    "Do you already have a goat shed?"
+            );
+
+            break;
+
+        case "Mushroom":
+
+            addFarmingQuestion(
+                    "Mushroom Type",
+                    "Which mushroom do you want to cultivate?"
+            );
+
+            addFarmingQuestion(
+                    "Growing Area",
+                    "How much growing-room area is available?"
+            );
+
+            addFarmingQuestion(
+                    "Growing Room",
+                    "Do you already have a suitable mushroom growing room?"
+            );
+
+            addFarmingQuestion(
+                    "Substrate",
+                    "What substrate or agricultural waste materials are available to you?"
+            );
+
+            addFarmingQuestion(
+                    "Temperature",
+                    "Do you have facilities for temperature and humidity management?"
+            );
+
+            break;
+
+        case "Dairy / Cow":
+
+            addFarmingQuestion(
+                    "Cattle Number",
+                    "How many cattle are you planning to keep?"
+            );
+
+            addFarmingQuestion(
+                    "Dairy Purpose",
+                    "Is your main goal milk production, breeding, or both?"
+            );
+
+            addFarmingQuestion(
+                    "Cattle Breed",
+                    "Do you have a preferred cattle breed?"
+            );
+
+            addFarmingQuestion(
+                    "Fodder",
+                    "Do you have access to green fodder or other feed resources?"
+            );
+
+            addFarmingQuestion(
+                    "Cattle Shed",
+                    "Do you already have a cattle shed?"
+            );
+
+            break;
+
+        case "Pearl":
+
+            addFarmingQuestion(
+                    "Water Area",
+                    "How much pond or suitable water area is available?"
+            );
+
+            addFarmingQuestion(
+                    "Pearl Method",
+                    "Do you have a preferred pearl culture method?"
+            );
+
+            addFarmingQuestion(
+                    "Water Quality",
+                    "Do you know the current water quality or water source?"
+            );
+
+            addFarmingQuestion(
+                    "Mussel Availability",
+                    "Do you have access to suitable freshwater mussels?"
+            );
+
+            break;
+
+        case "Fish":
+
+            addFarmingQuestion(
+                    "Pond Area",
+                    "What is the available pond area?"
+            );
+
+            addFarmingQuestion(
+                    "Fish Species",
+                    "Which fish species do you want to culture?"
+            );
+
+            addFarmingQuestion(
+                    "Pond Condition",
+                    "Is the pond already constructed and suitable for fish culture?"
+            );
+
+            addFarmingQuestion(
+                    "Water Source",
+                    "What is the main source of water for the pond?"
+            );
+
+            break;
+
+        case "Moringa":
+
+            addFarmingQuestion(
+                    "Moringa Purpose",
+                    "Are you growing moringa mainly for leaves, pods, seed, or another purpose?"
+            );
+
+            addFarmingQuestion(
+                    "Moringa Variety",
+                    "Do you have a preferred moringa variety?"
+            );
+
+            addFarmingQuestion(
+                    "Planting Time",
+                    "When are you planning to start planting?"
+            );
+
+            addFarmingQuestion(
+                    "Irrigation",
+                    "What irrigation facility is available?"
+            );
+
+            break;
+
+        case "Crop":
+
+            addFarmingQuestion(
+                    "Crop Type",
+                    "Which crop or group of crops are you considering?"
+            );
+
+            addFarmingQuestion(
+                    "Soil",
+                    "Do you know your soil type or recent soil-test results?"
+            );
+
+            addFarmingQuestion(
+                    "Season",
+                    "Which season are you planning to cultivate?"
+            );
+
+            addFarmingQuestion(
+                    "Irrigation",
+                    "What irrigation facility is available?"
+            );
+
+            break;
+    }
+}
+
+
+// =========================================================
+// ADD FARMING QUESTION
+// =========================================================
+
+private void addFarmingQuestion(
+        String key,
+        String question) {
+
+    currentFarmingQuestionKeys.add(
+            key
+    );
+
+    currentFarmingQuestions.add(
+            question
+    );
+}
+
+
+// =========================================================
+// PROCESS FARMING PLAN ANSWER
+// =========================================================
+
+private void processFarmingPlanAnswer() {
+
+    String answer =
+            aiQuestionField
+                    .getText()
+                    .trim();
+
+    if (answer.isEmpty()) {
+
+        return;
+    }
+
+    // =====================================================
+    // SAFETY CHECK
+    // =====================================================
+
+    if (farmingQuestionIndex < 0 ||
+            farmingQuestionIndex >=
+                    currentFarmingQuestions.size()) {
+
+        return;
+    }
+
+    // =====================================================
+    // GET CURRENT QUESTION KEY
+    // =====================================================
+
+    String key =
+            currentFarmingQuestionKeys.get(
+                    farmingQuestionIndex
+            );
+
+    // =====================================================
+    // SAVE ANSWER
+    // =====================================================
+
+    farmingPlanAnswers.put(
+            key,
+            answer
+    );
+
+    farmingQuestionIndex++;
+
+    aiQuestionField.clear();
+
+    // =====================================================
+    // MORE QUESTIONS
+    // =====================================================
+
+    if (farmingQuestionIndex <
+            currentFarmingQuestions.size()) {
+
+        String nextQuestion =
+                currentFarmingQuestions.get(
+                        farmingQuestionIndex
+                );
+
+        aiAssistantText.setText(
+                "Thank you! 🌱\n\n"
+                + "Your answer has been recorded."
+        );
+
+        aiQuestionField.setPromptText(
+                "Enter your answer..."
+        );
+
+        aiAskButton.setText(
+                "Next  ➤"
+        );
+
+        updateFarmingQuestionDisplay(
+                nextQuestion
+        );
+
+        return;
+    }
+
+    // =====================================================
+    // ALL QUESTIONS COMPLETE
+    // =====================================================
+
+    finishFarmingPlanQuestions();
+}
+
+
+// =========================================================
+// UPDATE FARMING QUESTION DISPLAY
+// =========================================================
+
+private void updateFarmingQuestionDisplay(
+        String question) {
+
+    aiAssistantText.setText(
+            "🌱 " + question
+    );
+
+    aiQuestionField.setPromptText(
+            "Type your answer here..."
+    );
+}
+
+
+// =========================================================
+// FINISH FARMING QUESTIONS
+// =========================================================
+
+private void finishFarmingPlanQuestions() {
+
+    StringBuilder summary =
+            new StringBuilder();
+
+    summary.append(
+            "Great! 🌱\n\n"
+    );
+
+    summary.append(
+            "I have collected the information needed "
+            + "for your "
+            + selectedFarmingType
+            + " farming plan.\n\n"
+    );
+
+    summary.append(
+            "Your information:\n\n"
+    );
+
+    for (Map.Entry<String, String> entry :
+            farmingPlanAnswers.entrySet()) {
+
+        summary.append(
+                "• "
+                + entry.getKey()
+                + ": "
+                + entry.getValue()
+                + "\n"
+        );
+    }
+
+    summary.append(
+            "\nEverything looks ready."
+    );
+
+    summary.append(
+            "\n\nClick \"Generate Plan\" to create "
+            + "your personalized farming plan."
+    );
+
+    aiAssistantText.setText(
+            summary.toString()
+    );
+
+    aiQuestionField.clear();
+
+    aiQuestionField.setDisable(
+            true
+    );
+
+    aiAskButton.setText(
+            "Generate Plan"
+    );
+
+    aiAskButton.setDisable(
+            false
+    );
+
+    aiAskButton.setOnAction(
+            event -> {
+
+                generateFinalFarmingPlan();
+            }
+    );
+}
+
+
+// =========================================================
+// GENERATE FINAL FARMING PLAN
+// =========================================================
+
+private void generateFinalFarmingPlan() {
+
+    if (selectedFarmingType == null ||
+            selectedFarmingType.isBlank()) {
+
+        return;
+    }
+
+    if (farmingPlanAnswers.isEmpty()) {
+
+        return;
+    }
+
+    // =====================================================
+    // UI
+    // =====================================================
+
+    aiAssistantText.setText(
+            "🌱 AgroBiz AI is preparing your "
+            + selectedFarmingType
+            + " farming plan...\n\n"
+            + "Please wait."
+    );
+
+    aiAskButton.setDisable(
+            true
+    );
+
+    aiQuestionField.setDisable(
+            true
+    );
+
+    // =====================================================
+    // BACKGROUND TASK
+    // =====================================================
+
+    Task<String> task =
+            new Task<String>() {
+
+                @Override
+                protected String call()
+                        throws Exception {
+
+                    return groqService.generateFarmingPlan(
+                            selectedFarmingType,
+                            farmingPlanAnswers
+                    );
+                }
+            };
+
+    // =====================================================
+    // SUCCESS
+    // =====================================================
+
+    task.setOnSucceeded(
+            event -> {
+
+                String result =
+                        task.getValue();
+
+                // =============================================
+                // PUT COMPLETE RESPONSE INTO PLAN TEXT
+                // =============================================
+
+                planText.setText(
+                        result
+                );
+
+                // =============================================
+                // PUT PLAN TEXT INSIDE SCROLL CONTENT
+                // =============================================
+
+                planContent.getChildren().clear();
+
+                planContent.getChildren().add(
+                        planText
+                );
+
+                // =============================================
+                // SHOW PLAN SCROLLER
+                // =============================================
+
+                planScroll.setVisible(
+                        true
+                );
+
+                planScroll.setManaged(
+                        true
+                );
+
+                aiCenter.setVisible(
+                        false
+                );
+
+                aiCenter.setManaged(
+                        false
+                );
+
+                // =============================================
+                // MAKE PLAN SCROLLER FILL CARD
+                // =============================================
+
+                VBox.setVgrow(
+                        planScroll,
+                        Priority.ALWAYS
+                );
+
+                // =============================================
+                // REPLACE CARD CONTENT
+                // =============================================
+
+                aiCard.getChildren().clear();
+
+                aiCard.getChildren().add(
+                        planScroll
+                );
+
+                aiCard.getChildren().add(
+                        newPlanButton
+                );
+
+                // =============================================
+                // SCROLL TO TOP
+                // =============================================
+
+                planScroll.setVvalue(
+                        0
+                );
+
+                // =============================================
+                // RESET BUTTON STATE
+                // =============================================
+
+                aiAskButton.setText(
+                        "Ask AI  ➤"
+                );
+
+                aiAskButton.setDisable(
+                        false
+                );
+
+                aiQuestionField.setDisable(
+                        false
+                );
+
+                aiQuestionField.clear();
+
+                aiQuestionField.setPromptText(
+                        "Ask another farming question..."
+                );
+
+                // =============================================
+                // RETURN TO NORMAL AI MODE
+                // =============================================
+
+                selectedFarmingType =
+                        null;
+
+                farmingQuestionIndex =
+                        0;
+
+                farmingPlanAnswers.clear();
+
+                currentFarmingQuestionKeys.clear();
+
+                currentFarmingQuestions.clear();
+
+                aiAskButton.setOnAction(
+                        e -> {
+
+                            String newQuestion =
+                                    aiQuestionField
+                                            .getText()
+                                            .trim();
+
+                            if (!newQuestion.isEmpty()) {
+
+                                askNormalAIQuestion(
+                                        newQuestion
+                                );
+                            }
+                        }
+                );
+            }
+    );
+
+    // =====================================================
+    // FAILURE
+    // =====================================================
+
+    task.setOnFailed(
+            event -> {
+
+                Throwable error =
+                        task.getException();
+
+                String errorMessage =
+                        "Sorry Farmer, I could not "
+                        + "generate your farming plan.";
+
+                if (error != null &&
+                        error.getMessage() != null) {
+
+                    errorMessage +=
+                            "\n\nError: "
+                            + error.getMessage();
+                }
+
+                aiAssistantText.setText(
+                        errorMessage
+                );
+
+                aiAskButton.setText(
+                        "Generate Plan"
+                );
+
+                aiAskButton.setDisable(
+                        false
+                );
+
+                aiQuestionField.setDisable(
+                        true
+                );
+            }
+    );
+
+    // =====================================================
+    // START THREAD
+    // =====================================================
+
+    Thread thread =
+            new Thread(task);
+
+    thread.setDaemon(
+            true
+    );
+
+    thread.start();
+}
+
+
+
 
     // MY LEARNING PAGE
     private VBox createLearningPage() {
