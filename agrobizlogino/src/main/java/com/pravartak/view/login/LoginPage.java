@@ -1,5 +1,7 @@
 package com.pravartak.view.login;
 
+import com.google.cloud.firestore.Firestore;
+import com.pravartak.config.FirebaseConfig;
 import com.pravartak.controller.authentication_contr.AuthController;
 import com.pravartak.dao.UserDAO;
 import com.pravartak.model.UserModel;
@@ -8,7 +10,7 @@ import com.pravartak.view.buyer.BuyerHomepage;
 
 import com.pravartak.view.buyer.BuyerProfilePage;
 // import com.pravartak.view.farmer.AIAdvisorPage;
-import com.pravartak.view.farmer.CommunityPage;
+//import com.pravartak.view.farmer.CommunityPage;
 
 import java.net.URL;
 import java.util.Random;
@@ -68,7 +70,86 @@ public class LoginPage extends Application {
     //private HomePageFarmer homepagefarmer;
     public static Stage mainStage;
     private Scene loginPageScene;
-    private String selectedRole = "";
+    private static String selectedRole = "";
+   private static int loggedInFarmerId = 0;
+private static String loggedInFirebaseUid = null;
+        public static int getLoggedInFarmerId() {
+    return loggedInFarmerId;
+}
+
+public static void setLoggedInFarmerId(int farmerId) {
+    loggedInFarmerId = farmerId;
+    System.out.println("Logged in farmer ID = " + farmerId);
+}
+
+public static String getLoggedInFirebaseUid() {
+    return loggedInFirebaseUid;
+}
+
+public static void setLoggedInFirebaseUid(String uid) {
+    loggedInFirebaseUid = uid;
+    System.out.println("Logged in Firebase UID = " + uid);
+}
+private static boolean loadLoggedInFarmer(
+        UserModel user,
+        String uid) {
+
+    try {
+
+        if (user == null) {
+
+            System.out.println(
+                    "ERROR: User is null."
+            );
+
+            return false;
+        }
+
+        // Save Firebase UID
+        loggedInFirebaseUid = uid;
+
+        System.out.println(
+                "Firebase UID = "
+                + loggedInFirebaseUid
+        );
+
+        // Get farmer ID from users document
+        int farmerId =
+                user.getFarmerId();
+
+        System.out.println(
+                "Farmer ID from users = "
+                + farmerId
+        );
+
+        if (farmerId <= 0) {
+
+            System.out.println(
+                    "ERROR: farmerId is missing in users document."
+            );
+
+            return false;
+        }
+
+        loggedInFarmerId =
+                farmerId;
+
+        System.out.println(
+                "Logged in farmer ID = "
+                + loggedInFarmerId
+        );
+
+        return true;
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+
+        return false;
+    }
+}
+
+    
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -386,6 +467,10 @@ public class LoginPage extends Application {
 
                 return;
         }
+        loggedInFirebaseUid = uid;
+        System.out.println( "Logged in Firebase UID = "
+        + loggedInFirebaseUid);
+
         String role =
                 user.getRole();
 
@@ -400,19 +485,117 @@ public class LoginPage extends Application {
         // ROLE ROUTING
         // ==========================================
 
-        if ("FARMER".equalsIgnoreCase(role)) {
+        // if ("FARMER".equalsIgnoreCase(role)) {
 
-                System.out.println(
-                        "Opening Farmer Home.");
+        //         System.out.println(
+        //                 "Opening Farmer Home.");
 
-                HomePageFarmer farmerHomePage =
-                        new HomePageFarmer();
+        //         HomePageFarmer farmerHomePage =
+        //                 new HomePageFarmer(
+        //                       farmerId, firebaseUid  
+        //                 );
 
-                mainStage.setScene(
-                        farmerHomePage.getHomePageFarmer());
+        //         mainStage.setScene(
+        //                 farmerHomePage.getHomePageFarmer());
 
-                return;
-        }
+        //         return;
+        // }
+//         if ("FARMER".equalsIgnoreCase(role)) {
+
+//     System.out.println(
+//             "Opening Farmer Home."
+//     );
+
+//     int loggedInFarmerId =
+//             LoginPage.getLoggedInFarmerId();
+
+//     String loggedInFirebaseUid =
+//             LoginPage.getLoggedInFirebaseUid();
+
+//     System.out.println(
+//             "Farmer ID = " + loggedInFarmerId
+//     );
+
+//     System.out.println(
+//             "Firebase UID = " + loggedInFirebaseUid
+//     );
+
+//     if (loggedInFarmerId <= 0) {
+
+//         System.out.println(
+//                 "ERROR: Farmer ID is missing."
+//         );
+
+//         return;
+//     }
+
+//     HomePageFarmer homePageFarmer =
+//             new HomePageFarmer(
+//                     loggedInFarmerId,
+//                     loggedInFirebaseUid
+//             );
+
+//     mainStage.setScene(
+//             homePageFarmer.getHomePageFarmer()
+//     );
+
+//     return;
+// }
+if ("FARMER".equalsIgnoreCase(role)) {
+
+    System.out.println(
+            "Opening Farmer Home."
+    );
+
+    // Get farmer ID from Firestore users document
+    int farmerId =
+            user.getFarmerId();
+
+    System.out.println(
+            "Farmer ID from Firestore = "
+            + farmerId
+    );
+
+    // Save it into LoginPage
+    LoginPage.setLoggedInFarmerId(
+            farmerId
+    );
+
+    LoginPage.setLoggedInFirebaseUid(
+            uid
+    );
+
+    if (farmerId <= 0) {
+
+        System.out.println(
+                "ERROR: Farmer ID is missing."
+        );
+
+        return;
+    }
+
+    System.out.println(
+            "Logged in farmer ID = "
+            + farmerId
+    );
+
+    System.out.println(
+            "Logged in Firebase UID = "
+            + uid
+    );
+
+    HomePageFarmer homePageFarmer =
+            new HomePageFarmer(
+                    farmerId,
+                    uid
+            );
+
+    mainStage.setScene(
+            homePageFarmer.getHomePageFarmer()
+    );
+
+    return;
+}
 
         if ("BUYER".equalsIgnoreCase(role)) {
 
@@ -679,6 +862,10 @@ public class LoginPage extends Application {
             fade.setCycleCount(Animation.INDEFINITE);
             fade.play();
         }
+    }
+
+    public static void setSelectedRole(String role) {
+        selectedRole = role;
     }
 
     public void backLoginPage() {

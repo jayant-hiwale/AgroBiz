@@ -27,6 +27,8 @@ public class EditSchemeAdmin {
         private TextArea eligibilityArea;
 
         private TextArea informationArea;
+        
+        private TextField applyUrlField;
 
         // =========================================================
         // CONSTRUCTOR
@@ -146,6 +148,25 @@ public class EditSchemeAdmin {
                                 informationArea);
 
                 // =====================================================
+// APPLY URL
+// =====================================================
+
+Label applyUrlLabel =
+        createLabel(
+                "Official Application URL");
+
+applyUrlField =
+        new TextField(
+                safe(
+                        scheme.getApplyUrl()));
+
+applyUrlField.setPromptText(
+        "https://example.gov.in/apply");
+
+styleTextField(
+        applyUrlField);
+
+                // =====================================================
                 // SAVE
                 // =====================================================
 
@@ -193,6 +214,8 @@ public class EditSchemeAdmin {
                                 eligibilityArea,
                                 informationLabel,
                                 informationArea,
+                                applyUrlLabel,
+                                applyUrlField,
                                 save,
                                 cancel);
 
@@ -245,9 +268,14 @@ public class EditSchemeAdmin {
                 String information = informationArea.getText()
                                 .trim();
 
+                String applyUrl =
+        applyUrlField.getText()
+                .trim();
+
                 if (name.isEmpty() ||
                                 eligibility.isEmpty() ||
-                                information.isEmpty()) {
+                                information.isEmpty() ||
+                                applyUrl.isEmpty()) {
 
                         showError(
                                         "Please fill all fields.");
@@ -263,16 +291,20 @@ public class EditSchemeAdmin {
 
                 scheme.setInformation(
                                 information);
+                
+                scheme.setApplyUrl(
+                                applyUrl);
 
                 boolean success = controller.updateScheme(
                                 scheme);
 
                 if (success) {
 
-                        AdminPage adminPage = new AdminPage();
+                        AdminPage adminPage =
+                 new AdminPage();
 
-                        LoginPage.mainStage.setScene(
-                                        adminPage.getAdminPage("Government Schemes"));
+        LoginPage.mainStage.setScene(
+                adminPage.getAdminPage("Government Schemes"));
                 } else {
 
                         showError(
@@ -358,10 +390,11 @@ public class EditSchemeAdmin {
 
         private void goBack() {
 
-                AdminPage adminPage = new AdminPage();
+                AdminPage adminPage =
+                 new AdminPage();
 
-                LoginPage.mainStage.setScene(
-                                adminPage.getAdminPage("Government Schemes"));
+        LoginPage.mainStage.setScene(
+                adminPage.getAdminPage("Government Schemes"));
         }
 
         // =========================================================

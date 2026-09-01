@@ -1,143 +1,324 @@
+// package com.pravartak.controller.farmercontoller;
+
+// import com.google.cloud.firestore.Firestore;
+// import com.pravartak.config.FirebaseConfig;
+// import com.pravartak.dao.farmer.ProductDAO;
+// import com.pravartak.model.farmer_model.Product;
+
+// import java.util.ArrayList;
+// import java.util.List;
+
+// public class ProductController {
+
+//     private final ProductDAO productDAO;
+
+//     public ProductController() {
+
+//         Firestore db =
+//                 FirebaseConfig.getFirestore();
+
+//         productDAO =
+//                 new ProductDAO(db);
+//     }
+
+//     // =====================================================
+//     // ADD PRODUCT
+//     // =====================================================
+
+//     public boolean addProduct(Product product) {
+
+//         return productDAO.addProduct(product);
+//     }
+
+//     // =====================================================
+//     // GET ALL PRODUCTS
+//     // Used by Buyer Marketplace
+//     // =====================================================
+
+//     public List<Product> getAllProducts() {
+
+//         return productDAO.getAllProducts();
+//     }
+
+//     // =====================================================
+//     // GET FARMER PRODUCTS
+//     // Used by Farmer Marketplace
+//     // =====================================================
+
+//     public List<Product> getFarmerProducts(
+//             int farmerId) {
+
+//         return productDAO.getFarmerProducts(
+//                 farmerId
+//         );
+//     }
+
+//     // =====================================================
+//     // GET SINGLE PRODUCT
+//     // =====================================================
+
+//     public Product getProduct(
+//             int productId) {
+
+//         return productDAO.getProduct(
+//                 productId
+//         );
+//     }
+
+//     // =====================================================
+//     // UPDATE PRODUCT
+//     // =====================================================
+
+//     public boolean updateProduct(
+//             Product product) {
+
+//         return productDAO.updateProduct(
+//                 product
+//         );
+//     }
+
+//     // =====================================================
+//     // DELETE PRODUCT
+//     // =====================================================
+
+//     public boolean deleteProduct(
+//             int productId) {
+
+//         return productDAO.deleteProduct(
+//                 productId
+//         );
+//     }
+
+//     // =====================================================
+//     // SEARCH ALL PRODUCTS
+//     // Used by Buyer Marketplace
+//     // =====================================================
+
+//     public List<Product> searchAllProducts(
+//             String searchText) {
+
+//         List<Product> allProducts =
+//                 productDAO.getAllProducts();
+
+//         if (searchText == null ||
+//                 searchText.trim().isEmpty()) {
+
+//             return allProducts;
+//         }
+
+//         String search =
+//                 searchText
+//                         .trim()
+//                         .toLowerCase();
+
+//         List<Product> result =
+//                 new ArrayList<>();
+
+//         for (Product product :
+//                 allProducts) {
+
+//             String name =
+//                     product.getProductName();
+
+//             String category =
+//                     product.getCategory();
+
+//             String location =
+//                     product.getLocation();
+
+//             String description =
+//                     product.getDescription();
+
+//             boolean matches =
+//                     (name != null &&
+//                      name.toLowerCase()
+//                          .contains(search))
+//                     ||
+//                     (category != null &&
+//                      category.toLowerCase()
+//                          .contains(search))
+//                     ||
+//                     (location != null &&
+//                      location.toLowerCase()
+//                          .contains(search))
+//                     ||
+//                     (description != null &&
+//                      description.toLowerCase()
+//                          .contains(search));
+
+//             if (matches) {
+
+//                 result.add(product);
+//             }
+//         }
+
+//         return result;
+//     }
+
+//     public List<Product> searchProducts(int farmerId, String text) {
+//         // TODO Auto-generated method stub
+//         throw new UnsupportedOperationException("Unimplemented method 'searchProducts'");
+//     }
+
+//     public List<Product> sortProducts(List<Product> products, String sortType) {
+//         // TODO Auto-generated method stub
+//         throw new UnsupportedOperationException("Unimplemented method 'sortProducts'");
+//     }
+// }
 package com.pravartak.controller.farmercontoller;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.cloud.firestore.Firestore;
+import com.pravartak.config.FirebaseConfig;
+import com.pravartak.dao.farmer.ProductDAO;
 import com.pravartak.model.farmer_model.Product;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class ProductController {
 
-    private List<Product> products;
+    private final ProductDAO productDAO;
 
     public ProductController() {
 
-        products = new ArrayList<>();
+        Firestore db =
+                FirebaseConfig.getFirestore();
 
-        loadSampleProducts();
+        productDAO =
+                new ProductDAO(db);
     }
 
     // =====================================================
-    // GET FARMER PRODUCTS
+    // ADD
     // =====================================================
 
-    public List<Product> getFarmerProducts(int farmerId) {
+    public boolean addProduct(
+            Product product) {
 
-        List<Product> farmerProducts =
-                new ArrayList<>();
+        return productDAO.addProduct(
+                product
+        );
+    }
 
-        for (Product product : products) {
+    // =====================================================
+    // ALL PRODUCTS
+    // BUYER
+    // =====================================================
 
-            if (product.getFarmerId() == farmerId) {
+    public List<Product> getAllProducts() {
 
-                farmerProducts.add(product);
-            }
+        return productDAO.getAllProducts();
+    }
+
+    // =====================================================
+    // CURRENT FARMER PRODUCTS
+    // =====================================================
+
+    public List<Product> getFarmerProducts(
+            int farmerId) {
+
+        return productDAO.getFarmerProducts(
+                farmerId
+        );
+    }
+
+    // =====================================================
+    // SINGLE PRODUCT
+    // =====================================================
+
+    public Product getProduct(
+            int productId) {
+
+        return productDAO.getProduct(
+                productId
+        );
+    }
+
+    // =====================================================
+    // UPDATE
+    // =====================================================
+
+    public boolean updateProduct(
+            Product product) {
+
+        return productDAO.updateProduct(
+                product
+        );
+    }
+
+    // =====================================================
+    // DELETE
+    // =====================================================
+
+    public boolean deleteProduct(
+            int productId) {
+
+        return productDAO.deleteProduct(
+                productId
+        );
+    }
+
+    // =====================================================
+    // SEARCH ALL PRODUCTS
+    // BUYER
+    // =====================================================
+
+    public List<Product> searchAllProducts(
+            String searchText) {
+
+        List<Product> allProducts =
+                productDAO.getAllProducts();
+
+        if (searchText == null ||
+                searchText.trim().isEmpty()) {
+
+            return allProducts;
         }
 
-        return farmerProducts;
-    }
-
-
-    // =====================================================
-    // ADD PRODUCT
-    // =====================================================
-
-    public boolean addProduct(Product product) {
-
-        if (product == null) {
-            return false;
-        }
-
-        products.add(product);
-
-        return true;
-    }
-
-
-    // =====================================================
-    // UPDATE PRODUCT
-    // =====================================================
-
-    public boolean updateProduct(Product updatedProduct) {
-
-        for (int i = 0; i < products.size(); i++) {
-
-            Product product =
-                    products.get(i);
-
-            if (product.getProductId()
-                    == updatedProduct.getProductId()) {
-
-                products.set(i, updatedProduct);
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-    // =====================================================
-    // DELETE PRODUCT
-    // =====================================================
-
-    public boolean deleteProduct(int productId) {
-
-        for (int i = 0; i < products.size(); i++) {
-
-            if (products.get(i).getProductId()
-                    == productId) {
-
-                products.remove(i);
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-    // =====================================================
-    // CHANGE PRODUCT STATUS
-    // =====================================================
-
-    public boolean changeStatus(
-            int productId,
-            String status) {
-
-        for (Product product : products) {
-
-            if (product.getProductId()
-                    == productId) {
-
-                product.setStatus(status);
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-    // =====================================================
-    // SEARCH
-    // =====================================================
-
-    public List<Product> searchProducts(
-            int farmerId,
-            String search) {
+        String search =
+                searchText.trim().toLowerCase();
 
         List<Product> result =
                 new ArrayList<>();
 
         for (Product product :
-                getFarmerProducts(farmerId)) {
+                allProducts) {
 
-            if (product.getProductName()
-                    .toLowerCase()
-                    .contains(search.toLowerCase())) {
+            boolean matches =
+                    product.getProductName() != null &&
+                    product.getProductName()
+                            .toLowerCase()
+                            .contains(search);
+
+            if (!matches &&
+                    product.getCategory() != null) {
+
+                matches =
+                        product.getCategory()
+                                .toLowerCase()
+                                .contains(search);
+            }
+
+            if (!matches &&
+                    product.getLocation() != null) {
+
+                matches =
+                        product.getLocation()
+                                .toLowerCase()
+                                .contains(search);
+            }
+
+            if (!matches &&
+                    product.getDescription() != null) {
+
+                matches =
+                        product.getDescription()
+                                .toLowerCase()
+                                .contains(search);
+            }
+
+            if (matches) {
 
                 result.add(product);
             }
@@ -146,169 +327,105 @@ public class ProductController {
         return result;
     }
 
+    // =====================================================
+    // SEARCH CURRENT FARMER PRODUCTS
+    // =====================================================
+
+    public List<Product> searchProducts(
+            int farmerId,
+            String text) {
+
+        return productDAO.searchFarmerProducts(
+                farmerId,
+                text
+        );
+    }
 
     // =====================================================
     // SORT
     // =====================================================
 
     public List<Product> sortProducts(
-            List<Product> list,
+            List<Product> products,
             String sortType) {
 
+        if (products == null) {
+
+            return new ArrayList<>();
+        }
+
         List<Product> result =
-                new ArrayList<>(list);
+                new ArrayList<>(
+                        products
+                );
 
-        if (sortType.equals(
-                "Price: Low to High")) {
+        if (sortType == null) {
 
-            result.sort(
-                    (a, b) ->
-                            Double.compare(
-                                    a.getPrice(),
-                                    b.getPrice()));
+            return result;
         }
 
-        else if (sortType.equals(
-                "Price: High to Low")) {
+        switch (sortType) {
 
-            result.sort(
-                    (a, b) ->
-                            Double.compare(
-                                    b.getPrice(),
-                                    a.getPrice()));
-        }
+            case "Price: Low to High":
 
-        else if (sortType.equals(
-                "Newest")) {
+                result.sort(
+                        Comparator.comparingDouble(
+                                Product::getPrice
+                        )
+                );
 
-            result.sort(
-                    (a, b) ->
-                            Integer.compare(
-                                    b.getProductId(),
-                                    a.getProductId()));
+                break;
+
+            case "Price: High to Low":
+
+                result.sort(
+                        Comparator.comparingDouble(
+                                Product::getPrice
+                        ).reversed()
+                );
+
+                break;
+
+            case "Quantity: High to Low":
+
+                result.sort(
+                        Comparator.comparingDouble(
+                                Product::getQuantity
+                        ).reversed()
+                );
+
+                break;
+
+            case "Name: A-Z":
+
+                result.sort(
+                        Comparator.comparing(
+                                Product::getProductName,
+                                Comparator.nullsLast(
+                                        String.CASE_INSENSITIVE_ORDER
+                                )
+                        )
+                );
+
+                break;
+
+            case "Name: Z-A":
+
+                result.sort(
+                        Comparator.comparing(
+                                Product::getProductName,
+                                Comparator.nullsLast(
+                                        String.CASE_INSENSITIVE_ORDER
+                                )
+                        ).reversed()
+                );
+
+                break;
+
+            default:
+                break;
         }
 
         return result;
-    }
-
-
-    // =====================================================
-    // SAMPLE DATA
-    // =====================================================
-
-    private void loadSampleProducts() {
-
-        products.add(
-                new Product(
-                        1,
-                        101,
-                        "Fresh Tomatoes",
-                        "Vegetables",
-                        "Fresh farm grown tomatoes.",
-                        40,
-                        "kg",
-                        120,
-                        "Pune",
-                        "",
-                        "Active",
-                        12));
-
-
-        products.add(
-                new Product(
-                        2,
-                        101,
-                        "Wheat",
-                        "Grains",
-                        "High quality wheat.",
-                        2500,
-                        "quintal",
-                        10,
-                        "Pune",
-                        "",
-                        "Active",
-                        5));
-
-
-        products.add(
-                new Product(
-                        3,
-                        101,
-                        "Organic Onion",
-                        "Vegetables",
-                        "Fresh organic onions.",
-                        45,
-                        "kg",
-                        0,
-                        "Pune",
-                        "",
-                        "Sold Out",
-                        18));
-
-
-        products.add(
-                new Product(
-                        4,
-                        101,
-                        "Potatoes",
-                        "Vegetables",
-                        "Fresh farm potatoes.",
-                        30,
-                        "kg",
-                        200,
-                        "Pune",
-                        "",
-                        "Active",
-                        8));
-
-
-        products.add(
-                new Product(
-                        5,
-                        101,
-                        "Soybean",
-                        "Grains",
-                        "Premium quality soybean.",
-                        4800,
-                        "quintal",
-                        20,
-                        "Pune",
-                        "",
-                        "Active",
-                        6));
-
-
-        products.add(
-                new Product(
-                        6,
-                        101,
-                        "Sugarcane",
-                        "Crops",
-                        "Fresh sugarcane crop.",
-                        3500,
-                        "ton",
-                        5,
-                        "Pune",
-                        "",
-                        "Active",
-                        4));
-    }
-
-    // =====================================================
-    // NEXT PRODUCT ID
-    // =====================================================
-
-    public int getNextProductId() {
-
-        int maxId = 0;
-
-        for (Product product : products) {
-
-            if (product.getProductId() > maxId) {
-                maxId = product.getProductId();
-            }
-        }
-
-        return maxId + 1;
     }
 }
