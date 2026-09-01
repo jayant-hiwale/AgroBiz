@@ -1,5 +1,6 @@
 package com.pravartak.controller.admincontroller;
 
+import java.io.File;
 import java.util.List;
 
 import com.pravartak.dao.admindao.ModuleDAO;
@@ -19,7 +20,7 @@ public class ModuleController {
     }
 
     // =========================================================
-    // ADD MODULE
+    // ADD MODULE - WITHOUT IMAGE
     // =========================================================
 
     public boolean addModule(
@@ -34,6 +35,36 @@ public class ModuleController {
     }
 
     // =========================================================
+    // ADD MODULE - WITH IMAGE
+    //
+    // Image is selected by admin as a File.
+    //
+    // Flow:
+    // File
+    //   ↓
+    // ModuleDAO
+    //   ↓
+    // Cloudinary
+    //   ↓
+    // image URL
+    //   ↓
+    // Firestore
+    // =========================================================
+
+    public boolean addModule(
+            int courseId,
+            String title,
+            String description,
+            File imageFile) {
+
+        return moduleDAO.addModule(
+                courseId,
+                title,
+                description,
+                imageFile);
+    }
+
+    // =========================================================
     // GET MODULES
     // =========================================================
 
@@ -45,7 +76,7 @@ public class ModuleController {
     }
 
     // =========================================================
-    // GET MODULE
+    // GET SINGLE MODULE
     // =========================================================
 
     public Module getModule(
@@ -71,7 +102,7 @@ public class ModuleController {
     }
 
     // =========================================================
-    // UPDATE MODULE
+    // UPDATE MODULE - WITHOUT IMAGE
     // =========================================================
 
     public boolean updateModule(
@@ -87,6 +118,30 @@ public class ModuleController {
                 title,
                 description,
                 published);
+    }
+
+    // =========================================================
+    // UPDATE MODULE - WITH IMAGE
+    //
+    // Image is selected by admin as a File.
+    //
+    // =========================================================
+
+    public boolean updateModule(
+            int courseId,
+            int moduleId,
+            String title,
+            String description,
+            boolean published,
+            File imageFile) {
+
+        return moduleDAO.updateModule(
+                courseId,
+                moduleId,
+                title,
+                description,
+                published,
+                imageFile);
     }
 
     // =========================================================

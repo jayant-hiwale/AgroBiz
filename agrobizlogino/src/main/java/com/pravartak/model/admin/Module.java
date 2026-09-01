@@ -12,6 +12,13 @@ public class Module {
     private boolean published;
 
     // =========================================================
+    // MODULE IMAGE
+    // Cloudinary URL
+    // =========================================================
+
+    private String imageUrl;
+
+    // =========================================================
     // REQUIRED BY FIRESTORE
     // =========================================================
 
@@ -28,7 +35,8 @@ public class Module {
             String title,
             String description,
             int moduleOrder,
-            boolean published) {
+            boolean published,
+            String imageUrl) {
 
         this.moduleId = moduleId;
         this.courseId = courseId;
@@ -36,6 +44,7 @@ public class Module {
         this.description = description;
         this.moduleOrder = moduleOrder;
         this.published = published;
+        this.imageUrl = imageUrl;
     }
 
     // =========================================================
@@ -67,6 +76,14 @@ public class Module {
     }
 
     // =========================================================
+    // IMAGE GETTER
+    // =========================================================
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    // =========================================================
     // SETTERS
     // =========================================================
 
@@ -95,6 +112,14 @@ public class Module {
     }
 
     // =========================================================
+    // IMAGE SETTER
+    // =========================================================
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    // =========================================================
     // TO STRING
     // =========================================================
 
@@ -108,6 +133,7 @@ public class Module {
                 ", description='" + description + '\'' +
                 ", moduleOrder=" + moduleOrder +
                 ", published=" + published +
+                ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
 }

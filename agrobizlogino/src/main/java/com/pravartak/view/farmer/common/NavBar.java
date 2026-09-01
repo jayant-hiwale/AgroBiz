@@ -1,7 +1,7 @@
 package com.pravartak.view.farmer.common;
 
 import com.pravartak.view.farmer.AIAdvisorPage;
-import com.pravartak.view.farmer.CommuityPage;
+import com.pravartak.view.farmer.CommunityPage;
 import com.pravartak.view.farmer.ExplorerPage;
 import com.pravartak.view.farmer.FarmerDashboard;
 import com.pravartak.view.farmer.HomePageFarmer;

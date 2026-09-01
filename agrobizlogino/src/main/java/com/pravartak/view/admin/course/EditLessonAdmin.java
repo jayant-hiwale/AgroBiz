@@ -1,6 +1,14 @@
 package com.pravartak.view.admin.course;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import com.cloudinary.Cloudinary;
+import com.pravartak.config.CloudinaryConfig;
 import com.pravartak.controller.admincontroller.LessonController;
+import com.pravartak.model.admin.ContentBlock;
 import com.pravartak.model.admin.Course;
 import com.pravartak.model.admin.Lesson;
 import com.pravartak.model.admin.Module;
@@ -8,6 +16,7 @@ import com.pravartak.view.login.LoginPage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,15 +33,9 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-
-import java.util.ArrayList;
-import java.util.List;
+import javafx.stage.FileChooser;
 
 public class EditLessonAdmin {
-
-        // =========================================================
-        // DATA
-        // =========================================================
 
         private final Course course;
         private final Module module;
@@ -40,27 +43,12 @@ public class EditLessonAdmin {
 
         private final LessonController lessonController = new LessonController();
 
-        // =========================================================
-        // FIELDS
-        // =========================================================
-
         private TextField titleField;
-
         private TextArea descriptionField;
-
         private TextField mediaField;
-
         private VBox contentBlocks;
 
-        // =========================================================
-        // CONTENT BLOCKS
-        // =========================================================
-
         private final List<VBox> blocks = new ArrayList<>();
-
-        // =========================================================
-        // CONSTRUCTOR
-        // =========================================================
 
         public EditLessonAdmin(
                         Course course,
@@ -83,37 +71,15 @@ public class EditLessonAdmin {
                 root.setStyle(
                                 "-fx-background-color:#080C0D;");
 
-                // =====================================================
-                // HEADER
-                // =====================================================
-
-                VBox header = createHeader();
-
-                root.setTop(header);
-
-                // =====================================================
-                // MAIN CONTENT
-                // =====================================================
+                root.setTop(createHeader());
 
                 VBox page = new VBox(15);
 
                 page.setPadding(
-                                new Insets(
-                                                10,
-                                                30,
-                                                30,
-                                                30));
-
-                // =====================================================
-                // COURSE / MODULE INFORMATION
-                // =====================================================
+                                new Insets(10, 30, 30, 30));
 
                 page.getChildren().add(
                                 createCourseInfo());
-
-                // =====================================================
-                // LESSON INFORMATION
-                // =====================================================
 
                 HBox information = new HBox(15);
 
@@ -129,30 +95,14 @@ public class EditLessonAdmin {
                 page.getChildren().add(
                                 information);
 
-                // =====================================================
-                // MEDIA
-                // =====================================================
-
                 page.getChildren().add(
                                 createMediaSection());
-
-                // =====================================================
-                // CONTENT
-                // =====================================================
 
                 page.getChildren().add(
                                 createContentEditor());
 
-                // =====================================================
-                // ACTIONS
-                // =====================================================
-
                 page.getChildren().add(
                                 createActions());
-
-                // =====================================================
-                // SCROLL
-                // =====================================================
 
                 ScrollPane scroll = new ScrollPane(page);
 
@@ -188,20 +138,12 @@ public class EditLessonAdmin {
                 VBox container = new VBox();
 
                 container.setPadding(
-                                new Insets(
-                                                15,
-                                                30,
-                                                10,
-                                                30));
+                                new Insets(15, 30, 10, 30));
 
                 HBox header = new HBox(15);
 
                 header.setAlignment(
                                 Pos.CENTER_LEFT);
-
-                // =====================================================
-                // BACK
-                // =====================================================
 
                 Button back = new Button("← Back");
 
@@ -217,10 +159,6 @@ public class EditLessonAdmin {
 
                 back.setOnAction(
                                 e -> goBack());
-
-                // =====================================================
-                // TITLE
-                // =====================================================
 
                 VBox titleBox = new VBox(3);
 
@@ -242,19 +180,11 @@ public class EditLessonAdmin {
                                 title,
                                 subtitle);
 
-                // =====================================================
-                // SPACER
-                // =====================================================
-
                 Region spacer = new Region();
 
                 HBox.setHgrow(
                                 spacer,
                                 Priority.ALWAYS);
-
-                // =====================================================
-                // SAVE
-                // =====================================================
 
                 Button save = new Button("✓  Save Changes");
 
@@ -364,10 +294,6 @@ public class EditLessonAdmin {
 
                 Separator separator = new Separator();
 
-                // =====================================================
-                // TITLE
-                // =====================================================
-
                 Label titleLabel = createFieldLabel(
                                 "Lesson Title");
 
@@ -376,18 +302,11 @@ public class EditLessonAdmin {
                 titleField.setPromptText(
                                 "Enter lesson title");
 
-                // IMPORTANT:
-                // Load existing lesson title
-
                 titleField.setText(
                                 safe(lesson.getTitle()));
 
                 styleTextField(
                                 titleField);
-
-                // =====================================================
-                // DESCRIPTION
-                // =====================================================
 
                 Label descriptionLabel = createFieldLabel(
                                 "Lesson Description");
@@ -396,9 +315,6 @@ public class EditLessonAdmin {
 
                 descriptionField.setPromptText(
                                 "Describe what students will learn in this lesson...");
-
-                // IMPORTANT:
-                // Load existing lesson description
 
                 descriptionField.setText(
                                 safe(lesson.getDescription()));
@@ -429,7 +345,7 @@ public class EditLessonAdmin {
         }
 
         // =========================================================
-        // MEDIA SECTION
+        // MEDIA
         // =========================================================
 
         private VBox createMediaSection() {
@@ -441,14 +357,23 @@ public class EditLessonAdmin {
 
                 Separator separator = new Separator();
 
+                mediaField = new TextField();
+
+                mediaField.setPromptText(
+                                "Enter media URL");
+
+                mediaField.setText(
+                                safe(lesson.getMediaUrl()));
+
+                styleTextField(
+                                mediaField);
+
                 FlowPane mediaCards = new FlowPane();
 
                 mediaCards.setHgap(10);
-
                 mediaCards.setVgap(10);
 
                 mediaCards.getChildren().addAll(
-
                                 createMediaCard(
                                                 "IMAGE",
                                                 "▧",
@@ -467,6 +392,7 @@ public class EditLessonAdmin {
                 card.getChildren().addAll(
                                 heading,
                                 separator,
+                                mediaField,
                                 mediaCards);
 
                 return card;
@@ -552,49 +478,51 @@ public class EditLessonAdmin {
                 contentBlocks.setFillWidth(
                                 true);
 
-                // =====================================================
-                // EXISTING LESSON CONTENT
-                // =====================================================
+                List<ContentBlock> existingBlocks = lesson.getContentBlocks();
 
-                /*
-                 * Your current Lesson model/DAO stores the basic lesson
-                 * fields. The content blocks are not currently being
-                 * saved by AddLessonAdmin.
-                 *
-                 * Therefore we don't invent old blocks here.
-                 */
+                if (existingBlocks != null &&
+                                !existingBlocks.isEmpty()) {
 
-                addTextBlock();
+                        System.out.println(
+                                        "Loading "
+                                                        + existingBlocks.size()
+                                                        + " existing content blocks.");
 
-                // =====================================================
-                // ADD BLOCK BUTTONS
-                // =====================================================
+                        for (ContentBlock block : existingBlocks) {
+
+                                if (block != null) {
+
+                                        addExistingBlock(
+                                                        block);
+                                }
+                        }
+
+                } else {
+
+                        addTextBlock();
+                }
 
                 HBox addButtons = new HBox(8);
 
                 addButtons.setAlignment(
                                 Pos.CENTER);
 
-                Button text = createAddButton(
-                                "+ Text");
+                Button text = createAddButton("+ Text");
 
                 text.setOnAction(
                                 e -> addTextBlock());
 
-                Button image = createAddButton(
-                                "+ Image");
+                Button image = createAddButton("+ Image");
 
                 image.setOnAction(
                                 e -> addImageBlock());
 
-                Button video = createAddButton(
-                                "+ Video");
+                Button video = createAddButton("+ Video");
 
                 video.setOnAction(
                                 e -> addVideoBlock());
 
-                Button document = createAddButton(
-                                "+ Document");
+                Button document = createAddButton("+ Document");
 
                 document.setOnAction(
                                 e -> addDocumentBlock());
@@ -615,10 +543,52 @@ public class EditLessonAdmin {
         }
 
         // =========================================================
-        // TEXT BLOCK
+        // EXISTING BLOCK
         // =========================================================
 
-        private void addTextBlock() {
+        private void addExistingBlock(
+                        ContentBlock contentBlock) {
+
+                String type = safe(contentBlock.getType())
+                                .toUpperCase();
+
+                String content = safe(contentBlock.getContent());
+
+                switch (type) {
+
+                        case "TEXT":
+                                addExistingTextBlock(
+                                                content);
+                                break;
+
+                        case "IMAGE":
+                                addExistingImageBlock(
+                                                content);
+                                break;
+
+                        case "VIDEO":
+                                addExistingVideoBlock(
+                                                content);
+                                break;
+
+                        case "DOCUMENT":
+                                addExistingDocumentBlock(
+                                                content);
+                                break;
+
+                        default:
+                                System.out.println(
+                                                "Unknown content block type: "
+                                                                + type);
+                }
+        }
+
+        // =========================================================
+        // EXISTING TEXT
+        // =========================================================
+
+        private void addExistingTextBlock(
+                        String value) {
 
                 VBox block = createContentBlock(
                                 "TEXT");
@@ -627,6 +597,8 @@ public class EditLessonAdmin {
 
                 textArea.setPromptText(
                                 "Write lesson content here...");
+
+                textArea.setText(value);
 
                 textArea.setWrapText(true);
 
@@ -639,43 +611,47 @@ public class EditLessonAdmin {
                 block.getChildren().add(
                                 textArea);
 
-                addBlock(
-                                block);
+                addBlock(block);
         }
 
         // =========================================================
-        // IMAGE BLOCK
+        // EXISTING IMAGE
         // =========================================================
 
-        private void addImageBlock() {
+        private void addExistingImageBlock(
+                        String value) {
 
-                VBox block = createContentBlock(
-                                "IMAGE");
+                VBox block = createContentBlock("IMAGE");
 
                 TextField url = new TextField();
 
                 url.setPromptText(
-                                "Enter image URL");
+                                "Cloudinary image URL");
 
-                styleTextField(
-                                url);
+                url.setText(value);
+
+                styleTextField(url);
+
+                Button chooseImage = new Button("Choose New Image");
+
+                chooseImage.setStyle(
+                                "-fx-background-color:#14251A;" +
+                                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-border-color:#245D35;" +
+                                                "-fx-border-radius:4;" +
+                                                "-fx-background-radius:4;" +
+                                                "-fx-padding:7 14;" +
+                                                "-fx-cursor:hand;");
 
                 ImageView preview = new ImageView();
 
-                preview.setFitWidth(
-                                300);
+                preview.setFitWidth(300);
+                preview.setFitHeight(160);
+                preview.setPreserveRatio(true);
 
-                preview.setFitHeight(
-                                160);
+                StackPane previewBox = new StackPane(preview);
 
-                preview.setPreserveRatio(
-                                true);
-
-                StackPane previewBox = new StackPane(
-                                preview);
-
-                previewBox.setPrefHeight(
-                                170);
+                previewBox.setPrefHeight(170);
 
                 previewBox.setStyle(
                                 "-fx-background-color:#0D1213;" +
@@ -683,52 +659,32 @@ public class EditLessonAdmin {
                                                 "-fx-border-style:dashed;" +
                                                 "-fx-border-radius:5;");
 
-                Button previewButton = new Button(
-                                "Preview Image");
-
-                previewButton.setStyle(
-                                "-fx-background-color:#14251A;" +
-                                                "-fx-text-fill:#68D34A;" +
-                                                "-fx-border-color:#245D35;" +
-                                                "-fx-border-radius:4;");
-
-                previewButton.setOnAction(
-                                e -> {
-
-                                        try {
-
-                                                if (!url.getText()
-                                                                .trim()
-                                                                .isEmpty()) {
-
-                                                        preview.setImage(
-                                                                        new Image(
-                                                                                        url.getText()
-                                                                                                        .trim(),
-                                                                                        true));
-                                                }
-
-                                        } catch (Exception ex) {
-
-                                                System.out.println(
-                                                                "Invalid image URL");
-                                        }
-                                });
+                chooseImage.setOnAction(
+                                e -> chooseAndUploadImage(
+                                                url,
+                                                preview));
 
                 block.getChildren().addAll(
                                 url,
-                                previewButton,
+                                chooseImage,
                                 previewBox);
 
-                addBlock(
-                                block);
+                if (!value.trim().isEmpty()) {
+
+                        loadImage(
+                                        url,
+                                        preview);
+                }
+
+                addBlock(block);
         }
 
         // =========================================================
-        // VIDEO BLOCK
+        // EXISTING VIDEO
         // =========================================================
 
-        private void addVideoBlock() {
+        private void addExistingVideoBlock(
+                        String value) {
 
                 VBox block = createContentBlock(
                                 "VIDEO");
@@ -738,8 +694,9 @@ public class EditLessonAdmin {
                 url.setPromptText(
                                 "Enter YouTube or video URL");
 
-                styleTextField(
-                                url);
+                url.setText(value);
+
+                styleTextField(url);
 
                 Label preview = new Label(
                                 "▶\n\nVideo Preview");
@@ -764,15 +721,15 @@ public class EditLessonAdmin {
                                 url,
                                 preview);
 
-                addBlock(
-                                block);
+                addBlock(block);
         }
 
         // =========================================================
-        // DOCUMENT BLOCK
+        // EXISTING DOCUMENT
         // =========================================================
 
-        private void addDocumentBlock() {
+        private void addExistingDocumentBlock(
+                        String value) {
 
                 VBox block = createContentBlock(
                                 "DOCUMENT");
@@ -782,8 +739,9 @@ public class EditLessonAdmin {
                 url.setPromptText(
                                 "Enter PDF / document URL");
 
-                styleTextField(
-                                url);
+                url.setText(value);
+
+                styleTextField(url);
 
                 Label info = new Label(
                                 "Students will be able to open this document.");
@@ -796,12 +754,166 @@ public class EditLessonAdmin {
                                 url,
                                 info);
 
-                addBlock(
-                                block);
+                addBlock(block);
         }
 
         // =========================================================
-        // CONTENT BLOCK
+        // ADD TEXT
+        // =========================================================
+
+        private void addTextBlock() {
+
+                VBox block = createContentBlock(
+                                "TEXT");
+
+                TextArea textArea = new TextArea();
+
+                textArea.setPromptText(
+                                "Write lesson content here...");
+
+                textArea.setWrapText(true);
+
+                textArea.setPrefHeight(
+                                150);
+
+                styleTextArea(
+                                textArea);
+
+                block.getChildren().add(
+                                textArea);
+
+                addBlock(block);
+        }
+
+        // =========================================================
+        // ADD IMAGE
+        // =========================================================
+
+        private void addImageBlock() {
+
+                VBox block = createContentBlock("IMAGE");
+
+                TextField url = new TextField();
+
+                url.setPromptText(
+                                "Cloudinary image URL");
+
+                styleTextField(url);
+
+                Button chooseImage = new Button("Choose Image");
+
+                chooseImage.setStyle(
+                                "-fx-background-color:#14251A;" +
+                                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-border-color:#245D35;" +
+                                                "-fx-border-radius:4;" +
+                                                "-fx-background-radius:4;" +
+                                                "-fx-padding:7 14;" +
+                                                "-fx-cursor:hand;");
+
+                ImageView preview = new ImageView();
+
+                preview.setFitWidth(300);
+                preview.setFitHeight(160);
+                preview.setPreserveRatio(true);
+
+                StackPane previewBox = new StackPane(preview);
+
+                previewBox.setPrefHeight(170);
+
+                previewBox.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-style:dashed;" +
+                                                "-fx-border-radius:5;");
+
+                chooseImage.setOnAction(
+                                e -> chooseAndUploadImage(
+                                                url,
+                                                preview));
+
+                block.getChildren().addAll(
+                                url,
+                                chooseImage,
+                                previewBox);
+
+                addBlock(block);
+        }
+
+        // =========================================================
+        // ADD VIDEO
+        // =========================================================
+
+        private void addVideoBlock() {
+
+                VBox block = createContentBlock(
+                                "VIDEO");
+
+                TextField url = new TextField();
+
+                url.setPromptText(
+                                "Enter YouTube or video URL");
+
+                styleTextField(url);
+
+                Label preview = new Label(
+                                "▶\n\nVideo Preview");
+
+                preview.setAlignment(
+                                Pos.CENTER);
+
+                preview.setPrefHeight(
+                                180);
+
+                preview.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                preview.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-text-fill:#555555;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-font-size:12px;");
+
+                block.getChildren().addAll(
+                                url,
+                                preview);
+
+                addBlock(block);
+        }
+
+        // =========================================================
+        // ADD DOCUMENT
+        // =========================================================
+
+        private void addDocumentBlock() {
+
+                VBox block = createContentBlock(
+                                "DOCUMENT");
+
+                TextField url = new TextField();
+
+                url.setPromptText(
+                                "Enter PDF / document URL");
+
+                styleTextField(url);
+
+                Label info = new Label(
+                                "Students will be able to open this document.");
+
+                info.setStyle(
+                                "-fx-text-fill:#777777;" +
+                                                "-fx-font-size:10px;");
+
+                block.getChildren().addAll(
+                                url,
+                                info);
+
+                addBlock(block);
+        }
+
+        // =========================================================
+        // CONTENT BLOCK UI
         // =========================================================
 
         private VBox createContentBlock(
@@ -824,6 +936,13 @@ public class EditLessonAdmin {
                 header.setAlignment(
                                 Pos.CENTER_LEFT);
 
+                Label typeLabel = new Label(type);
+
+                typeLabel.setStyle(
+                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-font-size:10px;" +
+                                                "-fx-font-weight:bold;");
+
                 Region spacer = new Region();
 
                 HBox.setHgrow(
@@ -837,9 +956,7 @@ public class EditLessonAdmin {
                 Button delete = new Button("×");
 
                 styleSmallButton(up);
-
                 styleSmallButton(down);
-
                 styleSmallButton(delete);
 
                 up.setOnAction(
@@ -857,6 +974,7 @@ public class EditLessonAdmin {
                                                 block));
 
                 header.getChildren().addAll(
+                                typeLabel,
                                 spacer,
                                 up,
                                 down,
@@ -875,8 +993,11 @@ public class EditLessonAdmin {
         private void addBlock(
                         VBox block) {
 
-                blocks.add(
-                                block);
+                if (block == null) {
+                        return;
+                }
+
+                blocks.add(block);
 
                 contentBlocks.getChildren().add(
                                 block);
@@ -889,8 +1010,7 @@ public class EditLessonAdmin {
         private void removeBlock(
                         VBox block) {
 
-                blocks.remove(
-                                block);
+                blocks.remove(block);
 
                 contentBlocks.getChildren().remove(
                                 block);
@@ -930,8 +1050,95 @@ public class EditLessonAdmin {
 
                 contentBlocks
                                 .getChildren()
-                                .addAll(
-                                                blocks);
+                                .addAll(blocks);
+        }
+
+        // =========================================================
+        // COLLECT CONTENT BLOCKS
+        // =========================================================
+
+        private List<ContentBlock> collectContentBlocks() {
+
+                List<ContentBlock> result = new ArrayList<>();
+
+                int order = 1;
+
+                for (VBox block : blocks) {
+
+                        if (block == null ||
+                                        block.getChildren().isEmpty()) {
+
+                                continue;
+                        }
+
+                        String type = "";
+
+                        Node first = block.getChildren()
+                                        .get(0);
+
+                        if (first instanceof HBox) {
+
+                                HBox header = (HBox) first;
+
+                                for (Node node : header.getChildren()) {
+
+                                        if (node instanceof Label) {
+
+                                                String text = ((Label) node)
+                                                                .getText();
+
+                                                if (text.equals("TEXT") ||
+                                                                text.equals("IMAGE") ||
+                                                                text.equals("VIDEO") ||
+                                                                text.equals("DOCUMENT")) {
+
+                                                        type = text;
+
+                                                        break;
+                                                }
+                                        }
+                                }
+                        }
+
+                        String content = "";
+
+                        for (Node node : block.getChildren()) {
+
+                                if (node instanceof TextArea) {
+
+                                        content = safe(
+                                                        ((TextArea) node)
+                                                                        .getText());
+
+                                        break;
+                                }
+
+                                if (node instanceof TextField) {
+
+                                        content = safe(
+                                                        ((TextField) node)
+                                                                        .getText());
+
+                                        break;
+                                }
+                        }
+
+                        if (type.isEmpty() ||
+                                        content.trim().isEmpty()) {
+
+                                continue;
+                        }
+
+                        result.add(
+                                        new ContentBlock(
+                                                        type,
+                                                        content,
+                                                        order));
+
+                        order++;
+                }
+
+                return result;
         }
 
         // =========================================================
@@ -944,10 +1151,6 @@ public class EditLessonAdmin {
 
                 box.setAlignment(
                                 Pos.CENTER_RIGHT);
-
-                // =====================================================
-                // CANCEL
-                // =====================================================
 
                 Button cancel = new Button("Cancel");
 
@@ -963,10 +1166,6 @@ public class EditLessonAdmin {
 
                 cancel.setOnAction(
                                 e -> goBack());
-
-                // =====================================================
-                // SAVE
-                // =====================================================
 
                 Button save = new Button(
                                 "✓  Save Changes");
@@ -997,10 +1196,6 @@ public class EditLessonAdmin {
 
         private void updateLesson() {
 
-                // =====================================================
-                // SAFETY
-                // =====================================================
-
                 if (lesson == null ||
                                 course == null ||
                                 module == null) {
@@ -1011,24 +1206,15 @@ public class EditLessonAdmin {
                         return;
                 }
 
-                // =====================================================
-                // GET DATA
-                // =====================================================
+                String title = titleField.getText().trim();
 
-                String title = titleField.getText()
-                                .trim();
-
-                String description = descriptionField.getText()
+                String description = descriptionField
+                                .getText()
                                 .trim();
 
                 String media = mediaField != null
-                                ? mediaField.getText()
-                                                .trim()
+                                ? mediaField.getText().trim()
                                 : safe(lesson.getMediaUrl());
-
-                // =====================================================
-                // VALIDATION
-                // =====================================================
 
                 if (title.isEmpty()) {
 
@@ -1050,16 +1236,38 @@ public class EditLessonAdmin {
                         return;
                 }
 
-                // =====================================================
-                // UPDATE
-                // =====================================================
+                List<ContentBlock> contentBlockList = collectContentBlocks();
+
+                System.out.println(
+                                "================================");
+
+                System.out.println(
+                                "Updating lesson");
+
+                System.out.println(
+                                "Course ID: "
+                                                + course.getCourseId());
+
+                System.out.println(
+                                "Module ID: "
+                                                + module.getModuleId());
+
+                System.out.println(
+                                "Lesson ID: "
+                                                + lesson.getLessonId());
+
+                System.out.println(
+                                "Content blocks: "
+                                                + contentBlockList.size());
 
                 boolean updated = lessonController.updateLesson(
                                 lesson.getLessonId(),
+                                course.getCourseId(),
                                 module.getModuleId(),
                                 title,
                                 description,
-                                media);
+                                media,
+                                contentBlockList);
 
                 if (!updated) {
 
@@ -1069,14 +1277,66 @@ public class EditLessonAdmin {
                         return;
                 }
 
+                lesson.setCourseId(
+                                course.getCourseId());
+
+                lesson.setModuleId(
+                                module.getModuleId());
+
+                lesson.setTitle(title);
+
+                lesson.setDescription(
+                                description);
+
+                lesson.setMediaUrl(
+                                media);
+
+                lesson.setContentBlocks(
+                                contentBlockList);
+
                 System.out.println(
                                 "Lesson updated successfully.");
 
-                // =====================================================
-                // RETURN TO MODULE PAGE
-                // =====================================================
+                System.out.println(
+                                "================================");
 
                 goBack();
+        }
+
+        // =========================================================
+        // LOAD IMAGE
+        // =========================================================
+
+        private void loadImage(
+                        TextField urlField,
+                        ImageView preview) {
+
+                try {
+
+                        String url = safe(urlField.getText())
+                                        .trim();
+
+                        if (url.isEmpty()) {
+
+                                preview.setImage(null);
+
+                                return;
+                        }
+
+                        Image image = new Image(
+                                        url,
+                                        true);
+
+                        preview.setImage(
+                                        image);
+
+                } catch (Exception e) {
+
+                        System.out.println(
+                                        "Invalid image URL.");
+
+                        preview.setImage(null);
+                }
         }
 
         // =========================================================
@@ -1179,7 +1439,7 @@ public class EditLessonAdmin {
         }
 
         // =========================================================
-        // TEXT FIELD
+        // TEXT FIELD STYLE
         // =========================================================
 
         private void styleTextField(
@@ -1205,7 +1465,7 @@ public class EditLessonAdmin {
         }
 
         // =========================================================
-        // TEXT AREA
+        // TEXT AREA STYLE
         // =========================================================
 
         private void styleTextArea(
@@ -1247,9 +1507,77 @@ public class EditLessonAdmin {
 
         private void goBack() {
 
-                ModulePage modulePage = new ModulePage(course);
+                AdminModulePage modulePage = new AdminModulePage(course);
 
                 LoginPage.mainStage.setScene(
                                 modulePage.getModuleScene());
         }
+
+        private void chooseAndUploadImage(
+                        TextField urlField,
+                        ImageView preview) {
+
+                FileChooser fileChooser = new FileChooser();
+
+                fileChooser.setTitle(
+                                "Choose Lesson Image");
+
+                fileChooser.getExtensionFilters()
+                                .add(
+                                                new FileChooser.ExtensionFilter(
+                                                                "Image Files",
+                                                                "*.png",
+                                                                "*.jpg",
+                                                                "*.jpeg",
+                                                                "*.webp"));
+
+                File file = fileChooser.showOpenDialog(
+                                LoginPage.mainStage);
+
+                if (file == null) {
+                        return;
+                }
+
+                try {
+
+                        System.out.println(
+                                        "Uploading image to Cloudinary...");
+
+                        Cloudinary cloudinary = CloudinaryConfig.getCloudinary();
+
+                        Map<?, ?> result = cloudinary.uploader().upload(
+                                        file,
+                                        Map.of(
+                                                        "folder",
+                                                        "agrobiz/lessons"));
+
+                        String imageUrl = result.get("secure_url")
+                                        .toString();
+
+                        System.out.println(
+                                        "Cloudinary URL:");
+
+                        System.out.println(
+                                        imageUrl);
+
+                        urlField.setText(imageUrl);
+
+                        Image image = new Image(
+                                        imageUrl,
+                                        true);
+
+                        preview.setImage(image);
+
+                        System.out.println(
+                                        "Image uploaded successfully.");
+
+                } catch (Exception e) {
+
+                        System.out.println(
+                                        "Error uploading image to Cloudinary:");
+
+                        e.printStackTrace();
+                }
+        }
+
 }

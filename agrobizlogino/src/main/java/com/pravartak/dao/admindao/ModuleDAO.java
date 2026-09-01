@@ -1,15 +1,20 @@
 package com.pravartak.dao.admindao;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QuerySnapshot;
 
+import com.pravartak.config.CloudinaryConfig;
 import com.pravartak.config.FirebaseConfig;
 import com.pravartak.model.admin.Module;
 
@@ -22,22 +27,30 @@ public class ModuleDAO {
         private final Firestore firestore;
 
         // =========================================================
+        // CLOUDINARY
+        // =========================================================
+
+        private final Cloudinary cloudinary;
+
+        // =========================================================
         // CONSTRUCTOR
         // =========================================================
 
         public ModuleDAO() {
 
                 firestore = FirebaseConfig.getFirestore();
+
+                cloudinary = CloudinaryConfig.getCloudinary();
         }
 
         // =========================================================
         // MODULE COLLECTION
         // =========================================================
         //
-        // Firestore structure:
+        // Firestore:
         //
         // courses
-        // └── courseId
+        // └── {courseId}
         // └── modules
         // ├── 1
         // ├── 2
@@ -55,13 +68,114 @@ public class ModuleDAO {
         }
 
         // =========================================================
+        // UPLOAD IMAGE TO CLOUDINARY
+        // =========================================================
+
+        private String uploadModuleImage(
+                        File imageFile,
+                        int courseId,
+                        int moduleId) {
+
+                try {
+
+                        if (imageFile == null) {
+
+                                System.out.println(
+                                                "No module image selected.");
+
+                                return "";
+                        }
+
+                        if (!imageFile.exists()) {
+
+                                System.out.println(
+                                                "Module image file does not exist.");
+
+                                return "";
+                        }
+
+                        System.out.println(
+                                        "Uploading module image to Cloudinary...");
+
+                        System.out.println(
+                                        "File: " + imageFile.getAbsolutePath());
+
+                        // -------------------------------------------------
+                        // CLOUDINARY FOLDER
+                        // -------------------------------------------------
+
+                        String folder = "agrobiz/courses/"
+                                        + courseId
+                                        + "/modules";
+
+                        // -------------------------------------------------
+                        // UPLOAD
+                        // -------------------------------------------------
+
+                        Map<?, ?> result = cloudinary.uploader().upload(
+                                        imageFile,
+                                        ObjectUtils.asMap(
+                                                        "folder", folder,
+                                                        "resource_type", "image"));
+
+                        // -------------------------------------------------
+                        // GET SECURE URL
+                        // -------------------------------------------------
+
+                        Object secureUrl = result.get("secure_url");
+
+                        if (secureUrl == null) {
+
+                                System.out.println(
+                                                "Cloudinary upload completed but URL was not returned.");
+
+                                return "";
+                        }
+
+                        String imageUrl = secureUrl.toString();
+
+                        System.out.println(
+                                        "================================");
+
+                        System.out.println(
+                                        "Module image uploaded successfully.");
+
+                        System.out.println(
+                                        "Cloudinary URL:");
+
+                        System.out.println(
+                                        imageUrl);
+
+                        System.out.println(
+                                        "================================");
+
+                        return imageUrl;
+
+                } catch (Exception e) {
+
+                        System.out.println(
+                                        "Error uploading module image to Cloudinary:");
+
+                        e.printStackTrace();
+
+                        return "";
+                }
+        }
+
+        // =========================================================
         // ADD MODULE
+        // =========================================================
+        //
+        // imageFile:
+        // Image selected by admin
+        //
         // =========================================================
 
         public boolean addModule(
                         int courseId,
                         String title,
-                        String description) {
+                        String description,
+                        File imageFile) {
 
                 try {
 
@@ -112,27 +226,48 @@ public class ModuleDAO {
                         int moduleOrder = modules.size() + 1;
 
                         // =====================================================
+                        // UPLOAD IMAGE
+                        // =====================================================
+
+                        String imageUrl = "";
+
+                        if (imageFile != null) {
+
+                                imageUrl = uploadModuleImage(
+                                                imageFile,
+                                                courseId,
+                                                nextModuleId);
+
+                                // -------------------------------------------------
+                                // IF IMAGE WAS SELECTED BUT UPLOAD FAILED
+                                // -------------------------------------------------
+
+                                if (imageUrl.isEmpty()) {
+
+                                        System.out.println(
+                                                        "Module image upload failed.");
+
+                                        return false;
+                                }
+                        }
+
+                        // =====================================================
                         // CREATE MODULE
                         // =====================================================
 
                         Module module = new Module(
-
                                         nextModuleId,
-
                                         courseId,
-
                                         title.trim(),
-
                                         description == null
                                                         ? ""
                                                         : description.trim(),
-
                                         moduleOrder,
-
-                                        false);
+                                        false,
+                                        imageUrl);
 
                         // =====================================================
-                        // DOCUMENT ID = MODULE ID
+                        // FIRESTORE DOCUMENT
                         // =====================================================
 
                         DocumentReference document = getModuleCollection(courseId)
@@ -141,25 +276,39 @@ public class ModuleDAO {
                                                                         nextModuleId));
 
                         // =====================================================
-                        // SAVE TO FIRESTORE
+                        // SAVE MODULE
                         // =====================================================
 
                         document.set(module).get();
+
+                        // =====================================================
+                        // LOG
+                        // =====================================================
+
+                        System.out.println(
+                                        "================================");
 
                         System.out.println(
                                         "Module added successfully.");
 
                         System.out.println(
-                                        "Course ID: "
+                                        "Course ID     : "
                                                         + courseId);
 
                         System.out.println(
-                                        "Module ID: "
+                                        "Module ID     : "
                                                         + nextModuleId);
 
                         System.out.println(
-                                        "Module Title: "
+                                        "Module Title  : "
                                                         + module.getTitle());
+
+                        System.out.println(
+                                        "Module Image  : "
+                                                        + imageUrl);
+
+                        System.out.println(
+                                        "================================");
 
                         return true;
 
@@ -172,6 +321,26 @@ public class ModuleDAO {
 
                         return false;
                 }
+        }
+
+        // =========================================================
+        // OLD ADD MODULE METHOD
+        // =========================================================
+        //
+        // Keeps compatibility with existing code.
+        //
+        // =========================================================
+
+        public boolean addModule(
+                        int courseId,
+                        String title,
+                        String description) {
+
+                return addModule(
+                                courseId,
+                                title,
+                                description,
+                                null);
         }
 
         // =========================================================
@@ -205,7 +374,7 @@ public class ModuleDAO {
                         }
 
                         // =====================================================
-                        // SORT BY MODULE ORDER
+                        // SORT
                         // =====================================================
 
                         Collections.sort(
@@ -242,10 +411,6 @@ public class ModuleDAO {
                                         .get()
                                         .get();
 
-                        // =====================================================
-                        // MODULE DOES NOT EXIST
-                        // =====================================================
-
                         if (!document.exists()) {
 
                                 System.out.println(
@@ -253,10 +418,6 @@ public class ModuleDAO {
 
                                 return null;
                         }
-
-                        // =====================================================
-                        // CONVERT FIRESTORE DOCUMENT
-                        // =====================================================
 
                         return document.toObject(
                                         Module.class);
@@ -275,18 +436,23 @@ public class ModuleDAO {
         // =========================================================
         // UPDATE MODULE
         // =========================================================
+        //
+        // This version also allows changing the image.
+        //
+        // =========================================================
 
         public boolean updateModule(
                         int courseId,
                         int moduleId,
                         String title,
                         String description,
-                        boolean published) {
+                        boolean published,
+                        File imageFile) {
 
                 try {
 
                         // =====================================================
-                        // GET DOCUMENT
+                        // DOCUMENT
                         // =====================================================
 
                         DocumentReference document = getModuleCollection(courseId)
@@ -294,13 +460,12 @@ public class ModuleDAO {
                                                         String.valueOf(
                                                                         moduleId));
 
-                        DocumentSnapshot snapshot = document
-                                        .get()
-                                        .get();
-
                         // =====================================================
                         // CHECK EXISTENCE
                         // =====================================================
+
+                        DocumentSnapshot snapshot = document.get()
+                                        .get();
 
                         if (!snapshot.exists()) {
 
@@ -311,15 +476,58 @@ public class ModuleDAO {
                         }
 
                         // =====================================================
+                        // VALIDATE TITLE
+                        // =====================================================
+
+                        if (title == null ||
+                                        title.trim().isEmpty()) {
+
+                                System.out.println(
+                                                "Module title is required.");
+
+                                return false;
+                        }
+
+                        // =====================================================
+                        // IMAGE URL
+                        // =====================================================
+
+                        String imageUrl = snapshot.getString("imageUrl");
+
+                        if (imageUrl == null) {
+
+                                imageUrl = "";
+                        }
+
+                        // =====================================================
+                        // UPLOAD NEW IMAGE
+                        // =====================================================
+
+                        if (imageFile != null) {
+
+                                String newImageUrl = uploadModuleImage(
+                                                imageFile,
+                                                courseId,
+                                                moduleId);
+
+                                if (newImageUrl.isEmpty()) {
+
+                                        System.out.println(
+                                                        "New module image upload failed.");
+
+                                        return false;
+                                }
+
+                                imageUrl = newImageUrl;
+                        }
+
+                        // =====================================================
                         // UPDATE
                         // =====================================================
 
                         document.update(
-
                                         "title",
-                                        title == null
-                                                        ? ""
-                                                        : title.trim(),
+                                        title.trim(),
 
                                         "description",
                                         description == null
@@ -327,16 +535,35 @@ public class ModuleDAO {
                                                         : description.trim(),
 
                                         "published",
-                                        published
+                                        published,
 
-                        ).get();
+                                        "imageUrl",
+                                        imageUrl).get();
+
+                        // =====================================================
+                        // LOG
+                        // =====================================================
+
+                        System.out.println(
+                                        "================================");
 
                         System.out.println(
                                         "Module updated successfully.");
 
                         System.out.println(
-                                        "Module ID: "
+                                        "Course ID : "
+                                                        + courseId);
+
+                        System.out.println(
+                                        "Module ID : "
                                                         + moduleId);
+
+                        System.out.println(
+                                        "Image URL : "
+                                                        + imageUrl);
+
+                        System.out.println(
+                                        "================================");
 
                         return true;
 
@@ -352,6 +579,30 @@ public class ModuleDAO {
         }
 
         // =========================================================
+        // OLD UPDATE MODULE METHOD
+        // =========================================================
+        //
+        // Keeps existing code working.
+        //
+        // =========================================================
+
+        public boolean updateModule(
+                        int courseId,
+                        int moduleId,
+                        String title,
+                        String description,
+                        boolean published) {
+
+                return updateModule(
+                                courseId,
+                                moduleId,
+                                title,
+                                description,
+                                published,
+                                null);
+        }
+
+        // =========================================================
         // DELETE MODULE
         // =========================================================
 
@@ -362,7 +613,7 @@ public class ModuleDAO {
                 try {
 
                         // =====================================================
-                        // GET DOCUMENT
+                        // DOCUMENT
                         // =====================================================
 
                         DocumentReference document = getModuleCollection(courseId)
@@ -370,13 +621,12 @@ public class ModuleDAO {
                                                         String.valueOf(
                                                                         moduleId));
 
-                        DocumentSnapshot snapshot = document
-                                        .get()
-                                        .get();
-
                         // =====================================================
                         // CHECK EXISTENCE
                         // =====================================================
+
+                        DocumentSnapshot snapshot = document.get()
+                                        .get();
 
                         if (!snapshot.exists()) {
 
@@ -387,7 +637,7 @@ public class ModuleDAO {
                         }
 
                         // =====================================================
-                        // DELETE MODULE
+                        // DELETE
                         // =====================================================
 
                         document.delete()
@@ -395,6 +645,10 @@ public class ModuleDAO {
 
                         System.out.println(
                                         "Module deleted successfully.");
+
+                        System.out.println(
+                                        "Course ID: "
+                                                        + courseId);
 
                         System.out.println(
                                         "Module ID: "
@@ -428,14 +682,10 @@ public class ModuleDAO {
 
                 try {
 
-                        // =====================================================
-                        // GET ALL MODULES
-                        // =====================================================
-
                         List<Module> modules = getModulesByCourse(courseId);
 
                         // =====================================================
-                        // SORT MODULES
+                        // SORT
                         // =====================================================
 
                         Collections.sort(
@@ -454,16 +704,8 @@ public class ModuleDAO {
 
                                 int newOrder = i + 1;
 
-                                // -------------------------------------------------
-                                // Update local object
-                                // -------------------------------------------------
-
                                 module.setModuleOrder(
                                                 newOrder);
-
-                                // -------------------------------------------------
-                                // Update Firestore
-                                // -------------------------------------------------
 
                                 getModuleCollection(courseId)
                                                 .document(
