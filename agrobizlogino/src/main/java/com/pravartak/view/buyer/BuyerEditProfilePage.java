@@ -2373,4 +2373,3 @@ public class BuyerEditProfilePage {
         return field;
     }
 }
-

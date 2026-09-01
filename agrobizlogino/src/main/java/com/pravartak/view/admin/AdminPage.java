@@ -1,6 +1,9 @@
+
 package com.pravartak.view.admin;
 
+import com.pravartak.view.admin.community.AdminCommunityPage;
 import com.pravartak.view.admin.course.AdminLearning;
+import com.pravartak.view.admin.marketplace.AdminMarketplacePage;
 import com.pravartak.view.admin.scheme.SchemeTab;
 import com.pravartak.view.login.LoginPage;
 
@@ -172,15 +175,12 @@ public class AdminPage {
                 // =====================================================
 
                 logout.setOnAction(e -> {
-                        try{
-                                 LoginPage loginPage = new LoginPage();
-                                 
+                        try {
+                                LoginPage loginPage = new LoginPage();
                                 loginPage.start(LoginPage.mainStage);
-
-                        }catch(Exception ex){
+                        } catch (Exception ex) {
                                 ex.printStackTrace();
                         }
-                       
                 });
 
                 // =====================================================
@@ -290,21 +290,10 @@ public class AdminPage {
                                                 "-fx-padding:10 18;");
 
                 // =====================================================
-                // NOTIFICATION
-                // =====================================================
-
-                Label notification = new Label("♧");
-
-                notification.setStyle(
-                                "-fx-text-fill:#AAAAAA;" +
-                                                "-fx-font-size:23px;" +
-                                                "-fx-cursor:hand;");
-
-                // =====================================================
                 // PROFILE
                 // =====================================================
 
-                Label profile = new Label("A");
+                Button profile = new Button("◎ Profile");
 
                 profile.setAlignment(
                                 Pos.CENTER);
@@ -319,6 +308,14 @@ public class AdminPage {
                                                 "-fx-text-fill:#EEEEEE;" +
                                                 "-fx-font-weight:bold;");
 
+                profile.setOnAction(e -> {
+                        System.out.println("Profile Button Clicked");
+
+                });
+                // =====================================================
+                // TOP BAR COMPONENTS
+                // =====================================================
+
                 // =====================================================
                 // TOP BAR COMPONENTS
                 // =====================================================
@@ -327,7 +324,6 @@ public class AdminPage {
                                 headerLogo,
                                 topSpace,
                                 search,
-                                notification,
                                 profile);
 
                 bp.setTop(topBar);
@@ -378,7 +374,8 @@ public class AdminPage {
                 // ROOT STYLE
                 // =====================================================
 
-                bp.setStyle("-fx-background-color:#080C0D;");
+                bp.setStyle(
+                                "-fx-background-color:#080C0D;");
 
                 // =====================================================
                 // SCENE
@@ -421,11 +418,10 @@ public class AdminPage {
 
                         case "Users":
 
-                                Text users = createPageTitle(
-                                                "Users");
+                                AdminUsersPage usersPage = new AdminUsersPage();
 
-                                bp.setCenter(users);
-
+                                bp.setCenter(
+                                                usersPage.getUsersPage());
                                 break;
 
                         // =================================================
@@ -434,10 +430,8 @@ public class AdminPage {
 
                         case "Marketplace":
 
-                                Text marketplace = createPageTitle(
-                                                "Marketplace");
-
-                                bp.setCenter(marketplace);
+                                AdminMarketplacePage marketplacePage = new AdminMarketplacePage();
+                                bp.setCenter(marketplacePage.getMarketplacePage());
 
                                 break;
 
@@ -457,10 +451,10 @@ public class AdminPage {
 
                         case "Community":
 
-                                Text community = createPageTitle(
-                                                "Community");
+                                AdminCommunityPage adminCommunityPage = new AdminCommunityPage();
 
-                                bp.setCenter(community);
+                                bp.setCenter(
+                                                adminCommunityPage.getCommunityPage());
 
                                 break;
 
@@ -470,9 +464,10 @@ public class AdminPage {
 
                         case "Government Schemes":
 
-                                Text schemes = createPageTitle( "Government Schemes");
+                                Text schemes = createPageTitle(
+                                                "Government Schemes");
 
-                                bp.setCenter(schemes);
+                                bp.setCenter(SchemeTab.getSchemesPage());
 
                                 break;
 
