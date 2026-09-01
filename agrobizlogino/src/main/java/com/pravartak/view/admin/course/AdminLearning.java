@@ -72,11 +72,7 @@ public class AdminLearning {
 
                         contentArea.getChildren().add(coursesPage);
 
-                } else {
-
-                        contentArea.getChildren().add(createComingSoonPage("Courses"));
                 }
-
                 // =====================================================
                 // ADD TO ROOT
                 // =====================================================
@@ -326,10 +322,6 @@ public class AdminLearning {
                                                 page = CategoriesTab.getCategoriesPage();
                                                 break;
 
-                                        case "Lessons":
-                                                page = createComingSoonPage("Lessons");
-                                                break;
-
                                 }
 
                                 // =================================================
@@ -344,7 +336,6 @@ public class AdminLearning {
 
                                         System.out.println("ERROR: " + tab.getText() + " returned NULL.");
 
-                                        contentArea.getChildren().add(createComingSoonPage(tab.getText()));
                                 }
                         });
 
@@ -388,31 +379,5 @@ public class AdminLearning {
                                                 "-fx-cursor:hand;");
         }
 
-        // =========================================================
-        // COMING SOON
-        // =========================================================
 
-        private static VBox createComingSoonPage(String name) {
-
-                VBox root = new VBox(10);
-
-                root.setPadding(new Insets(20, 0, 0, 0));
-
-                Label title = new Label(name);
-
-                title.setStyle(
-                                "-fx-text-fill:#EEEEEE;" +
-                                                "-fx-font-size:22px;" +
-                                                "-fx-font-weight:bold;");
-
-                Label message = new Label(name + " management will be available soon.");
-
-                message.setStyle("-fx-text-fill: #777777; -fx-font-size:12px;");
-
-                root.getChildren().addAll(
-                                title,
-                                message);
-
-                return root;
-        }
 }

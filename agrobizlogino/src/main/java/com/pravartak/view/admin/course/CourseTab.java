@@ -443,7 +443,7 @@ public class CourseTab {
                                 return;
                         }
 
-                        ModulePage modulePage = new ModulePage(course);
+                        AdminModulePage modulePage = new AdminModulePage(course);
 
                         Scene moduleScene = modulePage.getModuleScene();
 

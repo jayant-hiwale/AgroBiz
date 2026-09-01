@@ -5,6 +5,8 @@ import com.pravartak.model.admin.Course;
 import com.pravartak.view.admin.AdminPage;
 import com.pravartak.view.login.LoginPage;
 
+import java.io.File;
+
 import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,832 +18,1013 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.stage.Window;
 import javafx.util.Duration;
 
 public class AddModuleAdmin {
 
-    private final ModuleController moduleController = new ModuleController();
-    private final Course course;
+        private final ModuleController moduleController = new ModuleController();
 
-    // =========================================================
-    // FIELDS
-    // =========================================================
+        private final Course course;
 
-    private TextField moduleTitleField;
-    private TextArea descriptionField;
-    private TextField orderField;
-    private ComboBox<String> statusBox;
+        // =========================================================
+        // FIELDS
+        // =========================================================
 
-    // =========================================================
-    // CONSTRUCTOR
-    // =========================================================
+        private TextField moduleTitleField;
+        private TextArea descriptionField;
+        private TextField orderField;
+        private ComboBox<String> statusBox;
 
-    public AddModuleAdmin(Course course) {
+        // IMAGE
+        private File selectedImageFile;
+        private ImageView imagePreview;
+        private Label imageNameLabel;
 
-        this.course = course;
-    }
+        // =========================================================
+        // CONSTRUCTOR
+        // =========================================================
 
-    // =========================================================
-    // SCENE
-    // =========================================================
+        public AddModuleAdmin(Course course) {
 
-    public Scene getAddModuleScene() {
+                this.course = course;
+        }
 
-        VBox root = new VBox(16);
+        // =========================================================
+        // SCENE
+        // =========================================================
 
-        root.setPadding(
-                new Insets(15, 30, 20, 30));
+        public Scene getAddModuleScene() {
 
-        root.setStyle(
-                "-fx-background-color:#080C0D;");
+                VBox root = new VBox(16);
 
-        // =====================================================
-        // TOP BAR
-        // =====================================================
+                root.setPadding(
+                                new Insets(15, 30, 20, 30));
 
-        HBox topBar = new HBox(14);
+                root.setStyle(
+                                "-fx-background-color:#080C0D;");
 
-        topBar.setAlignment(
-                Pos.CENTER_LEFT);
+                // =====================================================
+                // TOP BAR
+                // =====================================================
 
-        Button backButton = new Button("← Back");
+                HBox topBar = new HBox(14);
 
-        backButton.setStyle(
-                "-fx-background-color:transparent;" +
-                        "-fx-text-fill:#AAAAAA;" +
-                        "-fx-font-size:11px;" +
-                        "-fx-border-color:#242B2C;" +
-                        "-fx-border-width:1;" +
-                        "-fx-border-radius:5;" +
-                        "-fx-background-radius:5;" +
-                        "-fx-padding:6 14;" +
-                        "-fx-cursor:hand;");
+                topBar.setAlignment(
+                                Pos.CENTER_LEFT);
 
-        Label pageTitle = new Label(
-                "Add Module");
+                Button backButton = new Button("← Back");
 
-        pageTitle.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                        "-fx-font-size:24px;" +
-                        "-fx-font-weight:bold;");
+                backButton.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:11px;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-padding:6 14;" +
+                                                "-fx-cursor:hand;");
 
-        Label courseLabel = new Label(
-                course != null
-                        ? "Course: " + safe(course.getTitle())
-                        : "Course not found");
+                Label pageTitle = new Label("Add Module");
 
-        courseLabel.setStyle(
-                "-fx-text-fill:#68D34A;" +
-                        "-fx-font-size:11px;" +
-                        "-fx-font-weight:bold;");
+                pageTitle.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:24px;" +
+                                                "-fx-font-weight:bold;");
 
-        topBar.getChildren().addAll(
-                backButton,
-                pageTitle,
-                courseLabel);
+                Label courseLabel = new Label(
+                                course != null
+                                                ? "Course: "
+                                                                + safe(course.getTitle())
+                                                : "Course not found");
 
-        backButton.setOnAction(
-                e -> goBack());
+                courseLabel.setStyle(
+                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-font-size:11px;" +
+                                                "-fx-font-weight:bold;");
 
-        // =====================================================
-        // PAGE DESCRIPTION
-        // =====================================================
+                topBar.getChildren().addAll(
+                                backButton,
+                                pageTitle,
+                                courseLabel);
 
-        Label description = new Label(
-                "Create a new module for this agricultural course.");
+                backButton.setOnAction(
+                                e -> goBack());
 
-        description.setStyle(
-                "-fx-text-fill:#888888;" +
-                        "-fx-font-size:11px;");
+                // =====================================================
+                // PAGE DESCRIPTION
+                // =====================================================
 
-        // =====================================================
-        // MAIN CONTENT
-        // =====================================================
+                Label description = new Label(
+                                "Create a new module for this agricultural course.");
 
-        HBox content = new HBox(16);
+                description.setStyle(
+                                "-fx-text-fill:#888888;" +
+                                                "-fx-font-size:11px;");
 
-        // =====================================================
-        // LEFT - MODULE INFORMATION
-        // =====================================================
+                // =====================================================
+                // MAIN CONTENT
+                // =====================================================
 
-        VBox informationCard = createInformationCard();
+                HBox content = new HBox(16);
 
-        informationCard.setPrefWidth(650);
-        informationCard.setMinWidth(500);
+                // =====================================================
+                // LEFT
+                // =====================================================
 
-        HBox.setHgrow(
-                informationCard,
-                Priority.ALWAYS);
+                VBox informationCard = createInformationCard();
 
-        // =====================================================
-        // RIGHT - MODULE SETTINGS
-        // =====================================================
+                informationCard.setPrefWidth(650);
+                informationCard.setMinWidth(500);
 
-        VBox settingsCard = createSettingsCard();
+                HBox.setHgrow(
+                                informationCard,
+                                Priority.ALWAYS);
 
-        settingsCard.setPrefWidth(300);
-        settingsCard.setMinWidth(260);
+                // =====================================================
+                // RIGHT
+                // =====================================================
 
-        content.getChildren().addAll(
-                informationCard,
-                settingsCard);
+                VBox settingsCard = createSettingsCard();
 
-        // =====================================================
-        // ACTION BUTTONS
-        // =====================================================
+                settingsCard.setPrefWidth(300);
+                settingsCard.setMinWidth(260);
 
-        HBox actions = createActionButtons();
+                content.getChildren().addAll(
+                                informationCard,
+                                settingsCard);
 
-        // =====================================================
-        // PAGE CONTENT
-        // =====================================================
+                // =====================================================
+                // ACTION BUTTONS
+                // =====================================================
 
-        VBox pageContent = new VBox(16);
+                HBox actions = createActionButtons();
 
-        pageContent.setPadding(
-                new Insets(5, 0, 20, 0));
+                // =====================================================
+                // PAGE CONTENT
+                // =====================================================
 
-        pageContent.getChildren().addAll(
-                content,
-                actions);
+                VBox pageContent = new VBox(16);
 
-        // =====================================================
-        // SCROLL PANE
-        // =====================================================
+                pageContent.setPadding(
+                                new Insets(5, 0, 20, 0));
 
-        ScrollPane scrollPane = new ScrollPane(pageContent);
+                pageContent.getChildren().addAll(
+                                content,
+                                actions);
 
-        scrollPane.setFitToWidth(true);
+                // =====================================================
+                // SCROLL
+                // =====================================================
 
-        scrollPane.setHbarPolicy(
-                ScrollPane.ScrollBarPolicy.NEVER);
+                ScrollPane scrollPane = new ScrollPane(pageContent);
 
-        scrollPane.setVbarPolicy(
-                ScrollPane.ScrollBarPolicy.AS_NEEDED);
+                scrollPane.setFitToWidth(true);
 
-        scrollPane.setPannable(true);
+                scrollPane.setHbarPolicy(
+                                ScrollPane.ScrollBarPolicy.NEVER);
 
-        scrollPane.setStyle(
-                "-fx-background-color:#080C0D;" +
-                        "-fx-background:#080C0D;" +
-                        "-fx-border-color:transparent;");
+                scrollPane.setVbarPolicy(
+                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-        VBox.setVgrow(
-                scrollPane,
-                Priority.ALWAYS);
+                scrollPane.setPannable(true);
 
-        // =====================================================
-        // ROOT
-        // =====================================================
+                scrollPane.setStyle(
+                                "-fx-background-color:#080C0D;" +
+                                                "-fx-background:#080C0D;" +
+                                                "-fx-border-color:transparent;");
 
-        root.getChildren().addAll(
-                topBar,
-                description,
-                scrollPane);
+                VBox.setVgrow(
+                                scrollPane,
+                                Priority.ALWAYS);
 
-        return new Scene(
-                root,
-                1100,
-                700);
-    }
+                // =====================================================
+                // ROOT
+                // =====================================================
 
-    // =========================================================
-    // INFORMATION CARD
-    // =========================================================
+                root.getChildren().addAll(
+                                topBar,
+                                description,
+                                scrollPane);
 
-    private VBox createInformationCard() {
+                return new Scene(
+                                root,
+                                1100,
+                                700);
+        }
 
-        VBox card = createCard();
+        // =========================================================
+        // INFORMATION CARD
+        // =========================================================
 
-        Label heading = createHeading("Module Information");
+        private VBox createInformationCard() {
 
-        Separator separator = new Separator();
+                VBox card = createCard();
 
-        // =====================================================
-        // MODULE TITLE
-        // =====================================================
+                Label heading = createHeading("Module Information");
 
-        Label titleLabel = createFieldLabel("Module Title");
+                Separator separator = new Separator();
 
-        moduleTitleField = new TextField();
+                // =====================================================
+                // TITLE
+                // =====================================================
 
-        moduleTitleField.setPromptText(
-                "Enter module title");
+                Label titleLabel = createFieldLabel("Module Title");
 
-        styleTextField(
-                moduleTitleField);
+                moduleTitleField = new TextField();
 
-        // =====================================================
-        // MODULE DESCRIPTION
-        // =====================================================
+                moduleTitleField.setPromptText(
+                                "Enter module title");
 
-        Label descriptionLabel = createFieldLabel("Module Description");
+                styleTextField(
+                                moduleTitleField);
 
-        descriptionField = new TextArea();
+                // =====================================================
+                // DESCRIPTION
+                // =====================================================
 
-        descriptionField.setPromptText(
-                "Describe what students will learn in this module...");
+                Label descriptionLabel = createFieldLabel(
+                                "Module Description");
 
-        descriptionField.setPrefHeight(250);
-        descriptionField.setWrapText(true);
+                descriptionField = new TextArea();
 
-        styleTextArea(
-                descriptionField);
+                descriptionField.setPromptText(
+                                "Describe what students will learn in this module...");
 
-        // =====================================================
-        // ADD
-        // =====================================================
+                descriptionField.setPrefHeight(250);
+                descriptionField.setWrapText(true);
 
-        card.getChildren().addAll(
-                heading,
-                separator,
-                titleLabel,
-                moduleTitleField,
-                descriptionLabel,
-                descriptionField);
+                styleTextArea(
+                                descriptionField);
 
-        return card;
-    }
+                // =====================================================
+                // IMAGE
+                // =====================================================
 
-    // =========================================================
-    // SETTINGS CARD
-    // =========================================================
+                Label imageLabel = createFieldLabel(
+                                "Module Image");
 
-    private VBox createSettingsCard() {
+                Button uploadImageButton = new Button("＋  Upload Image");
 
-        VBox card = createCard();
+                uploadImageButton.setMaxWidth(
+                                Double.MAX_VALUE);
 
-        Label heading = createHeading("Module Settings");
+                uploadImageButton.setPrefHeight(38);
 
-        Separator separator = new Separator();
+                uploadImageButton.setStyle(
+                                "-fx-background-color:#0D1511;" +
+                                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-border-color:#245D35;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-font-size:11px;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-cursor:hand;");
 
-        // =====================================================
-        // MODULE ORDER
-        // =====================================================
+                uploadImageButton.setOnAction(
+                                e -> chooseImage());
 
-        Label orderLabel = createFieldLabel("Module Order");
+                // =====================================================
+                // IMAGE NAME
+                // =====================================================
 
-        orderField = new TextField();
+                imageNameLabel = new Label("No image selected");
 
-        orderField.setPromptText(
-                "e.g. 1");
+                imageNameLabel.setStyle(
+                                "-fx-text-fill:#666666;" +
+                                                "-fx-font-size:10px;");
 
-        styleTextField(
-                orderField);
+                // =====================================================
+                // IMAGE PREVIEW
+                // =====================================================
 
-        // =====================================================
-        // STATUS
-        // =====================================================
+                imagePreview = new ImageView();
 
-        Label statusLabel = createFieldLabel("Module Status");
+                imagePreview.setFitWidth(220);
+                imagePreview.setFitHeight(120);
 
-        statusBox = new ComboBox<>();
+                imagePreview.setPreserveRatio(true);
 
-        statusBox.getItems().addAll(
-                "Draft",
-                "Published");
+                imagePreview.setSmooth(true);
 
-        statusBox.setValue(
-                "Draft");
+                imagePreview.setVisible(false);
+                imagePreview.setManaged(false);
 
-        styleComboBox(
-                statusBox);
+                imagePreview.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:6;" +
+                                                "-fx-background-radius:6;");
 
-        // =====================================================
-        // COURSE INFORMATION
-        // =====================================================
+                card.getChildren().addAll(
+                                heading,
+                                separator,
+                                titleLabel,
+                                moduleTitleField,
+                                descriptionLabel,
+                                descriptionField,
+                                imageLabel,
+                                uploadImageButton,
+                                imageNameLabel,
+                                imagePreview);
 
-        Label courseHeading = createFieldLabel("Course");
+                return card;
+        }
 
-        Label selectedCourse = new Label(
-                course != null
-                        ? safe(course.getTitle())
-                        : "Unknown Course");
+        // =========================================================
+        // CHOOSE IMAGE
+        // =========================================================
 
-        selectedCourse.setWrapText(true);
+        private void chooseImage() {
 
-        selectedCourse.setStyle(
-                "-fx-text-fill:#68D34A;" +
-                        "-fx-font-size:13px;" +
-                        "-fx-font-weight:bold;");
+                FileChooser fileChooser = new FileChooser();
 
-        // =====================================================
-        // COURSE ID
-        // =====================================================
+                fileChooser.setTitle(
+                                "Select Module Image");
 
-        Label idLabel = createFieldLabel("Course ID");
+                FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter(
+                                "Image Files",
+                                "*.png",
+                                "*.jpg",
+                                "*.jpeg",
+                                "*.webp");
 
-        Label courseId = new Label(
-                course != null
-                        ? String.valueOf(
-                                course.getCourseId())
-                        : "-");
+                fileChooser.getExtensionFilters().add(
+                                imageFilter);
 
-        courseId.setStyle(
-                "-fx-text-fill:#777777;" +
-                        "-fx-font-size:11px;");
+                Window window = LoginPage.mainStage;
 
-        // =====================================================
-        // ADD
-        // =====================================================
+                File file = fileChooser.showOpenDialog(window);
 
-        card.getChildren().addAll(
-                heading,
-                separator,
-                orderLabel,
-                orderField,
-                statusLabel,
-                statusBox,
-                courseHeading,
-                selectedCourse,
-                idLabel,
-                courseId);
+                if (file == null) {
+                        return;
+                }
 
-        return card;
-    }
+                selectedImageFile = file;
 
-    // =========================================================
-    // ACTION BUTTONS
-    // =========================================================
+                imageNameLabel.setText(
+                                file.getName());
 
-    private HBox createActionButtons() {
+                imageNameLabel.setStyle(
+                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-font-size:10px;");
 
-        HBox buttons = new HBox(10);
-
-        buttons.setAlignment(
-                Pos.CENTER_RIGHT);
-
-        Button cancel = new Button("Cancel");
-
-        cancel.setStyle(
-                "-fx-background-color:#101516;" +
-                        "-fx-text-fill:#AAAAAA;" +
-                        "-fx-border-color:#242B2C;" +
-                        "-fx-border-width:1;" +
-                        "-fx-border-radius:5;" +
-                        "-fx-background-radius:5;" +
-                        "-fx-padding:8 22;" +
-                        "-fx-font-weight:bold;" +
-                        "-fx-cursor:hand;");
-
-        Button save = new Button("✓  Save Module");
-
-        save.setStyle(
-                "-fx-background-color:#68D34A;" +
-                        "-fx-text-fill:#080C0D;" +
-                        "-fx-border-color:#68D34A;" +
-                        "-fx-border-width:1;" +
-                        "-fx-border-radius:5;" +
-                        "-fx-background-radius:5;" +
-                        "-fx-padding:8 24;" +
-                        "-fx-font-weight:bold;" +
-                        "-fx-cursor:hand;");
-
-        cancel.setOnAction(
-                e -> goBack());
-
-        save.setOnAction(
-                e -> saveModule());
-
-        buttons.getChildren().addAll(
-                cancel,
-                save);
-
-        return buttons;
-    }
-
-    // =========================================================
-    // SAVE MODULE
-    // =========================================================
-
-    private void saveModule() {
-
-        try {
-
-            // =========================================================
-            // COURSE CHECK
-            // =========================================================
-
-            if (course == null) {
-
-                showPopup(
-                        "Error",
-                        "Course information not found.",
-                        false);
-
-                return;
-            }
-
-            // =========================================================
-            // TITLE
-            // =========================================================
-
-            String title = moduleTitleField
-                    .getText()
-                    .trim();
-
-            if (title.isEmpty()) {
-
-                showPopup(
-                        "Missing Information",
-                        "Please enter a module title.",
-                        false);
-
-                moduleTitleField.requestFocus();
-
-                return;
-            }
-
-            // =========================================================
-            // DESCRIPTION
-            // =========================================================
-
-            String description = descriptionField
-                    .getText()
-                    .trim();
-
-            if (description.isEmpty()) {
-
-                showPopup(
-                        "Missing Information",
-                        "Please enter a module description.",
-                        false);
-
-                descriptionField.requestFocus();
-
-                return;
-            }
-
-            // =========================================================
-            // ORDER
-            // =========================================================
-
-            String orderText = orderField
-                    .getText()
-                    .trim();
-
-            int order = 1;
-
-            if (!orderText.isEmpty()) {
+                // =====================================================
+                // PREVIEW
+                // =====================================================
 
                 try {
 
-                    order = Integer.parseInt(orderText);
+                        Image image = new Image(
+                                        file.toURI().toString());
 
-                    if (order < 1) {
+                        imagePreview.setImage(image);
+
+                        imagePreview.setVisible(true);
+                        imagePreview.setManaged(true);
+
+                } catch (Exception e) {
+
+                        e.printStackTrace();
+
+                        imagePreview.setVisible(false);
+                        imagePreview.setManaged(false);
+                }
+        }
+
+        // =========================================================
+        // SETTINGS CARD
+        // =========================================================
+
+        private VBox createSettingsCard() {
+
+                VBox card = createCard();
+
+                Label heading = createHeading("Module Settings");
+
+                Separator separator = new Separator();
+
+                // =====================================================
+                // ORDER
+                // =====================================================
+
+                Label orderLabel = createFieldLabel(
+                                "Module Order");
+
+                orderField = new TextField();
+
+                orderField.setPromptText(
+                                "e.g. 1");
+
+                styleTextField(
+                                orderField);
+
+                // =====================================================
+                // STATUS
+                // =====================================================
+
+                Label statusLabel = createFieldLabel(
+                                "Module Status");
+
+                statusBox = new ComboBox<>();
+
+                statusBox.getItems().addAll(
+                                "Draft",
+                                "Published");
+
+                statusBox.setValue(
+                                "Draft");
+
+                styleComboBox(
+                                statusBox);
+
+                // =====================================================
+                // COURSE
+                // =====================================================
+
+                Label courseHeading = createFieldLabel("Course");
+
+                Label selectedCourse = new Label(
+                                course != null
+                                                ? safe(course.getTitle())
+                                                : "Unknown Course");
+
+                selectedCourse.setWrapText(true);
+
+                selectedCourse.setStyle(
+                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-font-size:13px;" +
+                                                "-fx-font-weight:bold;");
+
+                // =====================================================
+                // COURSE ID
+                // =====================================================
+
+                Label idLabel = createFieldLabel(
+                                "Course ID");
+
+                Label courseId = new Label(
+                                course != null
+                                                ? String.valueOf(
+                                                                course.getCourseId())
+                                                : "-");
+
+                courseId.setStyle(
+                                "-fx-text-fill:#777777;" +
+                                                "-fx-font-size:11px;");
+
+                card.getChildren().addAll(
+                                heading,
+                                separator,
+                                orderLabel,
+                                orderField,
+                                statusLabel,
+                                statusBox,
+                                courseHeading,
+                                selectedCourse,
+                                idLabel,
+                                courseId);
+
+                return card;
+        }
+
+        // =========================================================
+        // ACTION BUTTONS
+        // =========================================================
+
+        private HBox createActionButtons() {
+
+                HBox buttons = new HBox(10);
+
+                buttons.setAlignment(
+                                Pos.CENTER_RIGHT);
+
+                Button cancel = new Button("Cancel");
+
+                cancel.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-padding:8 22;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-cursor:hand;");
+
+                Button save = new Button(
+                                "✓  Save Module");
+
+                save.setStyle(
+                                "-fx-background-color:#68D34A;" +
+                                                "-fx-text-fill:#080C0D;" +
+                                                "-fx-border-color:#68D34A;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-padding:8 24;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-cursor:hand;");
+
+                cancel.setOnAction(
+                                e -> goBack());
+
+                save.setOnAction(
+                                e -> saveModule());
+
+                buttons.getChildren().addAll(
+                                cancel,
+                                save);
+
+                return buttons;
+        }
+
+        // =========================================================
+        // SAVE MODULE
+        // =========================================================
+
+        private void saveModule() {
+
+                try {
+
+                        // =====================================================
+                        // COURSE
+                        // =====================================================
+
+                        if (course == null) {
+
+                                showPopup(
+                                                "Error",
+                                                "Course information not found.",
+                                                false);
+
+                                return;
+                        }
+
+                        // =====================================================
+                        // TITLE
+                        // =====================================================
+
+                        String title = moduleTitleField
+                                        .getText()
+                                        .trim();
+
+                        if (title.isEmpty()) {
+
+                                showPopup(
+                                                "Missing Information",
+                                                "Please enter a module title.",
+                                                false);
+
+                                moduleTitleField.requestFocus();
+
+                                return;
+                        }
+
+                        // =====================================================
+                        // DESCRIPTION
+                        // =====================================================
+
+                        String description = descriptionField
+                                        .getText()
+                                        .trim();
+
+                        if (description.isEmpty()) {
+
+                                showPopup(
+                                                "Missing Information",
+                                                "Please enter a module description.",
+                                                false);
+
+                                descriptionField.requestFocus();
+
+                                return;
+                        }
+
+                        // =====================================================
+                        // ORDER
+                        // =====================================================
+
+                        String orderText = orderField
+                                        .getText()
+                                        .trim();
+
+                        int order = 1;
+
+                        if (!orderText.isEmpty()) {
+
+                                try {
+
+                                        order = Integer.parseInt(
+                                                        orderText);
+
+                                        if (order < 1) {
+
+                                                showPopup(
+                                                                "Invalid Order",
+                                                                "Module order must be greater than 0.",
+                                                                false);
+
+                                                orderField.requestFocus();
+
+                                                return;
+                                        }
+
+                                } catch (NumberFormatException ex) {
+
+                                        showPopup(
+                                                        "Invalid Order",
+                                                        "Module order must be a number.",
+                                                        false);
+
+                                        orderField.requestFocus();
+
+                                        return;
+                                }
+                        }
+
+                        // =====================================================
+                        // STATUS
+                        // =====================================================
+
+                        boolean published = "Published".equals(
+                                        statusBox.getValue());
+
+                        // =====================================================
+                        // COURSE DATA
+                        // =====================================================
+
+                        int courseId = course.getCourseId();
+
+                        System.out.println(
+                                        "================================");
+
+                        System.out.println(
+                                        "ADDING MODULE");
+
+                        System.out.println(
+                                        "Course ID     : "
+                                                        + courseId);
+
+                        System.out.println(
+                                        "Course        : "
+                                                        + course.getTitle());
+
+                        System.out.println(
+                                        "Module Title  : "
+                                                        + title);
+
+                        System.out.println(
+                                        "Description   : "
+                                                        + description);
+
+                        System.out.println(
+                                        "Order         : "
+                                                        + order);
+
+                        System.out.println(
+                                        "Published     : "
+                                                        + published);
+
+                        System.out.println(
+                                        "Image         : "
+                                                        + (selectedImageFile != null
+                                                                        ? selectedImageFile.getName()
+                                                                        : "No image"));
+
+                        System.out.println(
+                                        "================================");
+
+                        // =====================================================
+                        // SAVE MODULE
+                        // =====================================================
+
+                        boolean success;
+
+                        if (selectedImageFile != null) {
+
+                                success = moduleController.addModule(
+                                                courseId,
+                                                title,
+                                                description,
+                                                selectedImageFile);
+
+                        } else {
+
+                                success = moduleController.addModule(
+                                                courseId,
+                                                title,
+                                                description);
+                        }
+
+                        // =====================================================
+                        // FAILED
+                        // =====================================================
+
+                        if (!success) {
+
+                                showPopup(
+                                                "Error",
+                                                "Unable to create the module.",
+                                                false);
+
+                                return;
+                        }
+
+                        // =====================================================
+                        // SUCCESS
+                        // =====================================================
 
                         showPopup(
-                                "Invalid Order",
-                                "Module order must be greater than 0.",
-                                false);
+                                        "Module Created",
+                                        "The module has been added successfully.",
+                                        true);
 
-                        orderField.requestFocus();
+                        // =====================================================
+                        // RETURN
+                        // =====================================================
 
-                        return;
-                    }
+                        PauseTransition delay = new PauseTransition(
+                                        Duration.seconds(1.0));
 
-                } catch (NumberFormatException ex) {
+                        delay.setOnFinished(e -> {
 
-                    showPopup(
-                            "Invalid Order",
-                            "Module order must be a number.",
-                            false);
+                                AdminModulePage modulePage = new AdminModulePage(course);
 
-                    orderField.requestFocus();
+                                LoginPage.mainStage.setScene(
+                                                modulePage.getModuleScene());
+                        });
 
-                    return;
+                        delay.play();
+
+                } catch (Exception e) {
+
+                        e.printStackTrace();
+
+                        showPopup(
+                                        "Error",
+                                        "Something went wrong while creating the module.",
+                                        false);
                 }
-            }
+        }
 
-            // =========================================================
-            // STATUS
-            // =========================================================
+        // =========================================================
+        // BACK
+        // =========================================================
 
-            boolean published = "Published".equals(statusBox.getValue());
+        private void goBack() {
 
-            // =========================================================
-            // COURSE DATA
-            // =========================================================
-
-            int courseId = course.getCourseId();
-
-    
-            System.out.println("================================");
-            System.out.println("ADDING MODULE");
-            System.out.println("Course ID     : " + courseId);
-            System.out.println("Course        : " + course.getTitle());
-            System.out.println("Module Title  : " + title);
-            System.out.println("Description   : " + description);
-            System.out.println("Order         : " + order);
-            System.out.println("Published     : " + published);
-            System.out.println("================================");
-
-            // =========================================================
-            // SAVE USING MODULE CONTROLLER
-            // =========================================================
-
-            boolean success = moduleController.addModule(
-                    courseId,
-                    title,
-                    description);
-
-            // =========================================================
-            // SAVE FAILED
-            // =========================================================
-
-            if (!success) {
-
-                showPopup(
-                        "Error",
-                        "Unable to create the module.",
-                        false);
-
-                return;
-            }
-
-            // =========================================================
-            // SUCCESS
-            // =========================================================
-
-            showPopup(
-                    "Module Created",
-                    "The module has been added successfully.",
-                    true);
-
-            // =========================================================
-            // RETURN TO MODULE PAGE
-            // =========================================================
-
-            PauseTransition delay = new PauseTransition(
-                    Duration.seconds(1.0));
-
-            delay.setOnFinished(e -> {
-
-                ModulePage modulePage = new ModulePage(course);
+                AdminPage adminPage = new AdminPage();
 
                 LoginPage.mainStage.setScene(
-                        modulePage.getModuleScene());
-            });
-
-            delay.play();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-            showPopup(
-                    "Error",
-                    "Something went wrong while creating the module.",
-                    false);
+                                adminPage.getAdminPage(
+                                                "Manage Course"));
         }
-    }
 
-    // =========================================================
-    // BACK
-    // =========================================================
+        // =========================================================
+        // CARD
+        // =========================================================
 
-    private void goBack() {
+        private VBox createCard() {
 
-        AdminPage adminPage = new AdminPage();
+                VBox card = new VBox(10);
 
-        LoginPage.mainStage.setScene(adminPage.getAdminPage("Manage Course"));
-    }
+                card.setPadding(
+                                new Insets(18));
 
-    // =========================================================
-    // CARD
-    // =========================================================
+                card.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:8;" +
+                                                "-fx-background-radius:8;");
 
-    private VBox createCard() {
+                return card;
+        }
 
-        VBox card = new VBox(10);
+        // =========================================================
+        // HEADING
+        // =========================================================
 
-        card.setPadding(
-                new Insets(18));
+        private Label createHeading(
+                        String text) {
 
-        card.setStyle(
-                "-fx-background-color:#101516;" +
-                        "-fx-border-color:#242B2C;" +
-                        "-fx-border-width:1;" +
-                        "-fx-border-radius:8;" +
-                        "-fx-background-radius:8;");
+                Label label = new Label(text);
 
-        return card;
-    }
+                label.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:16px;" +
+                                                "-fx-font-weight:bold;");
 
-    // =========================================================
-    // HEADING
-    // =========================================================
+                return label;
+        }
 
-    private Label createHeading(
-            String text) {
+        // =========================================================
+        // FIELD LABEL
+        // =========================================================
 
-        Label label = new Label(text);
+        private Label createFieldLabel(
+                        String text) {
 
-        label.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                        "-fx-font-size:16px;" +
-                        "-fx-font-weight:bold;");
+                Label label = new Label(text);
 
-        return label;
-    }
+                label.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:11px;" +
+                                                "-fx-font-weight:bold;");
 
-    // =========================================================
-    // FIELD LABEL
-    // =========================================================
+                return label;
+        }
 
-    private Label createFieldLabel(
-            String text) {
+        // =========================================================
+        // TEXT FIELD STYLE
+        // =========================================================
 
-        Label label = new Label(text);
+        private void styleTextField(
+                        TextField field) {
 
-        label.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                        "-fx-font-size:11px;" +
-                        "-fx-font-weight:bold;");
+                field.setPrefHeight(36);
 
-        return label;
-    }
+                field.setMaxWidth(
+                                Double.MAX_VALUE);
 
-    // =========================================================
-    // TEXT FIELD STYLE
-    // =========================================================
+                field.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-prompt-text-fill:#666666;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-font-size:12px;" +
+                                                "-fx-padding:8;");
+        }
 
-    private void styleTextField(
-            TextField field) {
+        // =========================================================
+        // TEXT AREA STYLE
+        // =========================================================
 
-        field.setPrefHeight(36);
+        private void styleTextArea(
+                        TextArea area) {
 
-        field.setMaxWidth(
-                Double.MAX_VALUE);
+                area.setPrefHeight(160);
+                area.setMinHeight(120);
+                area.setWrapText(true);
 
-        field.setStyle(
-                "-fx-background-color:#0D1213;" +
-                        "-fx-text-fill:#EEEEEE;" +
-                        "-fx-prompt-text-fill:#666666;" +
-                        "-fx-border-color:#242B2C;" +
-                        "-fx-border-width:1;" +
-                        "-fx-border-radius:5;" +
-                        "-fx-background-radius:5;" +
-                        "-fx-font-size:12px;" +
-                        "-fx-padding:8;");
-    }
+                area.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-control-inner-background:#0D1213;" +
+                                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-prompt-text-fill:#666666;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-font-size:12px;" +
+                                                "-fx-padding:8;" +
+                                                "-fx-focus-color:transparent;" +
+                                                "-fx-faint-focus-color:transparent;");
+        }
 
-    // =========================================================
-    // TEXT AREA STYLE
-    // =========================================================
+        // =========================================================
+        // COMBO BOX STYLE
+        // =========================================================
 
-    private void styleTextArea(TextArea area) {
+        private void styleComboBox(
+                        ComboBox<String> box) {
 
-        area.setPrefHeight(160);
-        area.setMinHeight(120);
-        area.setWrapText(true);
+                box.setPrefHeight(36);
 
-        area.setStyle(
-                "-fx-background-color:#0D1213;" +
-                        "-fx-control-inner-background:#0D1213;" +
-                        "-fx-text-fill:#EEEEEE;" +
-                        "-fx-prompt-text-fill:#666666;" +
-                        "-fx-border-color:#242B2C;" +
-                        "-fx-border-width:1;" +
-                        "-fx-border-radius:5;" +
-                        "-fx-background-radius:5;" +
-                        "-fx-font-size:12px;" +
-                        "-fx-padding:8;" +
-                        "-fx-focus-color:transparent;" +
-                        "-fx-faint-focus-color:transparent;");
-    }
+                box.setMaxWidth(
+                                Double.MAX_VALUE);
 
-    // =========================================================
-    // COMBO BOX STYLE
-    // =========================================================
+                box.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;");
+        }
 
-    private void styleComboBox(
-            ComboBox<String> box) {
+        // =========================================================
+        // SAFE
+        // =========================================================
 
-        box.setPrefHeight(36);
+        private String safe(
+                        String value) {
 
-        box.setMaxWidth(
-                Double.MAX_VALUE);
+                return value == null
+                                ? ""
+                                : value;
+        }
 
-        box.setStyle(
-                "-fx-background-color:#0D1213;" +
-                        "-fx-text-fill:#EEEEEE;" +
-                        "-fx-border-color:#242B2C;" +
-                        "-fx-border-width:1;" +
-                        "-fx-border-radius:5;" +
-                        "-fx-background-radius:5;");
-    }
+        // =========================================================
+        // POPUP
+        // =========================================================
 
-    // =========================================================
-    // SAFE STRING
-    // =========================================================
+        private void showPopup(
+                        String title,
+                        String message,
+                        boolean success) {
 
-    private String safe(
-            String value) {
+                Popup popup = new Popup();
 
-        return value == null
-                ? ""
-                : value;
-    }
+                VBox box = new VBox(8);
 
-    // =========================================================
-    // POPUP
-    // =========================================================
+                box.setAlignment(
+                                Pos.CENTER);
 
-    private void showPopup(
-            String title,
-            String message,
-            boolean success) {
+                box.setPrefWidth(320);
+                box.setPrefHeight(135);
 
-        Popup popup = new Popup();
+                box.setPadding(
+                                new Insets(15));
 
-        VBox box = new VBox(8);
+                Label icon = new Label(
+                                success
+                                                ? "✓"
+                                                : "!");
 
-        box.setAlignment(
-                Pos.CENTER);
+                icon.setPrefSize(
+                                42,
+                                42);
 
-        box.setPrefWidth(320);
-        box.setPrefHeight(135);
+                icon.setAlignment(
+                                Pos.CENTER);
 
-        box.setPadding(new Insets(15));
+                icon.setStyle(
+                                "-fx-background-color:"
+                                                + (success
+                                                                ? "#245D35;"
+                                                                : "#3A2525;")
+                                                +
+                                                "-fx-text-fill:"
+                                                + (success
+                                                                ? "#68D34A;"
+                                                                : "#FF6B6B;")
+                                                +
+                                                "-fx-font-size:22px;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-background-radius:50%;");
 
-        Label icon = new Label(success ? "✓" : "!");
+                Label titleLabel = new Label(title);
 
-        icon.setPrefSize(
-                42,
-                42);
+                titleLabel.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:15px;" +
+                                                "-fx-font-weight:bold;");
 
-        icon.setAlignment(
-                Pos.CENTER);
+                Label messageLabel = new Label(message);
 
-        icon.setStyle(
-                "-fx-background-color:"
-                        + (success
-                                ? "#245D35;"
-                                : "#3A2525;")
-                        +
-                        "-fx-text-fill:"
-                        + (success
-                                ? "#68D34A;"
-                                : "#FF6B6B;")
-                        +
-                        "-fx-font-size:22px;" +
-                        "-fx-font-weight:bold;" +
-                        "-fx-background-radius:50%;");
+                messageLabel.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:11px;");
 
-        Label titleLabel = new Label(title);
+                messageLabel.setWrapText(true);
 
-        titleLabel.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                        "-fx-font-size:15px;" +
-                        "-fx-font-weight:bold;");
+                box.getChildren().addAll(
+                                icon,
+                                titleLabel,
+                                messageLabel);
 
-        Label messageLabel = new Label(message);
+                box.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-border-color:"
+                                                + (success
+                                                                ? "#68D34A;"
+                                                                : "#FF6B6B;")
+                                                +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:8;" +
+                                                "-fx-background-radius:8;");
 
-        messageLabel.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                        "-fx-font-size:11px;");
+                popup.getContent().add(box);
 
-        messageLabel.setWrapText(true);
+                Window window = LoginPage.mainStage;
 
-        box.getChildren().addAll(
-                icon,
-                titleLabel,
-                messageLabel);
+                popup.show(
+                                window,
+                                window.getX()
+                                                + (window.getWidth() - 320) / 2,
+                                window.getY()
+                                                + (window.getHeight() - 135) / 2);
 
-        box.setStyle(
-                "-fx-background-color:#101516;" +
-                        "-fx-border-color:"
-                        + (success
-                                ? "#68D34A;"
-                                : "#FF6B6B;")
-                        +
-                        "-fx-border-width:1;" +
-                        "-fx-border-radius:8;" +
-                        "-fx-background-radius:8;");
+                PauseTransition delay = new PauseTransition(
+                                Duration.seconds(1.5));
 
-        popup.getContent().add(box);
+                delay.setOnFinished(
+                                e -> popup.hide());
 
-        Window window = LoginPage.mainStage;
-
-        popup.show(
-                window,
-                window.getX()
-                        + (window.getWidth() - 320) / 2,
-                window.getY()
-                        + (window.getHeight() - 135) / 2);
-
-        PauseTransition delay = new PauseTransition(
-                Duration.seconds(1.5));
-
-        delay.setOnFinished(
-                e -> popup.hide());
-
-        delay.play();
-    }
+                delay.play();
+        }
 }

@@ -13,6 +13,8 @@ public interface CourseDAO {
 
     Course getCourseById(int courseId);
 
+      List<Course> getPublishedCourses();
+
     boolean updateCourse(Course course);
 
     boolean deleteCourse(int courseId);
