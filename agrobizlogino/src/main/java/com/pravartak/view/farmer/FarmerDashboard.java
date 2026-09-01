@@ -108,19 +108,13 @@ public class FarmerDashboard {
     // =========================================================
     // AI FARMING PLAN UI REFERENCES
     // =========================================================
+        private VBox aiCard;
+        private VBox aiCenter;
 
-    private VBox aiPlanContent;
-    private ScrollPane aiPlanScroll;
-    private Label aiPlanText;
-    private VBox aiCard;
-    private VBox aiCenter;
-    private Button aiNewPlanButton;
-
-
-    private VBox planContent;
-    private ScrollPane planScroll;
-    private Label planText;
-    private Button newPlanButton;
+        private VBox planContent;
+        private ScrollPane planScroll;
+        private Label planText;
+        private Button newPlanButton;
 
     // SCENE
     public Scene getDashboardScene() {
@@ -740,6 +734,7 @@ public class FarmerDashboard {
 
         ScrollPane scroll = new ScrollPane(content);
         scroll.setFitToWidth(true);
+        scroll.setFitToHeight(false);
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         // scroll.setStyle("-fx-background-color: #0d1414;");
         scroll.setStyle(
@@ -3367,7 +3362,6 @@ public class FarmerDashboard {
 //     thread.start();
 // }
 
-
 // =========================================================
 // AI ADVISOR PAGE
 // =========================================================
@@ -3392,7 +3386,8 @@ private VBox createAIAdvisorPage() {
     // MAIN PAGE
     // =====================================================
 
-    VBox page = new VBox();
+    VBox page =
+            new VBox();
 
     page.setBackground(
             new Background(
@@ -3405,56 +3400,14 @@ private VBox createAIAdvisorPage() {
     );
 
     // =====================================================
-    // FARMING PLAN VIEWER
-    // =====================================================
-
-    planContent = new VBox();
-
-    planContent.setSpacing(18);
-
-    planContent.setPadding(
-            new Insets(25)
-    );
-
-    planContent.setFillWidth(true);
-
-    planScroll = new ScrollPane(
-            planContent
-    );
-
-    planScroll.setFitToWidth(true);
-
-    planScroll.setHbarPolicy(
-            ScrollPane.ScrollBarPolicy.NEVER
-    );
-
-    planScroll.setVbarPolicy(
-            ScrollPane.ScrollBarPolicy.AS_NEEDED
-    );
-
-    planScroll.setVisible(false);
-
-    planScroll.setManaged(false);
-
-    planScroll.setStyle(
-            "-fx-background-color: transparent;"
-            + "-fx-background: transparent;"
-            + "-fx-control-inner-background: transparent;"
-    );
-
-    VBox.setVgrow(
-            planScroll,
-            Priority.ALWAYS
-    );
-
-    // =====================================================
     // TOP BAR
     // =====================================================
 
-    HBox topBar = createTopBar(
-            "AI Farming Advisor",
-            "Get intelligent recommendations for your farm."
-    );
+    HBox topBar =
+            createTopBar(
+                    "AI Farming Advisor",
+                    "Get intelligent recommendations for your farm."
+            );
 
     VBox.setMargin(
             topBar,
@@ -3462,10 +3415,23 @@ private VBox createAIAdvisorPage() {
     );
 
     // =====================================================
-    // CONTENT
+    // MAIN CONTENT
     // =====================================================
 
-    VBox content = new VBox();
+    VBox content =
+            new VBox();
+
+    content.setSpacing(
+            0
+    );
+
+    content.setFillWidth(
+            true
+    );
+
+    content.setMinHeight(
+            0
+    );
 
     content.setBackground(
             new Background(
@@ -3478,10 +3444,13 @@ private VBox createAIAdvisorPage() {
     );
 
     content.setPadding(
-            new Insets(0, 35, 35, 35)
+            new Insets(
+                    0,
+                    35,
+                    30,
+                    35
+            )
     );
-
-    content.setSpacing(0);
 
     VBox.setVgrow(
             content,
@@ -3492,9 +3461,23 @@ private VBox createAIAdvisorPage() {
     // AI CARD
     // =====================================================
 
-    VBox card = createWhiteCard();
+    VBox card =
+            createWhiteCard();
 
-    card.setPrefHeight(650);
+    aiCard =
+            card;
+
+    card.setFillWidth(
+            true
+    );
+
+    card.setMinHeight(
+            0
+    );
+
+    card.setPrefHeight(
+            650
+    );
 
     card.setMaxHeight(
             Double.MAX_VALUE
@@ -3505,16 +3488,15 @@ private VBox createAIAdvisorPage() {
             Priority.ALWAYS
     );
 
-    VBox.setMargin(
-            card,
-            Insets.EMPTY
-    );
-
     // =====================================================
-    // CENTER
+    // NORMAL AI CENTER
     // =====================================================
 
-    VBox center = new VBox();
+    VBox center =
+            new VBox();
+
+    aiCenter =
+            center;
 
     center.setAlignment(
             Pos.TOP_CENTER
@@ -3528,20 +3510,27 @@ private VBox createAIAdvisorPage() {
             new Insets(20)
     );
 
-    center.setFillWidth(true);
+    center.setFillWidth(
+            true
+    );
 
-    VBox.setVgrow(
-            center,
-            Priority.ALWAYS
+    center.setMinHeight(
+            0
     );
 
     // =====================================================
     // AI ICON
     // =====================================================
 
-    Label aiIcon = new Label("✦");
+    Label aiIcon =
+            new Label("✦");
 
     aiIcon.setPrefSize(
+            70,
+            70
+    );
+
+    aiIcon.setMinSize(
             70,
             70
     );
@@ -3558,7 +3547,7 @@ private VBox createAIAdvisorPage() {
             Font.font(
                     "Arial",
                     FontWeight.BOLD,
-                    32
+                    30
             )
     );
 
@@ -3573,7 +3562,7 @@ private VBox createAIAdvisorPage() {
     );
 
     // =====================================================
-    // PAGE TITLE
+    // QUESTION TITLE
     // =====================================================
 
     Label question =
@@ -3589,7 +3578,7 @@ private VBox createAIAdvisorPage() {
             Font.font(
                     "Arial",
                     FontWeight.BOLD,
-                    23
+                    22
             )
     );
 
@@ -3599,6 +3588,10 @@ private VBox createAIAdvisorPage() {
 
     question.setAlignment(
             Pos.CENTER
+    );
+
+    question.setMaxWidth(
+            Double.MAX_VALUE
     );
 
     // =====================================================
@@ -3616,19 +3609,27 @@ private VBox createAIAdvisorPage() {
             Pos.CENTER
     );
 
+    suggestions.setFillHeight(
+            true
+    );
+
+    // =====================================================
+    // QUICK QUESTION BUTTONS
+    // =====================================================
+
     Button cropButton =
             createSuggestionButton(
-                    "🌾  Which crop should I grow?"
+                    "🌾 Which crop should I grow?"
             );
 
     Button yieldButton =
             createSuggestionButton(
-                    "↗  How can I improve my yield?"
+                    "📈 How can I improve my yield?"
             );
 
     Button irrigationButton =
             createSuggestionButton(
-                    "💧  Optimize irrigation schedule"
+                    "💧 Optimize irrigation"
             );
 
     suggestions.getChildren().addAll(
@@ -3638,20 +3639,20 @@ private VBox createAIAdvisorPage() {
     );
 
     // =====================================================
-    // GENERATE PLAN BUTTON
+    // GENERATE FARMING PLAN BUTTON
     // =====================================================
 
     generatePlanButton =
             new Button(
-                    "📋  Generate Personalized Farming Plan"
+                    "🌱 Generate Farming Plan"
             );
 
     generatePlanButton.setPrefHeight(
-            48
+            45
     );
 
     generatePlanButton.setPrefWidth(
-            330
+            220
     );
 
     generatePlanButton.setTextFill(
@@ -3662,7 +3663,7 @@ private VBox createAIAdvisorPage() {
             Font.font(
                     "Arial",
                     FontWeight.BOLD,
-                    14
+                    13
             )
     );
 
@@ -3670,7 +3671,7 @@ private VBox createAIAdvisorPage() {
             new Background(
                     new BackgroundFill(
                             DARK_GREEN,
-                            new CornerRadii(10),
+                            new CornerRadii(9),
                             Insets.EMPTY
                     )
             )
@@ -3681,18 +3682,7 @@ private VBox createAIAdvisorPage() {
     );
 
     // =====================================================
-    // INITIAL CENTER CONTENT
-    // =====================================================
-
-    center.getChildren().addAll(
-            aiIcon,
-            question,
-            suggestions,
-            generatePlanButton
-    );
-
-    // =====================================================
-    // MESSAGE AREA
+    // ASSISTANT MESSAGE CARD
     // =====================================================
 
     HBox message =
@@ -3713,7 +3703,11 @@ private VBox createAIAdvisorPage() {
     message.setBackground(
             new Background(
                     new BackgroundFill(
-                            Color.rgb(86, 108, 22),
+                            Color.rgb(
+                                    86,
+                                    108,
+                                    22
+                            ),
                             new CornerRadii(15),
                             Insets.EMPTY
                     )
@@ -3773,7 +3767,7 @@ private VBox createAIAdvisorPage() {
     );
 
     aiAssistantText.setTextFill(
-            GREY
+            Color.WHITE
     );
 
     aiAssistantText.setFont(
@@ -3781,6 +3775,14 @@ private VBox createAIAdvisorPage() {
                     "Arial",
                     15
             )
+    );
+
+    aiAssistantText.setAlignment(
+            Pos.TOP_LEFT
+    );
+
+    aiAssistantText.setMaxWidth(
+            Double.MAX_VALUE
     );
 
     HBox.setHgrow(
@@ -3794,7 +3796,39 @@ private VBox createAIAdvisorPage() {
     );
 
     // =====================================================
-    // GENERATED FARMING PLAN TEXT
+    // PLAN CONTENT
+    // =====================================================
+
+    planContent =
+            new VBox();
+
+    planContent.setSpacing(
+            0
+    );
+
+    planContent.setFillWidth(
+            true
+    );
+
+    planContent.setMinWidth(
+            0
+    );
+
+    planContent.setMaxWidth(
+            Double.MAX_VALUE
+    );
+
+    planContent.setPadding(
+            new Insets(
+                    20,
+                    25,
+                    30,
+                    25
+            )
+    );
+
+    // =====================================================
+    // PLAN TEXT
     // =====================================================
 
     planText =
@@ -3804,32 +3838,164 @@ private VBox createAIAdvisorPage() {
             true
     );
 
-    planText.setMaxWidth(
-            Double.MAX_VALUE
+    planText.setAlignment(
+            Pos.TOP_LEFT
     );
 
     planText.setTextFill(
-            Color.DARKSLATEGRAY
+            Color.WHITE
     );
 
     planText.setFont(
             Font.font(
-                    "Arial",
+                    "Segoe UI",
+                    FontWeight.NORMAL,
                     15
             )
     );
 
+    planText.setLineSpacing(
+            3
+    );
+
     planText.setPadding(
-            new Insets(5)
+            new Insets(
+                    5,
+                    5,
+                    25,
+                    5
+            )
+    );
+
+    /*
+     * VERY IMPORTANT
+     *
+     * Let VBox calculate the actual width of the Label.
+     * Do not use a fixed width.
+     */
+
+    planText.setMinWidth(
+            0
+    );
+
+    planText.setMaxWidth(
+            Double.MAX_VALUE
+    );
+
+    VBox.setVgrow(
+            planText,
+            Priority.NEVER
+    );
+
+    planContent.getChildren().add(
+            planText
+    );
+
+    // =====================================================
+    // PLAN SCROLL PANE
+    // =====================================================
+
+    planScroll =
+            new ScrollPane(
+                    planContent
+            );
+
+    planScroll.setMinWidth(
+            0
+    );
+
+    planScroll.setMinHeight(
+            0
+    );
+
+    planScroll.setMaxWidth(
+            Double.MAX_VALUE
+    );
+
+    planScroll.setMaxHeight(
+            Double.MAX_VALUE
+    );
+
+    /*
+     * THIS IS CRITICAL.
+     *
+     * The ScrollPane viewport controls WIDTH.
+     * The content is allowed to become TALLER
+     * than the viewport.
+     */
+
+    planScroll.setFitToWidth(
+            true
+    );
+
+    planScroll.setFitToHeight(
+            false
+    );
+
+    planScroll.setPannable(
+            true
+    );
+
+    planScroll.setHbarPolicy(
+            ScrollPane.ScrollBarPolicy.NEVER
+    );
+
+    planScroll.setVbarPolicy(
+            ScrollPane.ScrollBarPolicy.AS_NEEDED
+    );
+
+    planScroll.setVisible(
+            false
+    );
+
+    planScroll.setManaged(
+            false
+    );
+
+    VBox.setVgrow(
+            planScroll,
+            Priority.ALWAYS
+    );
+
+    planScroll.setStyle(
+            "-fx-background-color: transparent;"
+            + "-fx-background: transparent;"
+            + "-fx-border-color: transparent;"
+            + "-fx-control-inner-background: transparent;"
+    );
+
+    // =====================================================
+    // IMPORTANT WIDTH LISTENER
+    // =====================================================
+
+    planScroll.viewportBoundsProperty().addListener(
+            (obs, oldBounds, newBounds) -> {
+
+                double width =
+                        newBounds.getWidth();
+
+                if (width > 50) {
+
+                    /*
+                     * Give the Label the viewport width
+                     * so wrapping occurs.
+                     */
+
+                    planText.setMaxWidth(
+                            width - 50
+                    );
+                }
+            }
     );
 
     // =====================================================
     // NEW FARMING PLAN BUTTON
     // =====================================================
 
-    newPlanButton = new Button(
-            "← New Farming Plan"
-    );
+    newPlanButton =
+            new Button(
+                    "← New Farming Plan"
+            );
 
     newPlanButton.setPrefHeight(
             45
@@ -3872,9 +4038,37 @@ private VBox createAIAdvisorPage() {
     newPlanButton.setOnAction(
             event -> {
 
-                planContent.getChildren().clear();
+                // ---------------------------------------------
+                // RESET FARMING PLAN DATA
+                // ---------------------------------------------
 
-                planText.setText("");
+                selectedFarmingType =
+                        null;
+
+                farmingQuestionIndex =
+                        0;
+
+                farmingPlanAnswers.clear();
+
+                currentFarmingQuestionKeys.clear();
+
+                currentFarmingQuestions.clear();
+
+                // ---------------------------------------------
+                // CLEAR OLD PLAN
+                // ---------------------------------------------
+
+                planText.setText(
+                        ""
+                );
+
+                planScroll.setVvalue(
+                        0
+                );
+
+                // ---------------------------------------------
+                // HIDE PLAN VIEW
+                // ---------------------------------------------
 
                 planScroll.setVisible(
                         false
@@ -3884,18 +4078,97 @@ private VBox createAIAdvisorPage() {
                         false
                 );
 
-                center.setVisible(
+                // ---------------------------------------------
+                // SHOW NORMAL AI VIEW
+                // ---------------------------------------------
+
+                aiCenter.setVisible(
                         true
                 );
 
-                center.setManaged(
+                aiCenter.setManaged(
                         true
                 );
 
-                card.getChildren().clear();
+                // ---------------------------------------------
+                // RESTORE CARD
+                // ---------------------------------------------
 
-                card.getChildren().add(
-                        center
+                aiCard.getChildren().clear();
+
+                aiCard.getChildren().add(
+                        aiCenter
+                );
+
+                // ---------------------------------------------
+                // RESTORE ORIGINAL UI
+                // ---------------------------------------------
+
+                question.setText(
+                        "How can Agro Biz AI help your farm?"
+                );
+
+                suggestions.getChildren().clear();
+
+                suggestions.getChildren().addAll(
+                        cropButton,
+                        yieldButton,
+                        irrigationButton
+                );
+
+                generatePlanButton.setVisible(
+                        true
+                );
+
+                generatePlanButton.setManaged(
+                        true
+                );
+
+                aiAssistantText.setText(
+                        "Hello Farmer! 🌱\n\n"
+                        + "I can help you make smarter farming "
+                        + "decisions and create a personalized "
+                        + "farming plan based on your farm "
+                        + "resources, capacity and goals."
+                );
+
+                aiQuestionField.clear();
+
+                aiQuestionField.setDisable(
+                        false
+                );
+
+                aiAskButton.setDisable(
+                        false
+                );
+
+                aiAskButton.setText(
+                        "Ask AI  ➤"
+                );
+
+                aiQuestionField.setPromptText(
+                        "Ask your farming question..."
+                );
+
+                // ---------------------------------------------
+                // RESTORE NORMAL ASK ACTION
+                // ---------------------------------------------
+
+                aiAskButton.setOnAction(
+                        e -> {
+
+                            String newQuestion =
+                                    aiQuestionField
+                                            .getText()
+                                            .trim();
+
+                            if (!newQuestion.isEmpty()) {
+
+                                askNormalAIQuestion(
+                                        newQuestion
+                                );
+                            }
+                        }
                 );
             }
     );
@@ -3922,10 +4195,15 @@ private VBox createAIAdvisorPage() {
             )
     );
 
+    aiQuestionField.setMaxWidth(
+            Double.MAX_VALUE
+    );
+
     aiQuestionField.setOnAction(
             event -> {
 
-                if (aiAskButton != null) {
+                if (aiAskButton != null &&
+                        !aiAskButton.isDisabled()) {
 
                     aiAskButton.fire();
                 }
@@ -3992,9 +4270,9 @@ private VBox createAIAdvisorPage() {
                     return;
                 }
 
-                // =============================================
+                // ---------------------------------------------
                 // FARMING PLAN MODE
-                // =============================================
+                // ---------------------------------------------
 
                 if (selectedFarmingType != null) {
 
@@ -4003,9 +4281,9 @@ private VBox createAIAdvisorPage() {
                     return;
                 }
 
-                // =============================================
+                // ---------------------------------------------
                 // NORMAL AI MODE
-                // =============================================
+                // ---------------------------------------------
 
                 askNormalAIQuestion(
                         userQuestion
@@ -4025,6 +4303,10 @@ private VBox createAIAdvisorPage() {
 
     input.setSpacing(
             12
+    );
+
+    input.setMaxWidth(
+            Double.MAX_VALUE
     );
 
     HBox.setHgrow(
@@ -4070,7 +4352,7 @@ private VBox createAIAdvisorPage() {
     );
 
     // =====================================================
-    // START PLAN BUTTON
+    // START FARMING PLAN
     // =====================================================
 
     generatePlanButton.setOnAction(
@@ -4086,24 +4368,35 @@ private VBox createAIAdvisorPage() {
     );
 
     // =====================================================
-    // ADD MESSAGE + INPUT
+    // INITIAL CENTER CONTENT
     // =====================================================
 
     center.getChildren().addAll(
-            message,
-            new Region(),
-            input
+            aiIcon,
+            question,
+            suggestions,
+            generatePlanButton,
+            message
     );
 
+    // =====================================================
+    // SPACER
+    // =====================================================
+
     Region aiSpacer =
-            (Region) center.getChildren()
-                    .get(
-                            center.getChildren().size() - 2
-                    );
+            new Region();
 
     VBox.setVgrow(
             aiSpacer,
             Priority.ALWAYS
+    );
+
+    center.getChildren().add(
+            aiSpacer
+    );
+
+    center.getChildren().add(
+            input
     );
 
     // =====================================================
@@ -4114,48 +4407,57 @@ private VBox createAIAdvisorPage() {
             center
     );
 
+    // =====================================================
+    // CONTENT
+    // =====================================================
+
     content.getChildren().add(
             card
     );
 
-    VBox.setVgrow(
-            card,
-            Priority.ALWAYS
-    );
-
     // =====================================================
-    // MAIN SCROLL
+    // MAIN PAGE SCROLL
     // =====================================================
 
-    ScrollPane scroll =
+    ScrollPane mainScroll =
             new ScrollPane(
                     content
             );
 
-    scroll.setFitToWidth(
+    mainScroll.setFitToWidth(
             true
     );
 
-    scroll.setFitToHeight(
-            true
+    /*
+     * Do NOT force the entire content to the viewport height.
+     * The AI card controls its own height.
+     */
+
+    mainScroll.setFitToHeight(
+            false
     );
 
-    scroll.setHbarPolicy(
+    mainScroll.setHbarPolicy(
             ScrollPane.ScrollBarPolicy.NEVER
     );
 
-    scroll.setVbarPolicy(
+    mainScroll.setVbarPolicy(
             ScrollPane.ScrollBarPolicy.AS_NEEDED
     );
 
-    scroll.setStyle(
+    mainScroll.setPannable(
+            true
+    );
+
+    mainScroll.setStyle(
             "-fx-background-color: transparent;"
             + "-fx-background: transparent;"
             + "-fx-control-inner-background: transparent;"
+            + "-fx-border-color: transparent;"
     );
 
     VBox.setVgrow(
-            scroll,
+            mainScroll,
             Priority.ALWAYS
     );
 
@@ -4165,11 +4467,11 @@ private VBox createAIAdvisorPage() {
 
     page.getChildren().addAll(
             topBar,
-            scroll
+            mainScroll
     );
 
     VBox.setVgrow(
-            scroll,
+            mainScroll,
             Priority.ALWAYS
     );
 
@@ -5166,7 +5468,7 @@ private void finishFarmingPlanQuestions() {
 }
 
 
-// =========================================================
+  // =========================================================
 // GENERATE FINAL FARMING PLAN
 // =========================================================
 
@@ -5184,7 +5486,7 @@ private void generateFinalFarmingPlan() {
     }
 
     // =====================================================
-    // UI
+    // UI - GENERATING
     // =====================================================
 
     aiAssistantText.setText(
@@ -5194,6 +5496,10 @@ private void generateFinalFarmingPlan() {
             + "Please wait."
     );
 
+    aiAskButton.setText(
+            "Generating..."
+    );
+
     aiAskButton.setDisable(
             true
     );
@@ -5201,6 +5507,18 @@ private void generateFinalFarmingPlan() {
     aiQuestionField.setDisable(
             true
     );
+
+    // =====================================================
+    // COPY VALUES FOR BACKGROUND THREAD
+    // =====================================================
+
+    final String finalFarmingType =
+            selectedFarmingType;
+
+    final Map<String, String> finalFarmingPlanAnswers =
+            new LinkedHashMap<>(
+                    farmingPlanAnswers
+            );
 
     // =====================================================
     // BACKGROUND TASK
@@ -5214,8 +5532,8 @@ private void generateFinalFarmingPlan() {
                         throws Exception {
 
                     return groqService.generateFarmingPlan(
-                            selectedFarmingType,
-                            farmingPlanAnswers
+                            finalFarmingType,
+                            finalFarmingPlanAnswers
                     );
                 }
             };
@@ -5230,17 +5548,17 @@ private void generateFinalFarmingPlan() {
                 String result =
                         task.getValue();
 
-                // =============================================
+                // =================================================
                 // PUT COMPLETE RESPONSE INTO PLAN TEXT
-                // =============================================
+                // =================================================
 
                 planText.setText(
                         result
                 );
 
-                // =============================================
-                // PUT PLAN TEXT INSIDE SCROLL CONTENT
-                // =============================================
+                // =================================================
+                // MAKE SURE PLAN CONTENT CONTAINS THE TEXT
+                // =================================================
 
                 planContent.getChildren().clear();
 
@@ -5248,9 +5566,9 @@ private void generateFinalFarmingPlan() {
                         planText
                 );
 
-                // =============================================
-                // SHOW PLAN SCROLLER
-                // =============================================
+                // =================================================
+                // SHOW PLAN SCROLLPANE
+                // =================================================
 
                 planScroll.setVisible(
                         true
@@ -5260,6 +5578,10 @@ private void generateFinalFarmingPlan() {
                         true
                 );
 
+                // =================================================
+                // HIDE NORMAL AI CENTER
+                // =================================================
+
                 aiCenter.setVisible(
                         false
                 );
@@ -5268,18 +5590,9 @@ private void generateFinalFarmingPlan() {
                         false
                 );
 
-                // =============================================
-                // MAKE PLAN SCROLLER FILL CARD
-                // =============================================
-
-                VBox.setVgrow(
-                        planScroll,
-                        Priority.ALWAYS
-                );
-
-                // =============================================
-                // REPLACE CARD CONTENT
-                // =============================================
+                // =================================================
+                // SHOW PLAN INSIDE CARD
+                // =================================================
 
                 aiCard.getChildren().clear();
 
@@ -5291,17 +5604,115 @@ private void generateFinalFarmingPlan() {
                         newPlanButton
                 );
 
-                // =============================================
-                // SCROLL TO TOP
-                // =============================================
+                // =================================================
+                // PLAN SCROLLPANE LAYOUT
+                // =================================================
 
-                planScroll.setVvalue(
+                VBox.setVgrow(
+                        planScroll,
+                        Priority.ALWAYS
+                );
+
+                planScroll.setMinHeight(
                         0
                 );
 
-                // =============================================
-                // RESET BUTTON STATE
-                // =============================================
+                planScroll.setMaxHeight(
+                        Double.MAX_VALUE
+                );
+
+                planScroll.setMaxWidth(
+                        Double.MAX_VALUE
+                );
+
+                planScroll.setFitToWidth(
+                        true
+                );
+
+                planScroll.setFitToHeight(
+                        false
+                );
+
+                planScroll.setVbarPolicy(
+                        ScrollPane.ScrollBarPolicy.AS_NEEDED
+                );
+
+                planScroll.setHbarPolicy(
+                        ScrollPane.ScrollBarPolicy.NEVER
+                );
+
+                // =================================================
+                // NEW PLAN BUTTON
+                // =================================================
+
+                newPlanButton.setAlignment(
+                        Pos.CENTER
+                );
+
+                VBox.setMargin(
+                        newPlanButton,
+                        new Insets(
+                                8,
+                                0,
+                                0,
+                                0
+                        )
+                );
+
+                // =================================================
+                // FORCE CORRECT WIDTH + HEIGHT CALCULATION
+                // =================================================
+
+                Platform.runLater(
+                        () -> {
+
+                            planScroll.applyCss();
+
+                            planScroll.layout();
+
+                            planContent.applyCss();
+
+                            planContent.layout();
+
+                            double viewportWidth =
+                                    planScroll
+                                            .getViewportBounds()
+                                            .getWidth();
+
+                            if (viewportWidth > 50) {
+
+                                planText.setMaxWidth(
+                                        viewportWidth - 50
+                                );
+                            }
+
+                            /*
+                             * Re-layout AFTER assigning width.
+                             * This is what makes the Label calculate
+                             * its complete wrapped height.
+                             */
+
+                            planText.applyCss();
+
+                            planText.layout();
+
+                            planContent.layout();
+
+                            planScroll.layout();
+
+                            // -----------------------------------------
+                            // ALWAYS START AT TOP
+                            // -----------------------------------------
+
+                            planScroll.setVvalue(
+                                    0
+                            );
+                        }
+                );
+
+                // =================================================
+                // RESTORE AI BUTTON
+                // =================================================
 
                 aiAskButton.setText(
                         "Ask AI  ➤"
@@ -5321,9 +5732,9 @@ private void generateFinalFarmingPlan() {
                         "Ask another farming question..."
                 );
 
-                // =============================================
-                // RETURN TO NORMAL AI MODE
-                // =============================================
+                // =================================================
+                // RESET FARMING PLAN STATE
+                // =================================================
 
                 selectedFarmingType =
                         null;
@@ -5336,6 +5747,10 @@ private void generateFinalFarmingPlan() {
                 currentFarmingQuestionKeys.clear();
 
                 currentFarmingQuestions.clear();
+
+                // =================================================
+                // RESTORE NORMAL AI ACTION
+                // =================================================
 
                 aiAskButton.setOnAction(
                         e -> {
@@ -5401,7 +5816,9 @@ private void generateFinalFarmingPlan() {
     // =====================================================
 
     Thread thread =
-            new Thread(task);
+            new Thread(
+                    task
+            );
 
     thread.setDaemon(
             true

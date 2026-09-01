@@ -5,6 +5,7 @@ import com.pravartak.dao.UserDAO;
 import com.pravartak.model.UserModel;
 // import com.pravartak.view.buyer.BuyerAIAdvisorPage;
 import com.pravartak.view.buyer.BuyerHomepage;
+import com.pravartak.view.buyer.BuyerProfilePage;
 
 import com.pravartak.view.buyer.BuyerProfilePage;
 // import com.pravartak.view.farmer.AIAdvisorPage;
