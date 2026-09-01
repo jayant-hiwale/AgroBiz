@@ -1,8 +1,9 @@
 *.json
-
+.vscode/
 # Maven build output
 **/target/
 
+config/cloudinary.properties
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json

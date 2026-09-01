@@ -3,12 +3,13 @@ package com.pravartak.controller.admincontroller;
 import java.util.List;
 
 import com.pravartak.dao.admindao.LessonDAO;
+import com.pravartak.model.admin.ContentBlock;
 import com.pravartak.model.admin.Lesson;
 
 public class LessonController {
 
     // =========================================================
-    // FIRESTORE DAO
+    // DAO
     // =========================================================
 
     private final LessonDAO lessonDAO;
@@ -27,16 +28,20 @@ public class LessonController {
     // =========================================================
 
     public boolean addLesson(
+            int courseId,
             int moduleId,
             String title,
             String description,
-            String mediaUrl) {
+            String mediaUrl,
+            List<ContentBlock> contentBlocks) {
 
         return lessonDAO.addLesson(
+                courseId,
                 moduleId,
                 title,
                 description,
-                mediaUrl);
+                mediaUrl,
+                contentBlocks);
     }
 
     // =========================================================
@@ -44,9 +49,11 @@ public class LessonController {
     // =========================================================
 
     public List<Lesson> getLessonsByModule(
+            int courseId,
             int moduleId) {
 
         return lessonDAO.getLessonsByModule(
+                courseId,
                 moduleId);
     }
 
@@ -55,23 +62,12 @@ public class LessonController {
     // =========================================================
 
     public Lesson getLesson(
+            int courseId,
             int moduleId,
             int lessonId) {
 
         return lessonDAO.getLesson(
-                moduleId,
-                lessonId);
-    }
-
-    // =========================================================
-    // DELETE LESSON
-    // =========================================================
-
-    public boolean deleteLesson(
-            int moduleId,
-            int lessonId) {
-
-        return lessonDAO.deleteLesson(
+                courseId,
                 moduleId,
                 lessonId);
     }
@@ -80,19 +76,59 @@ public class LessonController {
     // UPDATE LESSON
     // =========================================================
 
+    // =========================================================
+    // UPDATE LESSON
+    // =========================================================
+
     public boolean updateLesson(
-            int moduleId,
             int lessonId,
+            int courseId,
+            int moduleId,
             String title,
             String description,
-            String mediaUrl) {
+            String mediaUrl,
+            List<ContentBlock> contentBlocks) {
+
+        System.out.println(
+                "========================================");
+
+        System.out.println(   "Updating lesson");
+
+        System.out.println( "Course ID: " + courseId);
+
+        System.out.println("Module ID: " + moduleId);
+
+        System.out.println("Lesson ID: " + lessonId);
+
+        System.out.println(
+                "Content blocks: "+ (contentBlocks == null? 0 : contentBlocks.size()));
+
+        System.out.println(
+                "========================================");
 
         return lessonDAO.updateLesson(
+                courseId,
                 moduleId,
                 lessonId,
                 title,
                 description,
-                mediaUrl);
+                mediaUrl,
+                contentBlocks);
+    }
+
+    // =========================================================
+    // DELETE LESSON
+    // =========================================================
+
+    public boolean deleteLesson(
+            int courseId,
+            int moduleId,
+            int lessonId) {
+
+        return lessonDAO.deleteLesson(
+                courseId,
+                moduleId,
+                lessonId);
     }
 
     // =========================================================
@@ -100,9 +136,11 @@ public class LessonController {
     // =========================================================
 
     public int getLessonCount(
+            int courseId,
             int moduleId) {
 
         return lessonDAO.getLessonCount(
+                courseId,
                 moduleId);
     }
 }

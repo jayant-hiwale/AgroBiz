@@ -507,4 +507,61 @@ public class FirebaseCourseDAO implements CourseDAO {
                         e.printStackTrace();
                 }
         }
+        // =========================================================
+        // GET PUBLISHED COURSES
+        // =========================================================
+
+        public List<Course> getPublishedCourses() {
+
+                List<Course> courses = new ArrayList<>();
+
+                try {
+
+                        QuerySnapshot snapshot = getCourseCollection()
+                                        .whereEqualTo("status", true)
+                                        .get()
+                                        .get();
+
+                        for (DocumentSnapshot document : snapshot.getDocuments()) {
+
+                                Course course = document.toObject(
+                                                Course.class);
+
+                                if (course != null) {
+
+                                        if (course.getCourseId() == 0) {
+
+                                                try {
+
+                                                        course.setCourseId(
+                                                                        Integer.parseInt(document.getId()));
+
+                                                } catch (NumberFormatException ignored) {
+                                                }
+                                        }
+
+                                        courses.add(course);
+                                }
+                        }
+
+                        // =====================================================
+                        // SORT
+                        // =====================================================
+
+                        Collections.sort(
+                                        courses,
+                                        (c1, c2) -> Integer.compare(
+                                                        c1.getCourseId(),
+                                                        c2.getCourseId()));
+
+                } catch (Exception e) {
+
+                        System.out.println(
+                                        "Error loading published courses:");
+
+                        e.printStackTrace();
+                }
+
+                return courses;
+        }
 }

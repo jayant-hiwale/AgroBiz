@@ -7,12 +7,12 @@ import java.util.List;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
-import com.google.cloud.firestore.Firestore;
-
+import com.pravartak.model.admin.ContentBlock;
 import com.pravartak.model.admin.Lesson;
 
 public class LessonDAO {
@@ -28,18 +28,33 @@ public class LessonDAO {
         // =========================================================
 
         public LessonDAO() {
-
                 db = FirestoreClient.getFirestore();
         }
 
         // =========================================================
         // LESSON COLLECTION
         // =========================================================
+        //
+        // Firestore structure:
+        //
+        // courses
+        // └── courseId
+        // └── modules
+        // └── moduleId
+        // └── lessons
+        // ├── 1
+        // ├── 2
+        // └── 3
+        //
+        // =========================================================
 
         private CollectionReference getLessonCollection(
+                        int courseId,
                         int moduleId) {
 
-                return db.collection("modules")
+                return db.collection("courses")
+                                .document(String.valueOf(courseId))
+                                .collection("modules")
                                 .document(String.valueOf(moduleId))
                                 .collection("lessons");
         }
@@ -49,10 +64,12 @@ public class LessonDAO {
         // =========================================================
 
         public boolean addLesson(
+                        int courseId,
                         int moduleId,
                         String title,
                         String description,
-                        String mediaUrl) {
+                        String mediaUrl,
+                        List<ContentBlock> contentBlocks) {
 
                 try {
 
@@ -63,14 +80,19 @@ public class LessonDAO {
                         if (title == null ||
                                         title.trim().isEmpty()) {
 
+                                System.out.println(
+                                                "Lesson title is required.");
+
                                 return false;
                         }
 
                         // -------------------------------------------------
-                        // GET LESSONS
+                        // GET LESSONS FOR THIS COURSE + MODULE
                         // -------------------------------------------------
 
-                        List<Lesson> lessons = getLessonsByModule(moduleId);
+                        List<Lesson> lessons = getLessonsByModule(
+                                        courseId,
+                                        moduleId);
 
                         // -------------------------------------------------
                         // GENERATE NEXT LESSON ID
@@ -100,11 +122,20 @@ public class LessonDAO {
                         int lessonOrder = lessons.size() + 1;
 
                         // -------------------------------------------------
+                        // CONTENT BLOCKS
+                        // -------------------------------------------------
+
+                        List<ContentBlock> safeContentBlocks = contentBlocks == null
+                                        ? new ArrayList<>()
+                                        : contentBlocks;
+
+                        // -------------------------------------------------
                         // CREATE LESSON
                         // -------------------------------------------------
 
                         Lesson lesson = new Lesson(
                                         nextLessonId,
+                                        courseId,
                                         moduleId,
                                         title.trim(),
                                         description == null
@@ -113,32 +144,68 @@ public class LessonDAO {
                                         mediaUrl == null
                                                         ? ""
                                                         : mediaUrl.trim(),
-                                        lessonOrder);
+                                        lessonOrder,
+                                        safeContentBlocks);
 
                         // -------------------------------------------------
-                        // FIRESTORE DATA
+                        // FIRESTORE
                         // -------------------------------------------------
 
-                        CollectionReference collection = getLessonCollection(moduleId);
+                        CollectionReference collection = getLessonCollection(
+                                        courseId,
+                                        moduleId);
 
                         ApiFuture<WriteResult> future = collection
                                         .document(
-                                                        String.valueOf(nextLessonId))
+                                                        String.valueOf(
+                                                                        nextLessonId))
                                         .set(lesson);
 
                         future.get();
 
+                        // -------------------------------------------------
+                        // DEBUG
+                        // -------------------------------------------------
+
                         System.out.println(
-                                        "Lesson added successfully: "
-                                                        + lesson.getTitle()
-                                                        + " | Lesson ID: "
-                                                        + nextLessonId
-                                                        + " | Module ID: "
+                                        "========================================");
+
+                        System.out.println(
+                                        "Lesson added successfully.");
+
+                        System.out.println(
+                                        "Course ID: "
+                                                        + courseId);
+
+                        System.out.println(
+                                        "Module ID: "
                                                         + moduleId);
+
+                        System.out.println(
+                                        "Lesson ID: "
+                                                        + nextLessonId);
+
+                        System.out.println(
+                                        "Lesson Title: "
+                                                        + lesson.getTitle());
+
+                        System.out.println(
+                                        "Lesson Order: "
+                                                        + lesson.getLessonOrder());
+
+                        System.out.println(
+                                        "Content Blocks: "
+                                                        + lesson.getContentBlocks().size());
+
+                        System.out.println(
+                                        "========================================");
 
                         return true;
 
                 } catch (Exception e) {
+
+                        System.out.println(
+                                        "Error adding lesson:");
 
                         e.printStackTrace();
 
@@ -151,13 +218,16 @@ public class LessonDAO {
         // =========================================================
 
         public List<Lesson> getLessonsByModule(
+                        int courseId,
                         int moduleId) {
 
                 List<Lesson> lessons = new ArrayList<>();
 
                 try {
 
-                        CollectionReference collection = getLessonCollection(moduleId);
+                        CollectionReference collection = getLessonCollection(
+                                        courseId,
+                                        moduleId);
 
                         ApiFuture<QuerySnapshot> future = collection
                                         .orderBy(
@@ -190,6 +260,9 @@ public class LessonDAO {
 
                 } catch (Exception e) {
 
+                        System.out.println(
+                                        "Error loading lessons.");
+
                         e.printStackTrace();
                 }
 
@@ -201,26 +274,70 @@ public class LessonDAO {
         // =========================================================
 
         public Lesson getLesson(
+                        int courseId,
                         int moduleId,
                         int lessonId) {
 
                 try {
 
-                        DocumentSnapshot document = getLessonCollection(moduleId)
+                        DocumentSnapshot document = getLessonCollection(
+                                        courseId,
+                                        moduleId)
                                         .document(
-                                                        String.valueOf(lessonId))
+                                                        String.valueOf(
+                                                                        lessonId))
                                         .get()
                                         .get();
 
                         if (!document.exists()) {
 
+                                System.out.println(
+                                                "Lesson not found.");
+
                                 return null;
                         }
 
-                        return document.toObject(
+                        Lesson lesson = document.toObject(
                                         Lesson.class);
 
+                        if (lesson != null) {
+
+                                System.out.println(
+                                                "========================================");
+
+                                System.out.println(
+                                                "Lesson loaded successfully.");
+
+                                System.out.println(
+                                                "Course ID: "
+                                                                + lesson.getCourseId());
+
+                                System.out.println(
+                                                "Module ID: "
+                                                                + lesson.getModuleId());
+
+                                System.out.println(
+                                                "Lesson ID: "
+                                                                + lesson.getLessonId());
+
+                                System.out.println(
+                                                "Lesson Title: "
+                                                                + lesson.getTitle());
+
+                                System.out.println(
+                                                "Content Blocks: "
+                                                                + lesson.getContentBlocks().size());
+
+                                System.out.println(
+                                                "========================================");
+                        }
+
+                        return lesson;
+
                 } catch (Exception e) {
+
+                        System.out.println(
+                                        "Error getting lesson:");
 
                         e.printStackTrace();
 
@@ -233,50 +350,46 @@ public class LessonDAO {
         // =========================================================
 
         public boolean updateLesson(
+                        int courseId,
                         int moduleId,
                         int lessonId,
                         String title,
                         String description,
-                        String mediaUrl) {
+                        String mediaUrl,
+                        List<ContentBlock> contentBlocks) {
 
                 try {
 
-                        // -------------------------------------------------
-                        // VALIDATION
-                        // -------------------------------------------------
+                        if (title == null || title.trim().isEmpty()) {
 
-                        if (title == null ||
-                                        title.trim().isEmpty()) {
+                                System.out.println("Lesson title is required.");
 
                                 return false;
                         }
 
-                        // -------------------------------------------------
-                        // FIND LESSON
-                        // -------------------------------------------------
-
-                        DocumentSnapshot document = getLessonCollection(moduleId)
-                                        .document(
-                                                        String.valueOf(lessonId))
+                        DocumentSnapshot document = getLessonCollection(
+                                        courseId,
+                                        moduleId)
+                                        .document(String.valueOf(lessonId))
                                         .get()
                                         .get();
 
                         if (!document.exists()) {
 
                                 System.out.println(
-                                                "Lesson not found: "
-                                                                + lessonId);
+                                                "Lesson not found: " + lessonId);
 
                                 return false;
                         }
 
-                        // -------------------------------------------------
-                        // UPDATE DATA
-                        // -------------------------------------------------
+                        List<ContentBlock> safeContentBlocks = contentBlocks == null
+                                        ? new ArrayList<>()
+                                        : contentBlocks;
 
-                        getLessonCollection(moduleId)
-                                        .document(
-                                                        String.valueOf(lessonId))
+                        getLessonCollection(
+                                        courseId,
+                                        moduleId)
+                                        .document(String.valueOf(lessonId))
                                         .update(
                                                         "title",
                                                         title.trim(),
@@ -289,16 +402,34 @@ public class LessonDAO {
                                                         "mediaUrl",
                                                         mediaUrl == null
                                                                         ? ""
-                                                                        : mediaUrl.trim())
+                                                                        : mediaUrl.trim(),
+
+                                                        "contentBlocks",
+                                                        safeContentBlocks)
                                         .get();
 
                         System.out.println(
-                                        "Lesson updated successfully: "
-                                                        + lessonId);
+                                        "Lesson updated successfully.");
+
+                        System.out.println(
+                                        "Course ID: " + courseId);
+
+                        System.out.println(
+                                        "Module ID: " + moduleId);
+
+                        System.out.println(
+                                        "Lesson ID: " + lessonId);
+
+                        System.out.println(
+                                        "Content blocks: "
+                                                        + safeContentBlocks.size());
 
                         return true;
 
                 } catch (Exception e) {
+
+                        System.out.println(
+                                        "Error updating lesson:");
 
                         e.printStackTrace();
 
@@ -311,18 +442,27 @@ public class LessonDAO {
         // =========================================================
 
         public boolean deleteLesson(
+                        int courseId,
                         int moduleId,
                         int lessonId) {
 
                 try {
 
-                        DocumentSnapshot document = getLessonCollection(moduleId)
+                        CollectionReference collection = getLessonCollection(
+                                        courseId,
+                                        moduleId);
+
+                        DocumentSnapshot document = collection
                                         .document(
-                                                        String.valueOf(lessonId))
+                                                        String.valueOf(
+                                                                        lessonId))
                                         .get()
                                         .get();
 
                         if (!document.exists()) {
+
+                                System.out.println(
+                                                "Lesson not found.");
 
                                 return false;
                         }
@@ -331,9 +471,10 @@ public class LessonDAO {
                         // DELETE
                         // -------------------------------------------------
 
-                        getLessonCollection(moduleId)
+                        collection
                                         .document(
-                                                        String.valueOf(lessonId))
+                                                        String.valueOf(
+                                                                        lessonId))
                                         .delete()
                                         .get();
 
@@ -341,15 +482,31 @@ public class LessonDAO {
                         // REFRESH ORDER
                         // -------------------------------------------------
 
-                        refreshOrder(moduleId);
+                        refreshOrder(
+                                        courseId,
+                                        moduleId);
 
                         System.out.println(
-                                        "Lesson deleted successfully: "
+                                        "Lesson deleted successfully.");
+
+                        System.out.println(
+                                        "Course ID: "
+                                                        + courseId);
+
+                        System.out.println(
+                                        "Module ID: "
+                                                        + moduleId);
+
+                        System.out.println(
+                                        "Lesson ID: "
                                                         + lessonId);
 
                         return true;
 
                 } catch (Exception e) {
+
+                        System.out.println(
+                                        "Error deleting lesson:");
 
                         e.printStackTrace();
 
@@ -362,11 +519,14 @@ public class LessonDAO {
         // =========================================================
 
         private void refreshOrder(
+                        int courseId,
                         int moduleId) {
 
                 try {
 
-                        List<Lesson> lessons = getLessonsByModule(moduleId);
+                        List<Lesson> lessons = getLessonsByModule(
+                                        courseId,
+                                        moduleId);
 
                         for (int i = 0; i < lessons.size(); i++) {
 
@@ -376,7 +536,9 @@ public class LessonDAO {
 
                                 if (lesson.getLessonOrder() != newOrder) {
 
-                                        getLessonCollection(moduleId)
+                                        getLessonCollection(
+                                                        courseId,
+                                                        moduleId)
                                                         .document(
                                                                         String.valueOf(
                                                                                         lesson.getLessonId()))
@@ -389,6 +551,9 @@ public class LessonDAO {
 
                 } catch (Exception e) {
 
+                        System.out.println(
+                                        "Error refreshing lesson order:");
+
                         e.printStackTrace();
                 }
         }
@@ -398,14 +563,20 @@ public class LessonDAO {
         // =========================================================
 
         public int getLessonCount(
+                        int courseId,
                         int moduleId) {
 
                 try {
 
-                        return getLessonsByModule(moduleId)
+                        return getLessonsByModule(
+                                        courseId,
+                                        moduleId)
                                         .size();
 
                 } catch (Exception e) {
+
+                        System.out.println(
+                                        "Error getting lesson count:");
 
                         e.printStackTrace();
 
