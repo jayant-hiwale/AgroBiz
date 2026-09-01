@@ -19,9 +19,17 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -32,6 +40,48 @@ import java.io.File;
 import java.util.List;
 
 public class CommuityPage {
+
+    // =====================================================
+    // COLORS - AGROBIZ DARK THEME
+    // =====================================================
+
+    private static final Color BACKGROUND =
+            Color.web("#080C0D");
+
+    private static final Color CARD_BACKGROUND =
+            Color.web("#0D1213");
+
+    private static final Color SECONDARY_CARD =
+            Color.web("#101617");
+
+    private static final Color GREEN =
+            Color.web("#68D34A");
+
+    private static final Color DARK_GREEN =
+            Color.web("#14532D");
+
+    private static final Color LIGHT_GREEN =
+            Color.web("#B8E8A8");
+
+    private static final Color WHITE =
+            Color.web("#FFFFFF");
+
+    private static final Color TEXT =
+            Color.web("#F4F7F4");
+
+    private static final Color SECONDARY_TEXT =
+            Color.web("#A9B7AC");
+
+    private static final Color MUTED_TEXT =
+            Color.web("#777F79");
+
+    private static final Color BORDER =
+            Color.web("#26382B");
+
+
+    // =====================================================
+    // VARIABLES
+    // =====================================================
 
     private Scene communityScene;
 
@@ -46,6 +96,7 @@ public class CommuityPage {
     private File selectedImage;
 
     private Firestore db;
+
 
     // =====================================================
     // CONSTRUCTOR
@@ -72,6 +123,7 @@ public class CommuityPage {
                 new CommunityController(dao);
     }
 
+
     // =====================================================
     // COMMUNITY SCENE
     // =====================================================
@@ -81,30 +133,53 @@ public class CommuityPage {
         BorderPane root =
                 new BorderPane();
 
-        // Main page background
-        root.setStyle(
-                "-fx-background-color: #F4F8F3;"
+        root.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                BACKGROUND,
+                                CornerRadii.EMPTY,
+                                Insets.EMPTY
+                        )
+                )
         );
 
+
+        // =================================================
         // NAVBAR
+        // =================================================
+
         root.setTop(
                 new NavBar()
                         .createNavbar("Community")
         );
 
+
+        // =================================================
         // FOOTER
+        // =================================================
+
         root.setBottom(
                 new Footer()
                         .createFooter()
         );
 
+
+        // =================================================
         // MAIN CONTENT
+        // =================================================
+
         VBox mainContent =
                 createCommunityContent();
 
+
+        // =================================================
         // SCROLL PANE
+        // =================================================
+
         ScrollPane scrollPane =
-                new ScrollPane(mainContent);
+                new ScrollPane(
+                        mainContent
+                );
 
         scrollPane.setFitToWidth(true);
 
@@ -112,13 +187,21 @@ public class CommuityPage {
                 ScrollPane.ScrollBarPolicy.NEVER
         );
 
-        scrollPane.setStyle(
-                "-fx-background: #F4F8F3;" +
-                "-fx-background-color: #F4F8F3;" +
-                "-fx-control-inner-background: #F4F8F3;"
+        scrollPane.setVbarPolicy(
+                ScrollPane.ScrollBarPolicy.AS_NEEDED
         );
 
-        root.setCenter(scrollPane);
+        scrollPane.setStyle(
+                "-fx-background-color:#080C0D;" +
+                "-fx-background:#080C0D;" +
+                "-fx-control-inner-background:#080C0D;"
+        );
+
+
+        root.setCenter(
+                scrollPane
+        );
+
 
         communityScene =
                 new Scene(
@@ -127,11 +210,17 @@ public class CommuityPage {
                         750
                 );
 
+
+        // =================================================
         // LOAD POSTS
+        // =================================================
+
         loadPosts();
+
 
         return communityScene;
     }
+
 
     // =====================================================
     // COMMUNITY CONTENT
@@ -140,13 +229,13 @@ public class CommuityPage {
     private VBox createCommunityContent() {
 
         VBox main =
-                new VBox(20);
+                new VBox(22);
 
         main.setPadding(
                 new Insets(
                         30,
                         50,
-                        40,
+                        45,
                         50
                 )
         );
@@ -155,17 +244,40 @@ public class CommuityPage {
                 Pos.TOP_CENTER
         );
 
-        main.setStyle(
-                "-fx-background-color: #F4F8F3;"
+        main.setFillWidth(
+                true
         );
 
+        main.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                BACKGROUND,
+                                CornerRadii.EMPTY,
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+
         // =================================================
-        // TITLE
+        // PAGE HEADER
         // =================================================
+
+        VBox header =
+                new VBox(5);
+
+        header.setMaxWidth(
+                800
+        );
+
+        header.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
 
         Label title =
                 new Label(
-                        "🌾 Farmer Community"
+                        "🌾  Farmer Community"
                 );
 
         title.setFont(
@@ -177,8 +289,9 @@ public class CommuityPage {
         );
 
         title.setTextFill(
-                Color.web("#14532D")
+                WHITE
         );
+
 
         Label subtitle =
                 new Label(
@@ -193,29 +306,57 @@ public class CommuityPage {
         );
 
         subtitle.setTextFill(
-                Color.web("#555555")
+                SECONDARY_TEXT
         );
+
+        subtitle.setWrapText(
+                true
+        );
+
+
+        header.getChildren()
+                .addAll(
+                        title,
+                        subtitle
+                );
+
 
         // =================================================
         // CREATE POST CARD
         // =================================================
 
         VBox createPostCard =
-                new VBox(15);
+                new VBox(16);
 
-        createPostCard.setMaxWidth(800);
+        createPostCard.setMaxWidth(
+                800
+        );
 
         createPostCard.setPadding(
-                new Insets(22)
+                new Insets(24)
         );
 
-        createPostCard.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                "-fx-background-radius: 15;" +
-                "-fx-border-color: #D5E5D3;" +
-                "-fx-border-radius: 15;" +
-                "-fx-border-width: 1;"
+        createPostCard.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                CARD_BACKGROUND,
+                                new CornerRadii(15),
+                                Insets.EMPTY
+                        )
+                )
         );
+
+        createPostCard.setBorder(
+                new Border(
+                        new BorderStroke(
+                                BORDER,
+                                BorderStrokeStyle.SOLID,
+                                new CornerRadii(15),
+                                new BorderWidths(1)
+                        )
+                )
+        );
+
 
         // =================================================
         // CREATE POST TITLE
@@ -235,8 +376,30 @@ public class CommuityPage {
         );
 
         createTitle.setTextFill(
-                Color.web("#14532D")
+                WHITE
         );
+
+
+        // =================================================
+        // CREATE POST SUBTITLE
+        // =================================================
+
+        Label createSubtitle =
+                new Label(
+                        "Share something useful with the farming community."
+                );
+
+        createSubtitle.setFont(
+                Font.font(
+                        "Arial",
+                        12
+                )
+        );
+
+        createSubtitle.setTextFill(
+                MUTED_TEXT
+        );
+
 
         // =================================================
         // TEXT AREA
@@ -249,19 +412,25 @@ public class CommuityPage {
                 "What's happening on your farm?"
         );
 
-        postTextArea.setWrapText(true);
+        postTextArea.setWrapText(
+                true
+        );
 
-        postTextArea.setPrefRowCount(4);
+        postTextArea.setPrefRowCount(
+                4
+        );
 
         postTextArea.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                "-fx-control-inner-background: #FFFFFF;" +
-                "-fx-text-fill: #222222;" +
-                "-fx-prompt-text-fill: #888888;" +
-                "-fx-border-color: #CCCCCC;" +
-                "-fx-border-radius: 8;" +
-                "-fx-background-radius: 8;"
+                "-fx-background-color:#101617;" +
+                "-fx-control-inner-background:#101617;" +
+                "-fx-text-fill:#F4F7F4;" +
+                "-fx-prompt-text-fill:#777F79;" +
+                "-fx-border-color:#303B33;" +
+                "-fx-border-radius:9;" +
+                "-fx-background-radius:9;" +
+                "-fx-padding:10;"
         );
+
 
         // =================================================
         // IMAGE BUTTON
@@ -269,22 +438,28 @@ public class CommuityPage {
 
         Button uploadButton =
                 new Button(
-                        "📷 Upload Image"
+                        "📷  Upload Image"
                 );
 
-        uploadButton.setPrefHeight(40);
+        uploadButton.setPrefHeight(
+                40
+        );
 
         uploadButton.setStyle(
-                "-fx-background-color: #E8F5E9;" +
-                "-fx-text-fill: #14532D;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 8;" +
-                "-fx-cursor: hand;"
+                "-fx-background-color:#16251A;" +
+                "-fx-text-fill:#68D34A;" +
+                "-fx-font-weight:bold;" +
+                "-fx-background-radius:8;" +
+                "-fx-border-color:#2D5232;" +
+                "-fx-border-radius:8;" +
+                "-fx-padding:8 14;" +
+                "-fx-cursor:hand;"
         );
 
         uploadButton.setOnAction(
                 event -> selectImage()
         );
+
 
         // =================================================
         // SELECTED IMAGE LABEL
@@ -296,8 +471,16 @@ public class CommuityPage {
                 );
 
         selectedImageLabel.setTextFill(
-                Color.web("#777777")
+                MUTED_TEXT
         );
+
+        selectedImageLabel.setFont(
+                Font.font(
+                        "Arial",
+                        12
+                )
+        );
+
 
         // =================================================
         // REMOVE IMAGE BUTTON
@@ -313,9 +496,10 @@ public class CommuityPage {
         );
 
         removeImageButton.setStyle(
-                "-fx-background-color: #FFEBEE;" +
-                "-fx-text-fill: #C62828;" +
-                "-fx-background-radius: 8;"
+                "-fx-background-color:#2A1717;" +
+                "-fx-text-fill:#E57373;" +
+                "-fx-background-radius:8;" +
+                "-fx-cursor:hand;"
         );
 
         removeImageButton.setOnAction(
@@ -327,11 +511,16 @@ public class CommuityPage {
                             "No image selected"
                     );
 
+                    selectedImageLabel.setTextFill(
+                            MUTED_TEXT
+                    );
+
                     removeImageButton.setVisible(
                             false
                     );
                 }
         );
+
 
         HBox imageRow =
                 new HBox(
@@ -345,30 +534,37 @@ public class CommuityPage {
                 Pos.CENTER_LEFT
         );
 
+
         // =================================================
         // POST BUTTON
         // =================================================
 
         Button postButton =
                 new Button(
-                        "+ Post"
+                        "✓  Post"
                 );
 
-        postButton.setPrefWidth(120);
+        postButton.setPrefWidth(
+                120
+        );
 
-        postButton.setPrefHeight(42);
+        postButton.setPrefHeight(
+                42
+        );
 
         postButton.setStyle(
-                "-fx-background-color: #2E7D32;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 8;" +
-                "-fx-cursor: hand;"
+                "-fx-background-color:#68D34A;" +
+                "-fx-text-fill:#080C0D;" +
+                "-fx-font-weight:bold;" +
+                "-fx-font-size:13px;" +
+                "-fx-background-radius:8;" +
+                "-fx-cursor:hand;"
         );
 
         postButton.setOnAction(
                 event -> createPost()
         );
+
 
         HBox postRow =
                 new HBox();
@@ -378,7 +574,10 @@ public class CommuityPage {
         );
 
         postRow.getChildren()
-                .add(postButton);
+                .add(
+                        postButton
+                );
+
 
         // =================================================
         // ADD TO CREATE CARD
@@ -387,14 +586,28 @@ public class CommuityPage {
         createPostCard.getChildren()
                 .addAll(
                         createTitle,
+                        createSubtitle,
                         postTextArea,
                         imageRow,
                         postRow
                 );
 
+
         // =================================================
         // COMMUNITY POSTS TITLE
         // =================================================
+
+        HBox feedHeader =
+                new HBox();
+
+        feedHeader.setMaxWidth(
+                800
+        );
+
+        feedHeader.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
 
         Label feedTitle =
                 new Label(
@@ -410,8 +623,43 @@ public class CommuityPage {
         );
 
         feedTitle.setTextFill(
-                Color.web("#14532D")
+                WHITE
         );
+
+
+        Region feedSpacer =
+                new Region();
+
+        HBox.setHgrow(
+                feedSpacer,
+                Priority.ALWAYS
+        );
+
+
+        Label feedInfo =
+                new Label(
+                        "Connect • Share • Learn"
+                );
+
+        feedInfo.setFont(
+                Font.font(
+                        "Arial",
+                        11
+                )
+        );
+
+        feedInfo.setTextFill(
+                MUTED_TEXT
+        );
+
+
+        feedHeader.getChildren()
+                .addAll(
+                        feedTitle,
+                        feedSpacer,
+                        feedInfo
+                );
+
 
         // =================================================
         // POSTS CONTAINER
@@ -420,25 +668,31 @@ public class CommuityPage {
         postsContainer =
                 new VBox(15);
 
-        postsContainer.setMaxWidth(800);
+        postsContainer.setMaxWidth(
+                800
+        );
 
-        postsContainer.setFillWidth(true);
+        postsContainer.setFillWidth(
+                true
+        );
+
 
         // =================================================
-        // ADD EVERYTHING TO MAIN
+        // ADD EVERYTHING
         // =================================================
 
         main.getChildren()
                 .addAll(
-                        title,
-                        subtitle,
+                        header,
                         createPostCard,
-                        feedTitle,
+                        feedHeader,
                         postsContainer
                 );
 
+
         return main;
     }
+
 
     // =====================================================
     // SELECT IMAGE
@@ -464,25 +718,28 @@ public class CommuityPage {
                         )
                 );
 
+
         File file =
                 fileChooser.showOpenDialog(
                         communityScene.getWindow()
                 );
 
+
         if (file != null) {
 
-            selectedImage = file;
+            selectedImage =
+                    file;
 
             selectedImageLabel.setText(
-                    file.getName()
+                    "✓  " + file.getName()
             );
 
-            // Show image name
             selectedImageLabel.setTextFill(
-                    Color.web("#2E7D32")
+                    GREEN
             );
         }
     }
+
 
     // =====================================================
     // CREATE POST
@@ -495,7 +752,11 @@ public class CommuityPage {
                         .getText()
                         .trim();
 
-        // Check empty post
+
+        // =================================================
+        // VALIDATION
+        // =================================================
+
         if (content.isEmpty()
                 && selectedImage == null) {
 
@@ -506,6 +767,7 @@ public class CommuityPage {
             return;
         }
 
+
         try {
 
             /*
@@ -513,8 +775,6 @@ public class CommuityPage {
              *
              * Replace these values with your actual
              * logged-in farmer information.
-             *
-             * For testing, these values are used.
              */
 
             String farmerId =
@@ -523,17 +783,21 @@ public class CommuityPage {
             String farmerName =
                     "Current Farmer";
 
+
             /*
-             * Image URL
+             * Firebase Storage image URL
              *
-             * Firebase Storage upload should be done here.
-             *
-             * For now:
+             * Add Storage upload here when implemented.
              */
 
-            String imageUrl = "";
+            String imageUrl =
+                    "";
 
+
+            // =================================================
             // SAVE POST
+            // =================================================
+
             controller.createPost(
                     farmerId,
                     farmerName,
@@ -541,26 +805,41 @@ public class CommuityPage {
                     imageUrl
             );
 
+
+            // =================================================
             // CLEAR TEXT
+            // =================================================
+
             postTextArea.clear();
 
+
+            // =================================================
             // CLEAR IMAGE
-            selectedImage = null;
+            // =================================================
+
+            selectedImage =
+                    null;
 
             selectedImageLabel.setText(
                     "No image selected"
             );
 
             selectedImageLabel.setTextFill(
-                    Color.web("#777777")
+                    MUTED_TEXT
             );
 
+
+            // =================================================
             // REFRESH POSTS
+            // =================================================
+
             loadPosts();
+
 
             showAlert(
                     "Post created successfully!"
             );
+
 
         } catch (Exception ex) {
 
@@ -573,6 +852,7 @@ public class CommuityPage {
         }
     }
 
+
     // =====================================================
     // LOAD POSTS
     // =====================================================
@@ -583,42 +863,134 @@ public class CommuityPage {
             return;
         }
 
+
         postsContainer
                 .getChildren()
                 .clear();
+
 
         try {
 
             List<CommunityPost> posts =
                     controller.getPosts();
 
+
+            // =================================================
             // NO POSTS
+            // =================================================
+
             if (posts.isEmpty()) {
+
+                VBox emptyCard =
+                        new VBox(8);
+
+                emptyCard.setAlignment(
+                        Pos.CENTER
+                );
+
+                emptyCard.setPadding(
+                        new Insets(35)
+                );
+
+                emptyCard.setBackground(
+                        new Background(
+                                new BackgroundFill(
+                                        CARD_BACKGROUND,
+                                        new CornerRadii(15),
+                                        Insets.EMPTY
+                                )
+                        )
+                );
+
+                emptyCard.setBorder(
+                        new Border(
+                                new BorderStroke(
+                                        BORDER,
+                                        BorderStrokeStyle.SOLID,
+                                        new CornerRadii(15),
+                                        new BorderWidths(1)
+                                )
+                  )  );
+
+
+                Label icon =
+                        new Label(
+                                "🌱"
+                        );
+
+                icon.setFont(
+                        Font.font(
+                                "Arial",
+                                35
+                        )
+                );
+
 
                 Label empty =
                         new Label(
-                                "No posts yet. Be the first farmer to post!"
+                                "No posts yet"
                         );
 
                 empty.setFont(
                         Font.font(
                                 "Arial",
-                                14
+                                FontWeight.BOLD,
+                                17
                         )
                 );
 
                 empty.setTextFill(
-                        Color.web("#666666")
+                        WHITE
                 );
+
+
+                Label message =
+                        new Label(
+                                "Be the first farmer to share something with the community!"
+                        );
+
+                message.setFont(
+                        Font.font(
+                                "Arial",
+                                12
+                        )
+                );
+
+                message.setTextFill(
+                        MUTED_TEXT
+                );
+
+                message.setWrapText(
+                        true
+                );
+
+                message.setAlignment(
+                        Pos.CENTER
+                );
+
+
+                emptyCard.getChildren()
+                        .addAll(
+                                icon,
+                                empty,
+                                message
+                        );
+
 
                 postsContainer
                         .getChildren()
-                        .add(empty);
+                        .add(
+                                emptyCard
+                        );
 
                 return;
             }
 
+
+            // =================================================
             // SHOW POSTS
+            // =================================================
+
             for (CommunityPost post :
                     posts) {
 
@@ -629,9 +1001,56 @@ public class CommuityPage {
                         );
             }
 
+
         } catch (Exception ex) {
 
             ex.printStackTrace();
+
+
+            VBox errorCard =
+                    new VBox(10);
+
+            errorCard.setPadding(
+                    new Insets(25)
+            );
+
+            errorCard.setAlignment(
+                    Pos.CENTER
+            );
+
+            errorCard.setBackground(
+                    new Background(
+                            new BackgroundFill(
+                                    CARD_BACKGROUND,
+                                    new CornerRadii(15),
+                                    Insets.EMPTY
+                            )
+                    )
+            );
+
+            errorCard.setBorder(
+                    new Border(
+                            new BorderStroke(
+                                    Color.web("#633333"),
+                                    BorderStrokeStyle.SOLID,
+                                    new CornerRadii(15),
+                                    new BorderWidths(1)
+                            )
+            ));
+
+
+            Label errorIcon =
+                    new Label(
+                            "⚠"
+                    );
+
+            errorIcon.setFont(
+                    Font.font(
+                            "Arial",
+                            28
+                    )
+            );
+
 
             Label error =
                     new Label(
@@ -647,14 +1066,25 @@ public class CommuityPage {
             );
 
             error.setTextFill(
-                    Color.web("#C62828")
+                    Color.web("#E57373")
             );
+
+
+            errorCard.getChildren()
+                    .addAll(
+                            errorIcon,
+                            error
+                    );
+
 
             postsContainer
                     .getChildren()
-                    .add(error);
+                    .add(
+                            errorCard
+                    );
         }
     }
+
 
     // =====================================================
     // CREATE POST CARD
@@ -664,37 +1094,57 @@ public class CommuityPage {
             CommunityPost post) {
 
         VBox card =
-                new VBox(12);
+                new VBox(13);
 
-        card.setMaxWidth(800);
+        card.setMaxWidth(
+                800
+        );
 
         card.setPadding(
                 new Insets(20)
         );
 
-        /*
-         * WHITE CARD
-         *
-         * This is important because the page background
-         * is light green.
-         */
-
-        card.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                "-fx-background-radius: 15;" +
-                "-fx-border-color: #D5E5D3;" +
-                "-fx-border-radius: 15;" +
-                "-fx-border-width: 1;"
+        card.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                CARD_BACKGROUND,
+                                new CornerRadii(15),
+                                Insets.EMPTY
+                        )
+                )
         );
 
+        card.setBorder(
+                new Border(
+                        new BorderStroke(
+                                BORDER,
+                                BorderStrokeStyle.SOLID,
+                                new CornerRadii(15),
+                                new BorderWidths(1)
+                        )
+                )
+        );
+
+
         // =================================================
-        // FARMER NAME
+        // POST HEADER
         // =================================================
+
+        HBox postHeader =
+                new HBox();
+
+        postHeader.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
 
         Label farmer =
                 new Label(
-                        "👨‍🌾 "
-                        + post.getFarmerName()
+                        "👨‍🌾  "
+                        + safeText(
+                                post.getFarmerName(),
+                                "Farmer"
+                        )
                 );
 
         farmer.setFont(
@@ -706,13 +1156,63 @@ public class CommuityPage {
         );
 
         farmer.setTextFill(
-                Color.web("#14532D")
+                WHITE
         );
 
-        farmer.setStyle(
-                "-fx-text-fill: #14532D;" +
-                "-fx-font-weight: bold;"
+
+        Region headerSpacer =
+                new Region();
+
+        HBox.setHgrow(
+                headerSpacer,
+                Priority.ALWAYS
         );
+
+
+        Label communityLabel =
+                new Label(
+                        "COMMUNITY"
+                );
+
+        communityLabel.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        9
+                )
+        );
+
+        communityLabel.setTextFill(
+                DARK_GREEN
+        );
+
+        communityLabel.setPadding(
+                new Insets(
+                        5,
+                        9,
+                        5,
+                        9
+                )
+        );
+
+        communityLabel.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Color.web("#D8F0D0"),
+                                new CornerRadii(12),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+
+        postHeader.getChildren()
+                .addAll(
+                        farmer,
+                        headerSpacer,
+                        communityLabel
+                );
+
 
         // =================================================
         // POST CONTENT
@@ -720,31 +1220,32 @@ public class CommuityPage {
 
         Label content =
                 new Label(
-                        post.getContent()
+                        safeText(
+                                post.getContent(),
+                                ""
+                        )
                 );
 
-        content.setWrapText(true);
+        content.setWrapText(
+                true
+        );
 
         content.setFont(
                 Font.font(
                         "Arial",
                         FontWeight.NORMAL,
-                        16
+                        15
                 )
         );
 
-        /*
-         * IMPORTANT:
-         * Dark text so it does NOT merge with background.
-         */
-
         content.setTextFill(
-                Color.web("#222222")
+                TEXT
         );
 
         content.setStyle(
-                "-fx-text-fill: #222222;"
+                "-fx-text-fill:#F4F7F4;"
         );
+
 
         // =================================================
         // IMAGE
@@ -755,6 +1256,7 @@ public class CommuityPage {
 
         String imageUrl =
                 post.getImageUrl();
+
 
         if (imageUrl != null
                 && !imageUrl.trim().isEmpty()) {
@@ -770,8 +1272,11 @@ public class CommuityPage {
                                 true
                         );
 
+
                 ImageView imageView =
-                        new ImageView(image);
+                        new ImageView(
+                                image
+                        );
 
                 imageView.setPreserveRatio(
                         true
@@ -781,9 +1286,12 @@ public class CommuityPage {
                         700
                 );
 
+
                 imageBox
                         .getChildren()
-                        .add(imageView);
+                        .add(
+                                imageView
+                        );
 
             } catch (Exception ex) {
 
@@ -791,13 +1299,26 @@ public class CommuityPage {
             }
         }
 
+
+        // =================================================
+        // SEPARATOR
+        // =================================================
+
+        Separator separator =
+                new Separator();
+
+        separator.setStyle(
+                "-fx-background-color:#26382B;"
+        );
+
+
         // =================================================
         // LIKE COUNT
         // =================================================
 
         Label likes =
                 new Label(
-                        "👍 "
+                        "👍  "
                         + post.getLikes()
                         + " Likes"
                 );
@@ -806,23 +1327,14 @@ public class CommuityPage {
                 Font.font(
                         "Arial",
                         FontWeight.BOLD,
-                        14
+                        13
                 )
         );
 
-        /*
-         * IMPORTANT:
-         * Dark color so Likes is clearly visible.
-         */
-
         likes.setTextFill(
-                Color.web("#333333")
+                SECONDARY_TEXT
         );
 
-        likes.setStyle(
-                "-fx-text-fill: #333333;" +
-                "-fx-font-weight: bold;"
-        );
 
         // =================================================
         // LIKE BUTTON
@@ -830,7 +1342,7 @@ public class CommuityPage {
 
         Button likeButton =
                 new Button(
-                        "👍 Like"
+                        "👍  Like"
                 );
 
         likeButton.setPrefHeight(
@@ -838,13 +1350,16 @@ public class CommuityPage {
         );
 
         likeButton.setStyle(
-                "-fx-background-color: #E8F5E9;" +
-                "-fx-text-fill: #14532D;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 8;" +
-                "-fx-padding: 8 18;" +
-                "-fx-cursor: hand;"
+                "-fx-background-color:#16251A;" +
+                "-fx-text-fill:#68D34A;" +
+                "-fx-font-weight:bold;" +
+                "-fx-background-radius:8;" +
+                "-fx-border-color:#2D5232;" +
+                "-fx-border-radius:8;" +
+                "-fx-padding:7 18;" +
+                "-fx-cursor:hand;"
         );
+
 
         likeButton.setOnAction(
                 event -> {
@@ -855,8 +1370,10 @@ public class CommuityPage {
                                 post.getPostId()
                         );
 
+
                         // Reload to show new count
                         loadPosts();
+
 
                     } catch (Exception ex) {
 
@@ -869,13 +1386,14 @@ public class CommuityPage {
                 }
         );
 
+
         // =================================================
         // ACTION ROW
         // =================================================
 
         HBox actionRow =
                 new HBox(
-                        20,
+                        15,
                         likes,
                         likeButton
                 );
@@ -884,19 +1402,16 @@ public class CommuityPage {
                 Pos.CENTER_LEFT
         );
 
-        // =================================================
-        // SEPARATOR
-        // =================================================
-
-        Separator separator =
-                new Separator();
 
         // =================================================
         // ADD CONTENT
         // =================================================
 
         card.getChildren()
-                .add(farmer);
+                .add(
+                        postHeader
+                );
+
 
         // Add text only if available
         if (post.getContent() != null
@@ -905,8 +1420,11 @@ public class CommuityPage {
                         .isEmpty()) {
 
             card.getChildren()
-                    .add(content);
+                    .add(
+                            content
+                    );
         }
+
 
         // Add image if available
         if (!imageBox
@@ -914,8 +1432,11 @@ public class CommuityPage {
                 .isEmpty()) {
 
             card.getChildren()
-                    .add(imageBox);
+                    .add(
+                            imageBox
+                    );
         }
+
 
         card.getChildren()
                 .addAll(
@@ -923,8 +1444,28 @@ public class CommuityPage {
                         actionRow
                 );
 
+
         return card;
     }
+
+
+    // =====================================================
+    // SAFE TEXT
+    // =====================================================
+
+    private String safeText(
+            String value,
+            String defaultValue) {
+
+        if (value == null
+                || value.trim().isEmpty()) {
+
+            return defaultValue;
+        }
+
+        return value.trim();
+    }
+
 
     // =====================================================
     // ALERT
@@ -939,7 +1480,7 @@ public class CommuityPage {
                 );
 
         alert.setTitle(
-                "Community"
+                "AgroBiz Community"
         );
 
         alert.setHeaderText(

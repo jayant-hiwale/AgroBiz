@@ -13,7 +13,7 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.pravartak.config.FirebaseConfig;
 import com.pravartak.model.admin.Module;
 
-public class FirestoreModuleDAO {
+public class ModuleDAO {
 
         // =========================================================
         // FIRESTORE
@@ -25,7 +25,7 @@ public class FirestoreModuleDAO {
         // CONSTRUCTOR
         // =========================================================
 
-        public FirestoreModuleDAO() {
+        public ModuleDAO() {
 
                 firestore = FirebaseConfig.getFirestore();
         }

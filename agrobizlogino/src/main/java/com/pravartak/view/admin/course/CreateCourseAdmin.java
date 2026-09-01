@@ -2,7 +2,12 @@ package com.pravartak.view.admin.course;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+
+import com.pravartak.config.CloudinaryConfig;
 import com.pravartak.controller.admincontroller.CategoryController;
 import com.pravartak.controller.admincontroller.CourseController;
 import com.pravartak.model.admin.Category;
@@ -23,7 +28,6 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-// import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
@@ -41,6 +45,12 @@ public class CreateCourseAdmin {
         private final CategoryController categoryController = new CategoryController();
 
         // =========================================================
+        // CLOUDINARY
+        // =========================================================
+
+        private final Cloudinary cloudinary;
+
+        // =========================================================
         // FORM HOLDER
         // =========================================================
 
@@ -48,10 +58,6 @@ public class CreateCourseAdmin {
 
                 TextField title;
 
-                // CHANGED:
-                // ComboBox<String>
-                // ↓
-                // ComboBox<Category>
                 ComboBox<Category> category;
 
                 ComboBox<String> language;
@@ -60,7 +66,20 @@ public class CreateCourseAdmin {
 
                 ToggleGroup difficultyGroup;
 
-                String thumbnailPath = "";
+                // Local file selected by user
+                File thumbnailFile;
+
+                // Cloudinary URL
+                String thumbnailUrl = "";
+        }
+
+        // =========================================================
+        // CONSTRUCTOR
+        // =========================================================
+
+        public CreateCourseAdmin() {
+
+                cloudinary = CloudinaryConfig.getCloudinary();
         }
 
         // =========================================================
@@ -72,7 +91,11 @@ public class CreateCourseAdmin {
                 VBox root = new VBox(16);
 
                 root.setPadding(
-                                new Insets(15, 30, 18, 30));
+                                new Insets(
+                                                15,
+                                                30,
+                                                18,
+                                                30));
 
                 root.setAlignment(
                                 Pos.TOP_LEFT);
@@ -92,7 +115,7 @@ public class CreateCourseAdmin {
                                 Pos.CENTER_LEFT);
 
                 // =====================================================
-                // BACK
+                // BACK BUTTON
                 // =====================================================
 
                 Button backButton = new Button("← Back");
@@ -107,6 +130,10 @@ public class CreateCourseAdmin {
                                                 "-fx-background-radius:5;" +
                                                 "-fx-padding:5 12;" +
                                                 "-fx-cursor:hand;");
+
+                // =====================================================
+                // TITLE
+                // =====================================================
 
                 Label title = new Label(
                                 "Create New Course");
@@ -163,7 +190,7 @@ public class CreateCourseAdmin {
                                 courseSettings);
 
                 // =====================================================
-                // BUTTONS
+                // ACTION BUTTONS
                 // =====================================================
 
                 HBox actionButtons = createActionButtons(form);
@@ -213,16 +240,16 @@ public class CreateCourseAdmin {
 
                 Separator separator = new Separator();
 
+                // =====================================================
+                // COURSE TITLE
+                // =====================================================
+
                 Label courseTitleLabel = new Label("Course Title");
 
                 courseTitleLabel.setStyle(
                                 "-fx-text-fill:#AAAAAA;" +
                                                 "-fx-font-size:14px;" +
                                                 "-fx-font-weight:bold;");
-
-                // =====================================================
-                // TITLE
-                // =====================================================
 
                 form.title = new TextField();
 
@@ -252,15 +279,11 @@ public class CreateCourseAdmin {
                                                 "-fx-font-size:14px;" +
                                                 "-fx-font-weight:bold;");
 
-                // =====================================================
-                // CATEGORY COMBOBOX
-                // =====================================================
-
                 form.category = new ComboBox<>();
 
-                // ---------------------------------------------
-                // GET TEMPORARY CATEGORIES
-                // ---------------------------------------------
+                // =====================================================
+                // LOAD CATEGORIES
+                // =====================================================
 
                 List<Category> categories = categoryController
                                 .getAllCategories();
@@ -268,10 +291,6 @@ public class CreateCourseAdmin {
                 form.category
                                 .getItems()
                                 .setAll(categories);
-
-                // ---------------------------------------------
-                // SELECT FIRST CATEGORY
-                // ---------------------------------------------
 
                 if (!categories.isEmpty()) {
 
@@ -388,14 +407,27 @@ public class CreateCourseAdmin {
                         File file = chooser.showOpenDialog(
                                         LoginPage.mainStage);
 
-                        if (file != null) {
+                        if (file == null) {
+                                return;
+                        }
 
-                                form.thumbnailPath = file.getAbsolutePath();
+                        // =================================================
+                        // STORE LOCAL FILE
+                        // =================================================
 
-                                ImageView imageView = new ImageView(
-                                                new Image(
-                                                                file.toURI()
-                                                                                .toString()));
+                        form.thumbnailFile = file;
+
+                        // =================================================
+                        // PREVIEW IMAGE
+                        // =================================================
+
+                        try {
+
+                                Image image = new Image(
+                                                file.toURI()
+                                                                .toString());
+
+                                ImageView imageView = new ImageView(image);
 
                                 imageView.setFitWidth(240);
                                 imageView.setFitHeight(150);
@@ -408,6 +440,15 @@ public class CreateCourseAdmin {
                                 uploadArea
                                                 .getChildren()
                                                 .add(imageView);
+
+                        } catch (Exception ex) {
+
+                                ex.printStackTrace();
+
+                                showCourseStatusPopup(
+                                                "Image Error",
+                                                "Unable to preview the selected image.",
+                                                false);
                         }
                 });
 
@@ -611,6 +652,10 @@ public class CreateCourseAdmin {
 
                 try {
 
+                        // =================================================
+                        // COURSE TITLE
+                        // =================================================
+
                         String title = form.title
                                         .getText()
                                         .trim();
@@ -625,9 +670,9 @@ public class CreateCourseAdmin {
                                 return;
                         }
 
-                        // =====================================================
-                        // GET SELECTED CATEGORY
-                        // =====================================================
+                        // =================================================
+                        // CATEGORY
+                        // =================================================
 
                         Category selectedCategory = form.category.getValue();
 
@@ -641,14 +686,18 @@ public class CreateCourseAdmin {
                                 return;
                         }
 
-                        // ---------------------------------------------
-                        // Get category name
-                        // ---------------------------------------------
-
                         String category = selectedCategory
                                         .getCategoryName();
 
+                        // =================================================
+                        // LANGUAGE
+                        // =================================================
+
                         String language = form.language.getValue();
+
+                        // =================================================
+                        // DIFFICULTY
+                        // =================================================
 
                         RadioButton selected = (RadioButton) form.difficultyGroup
                                         .getSelectedToggle();
@@ -657,9 +706,37 @@ public class CreateCourseAdmin {
                                         ? selected.getText()
                                         : "Intermediate";
 
-                        // =====================================================
-                        // CONTROLLER
-                        // =====================================================
+                        // =================================================
+                        // CLOUDINARY UPLOAD
+                        // =================================================
+
+                        String thumbnailUrl = "";
+
+                        if (form.thumbnailFile != null) {
+
+                                showCourseStatusPopup(
+                                                "Uploading Image",
+                                                "Uploading course thumbnail...",
+                                                true);
+
+                                thumbnailUrl = uploadThumbnailToCloudinary(
+                                                form.thumbnailFile);
+
+                                if (thumbnailUrl == null ||
+                                                thumbnailUrl.isEmpty()) {
+
+                                        showCourseStatusPopup(
+                                                        "Upload Failed",
+                                                        "Course thumbnail could not be uploaded.",
+                                                        false);
+
+                                        return;
+                                }
+                        }
+
+                        // =================================================
+                        // COURSE CONTROLLER
+                        // =================================================
 
                         CourseController controller = new CourseController();
 
@@ -668,12 +745,12 @@ public class CreateCourseAdmin {
                                         category,
                                         difficulty,
                                         language,
-                                        form.thumbnailPath,
+                                        thumbnailUrl,
                                         published);
 
-                        // =====================================================
+                        // =================================================
                         // SUCCESS
-                        // =====================================================
+                        // =================================================
 
                         if (success) {
 
@@ -731,6 +808,78 @@ public class CreateCourseAdmin {
         }
 
         // =========================================================
+        // CLOUDINARY UPLOAD
+        // =========================================================
+
+        private String uploadThumbnailToCloudinary(
+                        File file) {
+
+                try {
+
+                        if (file == null ||
+                                        !file.exists()) {
+
+                                System.out.println(
+                                                "Thumbnail file does not exist.");
+
+                                return null;
+                        }
+
+                        // =================================================
+                        // UPLOAD OPTIONS
+                        // =================================================
+
+                        Map<String, Object> options = ObjectUtils.asMap(
+                                        "folder",
+                                        "agrobiz/courses",
+                                        "resource_type",
+                                        "image");
+
+                        // =================================================
+                        // UPLOAD
+                        // =================================================
+
+                        Map<?, ?> result = cloudinary.uploader().upload(
+                                        file,
+                                        options);
+
+                        // =================================================
+                        // SECURE URL
+                        // =================================================
+
+                        Object secureUrl = result.get("secure_url");
+
+                        if (secureUrl == null) {
+
+                                System.out.println(
+                                                "Cloudinary secure_url is null.");
+
+                                return null;
+                        }
+
+                        String url = secureUrl.toString();
+
+                        System.out.println(
+                                        "Course thumbnail uploaded successfully.");
+
+                        System.out.println(
+                                        "Cloudinary URL: "
+                                                        + url);
+
+                        return url;
+
+                } catch (Exception e) {
+
+                        System.out.println(
+                                        "Cloudinary upload failed.");
+
+                        e.printStackTrace();
+
+                        return null;
+                }
+        }
+
+        // =========================================================
         // STATUS POPUP
         // =========================================================
 
@@ -753,7 +902,9 @@ public class CreateCourseAdmin {
                                 new Insets(15));
 
                 Label icon = new Label(
-                                success ? "✓" : "!");
+                                success
+                                                ? "✓"
+                                                : "!");
 
                 icon.setPrefSize(
                                 42,

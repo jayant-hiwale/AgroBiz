@@ -2,12 +2,12 @@ package com.pravartak.controller.admincontroller;
 
 import java.util.List;
 
-import com.pravartak.dao.admindao.FirestoreModuleDAO;
+import com.pravartak.dao.admindao.ModuleDAO;
 import com.pravartak.model.admin.Module;
 
 public class ModuleController {
 
-    private final FirestoreModuleDAO moduleDAO;
+    private final ModuleDAO moduleDAO;
 
     // =========================================================
     // CONSTRUCTOR
@@ -15,7 +15,7 @@ public class ModuleController {
 
     public ModuleController() {
 
-        moduleDAO = new FirestoreModuleDAO();
+        moduleDAO = new ModuleDAO();
     }
 
     // =========================================================

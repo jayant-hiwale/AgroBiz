@@ -1,6 +1,7 @@
-
 package com.pravartak.view.farmer;
 
+import java.awt.Desktop;
+import java.net.URI;
 import java.util.List;
 
 import com.pravartak.controller.admincontroller.SchemeController;
@@ -18,8 +19,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
@@ -31,8 +32,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import java.awt.Desktop;
-import java.net.URI;
 
 public class SchemesPage {
 
@@ -43,7 +42,7 @@ public class SchemesPage {
     private static Scene schemesScene;
 
     // =========================================================
-    // SCHEME CONTROLLER
+    // CONTROLLER
     // =========================================================
 
     private static final SchemeController schemeController =
@@ -55,11 +54,8 @@ public class SchemesPage {
 
     public static Scene getSchemesPage() {
 
-        // =====================================================
-        // MAIN BORDER PANE
-        // =====================================================
-
-        BorderPane borderPane = new BorderPane();
+        BorderPane borderPane =
+                new BorderPane();
 
         borderPane.setStyle(
                 "-fx-background-color:#050b0a;"
@@ -85,7 +81,8 @@ public class SchemesPage {
         // MAIN CONTENT
         // =====================================================
 
-        VBox mainVBox = new VBox(16);
+        VBox mainVBox =
+                new VBox(16);
 
         mainVBox.setPadding(
                 new Insets(
@@ -107,7 +104,7 @@ public class SchemesPage {
         );
 
         // =====================================================
-        // PAGE TITLE
+        // TITLE
         // =====================================================
 
         Label pageTitle =
@@ -128,7 +125,7 @@ public class SchemesPage {
         );
 
         // =====================================================
-        // PAGE DESCRIPTION
+        // DESCRIPTION
         // =====================================================
 
         Label pageDescription =
@@ -154,27 +151,40 @@ public class SchemesPage {
                 )
         );
 
-        pageDescription.setWrapText(
-                true
+        pageDescription.setWrapText(true);
+
+        pageDescription.setMaxWidth(950);
+
+        // =====================================================
+        // SCHEME CARDS CONTAINER
+        // =====================================================
+
+        VBox schemeCards =
+                new VBox(18);
+
+        schemeCards.setAlignment(
+                Pos.TOP_LEFT
         );
 
-        pageDescription.setMaxWidth(
-                950
-        );
+        schemeCards.setFillWidth(true);
 
         // =====================================================
         // CATEGORY BUTTONS
         // =====================================================
 
         HBox categoryButtons =
-                createCategoryButtons();
+                createCategoryButtons(
+                        schemeCards
+                );
 
         // =====================================================
-        // SCHEME CARDS
+        // INITIAL LOAD
         // =====================================================
 
-        VBox schemeCards =
-                createSchemeCards();
+        loadSchemesByCategory(
+                "ALL",
+                schemeCards
+        );
 
         // =====================================================
         // ADD CONTENT
@@ -188,7 +198,7 @@ public class SchemesPage {
         );
 
         // =====================================================
-        // SCROLL PANE
+        // SCROLL
         // =====================================================
 
         ScrollPane scrollPane =
@@ -198,13 +208,9 @@ public class SchemesPage {
                 mainVBox
         );
 
-        scrollPane.setFitToWidth(
-                true
-        );
+        scrollPane.setFitToWidth(true);
 
-        scrollPane.setFitToHeight(
-                false
-        );
+        scrollPane.setFitToHeight(false);
 
         scrollPane.setHbarPolicy(
                 ScrollPane.ScrollBarPolicy.NEVER
@@ -214,9 +220,7 @@ public class SchemesPage {
                 ScrollPane.ScrollBarPolicy.AS_NEEDED
         );
 
-        scrollPane.setPannable(
-                true
-        );
+        scrollPane.setPannable(true);
 
         scrollPane.setStyle(
                 "-fx-background-color:#050b0a;" +
@@ -224,10 +228,6 @@ public class SchemesPage {
                 "-fx-control-inner-background:#050b0a;" +
                 "-fx-border-color:transparent;"
         );
-
-        // =====================================================
-        // SET CENTER
-        // =====================================================
 
         borderPane.setCenter(
                 scrollPane
@@ -244,8 +244,7 @@ public class SchemesPage {
                         768
                 );
 
-        schemesScene =
-                scene;
+        schemesScene = scene;
 
         return scene;
     }
@@ -254,7 +253,8 @@ public class SchemesPage {
     // CATEGORY BUTTONS
     // =========================================================
 
-    private static HBox createCategoryButtons() {
+    private static HBox createCategoryButtons(
+            VBox schemeCards) {
 
         HBox categoryBox =
                 new HBox(10);
@@ -274,7 +274,7 @@ public class SchemesPage {
                 );
 
         // =====================================================
-        // ANIMAL
+        // ANIMAL HUSBANDRY
         // =====================================================
 
         Button animalButton =
@@ -294,7 +294,7 @@ public class SchemesPage {
                 );
 
         // =====================================================
-        // INSURANCE
+        // LIVESTOCK INSURANCE
         // =====================================================
 
         Button insuranceButton =
@@ -308,34 +308,63 @@ public class SchemesPage {
         // =====================================================
 
         allSchemesButton.setOnAction(
-                event -> showMessage(
-                        "All Schemes",
-                        "Showing all available schemes."
-                )
+                e -> {
+
+                    setSelectedButton(
+                            categoryBox,
+                            allSchemesButton
+                    );
+
+                    loadSchemesByCategory(
+                            "ALL",
+                            schemeCards
+                    );
+                }
         );
 
         animalButton.setOnAction(
-                event -> showMessage(
-                        "Animal Husbandry",
-                        "Category filtering will be connected after "
-                        + "adding a category field to Scheme."
-                )
+                e -> {
+
+                    setSelectedButton(
+                            categoryBox,
+                            animalButton
+                    );
+
+                    loadSchemesByCategory(
+                            "Animal Husbandry",
+                            schemeCards
+                    );
+                }
         );
 
         equipmentButton.setOnAction(
-                event -> showMessage(
-                        "Equipment Subsidy",
-                        "Category filtering will be connected after "
-                        + "adding a category field to Scheme."
-                )
+                e -> {
+
+                    setSelectedButton(
+                            categoryBox,
+                            equipmentButton
+                    );
+
+                    loadSchemesByCategory(
+                            "Equipment Subsidy",
+                            schemeCards
+                    );
+                }
         );
 
         insuranceButton.setOnAction(
-                event -> showMessage(
-                        "Livestock Insurance",
-                        "Category filtering will be connected after "
-                        + "adding a category field to Scheme."
-                )
+                e -> {
+
+                    setSelectedButton(
+                            categoryBox,
+                            insuranceButton
+                    );
+
+                    loadSchemesByCategory(
+                            "Livestock Insurance",
+                            schemeCards
+                    );
+                }
         );
 
         // =====================================================
@@ -353,101 +382,216 @@ public class SchemesPage {
     }
 
     // =========================================================
-    // CREATE SCHEME CARDS
+    // LOAD SCHEMES BY CATEGORY
     // =========================================================
 
-    private static VBox createSchemeCards() {
+    private static void loadSchemesByCategory(
+            String category,
+            VBox schemeCards) {
 
-        VBox schemeCards =
-                new VBox(18);
+        // -----------------------------------------------------
+        // CLEAR OLD CARDS
+        // -----------------------------------------------------
 
-        schemeCards.setAlignment(
-                Pos.TOP_LEFT
-        );
+        schemeCards.getChildren().clear();
 
-        schemeCards.setFillWidth(
-                true
-        );
+        // -----------------------------------------------------
+        // GET FIREBASE DATA
+        // -----------------------------------------------------
 
-        // =====================================================
-        // LOAD FROM FIREBASE
-        // =====================================================
-
-        List<Scheme> schemes;
+        List<Scheme> allSchemes;
 
         try {
 
-            schemes =
+            allSchemes =
                     schemeController.getAllSchemes();
 
         } catch (Exception e) {
 
             e.printStackTrace();
 
-            schemes =
-                    null;
+            schemeCards.getChildren().add(
+                    createNoSchemeView()
+            );
+
+            return;
         }
 
-        // =====================================================
+        // -----------------------------------------------------
         // NULL / EMPTY
-        // =====================================================
+        // -----------------------------------------------------
 
-        if (schemes == null ||
-                schemes.isEmpty()) {
+        if (allSchemes == null ||
+                allSchemes.isEmpty()) {
 
             schemeCards.getChildren().add(
                     createNoSchemeView()
             );
 
-            return schemeCards;
+            return;
         }
 
-        // =====================================================
-        // ADD SCHEMES
-        // =====================================================
+        // -----------------------------------------------------
+        // FILTER
+        // -----------------------------------------------------
 
-        int activeSchemeCount = 0;
+        int count = 0;
 
-        for (Scheme scheme : schemes) {
+        for (Scheme scheme : allSchemes) {
 
             if (scheme == null) {
                 continue;
             }
 
-            // -------------------------------------------------
-            // ONLY ACTIVE SCHEMES
-            // -------------------------------------------------
-
+            // Only active schemes
             if (!scheme.isActive()) {
                 continue;
             }
 
-            VBox card =
-                    createSchemeCard(
-                            scheme
+            // ALL
+            if ("ALL".equalsIgnoreCase(category)) {
+
+                schemeCards.getChildren().add(
+                        createSchemeCard(scheme)
+                );
+
+                count++;
+
+                continue;
+            }
+
+            // CATEGORY
+            String schemeCategory =
+                    safeText(
+                            scheme.getCategory(),
+                            ""
                     );
 
-            schemeCards.getChildren().add(
-                    card
-            );
+            if (schemeCategory.equalsIgnoreCase(
+                    category)) {
 
-            activeSchemeCount++;
+                schemeCards.getChildren().add(
+                        createSchemeCard(scheme)
+                );
+
+                count++;
+            }
         }
 
-        // =====================================================
-        // NO ACTIVE SCHEMES
-        // =====================================================
+        // -----------------------------------------------------
+        // NOTHING FOUND
+        // -----------------------------------------------------
 
-        if (activeSchemeCount == 0) {
-
-            schemeCards.getChildren().clear();
+        if (count == 0) {
 
             schemeCards.getChildren().add(
-                    createNoSchemeView()
+                    createNoSchemeView(
+                            category
+                    )
             );
         }
+    }
 
-        return schemeCards;
+    // =========================================================
+    // SELECTED CATEGORY BUTTON
+    // =========================================================
+
+    private static void setSelectedButton(
+            HBox categoryBox,
+            Button selectedButton) {
+
+        for (javafx.scene.Node node :
+                categoryBox.getChildren()) {
+
+            if (node instanceof Button) {
+
+                Button button =
+                        (Button) node;
+
+                if (button == selectedButton) {
+
+                    styleSelectedButton(button);
+
+                }
+                 else {
+
+                    styleNormalButton(button);
+                }
+            }
+        }
+    }
+
+    // =========================================================
+    // SELECTED BUTTON STYLE
+    // =========================================================
+
+    private static void styleSelectedButton(
+            Button button) {
+
+        button.setTextFill(
+                Color.BLACK
+        );
+
+        button.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Color.rgb(
+                                        83,
+                                        215,
+                                        74
+                                ),
+                                new CornerRadii(15),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        button.setBorder(null);
+    }
+
+    // =========================================================
+    // NORMAL BUTTON STYLE
+    // =========================================================
+
+    private static void styleNormalButton(
+            Button button) {
+
+        button.setTextFill(
+                Color.rgb(
+                        145,
+                        160,
+                        153
+                )
+        );
+
+        button.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Color.rgb(
+                                        8,
+                                        23,
+                                        19
+                                ),
+                                new CornerRadii(15),
+                                Insets.EMPTY
+                        )
+                )
+        );
+
+        button.setBorder(
+                new Border(
+                        new BorderStroke(
+                                Color.rgb(
+                                        28,
+                                        55,
+                                        45
+                                ),
+                                BorderStrokeStyle.SOLID,
+                                new CornerRadii(15),
+                                new BorderWidths(1)
+                        )
+                )
+        );
     }
 
     // =========================================================
@@ -455,6 +599,14 @@ public class SchemesPage {
     // =========================================================
 
     private static VBox createNoSchemeView() {
+
+        return createNoSchemeView(
+                "this category"
+        );
+    }
+
+    private static VBox createNoSchemeView(
+            String category) {
 
         VBox box =
                 new VBox(10);
@@ -500,8 +652,8 @@ public class SchemesPage {
 
         Label message =
                 new Label(
-                        "Government schemes will appear here when they "
-                        + "are published by the administrator."
+                        "No active government schemes were found for "
+                        + category + "."
                 );
 
         message.setFont(
@@ -519,9 +671,7 @@ public class SchemesPage {
                 )
         );
 
-        message.setWrapText(
-                true
-        );
+        message.setWrapText(true);
 
         message.setAlignment(
                 Pos.CENTER
@@ -623,12 +773,18 @@ public class SchemesPage {
         );
 
         // =====================================================
-        // BADGE
+        // CATEGORY BADGE
         // =====================================================
+
+        String category =
+                safeText(
+                        scheme.getCategory(),
+                        "GENERAL"
+                );
 
         Label badge =
                 new Label(
-                        "GOVERNMENT SCHEME"
+                        category.toUpperCase()
                 );
 
         badge.setFont(
@@ -770,10 +926,6 @@ public class SchemesPage {
                 )
         );
 
-        // =====================================================
-        // ELIGIBILITY TITLE
-        // =====================================================
-
         Label eligibilityHeading =
                 new Label(
                         "ⓘ  Eligibility"
@@ -794,10 +946,6 @@ public class SchemesPage {
                         74
                 )
         );
-
-        // =====================================================
-        // ELIGIBILITY DETAILS
-        // =====================================================
 
         String eligibility =
                 safeText(
@@ -839,12 +987,12 @@ public class SchemesPage {
         );
 
         // =====================================================
-        // ACTION BUTTON
+        // APPLY BUTTON
         // =====================================================
 
         Button actionButton =
                 new Button(
-                        "Applay Now "
+                        "Apply Now"
                 );
 
         actionButton.setPrefHeight(
@@ -874,10 +1022,6 @@ public class SchemesPage {
                 "-fx-cursor:hand;"
         );
 
-        // =====================================================
-        // ACTION
-        // =====================================================
-
         actionButton.setOnAction(
                 event -> {
 
@@ -885,6 +1029,10 @@ public class SchemesPage {
                             scheme
                     );
                 }
+        );
+        Button likeButton =
+        createLikeButton(
+                scheme
         );
 
         // =====================================================
@@ -896,11 +1044,12 @@ public class SchemesPage {
                 nameLabel,
                 informationLabel,
                 eligibilityBox,
-                actionButton
+                actionButton,
+                likeButton
         );
 
         // =====================================================
-        // HOVER EFFECT
+        // HOVER
         // =====================================================
 
         schemeCard.setOnMouseEntered(
@@ -931,73 +1080,76 @@ public class SchemesPage {
 
         return schemeCard;
     }
+
     // =========================================================
-// OPEN SCHEME WEBSITE
-// =========================================================
+    // OPEN APPLICATION WEBSITE
+    // =========================================================
 
-private static void openSchemeWebsite(
-        Scheme scheme) {
+    private static void openSchemeWebsite(
+            Scheme scheme) {
 
-    String url =
-            safeText(
-                    scheme.getApplyUrl(),
-                    "");
+        String url =
+                safeText(
+                        scheme.getApplyUrl(),
+                        ""
+                );
 
-    if (url.isEmpty()) {
-
-        showMessage(
-                "Application Link",
-                "Application link is not available for this scheme.");
-
-        return;
-    }
-
-    try {
-
-        if (!url.startsWith("http://") &&
-                !url.startsWith("https://")) {
-
-            url = "https://" + url;
-        }
-
-        if (!Desktop.isDesktopSupported()) {
+        if (url.isEmpty()) {
 
             showMessage(
                     "Application Link",
-                    "Your computer does not support opening web links.");
+                    "Application link is not available for this scheme."
+            );
 
             return;
         }
 
-        Desktop desktop =
-                Desktop.getDesktop();
+        try {
 
-        if (!desktop.isSupported(
-                Desktop.Action.BROWSE)) {
+            if (!url.startsWith("http://") &&
+                    !url.startsWith("https://")) {
+
+                url = "https://" + url;
+            }
+
+            if (!Desktop.isDesktopSupported()) {
+
+                showMessage(
+                        "Application Link",
+                        "Your computer does not support opening web links."
+                );
+
+                return;
+            }
+
+            Desktop desktop =
+                    Desktop.getDesktop();
+
+            if (!desktop.isSupported(
+                    Desktop.Action.BROWSE)) {
+
+                showMessage(
+                        "Application Link",
+                        "Your system cannot open web links."
+                );
+
+                return;
+            }
+
+            desktop.browse(
+                    new URI(url)
+            );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
 
             showMessage(
                     "Application Link",
-                    "Your system cannot open web links.");
-
-            return;
+                    "Unable to open the application website."
+            );
         }
-
-        desktop.browse(
-                new URI(url));
-
-    } catch (Exception e) {
-
-        e.printStackTrace();
-
-        showMessage(
-                "Application Link",
-                "Unable to open the application website.");
     }
-}
-
-    // =========================================================
-    // SCHEME DETAILS
-    // =========================================================
 
     // =========================================================
     // CATEGORY BUTTON
@@ -1028,73 +1180,16 @@ private static void openSchemeWebsite(
                 javafx.scene.Cursor.HAND
         );
 
-        // =====================================================
-        // SELECTED
-        // =====================================================
-
         if (selected) {
 
-            categoryButton.setTextFill(
-                    Color.BLACK
+            styleSelectedButton(
+                    categoryButton
             );
 
-            categoryButton.setBackground(
-                    new Background(
-                            new BackgroundFill(
-                                    Color.rgb(
-                                            83,
-                                            215,
-                                            74
-                                    ),
-                                    new CornerRadii(15),
-                                    Insets.EMPTY
-                            )
-                    )
-            );
+        } else {
 
-        }
-
-        // =====================================================
-        // NORMAL
-        // =====================================================
-
-        else {
-
-            categoryButton.setTextFill(
-                    Color.rgb(
-                            145,
-                            160,
-                            153
-                    )
-            );
-
-            categoryButton.setBackground(
-                    new Background(
-                            new BackgroundFill(
-                                    Color.rgb(
-                                            8,
-                                            23,
-                                            19
-                                    ),
-                                    new CornerRadii(15),
-                                    Insets.EMPTY
-                            )
-                    )
-            );
-
-            categoryButton.setBorder(
-                    new Border(
-                            new BorderStroke(
-                                    Color.rgb(
-                                            28,
-                                            55,
-                                            45
-                                    ),
-                                    BorderStrokeStyle.SOLID,
-                                    new CornerRadii(15),
-                                    new BorderWidths(1)
-                            )
-                    )
+            styleNormalButton(
+                    categoryButton
             );
         }
 
@@ -1159,4 +1254,106 @@ private static void openSchemeWebsite(
             );
         }
     }
+    // =========================================================
+// LIKE / UNLIKE BUTTON
+// =========================================================
+
+private static Button createLikeButton(
+        Scheme scheme) {
+
+    Button likeButton = new Button();
+
+    likeButton.setPrefHeight(34);
+
+    likeButton.setPrefWidth(120);
+
+    likeButton.setCursor(
+            javafx.scene.Cursor.HAND
+    );
+
+    likeButton.setFont(
+            Font.font(
+                    "Arial",
+                    FontWeight.BOLD,
+                    11
+            )
+    );
+
+    updateLikeButton(
+            likeButton,
+            scheme
+    );
+
+    likeButton.setOnAction(
+            event -> {
+
+                if (SavedSchemesManager.isLiked(scheme)) {
+
+                    // -----------------------------------------
+                    // UNLIKE
+                    // -----------------------------------------
+
+                    SavedSchemesManager.removeScheme(
+                            scheme
+                    );
+
+                } else {
+
+                    // -----------------------------------------
+                    // LIKE
+                    // -----------------------------------------
+
+                    SavedSchemesManager.addScheme(
+                            scheme
+                    );
+                }
+
+                // Update button
+                updateLikeButton(
+                        likeButton,
+                        scheme
+                );
+            }
+    );
+
+    return likeButton;
+}
+// =========================================================
+// UPDATE LIKE BUTTON
+// =========================================================
+
+private static void updateLikeButton(
+        Button button,
+        Scheme scheme) {
+
+    if (SavedSchemesManager.isLiked(scheme)) {
+
+        button.setText("♥  Save ");
+
+        button.setStyle(
+                "-fx-background-color:#53d74a;" +
+                "-fx-text-fill:#06100b;" +
+                "-fx-background-radius:5;" +
+                "-fx-border-color:#53d74a;" +
+                "-fx-border-radius:5;" +
+                "-fx-font-weight:bold;" +
+                "-fx-cursor:hand;"
+        );
+
+    } else {
+
+        button.setText("♡  Like");
+
+        button.setStyle(
+                "-fx-background-color:#101d18;" +
+                "-fx-text-fill:#53d74a;" +
+                "-fx-background-radius:5;" +
+                "-fx-border-color:#53d74a;" +
+                "-fx-border-width:1;" +
+                "-fx-border-radius:5;" +
+                "-fx-font-weight:bold;" +
+                "-fx-cursor:hand;"
+        );
+    }
+}
 }

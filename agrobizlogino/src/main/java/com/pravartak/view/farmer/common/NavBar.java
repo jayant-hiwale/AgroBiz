@@ -1225,20 +1225,95 @@ public class NavBar {
         // =====================================================
         // RIGHT
         // =====================================================
+// =====================================================
+// LOGOUT BUTTON
+// =====================================================
 
-        HBox right =
-                new HBox(
-                        profile
-                );
+Button logout =
+        navButton("Logout");
 
-        right.setAlignment(
-                Pos.CENTER_RIGHT
+// Normal logout style
+logout.setStyle(
+        "-fx-background-color:transparent;" +
+        "-fx-text-fill:#aaaaaa;" +
+        "-fx-font-size:13px;" +
+        "-fx-cursor:hand;" +
+        "-fx-padding:5 0 5 0;"
+);
+
+// Logout hover
+logout.setOnMouseEntered(e -> {
+
+    logout.setStyle(
+            "-fx-background-color:transparent;" +
+            "-fx-text-fill:#ff4d5a;" +
+            "-fx-font-size:13px;" +
+            "-fx-font-weight:bold;" +
+            "-fx-cursor:hand;" +
+            "-fx-padding:5 0 5 0;" +
+            "-fx-border-color:#ff4d5a;" +
+            "-fx-border-width:0 0 2 0;"
+    );
+});
+
+logout.setOnMouseExited(e -> {
+
+    logout.setStyle(
+            "-fx-background-color:transparent;" +
+            "-fx-text-fill:#aaaaaa;" +
+            "-fx-font-size:13px;" +
+            "-fx-cursor:hand;" +
+            "-fx-padding:5 0 5 0;"
+    );
+});
+
+// =====================================================
+// LOGOUT ACTION
+// =====================================================
+
+logout.setOnAction(e -> {
+
+    System.out.println(
+            "Farmer logged out."
+    );
+
+    try {
+
+        LoginPage loginPage =
+                new LoginPage();
+
+        /*
+         * Start LoginPage again using the
+         * existing mainStage.
+         */
+        loginPage.start(
+                LoginPage.mainStage
         );
 
-        right.setPrefWidth(
-                450
+    } catch (Exception ex) {
+
+        ex.printStackTrace();
+    }
+});
+
+// =====================================================
+// RIGHT
+// =====================================================
+
+HBox right =
+        new HBox(
+                15,
+                profile,
+                logout
         );
 
+right.setAlignment(
+        Pos.CENTER_RIGHT
+);
+
+right.setPrefWidth(
+        450
+);
         // =====================================================
         // ADD EVERYTHING
         // =====================================================
