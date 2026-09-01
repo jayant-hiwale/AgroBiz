@@ -1,7 +1,7 @@
 package com.pravartak.view.farmer.common;
 
 import com.pravartak.view.farmer.AIAdvisorPage;
-import com.pravartak.view.farmer.CommuityPage;
+import com.pravartak.view.farmer.CommunityPage;
 import com.pravartak.view.farmer.ExplorerPage;
 import com.pravartak.view.farmer.FarmerDashboard;
 import com.pravartak.view.farmer.HomePageFarmer;
@@ -298,8 +298,8 @@ public class NavBar {
                             "Community button clicked"
                     );
 
-                    CommuityPage communityPage =
-                            new CommuityPage();
+                    CommunityPage communityPage =
+                            new CommunityPage();
 
                     LoginPage.mainStage.setScene(
                             communityPage
