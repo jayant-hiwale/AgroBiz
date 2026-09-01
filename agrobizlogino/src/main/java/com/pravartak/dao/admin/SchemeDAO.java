@@ -1,299 +1,299 @@
 
-package com.pravartak.dao.admin;
+// package com.pravartak.dao.admin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+// import java.util.ArrayList;
+// import java.util.List;
+// import java.util.UUID;
 
-import com.pravartak.model.admin.Scheme;
+// import com.pravartak.model.admin.Scheme;
 
-public class SchemeDAO {
+// public class SchemeDAO {
 
-    // =========================================================
-    // TEMPORARY IN-MEMORY DATABASE
-    // =========================================================
+//     // =========================================================
+//     // TEMPORARY IN-MEMORY DATABASE
+//     // =========================================================
 
-    /*
-     * static is important.
-     *
-     * Even if a new SchemeDAO / SchemeController is created,
-     * all pages will use the same list while the application
-     * is running.
-     */
-    private static final List<Scheme> schemes =
-            new ArrayList<>();
+//     /*
+//      * static is important.
+//      *
+//      * Even if a new SchemeDAO / SchemeController is created,
+//      * all pages will use the same list while the application
+//      * is running.
+//      */
+//     private static final List<Scheme> schemes =
+//             new ArrayList<>();
 
-    // =========================================================
-    // OPTIONAL SAMPLE DATA
-    // =========================================================
+//     // =========================================================
+//     // OPTIONAL SAMPLE DATA
+//     // =========================================================
 
-    static {
+//     static {
 
-        /*
-         * You can remove these later.
-         *
-         * They are only here so that the Scheme page
-         * is not empty when the application starts.
-         */
+//         /*
+//          * You can remove these later.
+//          *
+//          * They are only here so that the Scheme page
+//          * is not empty when the application starts.
+//          */
 
-        Scheme scheme1 = new Scheme(
-                UUID.randomUUID().toString(),
-                "Sub-Mission on Agricultural Mechanization (SMAM)",
-                "Farmers\nFarmer groups\nRegistered agricultural organisations",
-                "Financial assistance for agricultural machinery "
-                        + "and modern farm equipment.",
-                true);
+//         Scheme scheme1 = new Scheme(
+//                 UUID.randomUUID().toString(),
+//                 "Sub-Mission on Agricultural Mechanization (SMAM)",
+//                 "Farmers\nFarmer groups\nRegistered agricultural organisations",
+//                 "Financial assistance for agricultural machinery "
+//                         + "and modern farm equipment.",
+//                 true);
 
-        Scheme scheme2 = new Scheme(
-                UUID.randomUUID().toString(),
-                "Pradhan Mantri Krishi Sinchai Yojana",
-                "Farmers with agricultural land",
-                "Supports irrigation development and promotes "
-                        + "efficient use of water in agriculture.",
-                true);
+//         Scheme scheme2 = new Scheme(
+//                 UUID.randomUUID().toString(),
+//                 "Pradhan Mantri Krishi Sinchai Yojana",
+//                 "Farmers with agricultural land",
+//                 "Supports irrigation development and promotes "
+//                         + "efficient use of water in agriculture.",
+//                 true);
 
-        schemes.add(scheme1);
-        schemes.add(scheme2);
-    }
+//         schemes.add(scheme1);
+//         schemes.add(scheme2);
+//     }
 
-    // =========================================================
-    // ADD SCHEME
-    // =========================================================
+//     // =========================================================
+//     // ADD SCHEME
+//     // =========================================================
 
-    public boolean addScheme(Scheme scheme) {
+//     public boolean addScheme(Scheme scheme) {
 
-        try {
+//         try {
 
-            if (scheme == null) {
-                return false;
-            }
+//             if (scheme == null) {
+//                 return false;
+//             }
 
-            // ---------------------------------------------
-            // GENERATE ID IF MISSING
-            // ---------------------------------------------
+//             // ---------------------------------------------
+//             // GENERATE ID IF MISSING
+//             // ---------------------------------------------
 
-            if (scheme.getSchemeId() == null ||
-                    scheme.getSchemeId().trim().isEmpty()) {
+//             if (scheme.getSchemeId() == null ||
+//                     scheme.getSchemeId().trim().isEmpty()) {
 
-                scheme.setSchemeId(
-                        UUID.randomUUID().toString());
-            }
+//                 scheme.setSchemeId(
+//                         UUID.randomUUID().toString());
+//             }
 
-            // ---------------------------------------------
-            // CHECK DUPLICATE ID
-            // ---------------------------------------------
+//             // ---------------------------------------------
+//             // CHECK DUPLICATE ID
+//             // ---------------------------------------------
 
-            for (Scheme existing : schemes) {
+//             for (Scheme existing : schemes) {
 
-                if (existing.getSchemeId()
-                        .equals(scheme.getSchemeId())) {
+//                 if (existing.getSchemeId()
+//                         .equals(scheme.getSchemeId())) {
 
-                    System.out.println(
-                            "Scheme ID already exists.");
+//                     System.out.println(
+//                             "Scheme ID already exists.");
 
-                    return false;
-                }
-            }
+//                     return false;
+//                 }
+//             }
 
-            schemes.add(scheme);
+//             schemes.add(scheme);
 
-            System.out.println(
-                    "Scheme added successfully.");
+//             System.out.println(
+//                     "Scheme added successfully.");
 
-            System.out.println(
-                    "Total schemes: "
-                            + schemes.size());
+//             System.out.println(
+//                     "Total schemes: "
+//                             + schemes.size());
 
-            return true;
+//             return true;
 
-        } catch (Exception e) {
+//         } catch (Exception e) {
 
-            System.err.println(
-                    "Error adding scheme: "
-                            + e.getMessage());
+//             System.err.println(
+//                     "Error adding scheme: "
+//                             + e.getMessage());
 
-            e.printStackTrace();
+//             e.printStackTrace();
 
-            return false;
-        }
-    }
+//             return false;
+//         }
+//     }
 
-    // =========================================================
-    // GET ALL SCHEMES
-    // =========================================================
+//     // =========================================================
+//     // GET ALL SCHEMES
+//     // =========================================================
 
-    public List<Scheme> getAllSchemes() {
+//     public List<Scheme> getAllSchemes() {
 
-        /*
-         * Return a new ArrayList so UI code cannot
-         * accidentally destroy the original database list.
-         */
+//         /*
+//          * Return a new ArrayList so UI code cannot
+//          * accidentally destroy the original database list.
+//          */
 
-        return new ArrayList<>(schemes);
-    }
+//         return new ArrayList<>(schemes);
+//     }
 
-    // =========================================================
-    // GET ONE SCHEME
-    // =========================================================
+//     // =========================================================
+//     // GET ONE SCHEME
+//     // =========================================================
 
-    public Scheme getScheme(String schemeId) {
+//     public Scheme getScheme(String schemeId) {
 
-        if (schemeId == null ||
-                schemeId.trim().isEmpty()) {
+//         if (schemeId == null ||
+//                 schemeId.trim().isEmpty()) {
 
-            return null;
-        }
+//             return null;
+//         }
 
-        for (Scheme scheme : schemes) {
+//         for (Scheme scheme : schemes) {
 
-            if (schemeId.equals(
-                    scheme.getSchemeId())) {
+//             if (schemeId.equals(
+//                     scheme.getSchemeId())) {
 
-                return scheme;
-            }
-        }
+//                 return scheme;
+//             }
+//         }
 
-        return null;
-    }
+//         return null;
+//     }
 
-    // =========================================================
-    // UPDATE SCHEME
-    // =========================================================
+//     // =========================================================
+//     // UPDATE SCHEME
+//     // =========================================================
 
-    public boolean updateScheme(Scheme updatedScheme) {
+//     public boolean updateScheme(Scheme updatedScheme) {
 
-        try {
+//         try {
 
-            if (updatedScheme == null) {
-                return false;
-            }
+//             if (updatedScheme == null) {
+//                 return false;
+//             }
 
-            String schemeId =
-                    updatedScheme.getSchemeId();
+//             String schemeId =
+//                     updatedScheme.getSchemeId();
 
-            if (schemeId == null ||
-                    schemeId.trim().isEmpty()) {
+//             if (schemeId == null ||
+//                     schemeId.trim().isEmpty()) {
 
-                return false;
-            }
+//                 return false;
+//             }
 
-            for (int i = 0;
-                    i < schemes.size();
-                    i++) {
+//             for (int i = 0;
+//                     i < schemes.size();
+//                     i++) {
 
-                Scheme existing =
-                        schemes.get(i);
+//                 Scheme existing =
+//                         schemes.get(i);
 
-                if (schemeId.equals(
-                        existing.getSchemeId())) {
+//                 if (schemeId.equals(
+//                         existing.getSchemeId())) {
 
-                    schemes.set(
-                            i,
-                            updatedScheme);
+//                     schemes.set(
+//                             i,
+//                             updatedScheme);
 
-                    System.out.println(
-                            "Scheme updated successfully: "
-                                    + updatedScheme.getSchemeName());
+//                     System.out.println(
+//                             "Scheme updated successfully: "
+//                                     + updatedScheme.getSchemeName());
 
-                    return true;
-                }
-            }
+//                     return true;
+//                 }
+//             }
 
-            System.out.println(
-                    "Scheme not found for update.");
+//             System.out.println(
+//                     "Scheme not found for update.");
 
-            return false;
+//             return false;
 
-        } catch (Exception e) {
+//         } catch (Exception e) {
 
-            System.err.println(
-                    "Error updating scheme: "
-                            + e.getMessage());
+//             System.err.println(
+//                     "Error updating scheme: "
+//                             + e.getMessage());
 
-            e.printStackTrace();
+//             e.printStackTrace();
 
-            return false;
-        }
-    }
+//             return false;
+//         }
+//     }
 
-    // =========================================================
-    // DELETE SCHEME
-    // =========================================================
+//     // =========================================================
+//     // DELETE SCHEME
+//     // =========================================================
 
-    public boolean deleteScheme(String schemeId) {
+//     public boolean deleteScheme(String schemeId) {
 
-        try {
+//         try {
 
-            if (schemeId == null ||
-                    schemeId.trim().isEmpty()) {
+//             if (schemeId == null ||
+//                     schemeId.trim().isEmpty()) {
 
-                return false;
-            }
+//                 return false;
+//             }
 
-            boolean removed =
-                    schemes.removeIf(
-                            scheme ->
-                                    schemeId.equals(
-                                            scheme.getSchemeId()));
+//             boolean removed =
+//                     schemes.removeIf(
+//                             scheme ->
+//                                     schemeId.equals(
+//                                             scheme.getSchemeId()));
 
-            if (removed) {
+//             if (removed) {
 
-                System.out.println(
-                        "Scheme deleted successfully.");
+//                 System.out.println(
+//                         "Scheme deleted successfully.");
 
-                System.out.println(
-                        "Remaining schemes: "
-                                + schemes.size());
+//                 System.out.println(
+//                         "Remaining schemes: "
+//                                 + schemes.size());
 
-            } else {
+//             } else {
 
-                System.out.println(
-                        "Scheme not found for delete.");
-            }
+//                 System.out.println(
+//                         "Scheme not found for delete.");
+//             }
 
-            return removed;
+//             return removed;
 
-        } catch (Exception e) {
+//         } catch (Exception e) {
 
-            System.err.println(
-                    "Error deleting scheme: "
-                            + e.getMessage());
+//             System.err.println(
+//                     "Error deleting scheme: "
+//                             + e.getMessage());
 
-            e.printStackTrace();
+//             e.printStackTrace();
 
-            return false;
-        }
-    }
+//             return false;
+//         }
+//     }
 
-    // =========================================================
-    // CHECK IF SCHEME EXISTS
-    // =========================================================
+//     // =========================================================
+//     // CHECK IF SCHEME EXISTS
+//     // =========================================================
 
-    public boolean exists(
-            String schemeId) {
+//     public boolean exists(
+//             String schemeId) {
 
-        return getScheme(schemeId) != null;
-    }
+//         return getScheme(schemeId) != null;
+//     }
 
-    // =========================================================
-    // TOTAL SCHEMES
-    // =========================================================
+//     // =========================================================
+//     // TOTAL SCHEMES
+//     // =========================================================
 
-    public int getSchemeCount() {
+//     public int getSchemeCount() {
 
-        return schemes.size();
-    }
+//         return schemes.size();
+//     }
 
-    // =========================================================
-    // CLEAR ALL
-    // Mainly useful for testing
-    // =========================================================
+//     // =========================================================
+//     // CLEAR ALL
+//     // Mainly useful for testing
+//     // =========================================================
 
-    public void clearAll() {
+//     public void clearAll() {
 
-        schemes.clear();
+//         schemes.clear();
 
-        System.out.println(
-                "All temporary schemes cleared.");
-    }
-}
+//         System.out.println(
+//                 "All temporary schemes cleared.");
+//     }
+// }
