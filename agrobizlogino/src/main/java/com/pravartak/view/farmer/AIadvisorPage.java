@@ -1,670 +1,1051 @@
 package com.pravartak.view.farmer;
 
+import java.io.File;
 
-import com.pravartak.view.farmer.common.Footer;
+import com.pravartak.services.GroqService;
 import com.pravartak.view.farmer.common.NavBar;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import java.io.File;
+import javafx.stage.FileChooser;
 
 public class AIAdvisorPage {
-        // private static final AIService aiService =
-        // new AIService();
 
-    // =========================================================
-    // AGROBIZ DARK THEME
-    // =========================================================
+        // ============================================================
+        // EXISTING COLORS - NOT CHANGED
+        // ============================================================
 
-    private static final String BACKGROUND = "#080c0d";
+        private static final Color BG = Color.rgb(3, 18, 14);
 
-    private static final String CARD = "#101817";
+        private static final Color CARD = Color.rgb(7, 39, 30);
 
-    private static final String CARD_LIGHT = "#14201d";
+        private static final Color DARK_GREEN = Color.rgb(10, 55, 40);
 
-    private static final String GREEN = "#4CAF50";
+        private static final Color GREEN = Color.rgb(45, 190, 75);
 
-    private static final String GREEN_DARK = "#2E7D32";
+        private static final Color LIGHT_GREEN = Color.rgb(20, 65, 45);
 
-    private static final String GREEN_LIGHT = "#A5D6A7";
+        private static final Color DARK_TEXT = Color.rgb(236, 240, 225);
 
-    private static final String TEXT = "#F1F5F2";
+        private static final Color GREY = Color.rgb(150, 175, 160);
 
-    private static final String SECONDARY_TEXT = "#A8B5AD";
+        private static final Color BORDER = Color.rgb(88, 243, 186);
 
-    private static final String BORDER = "#263A32";
+        // ============================================================
+        // IMAGE
+        // ============================================================
 
+        private static File selectedImage;
 
-    // =========================================================
-    // MAIN SCENE
-    // =========================================================
+        // ============================================================
+        // GROQ SERVICE
+        // ============================================================
 
-    public static Scene getAIAdvisorScene() {
+        private static final GroqService groqService = new GroqService();
 
-        BorderPane root =
-                new BorderPane();
+        // ============================================================
+        // CHAT COMPONENTS
+        // ============================================================
 
+        private static VBox chatContainer;
 
-        // Main background
+        private static ScrollPane chatScrollPane;
 
-        root.setStyle(
-                "-fx-background-color: " +
-                        BACKGROUND +
-                        ";"
-        );
+        private static TextField questionField;
 
+        private static Button sendButton;
 
-        // =====================================================
-        // TOP NAVBAR
-        // =====================================================
+        private static Button attachButton;
 
-        root.setTop(
-                new NavBar()
-                        .createNavbar("AI Advisor ")
-        );
+        private static HBox attachmentArea;
 
+        private static Label attachmentLabel;
 
-        // =====================================================
-        // BOTTOM FOOTER
-        // =====================================================
+        // ============================================================
+        // CREATE SCENE
+        // ============================================================
 
-        root.setBottom(
-                new Footer()
-                        .createFooter()
-        );
+        public static Scene getAIAdvisorScene() {
 
+                BorderPane root = new BorderPane();
 
-        // =====================================================
-        // CENTER CONTENT
-        // =====================================================
+                root.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                BG,
+                                                                CornerRadii.EMPTY,
+                                                                Insets.EMPTY)));
 
-        root.setCenter(
-                createAIContent()
-        );
+                // Existing navbar
+                NavBar navBar = new NavBar();
 
+                root.setTop(
+                                navBar.createNavbar(
+                                                "AI Advisor"));
 
-        return new Scene(
-                root,
-                1368,
-                768
-        );
-    }
+                root.setCenter(
+                                createContent());
 
+                return new Scene(
+                                root,
+                                1368,
+                                768);
+        }
 
-    // =========================================================
-    // MAIN CONTENT
-    // =========================================================
-
-    private static VBox createAIContent() {
-
-        VBox main =
-                new VBox(20);
-
-        main.setPadding(
-                new Insets(
-                        30,
-                        100,
-                        30,
-                        100
-                )
-        );
-
-        main.setAlignment(
-                Pos.TOP_CENTER
-        );
-
-
-        // =====================================================
-        // PAGE INTRODUCTION
-        // =====================================================
-
-        VBox intro =
-                new VBox(6);
-
-        intro.setMaxWidth(900);
-
-        intro.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-
-        Label title =
-                new Label(
-                        "🌱 AI Farming Advisor"
-                );
-
-        title.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        26
-                )
-        );
-
-        title.setTextFill(
-                Color.web(GREEN_LIGHT)
-        );
-
-
-        Label subtitle =
-                new Label(
-                        "Get simple and smart guidance for your farming needs."
-                );
-
-        subtitle.setFont(
-                Font.font(
-                        "Arial",
-                        14
-                )
-        );
-
-        subtitle.setTextFill(
-                Color.web(SECONDARY_TEXT)
-        );
-
-
-        intro.getChildren().addAll(
-                title,
-                subtitle
-        );
-
-
-        // =====================================================
-        // QUESTION CARD
-        // =====================================================
-
-        VBox questionCard =
-                new VBox(14);
-
-        questionCard.setMaxWidth(900);
-
-        questionCard.setPadding(
-                new Insets(22)
-        );
-
-        questionCard.setStyle(
-                "-fx-background-color: " +
-                        CARD +
-                        ";" +
-
-                "-fx-background-radius: 14;" +
-
-                "-fx-border-color: " +
-                        BORDER +
-                        ";" +
-
-                "-fx-border-radius: 14;" +
-
-                "-fx-border-width: 1;"
-        );
-
-
-        Label questionTitle =
-                new Label(
-                        "Ask your farming question"
-                );
-
-        questionTitle.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        18
-                )
-        );
-
-        questionTitle.setTextFill(
-                Color.web(TEXT)
-        );
-
-
-        Label questionHint =
-                new Label(
-                        "Ask about crops, soil, irrigation, fertilizers, pests or farming practices."
-                );
-
-        questionHint.setFont(
-                Font.font(
-                        "Arial",
-                        13
-                )
-        );
-
-        questionHint.setTextFill(
-                Color.web(SECONDARY_TEXT)
-        );
-
-
-        // =====================================================
-        // QUESTION TEXT AREA
-        // =====================================================
-
-        TextArea questionBox =
-                new TextArea();
-
-        questionBox.setPromptText(
-                "Example: Which fertilizer is suitable for wheat?"
-        );
-
-        questionBox.setWrapText(true);
-
-        questionBox.setPrefHeight(105);
-
-        questionBox.setFont(
-                Font.font(
-                        "Arial",
-                        14
-                )
-        );
-
-        questionBox.setStyle(
-
-                "-fx-control-inner-background: #0B1210;" +
-
-                "-fx-text-fill: #F1F5F2;" +
-
-                "-fx-prompt-text-fill: #718078;" +
-
-                "-fx-border-color: #263A32;" +
-
-                "-fx-border-radius: 10;" +
-
-                "-fx-background-radius: 10;" +
-
-                "-fx-focus-color: #4CAF50;" +
-
-                "-fx-faint-focus-color: transparent;"
-        );
-
-
-        // =====================================================
-        // BUTTON AREA
-        // =====================================================
-
-        HBox buttonBox =
-                new HBox(10);
-
-        buttonBox.setAlignment(
-                Pos.CENTER_RIGHT
-        );
-
-
-        // Clear button
-
-        Button clearButton =
-                new Button(
-                        "Clear"
-                );
-
-        clearButton.setPrefSize(
-                90,
-                40
-        );
-
-        clearButton.setStyle(
-
-                "-fx-background-color: #1A2421;" +
-
-                "-fx-text-fill: #B7C3BC;" +
-
-                "-fx-font-weight: bold;" +
-
-                "-fx-background-radius: 20;" +
-
-                "-fx-border-color: #34473F;" +
-
-                "-fx-border-radius: 20;"
-        );
-
-
-        // Ask AI button
-
-        Button askButton =
-                new Button(
-                        "Ask AI  ✦"
-                );
-
-        askButton.setPrefSize(
-                120,
-                40
-        );
-
-        askButton.setStyle(
-
-                "-fx-background-color: " +
-                        GREEN_DARK +
-                        ";" +
-
-                "-fx-text-fill: white;" +
-
-                "-fx-font-weight: bold;" +
-
-                "-fx-font-size: 14;" +
-
-                "-fx-background-radius: 20;"
-        );
-        
-
-
-        // =====================================================
-        // RESPONSE TITLE
-        // =====================================================
-
-        Label responseTitle =
-                new Label(
-                        "AI Response"
-                );
-
-        responseTitle.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        18
-                )
-        );
-
-        responseTitle.setTextFill(
-                Color.web(TEXT)
-        );
-
-
-        // =====================================================
-        // RESPONSE BOX
-        // =====================================================
-
-        TextArea responseBox =
-                new TextArea();
-
-        responseBox.setEditable(
-                false
-        );
-
-        responseBox.setWrapText(
-                true
-        );
-
-        responseBox.setPrefHeight(
-                170
-        );
-
-        responseBox.setPromptText(
-                "Your AI farming advice will appear here..."
-        );
-
-        responseBox.setFont(
-                Font.font(
-                        "Arial",
-                        14
-                )
-        );
-
-        responseBox.setStyle(
-
-                "-fx-control-inner-background: #14201D;" +
-
-                "-fx-text-fill: #E8F5E9;" +
-
-                "-fx-prompt-text-fill: #718078;" +
-
-                "-fx-border-color: #263A32;" +
-
-                "-fx-border-radius: 10;" +
-
-                "-fx-background-radius: 10;"
-        );
-
-
-        // =====================================================
-        // ASK AI ACTION
-        // =====================================================
-
-        askButton.setOnAction(event -> {
-
-    String question =
-            questionBox.getText().trim();
-
-
-    if (question.isEmpty()) {
-
-        responseBox.setText(
-                "Please enter a farming question first."
-        );
-
-        return;
-    }
-
-
-    responseBox.setText(
-            "AI is thinking... 🌱"
-    );
-
-
-//     String answer =
-//             aiService.askAI(question);
-
-
-//     responseBox.setText(
-//             answer
-//     );
-});
-
-
-        // =====================================================
-        // CLEAR ACTION
-        // =====================================================
-
-        clearButton.setOnAction(event -> {
-
-            questionBox.clear();
-
-            responseBox.clear();
-        });
-
-
-        buttonBox.getChildren().addAll(
-                clearButton,
-                askButton
-        );
-
-
-        // =====================================================
-        // ADD QUESTION CARD CONTENT
-        // =====================================================
-
-        questionCard.getChildren().addAll(
-
-                questionTitle,
-
-                questionHint,
-
-                questionBox,
-
-                buttonBox,
-
-                responseTitle,
-
-                responseBox
-        );
-
-
-        // =====================================================
-        // QUICK QUESTIONS
-        // =====================================================
-
-        Label quickTitle =
-                new Label(
-                        "Quick Questions"
-                );
-
-        quickTitle.setMaxWidth(
-                900
-        );
-
-        quickTitle.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        16
-                )
-        );
-
-        quickTitle.setTextFill(
-                Color.web(TEXT)
-        );
-
-
-        HBox quickQuestions =
-                new HBox(10);
-
-        quickQuestions.setMaxWidth(
-                900
-        );
-
-        quickQuestions.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-
-        Button cropButton =
-                createQuickButton(
-                        "🌾 Crop Advice",
-                        questionBox
-                );
-
-
-        Button soilButton =
-                createQuickButton(
-                        "🌱 Soil Health",
-                        questionBox
-                );
-
-
-        Button irrigationButton =
-                createQuickButton(
-                        "💧 Irrigation",
-                        questionBox
-                );
-
-
-        Button fertilizerButton =
-                createQuickButton(
-                        "🌿 Fertilizer",
-                        questionBox
-                );
-
-
-        quickQuestions.getChildren().addAll(
-
-                cropButton,
-
-                soilButton,
-
-                irrigationButton,
-
-                fertilizerButton
-        );
-
-
-        // =====================================================
+        // ============================================================
         // MAIN CONTENT
-        // =====================================================
+        // ============================================================
 
-        main.getChildren().addAll(
+        private static VBox createContent() {
 
-                intro,
+                VBox content = new VBox(15);
 
-                questionCard,
+                content.setPadding(
+                                new Insets(
+                                                20,
+                                                30,
+                                                20,
+                                                30));
 
-                quickTitle,
+                // ========================================================
+                // HEADER
+                // ========================================================
 
-                quickQuestions
-        );
+                VBox header = new VBox(5);
 
+                Label heading = new Label(
+                                "🌱 Your Personal AI Farming Advisor");
 
-        return main;
-    }
+                heading.setTextFill(
+                                Color.WHITE);
 
+                heading.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                24));
 
-    // =========================================================
-    // QUICK QUESTION BUTTON
-    // =========================================================
+                Label description = new Label(
+                                "Ask questions about crops, irrigation, soil, fertilizers, diseases and farming decisions.");
 
-    private static Button createQuickButton(
-            String text,
-            TextArea questionBox) {
+                description.setTextFill(
+                                Color.rgb(
+                                                220,
+                                                235,
+                                                220));
 
+                description.setFont(
+                                Font.font(
+                                                "Arial",
+                                                14));
 
-        Button button =
-                new Button(text);
+                description.setWrapText(
+                                true);
 
+                header.getChildren().addAll(
+                                heading,
+                                description);
 
-        button.setPrefHeight(
-                38
-        );
+                // ========================================================
+                // CHAT CONTAINER
+                // ========================================================
 
+                chatContainer = new VBox(18);
 
-        button.setStyle(
+                chatContainer.setPadding(
+                                new Insets(20));
 
-                "-fx-background-color: #14201D;" +
+                chatContainer.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                CARD,
+                                                                new CornerRadii(14),
+                                                                Insets.EMPTY)));
 
-                "-fx-text-fill: #A5D6A7;" +
+                chatContainer.setBorder(
+                                new Border(
+                                                new BorderStroke(
+                                                                BORDER,
+                                                                BorderStrokeStyle.SOLID,
+                                                                new CornerRadii(14),
+                                                                new BorderWidths(1))));
 
-                "-fx-font-weight: bold;" +
+                // Welcome message
+                addWelcomeMessage();
 
-                "-fx-font-size: 12;" +
+                // ========================================================
+                // SCROLL PANE
+                // ========================================================
 
-                "-fx-background-radius: 20;" +
+                chatScrollPane = new ScrollPane(
+                                chatContainer);
 
-                "-fx-border-color: #2C4238;" +
+                chatScrollPane.setFitToWidth(
+                                true);
 
-                "-fx-border-radius: 20;"
-        );
+                chatScrollPane.setHbarPolicy(
+                                ScrollPane.ScrollBarPolicy.NEVER);
 
+                chatScrollPane.setVbarPolicy(
+                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-        button.setOnAction(event -> {
+                chatScrollPane.setStyle(
+                                "-fx-background-color: transparent;" +
+                                                "-fx-background: transparent;" +
+                                                "-fx-border-color: transparent;");
 
+                VBox.setVgrow(
+                                chatScrollPane,
+                                Priority.ALWAYS);
 
-            if (text.contains("Crop")) {
+                // ========================================================
+                // INPUT AREA
+                // ========================================================
 
-                questionBox.setText(
-                        "Which crop is suitable for my farm?"
-                );
+                VBox inputArea = createInputArea();
 
+                content.getChildren().addAll(
+                                header,
+                                chatScrollPane,
+                                inputArea);
 
-            } else if (text.contains("Soil")) {
+                return content;
+        }
 
-                questionBox.setText(
-                        "How can I improve my soil health?"
-                );
+        // ============================================================
+        // WELCOME MESSAGE
+        // ============================================================
 
+        private static void addWelcomeMessage() {
 
-            } else if (text.contains("Irrigation")) {
+                VBox message = new VBox(6);
 
-                questionBox.setText(
-                        "Which irrigation method is suitable for my crop?"
-                );
+                message.setAlignment(
+                                Pos.TOP_LEFT);
 
+                Label aiName = new Label(
+                                "🌱 AgroBiz AI");
 
-            } else {
+                aiName.setTextFill(
+                                GREEN);
 
-                questionBox.setText(
-                        "Which fertilizer should I use for my crop?"
-                );
-            }
-        });
+                aiName.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                14));
 
+                Label welcome = new Label(
+                                "Hello Farmer! 👋\n\n"
+                                                + "I am your AI Farming Advisor. "
+                                                + "Ask me anything about crops, irrigation, soil, fertilizers, "
+                                                + "pests, diseases or other farming decisions.");
 
-        return button;
-    }
+                welcome.setTextFill(
+                                DARK_TEXT);
+
+                welcome.setFont(
+                                Font.font(
+                                                "Arial",
+                                                15));
+
+                welcome.setWrapText(
+                                true);
+
+                welcome.setMaxWidth(
+                                900);
+
+                message.getChildren().addAll(
+                                aiName,
+                                welcome);
+
+                chatContainer.getChildren().add(
+                                message);
+        }
+
+        // ============================================================
+        // INPUT AREA
+        // ============================================================
+
+        private static VBox createInputArea() {
+
+                VBox inputArea = new VBox(8);
+
+                // ========================================================
+                // ATTACHMENT AREA
+                // ========================================================
+
+                attachmentArea = new HBox(8);
+
+                attachmentArea.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                attachmentArea.setVisible(
+                                false);
+
+                attachmentArea.setManaged(
+                                false);
+
+                attachmentLabel = new Label(
+                                "📎 Image attached");
+
+                attachmentLabel.setTextFill(
+                                GREY);
+
+                attachmentLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                13));
+
+                Button removeButton = new Button(
+                                "Remove");
+
+                styleRemoveButton(
+                                removeButton);
+
+                removeButton.setOnAction(
+                                event -> removeSelectedImage());
+
+                attachmentArea.getChildren().addAll(
+                                attachmentLabel,
+                                removeButton);
+
+                // ========================================================
+                // CHAT INPUT BAR
+                // ========================================================
+
+                HBox inputBar = new HBox(10);
+
+                inputBar.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                inputBar.setPadding(
+                                new Insets(
+                                                8,
+                                                10,
+                                                8,
+                                                12));
+
+                inputBar.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                CARD,
+                                                                new CornerRadii(25),
+                                                                Insets.EMPTY)));
+
+                inputBar.setBorder(
+                                new Border(
+                                                new BorderStroke(
+                                                                BORDER,
+                                                                BorderStrokeStyle.SOLID,
+                                                                new CornerRadii(25),
+                                                                new BorderWidths(1))));
+
+                // ========================================================
+                // ATTACH BUTTON
+                // ========================================================
+
+                attachButton = new Button(
+                                "📎");
+
+                styleAttachButton(
+                                attachButton);
+
+                attachButton.setOnAction(
+                                event -> chooseImage());
+
+                // ========================================================
+                // TEXT FIELD
+                // ========================================================
+
+                questionField = new TextField();
+
+                questionField.setPromptText(
+                                "Ask your farming question...");
+
+                questionField.setFont(
+                                Font.font(
+                                                "Arial",
+                                                15));
+
+                questionField.setStyle(
+                                "-fx-background-color: transparent;" +
+                                                "-fx-text-fill: #e1f0e4;" +
+                                                "-fx-prompt-text-fill: #96afa0;" +
+                                                "-fx-border-color: transparent;" +
+                                                "-fx-background-insets: 0;" +
+                                                "-fx-padding: 8 5 8 5;");
+
+                HBox.setHgrow(
+                                questionField,
+                                Priority.ALWAYS);
+
+                // ========================================================
+                // SEND BUTTON
+                // ========================================================
+
+                sendButton = new Button(
+                                "➤");
+
+                styleSendButton(
+                                sendButton);
+
+                sendButton.setOnAction(
+                                event -> sendQuestion());
+
+                // Press Enter to send
+                questionField.setOnAction(
+                                event -> sendQuestion());
+
+                inputBar.getChildren().addAll(
+                                attachButton,
+                                questionField,
+                                sendButton);
+
+                inputArea.getChildren().addAll(
+                                attachmentArea,
+                                inputBar);
+
+                return inputArea;
+        }
+
+        // ============================================================
+        // CHOOSE IMAGE
+        // ============================================================
+
+        private static void chooseImage() {
+
+                FileChooser chooser = new FileChooser();
+
+                chooser.setTitle(
+                                "Select Farm Image");
+
+                chooser.getExtensionFilters()
+                                .add(
+                                                new FileChooser.ExtensionFilter(
+                                                                "Image Files",
+                                                                "*.png",
+                                                                "*.jpg",
+                                                                "*.jpeg"));
+
+                File file = chooser.showOpenDialog(
+                                null);
+
+                if (file == null) {
+                        return;
+                }
+
+                selectedImage = file;
+
+                attachmentLabel.setText(
+                                "📎 " + file.getName());
+
+                attachmentArea.setVisible(
+                                true);
+
+                attachmentArea.setManaged(
+                                true);
+        }
+
+        // ============================================================
+        // REMOVE IMAGE
+        // ============================================================
+
+        private static void removeSelectedImage() {
+
+                selectedImage = null;
+
+                attachmentArea.setVisible(
+                                false);
+
+                attachmentArea.setManaged(
+                                false);
+        }
+
+        // ============================================================
+        // SEND QUESTION
+        // ============================================================
+
+        private static void sendQuestion() {
+
+                String question = questionField
+                                .getText()
+                                .trim();
+
+                if (question.isEmpty()) {
+                        return;
+                }
+
+                // Save image before clearing
+                File imageToSend = selectedImage;
+
+                // Add user question to conversation
+                addUserMessage(
+                                question,
+                                imageToSend);
+
+                // Clear input
+                questionField.clear();
+
+                // Disable controls while AI responds
+                questionField.setDisable(
+                                true);
+
+                sendButton.setDisable(
+                                true);
+
+                attachButton.setDisable(
+                                true);
+
+                // Add temporary thinking message
+                VBox thinkingMessage = createThinkingMessage();
+
+                chatContainer.getChildren().add(
+                                thinkingMessage);
+
+                scrollToBottom();
+
+                // ========================================================
+                // GROQ TASK
+                // ========================================================
+
+                Task<String> task = new Task<String>() {
+
+                        @Override
+                        protected String call()
+                                        throws Exception {
+
+                                if (imageToSend != null) {
+
+                                        return groqService
+                                                        .askQuestionWithImage(
+                                                                        question,
+                                                                        imageToSend.toPath());
+
+                                } else {
+
+                                        return groqService
+                                                        .askQuestion(
+                                                                        question);
+                                }
+                        }
+                };
+
+                // ========================================================
+                // SUCCESS
+                // ========================================================
+
+                task.setOnSucceeded(
+                                event -> {
+
+                                        String response = task.getValue();
+
+                                        Platform.runLater(
+                                                        () -> {
+
+                                                                chatContainer
+                                                                                .getChildren()
+                                                                                .remove(
+                                                                                                thinkingMessage);
+
+                                                                addAIMessage(
+                                                                                response);
+
+                                                                questionField
+                                                                                .setDisable(
+                                                                                                false);
+
+                                                                sendButton
+                                                                                .setDisable(
+                                                                                                false);
+
+                                                                attachButton
+                                                                                .setDisable(
+                                                                                                false);
+
+                                                                // Remove selected image
+                                                                removeSelectedImage();
+
+                                                                questionField.requestFocus();
+
+                                                                scrollToBottom();
+                                                        });
+                                });
+
+                // ========================================================
+                // ERROR
+                // ========================================================
+
+                task.setOnFailed(
+                                event -> {
+
+                                        Throwable error = task.getException();
+
+                                        Platform.runLater(
+                                                        () -> {
+
+                                                                chatContainer
+                                                                                .getChildren()
+                                                                                .remove(
+                                                                                                thinkingMessage);
+
+                                                                addAIMessage(
+                                                                                "Sorry, I could not process your request.\n\n"
+                                                                                                + getErrorMessage(
+                                                                                                                error));
+
+                                                                questionField
+                                                                                .setDisable(
+                                                                                                false);
+
+                                                                sendButton
+                                                                                .setDisable(
+                                                                                                false);
+
+                                                                attachButton
+                                                                                .setDisable(
+                                                                                                false);
+
+                                                                questionField.requestFocus();
+
+                                                                scrollToBottom();
+                                                        });
+                                });
+
+                Thread thread = new Thread(
+                                task);
+
+                thread.setDaemon(
+                                true);
+
+                thread.start();
+        }
+
+        // ============================================================
+        // USER MESSAGE
+        // ============================================================
+
+        private static void addUserMessage(
+                        String question,
+                        File image) {
+
+                HBox row = new HBox();
+
+                row.setAlignment(
+                                Pos.CENTER_RIGHT);
+
+                VBox message = new VBox(6);
+
+                message.setAlignment(
+                                Pos.TOP_RIGHT);
+
+                message.setMaxWidth(
+                                800);
+
+                Label userName = new Label(
+                                "You");
+
+                userName.setTextFill(
+                                GREY);
+
+                userName.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                13));
+
+                Label questionLabel = new Label(
+                                question);
+
+                questionLabel.setTextFill(
+                                Color.WHITE);
+
+                questionLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                15));
+
+                questionLabel.setWrapText(
+                                true);
+
+                questionLabel.setMaxWidth(
+                                760);
+
+                questionLabel.setPadding(
+                                new Insets(
+                                                12,
+                                                16,
+                                                12,
+                                                16));
+
+                questionLabel.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                DARK_GREEN,
+                                                                new CornerRadii(
+                                                                                16,
+                                                                                16,
+                                                                                4,
+                                                                                16,
+                                                                                false),
+                                                                Insets.EMPTY)));
+
+                message.getChildren().addAll(
+                                userName,
+                                questionLabel);
+
+                // Show image in conversation
+                if (image != null &&
+                                image.exists()) {
+
+                        try {
+
+                                Image farmImage = new Image(
+                                                image.toURI()
+                                                                .toString());
+
+                                ImageView imageView = new ImageView(
+                                                farmImage);
+
+                                imageView.setFitWidth(
+                                                220);
+
+                                imageView.setFitHeight(
+                                                150);
+
+                                imageView.setPreserveRatio(
+                                                true);
+
+                                imageView.setSmooth(
+                                                true);
+
+                                HBox imageBox = new HBox(
+                                                imageView);
+
+                                imageBox.setAlignment(
+                                                Pos.CENTER_RIGHT);
+
+                                message.getChildren().add(
+                                                imageBox);
+
+                        } catch (Exception ignored) {
+                                // Ignore image preview error
+                        }
+                }
+
+                row.getChildren().add(
+                                message);
+
+                chatContainer.getChildren().add(
+                                row);
+
+                scrollToBottom();
+        }
+
+        // ============================================================
+        // AI MESSAGE
+        // ============================================================
+
+        private static void addAIMessage(
+                        String response) {
+
+                HBox row = new HBox();
+
+                row.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                VBox message = new VBox(6);
+
+                message.setAlignment(
+                                Pos.TOP_LEFT);
+
+                message.setMaxWidth(
+                                900);
+
+                Label aiName = new Label(
+                                "🌱 AgroBiz AI");
+
+                aiName.setTextFill(
+                                GREEN);
+
+                aiName.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                14));
+
+                Label responseLabel = new Label(
+                                response);
+
+                responseLabel.setTextFill(
+                                DARK_TEXT);
+
+                responseLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                15));
+
+                responseLabel.setWrapText(
+                                true);
+
+                responseLabel.setMaxWidth(
+                                850);
+
+                responseLabel.setPadding(
+                                new Insets(
+                                                12,
+                                                16,
+                                                12,
+                                                16));
+
+                /*
+                 * Same existing CARD color.
+                 */
+                responseLabel.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                CARD,
+                                                                new CornerRadii(
+                                                                                16,
+                                                                                16,
+                                                                                16,
+                                                                                4,
+                                                                                false),
+                                                                Insets.EMPTY)));
+
+                message.getChildren().addAll(
+                                aiName,
+                                responseLabel);
+
+                row.getChildren().add(
+                                message);
+
+                chatContainer.getChildren().add(
+                                row);
+
+                scrollToBottom();
+        }
+
+        // ============================================================
+        // THINKING MESSAGE
+        // ============================================================
+
+        private static VBox createThinkingMessage() {
+
+                VBox message = new VBox(6);
+
+                message.setAlignment(
+                                Pos.TOP_LEFT);
+
+                message.setMaxWidth(
+                                900);
+
+                Label aiName = new Label(
+                                "🌱 AgroBiz AI");
+
+                aiName.setTextFill(
+                                GREEN);
+
+                aiName.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                14));
+
+                Label thinking = new Label(
+                                "Thinking...");
+
+                thinking.setTextFill(
+                                GREY);
+
+                thinking.setFont(
+                                Font.font(
+                                                "Arial",
+                                                14));
+
+                thinking.setPadding(
+                                new Insets(
+                                                12,
+                                                16,
+                                                12,
+                                                16));
+
+                message.getChildren().addAll(
+                                aiName,
+                                thinking);
+
+                return message;
+        }
+
+        // ============================================================
+        // SCROLL TO BOTTOM
+        // ============================================================
+
+        private static void scrollToBottom() {
+
+                Platform.runLater(
+                                () -> {
+
+                                        if (chatScrollPane != null) {
+
+                                                chatScrollPane.setVvalue(
+                                                                1.0);
+                                        }
+                                });
+        }
+
+        // ============================================================
+        // ERROR MESSAGE
+        // ============================================================
+
+        private static String getErrorMessage(
+                        Throwable error) {
+
+                if (error == null) {
+
+                        return "Unknown error occurred.";
+                }
+
+                String message = error.getMessage();
+
+                if (message == null ||
+                                message.isBlank()) {
+
+                        return error.toString();
+                }
+
+                return message;
+        }
+
+        // ============================================================
+        // ATTACH BUTTON STYLE
+        // ============================================================
+
+        private static void styleAttachButton(
+                        Button button) {
+
+                button.setPrefSize(
+                                42,
+                                42);
+
+                button.setTextFill(
+                                DARK_TEXT);
+
+                button.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                18));
+
+                button.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                LIGHT_GREEN,
+                                                                new CornerRadii(20),
+                                                                Insets.EMPTY)));
+
+                button.setBorder(
+                                new Border(
+                                                new BorderStroke(
+                                                                BORDER,
+                                                                BorderStrokeStyle.SOLID,
+                                                                new CornerRadii(20),
+                                                                new BorderWidths(1))));
+        }
+
+        // ============================================================
+        // SEND BUTTON STYLE
+        // ============================================================
+
+        private static void styleSendButton(
+                        Button button) {
+
+                button.setPrefSize(
+                                44,
+                                44);
+
+                button.setTextFill(
+                                Color.WHITE);
+
+                button.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                20));
+
+                button.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                GREEN,
+                                                                new CornerRadii(22),
+                                                                Insets.EMPTY)));
+        }
+
+        // ============================================================
+        // REMOVE BUTTON STYLE
+        // ============================================================
+
+        private static void styleRemoveButton(
+                        Button button) {
+
+                button.setPrefHeight(
+                                30);
+
+                button.setTextFill(
+                                Color.rgb(
+                                                230,
+                                                120,
+                                                120));
+
+                button.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                12));
+
+                button.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                Color.rgb(
+                                                                                55,
+                                                                                25,
+                                                                                25),
+                                                                new CornerRadii(15),
+                                                                Insets.EMPTY)));
+
+                button.setBorder(
+                                new Border(
+                                                new BorderStroke(
+                                                                Color.rgb(
+                                                                                100,
+                                                                                50,
+                                                                                50),
+                                                                BorderStrokeStyle.SOLID,
+                                                                new CornerRadii(15),
+                                                                new BorderWidths(1))));
+        }
 }
-

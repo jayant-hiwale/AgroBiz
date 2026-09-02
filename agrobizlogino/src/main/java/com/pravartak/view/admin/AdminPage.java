@@ -71,8 +71,7 @@ public class AdminPage {
                                 "Marketplace",
                                 "Manage Course",
                                 "Community",
-                                "Government Schemes",
-                                "Settings");
+                                "Government Schemes");
 
                 lv.setStyle(
                                 "-fx-background-color:#0D1213;" +
@@ -405,10 +404,9 @@ public class AdminPage {
 
                         case "Dashboard":
 
-                                Text dashboard = createPageTitle(
-                                                "Good Morning, Admin 👋");
+                                AdminDashBoard dashboardPage = new AdminDashBoard();
 
-                                bp.setCenter(dashboard);
+                                bp.setCenter(dashboardPage);
 
                                 break;
 
@@ -464,8 +462,8 @@ public class AdminPage {
 
                         case "Government Schemes":
 
-                                Text schemes = createPageTitle(
-                                                "Government Schemes");
+                                // Text schemes = createPageTitle(
+                                //                 "Government Schemes");
 
                                 bp.setCenter(SchemeTab.getSchemesPage());
 
@@ -475,14 +473,14 @@ public class AdminPage {
                         // SETTINGS
                         // =================================================
 
-                        case "Settings":
+                        // case "Settings":
 
-                                Text settings = createPageTitle(
-                                                "Settings");
+                        //         Text settings = createPageTitle(
+                        //                         "Settings");
 
-                                bp.setCenter(settings);
+                        //         bp.setCenter(settings);
 
-                                break;
+                        //         break;
 
                         // =================================================
                         // DEFAULT
@@ -490,11 +488,9 @@ public class AdminPage {
 
                         default:
 
-                                Text defaultPage = createPageTitle(
-                                                "Good Morning, Admin 👋");
+                                AdminDashBoard dashboardPage1 = new AdminDashBoard();
 
-                                bp.setCenter(
-                                                defaultPage);
+                                bp.setCenter(dashboardPage1);
 
                                 break;
                 }
