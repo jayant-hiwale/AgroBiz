@@ -80,6 +80,7 @@ import com.pravartak.dao.admindao.FirebaseCourseDAO;
 import com.pravartak.model.admin.Course;
 import com.pravartak.view.farmer.common.Footer;
 import com.pravartak.view.farmer.common.NavBar;
+import com.pravartak.view.login.LoginPage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -102,13 +103,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 
 public class LearningPage {
-
-    // =========================================================
-    // SCENE
-    // =========================================================
 
     private Scene learningpagScene;
 
@@ -867,11 +863,8 @@ public class LearningPage {
         FarmerModulesPage modulesPage = new FarmerModulesPage(
                 course);
 
-        Stage stage = (Stage) courseContainer
-                .getScene()
-                .getWindow();
 
-        stage.setScene(
+        LoginPage.mainStage.setScene(
                 modulesPage.getModulesPageScene());
     }
 
