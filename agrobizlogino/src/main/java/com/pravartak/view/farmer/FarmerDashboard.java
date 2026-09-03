@@ -104,6 +104,10 @@ public class FarmerDashboard {
         private Button aiAdvisorButton;
         private Button investmentButton;
         private Button schemesButton;
+        private Button reviewsButton;
+
+        private Button orderRequestsButton;
+        private Button myOrdersButton;
 
         // // // MAIN BORDER PANE
         private BorderPane root;
@@ -265,10 +269,46 @@ public class FarmerDashboard {
                 schemesButton = createMenuButton("◇", "Schemes & Subsidies");
                 schemesButton.setOnAction(event -> showPage("schemes"));
 
-                // ADD BUTTONS
-                sidebar.getChildren().addAll(homepageButton, dashboardButton, profileButton, aiAdvisorButton,
-                                investmentButton, schemesButton);
+                // =========================================================
+// ORDER REQUESTS
+// =========================================================
 
+orderRequestsButton = createMenuButton("📦", "Order Requests");
+
+orderRequestsButton.setOnAction(event -> {
+
+        showPage("orderRequests");
+});
+
+// =========================================================
+// MY ORDERS
+// =========================================================
+
+myOrdersButton = createMenuButton("📋", "My Orders");
+
+myOrdersButton.setOnAction(event -> {
+
+        showPage("myOrders");
+});
+
+reviewsButton = createMenuButton("⭐", "Customer Reviews");
+
+reviewsButton.setOnAction(event ->
+        showPage("reviews")
+);
+
+                // ADD BUTTONS
+                sidebar.getChildren().addAll(
+        homepageButton,
+        dashboardButton,
+        profileButton,
+        aiAdvisorButton,
+        investmentButton,
+        schemesButton,
+        orderRequestsButton,
+        myOrdersButton,
+        reviewsButton
+);
                 // SPACER
                 Region spacer = new Region();
                 VBox.setVgrow(spacer, Priority.ALWAYS);
@@ -353,24 +393,59 @@ public class FarmerDashboard {
 
         // SELECTED BUTTON
         private void setSelectedMenuButton(Button selectedButton) {
-                Button[] buttons = { homepageButton, dashboardButton, profileButton, aiAdvisorButton, investmentButton,
-                                schemesButton };
 
-                for (Button button : buttons) {
-                        if (button == null) {
-                                continue;
-                        }
+    Button[] buttons = {
+        homepageButton,
+        dashboardButton,
+        profileButton,
+        aiAdvisorButton,
+        investmentButton,
+        schemesButton,
+        orderRequestsButton,
+        myOrdersButton,
+        reviewsButton
+    };
 
-                        button.setTextFill(Color.rgb(235, 245, 235));
-                        button.setFont(Font.font("Arial", FontWeight.NORMAL, 14));
-                        button.setBackground(Background.EMPTY);
-                }
+    for (Button button : buttons) {
 
-                selectedButton.setTextFill(Color.WHITE);
-                selectedButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-                selectedButton.setBackground(
-                                new Background(new BackgroundFill(GREEN, new CornerRadii(10), Insets.EMPTY)));
+        if (button == null) {
+            continue;
         }
+
+        button.setTextFill(Color.rgb(235, 245, 235));
+        button.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.NORMAL,
+                        14
+                )
+        );
+
+        button.setBackground(
+                Background.EMPTY
+        );
+    }
+
+    selectedButton.setTextFill(Color.WHITE);
+
+    selectedButton.setFont(
+            Font.font(
+                    "Arial",
+                    FontWeight.BOLD,
+                    14
+            )
+    );
+
+    selectedButton.setBackground(
+            new Background(
+                    new BackgroundFill(
+                            GREEN,
+                            new CornerRadii(10),
+                            Insets.EMPTY
+                    )
+            )
+    );
+}
 
         // PAGE NAVIGATION
         // =========================================================
@@ -437,6 +512,52 @@ public class FarmerDashboard {
                                                 createSavedSchemesSection());
 
                                 break;
+
+                        // =========================================================
+// ORDER REQUESTS
+// =========================================================
+
+case "orderRequests":
+
+        setSelectedMenuButton(
+                orderRequestsButton
+        );
+
+        root.setCenter(
+                new FarmerOrderRequestsPage(farmerId)
+                        .getOrderRequestsPage()
+        );
+
+        break;
+
+        case "reviews":
+
+    setSelectedMenuButton(reviewsButton);
+
+    root.setCenter(
+            new FarmerReviewsPage(farmerId)
+                    .getReviewsPage()
+    );
+
+    break;
+
+
+// =========================================================
+// MY ORDERS
+// =========================================================
+
+case "myOrders":
+
+        setSelectedMenuButton(
+                myOrdersButton
+        );
+
+        root.setCenter(
+                new FarmerOrdersPage(farmerId)
+                        .getOrdersPage()
+        );
+
+        break;
 
                         case "Homepage":
 

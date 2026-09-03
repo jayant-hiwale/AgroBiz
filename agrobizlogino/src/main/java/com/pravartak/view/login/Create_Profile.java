@@ -806,11 +806,7 @@ import com.pravartak.controller.authentication_contr.AuthController;
 import com.pravartak.dao.UserDAO;
 import com.pravartak.model.UserModel;
 import java.net.URL;
-import java.util.Random;
 
-import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
-import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -819,26 +815,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
+
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
+
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.RadialGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Circle;
+
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.util.Duration;
+
 
 public class Create_Profile {
 
@@ -1650,106 +1638,5 @@ public class Create_Profile {
         );
     }
 
-//     // =========================================================
-//     // ANIMATED BACKGROUND
-//     // =========================================================
 
-//     private void createAnimatedBackground(StackPane pane) {
-
-//         Circle glow1 = new Circle(200);
-//         glow1.setFill(new RadialGradient(
-//                 0, 0, 0.5, 0.5, 1, true, CycleMethod.NO_CYCLE,
-//                 new Stop(0, Color.rgb(104, 211, 74, 0.12)),
-//                 new Stop(1, Color.TRANSPARENT)));
-//         glow1.setMouseTransparent(true);
-
-//         StackPane.setAlignment(glow1, Pos.TOP_RIGHT);
-//         StackPane.setMargin(glow1, new Insets(-90, -90, 0, 0));
-
-//         Circle glow2 = new Circle(160);
-//         glow2.setFill(new RadialGradient(
-//                 0, 0, 0.5, 0.5, 1, true, CycleMethod.NO_CYCLE,
-//                 new Stop(0, Color.rgb(45, 140, 70, 0.11)),
-//                 new Stop(1, Color.TRANSPARENT)));
-//         glow2.setMouseTransparent(true);
-
-//         StackPane.setAlignment(glow2, Pos.BOTTOM_LEFT);
-//         StackPane.setMargin(glow2, new Insets(0, 0, -70, -70));
-
-//         Circle glow3 = new Circle(130);
-//         glow3.setFill(new RadialGradient(
-//                 0, 0, 0.5, 0.5, 1, true, CycleMethod.NO_CYCLE,
-//                 new Stop(0, Color.rgb(104, 211, 74, 0.07)),
-//                 new Stop(1, Color.TRANSPARENT)));
-//         glow3.setMouseTransparent(true);
-
-//         StackPane.setAlignment(glow3, Pos.CENTER_RIGHT);
-//         StackPane.setMargin(glow3, new Insets(0, -70, 0, 0));
-
-//         TranslateTransition move1 = new TranslateTransition(Duration.seconds(9), glow1);
-//         move1.setToX(-90);
-//         move1.setToY(70);
-//         move1.setAutoReverse(true);
-//         move1.setCycleCount(Animation.INDEFINITE);
-//         move1.play();
-
-//         TranslateTransition move2 = new TranslateTransition(Duration.seconds(11), glow2);
-//         move2.setToX(80);
-//         move2.setToY(-60);
-//         move2.setAutoReverse(true);
-//         move2.setCycleCount(Animation.INDEFINITE);
-//         move2.play();
-
-//         TranslateTransition move3 = new TranslateTransition(Duration.seconds(8), glow3);
-//         move3.setToX(-60);
-//         move3.setToY(60);
-//         move3.setAutoReverse(true);
-//         move3.setCycleCount(Animation.INDEFINITE);
-//         move3.play();
-
-//         pane.getChildren().addAll(glow1, glow2, glow3);
-
-//         Random random = new Random();
-
-//         for (int i = 0; i < 15; i++) {
-
-//             Circle particle = new Circle(1.5 + random.nextDouble() * 2);
-
-//             particle.setFill(Color.rgb(
-//                     104,
-//                     211,
-//                     74,
-//                     0.15 + random.nextDouble() * 0.25));
-
-//             particle.setMouseTransparent(true);
-
-//             particle.setTranslateX(
-//                     random.nextDouble() * 550 - 275);
-
-//             particle.setTranslateY(
-//                     random.nextDouble() * 700 - 350);
-
-//             pane.getChildren().add(particle);
-
-//             TranslateTransition move = new TranslateTransition(
-//                     Duration.seconds(5 + random.nextDouble() * 6),
-//                     particle);
-
-//             move.setByX(-35 + random.nextDouble() * 70);
-//             move.setByY(-50 - random.nextDouble() * 80);
-//             move.setAutoReverse(true);
-//             move.setCycleCount(Animation.INDEFINITE);
-//             move.play();
-
-//             FadeTransition fade = new FadeTransition(
-//                     Duration.seconds(2.5 + random.nextDouble() * 3),
-//                     particle);
-
-//             fade.setFromValue(0.15);
-//             fade.setToValue(0.7);
-//             fade.setAutoReverse(true);
-//             fade.setCycleCount(Animation.INDEFINITE);
-//             fade.play();
-//         }
-//     }
 }
