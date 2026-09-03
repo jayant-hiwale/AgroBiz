@@ -141,7 +141,7 @@ public class NavBar {
         );
 
         left.setPrefWidth(
-                450
+                220
         );
 
         // =====================================================
@@ -435,37 +435,37 @@ chats.setOnAction(e -> {
                 }
         );
 
-        Button reviews =
-        navButton("⭐ Reviews");
+//         Button reviews =
+//         navButton("⭐ Reviews");
 
-if ("Reviews".equals(currentPage)) {
-    reviews.setStyle(navButtonActive());
-}
+// if ("Reviews".equals(currentPage)) {
+//     reviews.setStyle(navButtonActive());
+// }
 
-reviews.setOnAction(e -> {
+// reviews.setOnAction(e -> {
 
-    if (!checkFarmerId()) {
-        return;
-    }
+//     if (!checkFarmerId()) {
+//         return;
+//     }
 
-    BorderPane reviewPage =
-            new FarmerReviewsPage(
-                    farmerId
-            ).getReviewsPage();
+//     BorderPane reviewPage =
+//             new FarmerReviewsPage(
+//                     farmerId
+//             ).getReviewsPage();
 
-    Scene scene =
-            new Scene(
-                    reviewPage,
-                    1400,
-                    850
-            );
+//     Scene scene =
+//             new Scene(
+//                     reviewPage,
+//                     1400,
+//                     850
+//             );
 
-    LoginPage.mainStage.setScene(
-            scene
-    );
+//     LoginPage.mainStage.setScene(
+//             scene
+//     );
 
-    LoginPage.mainStage.show();
-});
+//     LoginPage.mainStage.show();
+// });
 
         // =====================================================
         // CENTER NAVIGATION
@@ -473,7 +473,7 @@ reviews.setOnAction(e -> {
 
         HBox center =
                 new HBox(
-                        25,
+                        35,
                         home,
                         explorer,
                         marketplace,
@@ -481,8 +481,7 @@ reviews.setOnAction(e -> {
                         community,
                         learning,
                         schemes,
-                        aiadvisor,
-                        reviews
+                        aiadvisor
                 );
 
         center.setAlignment(
@@ -705,7 +704,7 @@ right.setAlignment(
 );
 
 right.setPrefWidth(
-        450
+        350
 );
         // =====================================================
         // ADD EVERYTHING

@@ -2383,9 +2383,9 @@ loginCard.getChildren().addAll(
         );
 
 
-        mainStage.setWidth(1368);
+        mainStage.setWidth(1550);
 
-        mainStage.setHeight(768);
+        mainStage.setHeight(839);
 
 
         // =====================================================
