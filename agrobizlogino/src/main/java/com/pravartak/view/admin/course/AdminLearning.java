@@ -265,7 +265,6 @@ public class AdminLearning {
                 String[] tabNames = {
                                 "Courses",
                                 "Categories",
-                                "Lessons",
                 };
 
                 for (int i = 0; i < tabNames.length; i++) {

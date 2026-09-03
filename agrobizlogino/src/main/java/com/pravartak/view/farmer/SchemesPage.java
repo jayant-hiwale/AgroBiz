@@ -12,11 +12,14 @@ import com.pravartak.view.login.LoginPage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+
 import javafx.scene.Scene;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -29,1331 +32,1373 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+
 import javafx.scene.paint.Color;
+
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+// =============================================================
+// SCHEMES PAGE
+// =============================================================
+
 public class SchemesPage {
 
-    // =========================================================
-    // SCENE
-    // =========================================================
+        // =========================================================
+        // THEME COLORS
+        // =========================================================
 
-    private static Scene schemesScene;
+        private static final String BG = "#050B0A";
 
-    // =========================================================
-    // CONTROLLER
-    // =========================================================
+        private static final String CARD = "#0B1714";
 
-    private static final SchemeController schemeController =
-            new SchemeController();
+        private static final String CARD_HOVER = "#10221C";
 
-    // =========================================================
-    // GET SCHEMES PAGE
-    // =========================================================
+        private static final String CARD_BORDER = "#19352B";
 
-    public static Scene getSchemesPage() {
+        private static final String GREEN = "#53D74A";
 
-        BorderPane borderPane =
-                new BorderPane();
+        private static final String GREEN_LIGHT = "#68D34A";
 
-        borderPane.setStyle(
-                "-fx-background-color:#050b0a;"
-        );
+        private static final String GREEN_DARK = "#163D24";
 
-        // =====================================================
-        // NAVBAR
-        // =====================================================
+        private static final String GREEN_DARKER = "#0C2B1E";
 
-        borderPane.setTop(
-                new NavBar().createNavbar("Schemes")
-        );
+        private static final String TEXT = "#FFFFFF";
 
-        // =====================================================
-        // FOOTER
-        // =====================================================
+        private static final String TEXT_PRIMARY = "#EEEEEE";
 
-        borderPane.setBottom(
-                new Footer().createFooter()
-        );
+        private static final String TEXT_SECONDARY = "#91A099";
 
-        // =====================================================
-        // MAIN CONTENT
-        // =====================================================
+        private static final String TEXT_MUTED = "#687572";
 
-        VBox mainVBox =
-                new VBox(16);
+        private static final String BORDER = "#1C372D";
 
-        mainVBox.setPadding(
-                new Insets(
-                        25,
-                        35,
-                        25,
-                        35
-                )
-        );
-
-        mainVBox.setAlignment(
-                Pos.TOP_LEFT
-        );
-
-        mainVBox.setFillWidth(true);
-
-        mainVBox.setStyle(
-                "-fx-background-color:#050b0a;"
-        );
-
-        // =====================================================
-        // TITLE
-        // =====================================================
-
-        Label pageTitle =
-                new Label(
-                        "Government & Industry Schemes"
-                );
-
-        pageTitle.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        26
-                )
-        );
-
-        pageTitle.setTextFill(
-                Color.WHITE
-        );
-
-        // =====================================================
-        // DESCRIPTION
-        // =====================================================
-
-        Label pageDescription =
-                new Label(
-                        "Explore available programs, subsidies, and insurance "
-                        + "schemes designed to support sustainable agriculture "
-                        + "and animal husbandry. Discover opportunities to "
-                        + "enhance your farming operations."
-                );
-
-        pageDescription.setFont(
-                Font.font(
-                        "Arial",
-                        13
-                )
-        );
-
-        pageDescription.setTextFill(
-                Color.rgb(
-                        145,
-                        160,
-                        153
-                )
-        );
-
-        pageDescription.setWrapText(true);
-
-        pageDescription.setMaxWidth(950);
-
-        // =====================================================
-        // SCHEME CARDS CONTAINER
-        // =====================================================
-
-        VBox schemeCards =
-                new VBox(18);
-
-        schemeCards.setAlignment(
-                Pos.TOP_LEFT
-        );
-
-        schemeCards.setFillWidth(true);
-
-        // =====================================================
-        // CATEGORY BUTTONS
-        // =====================================================
-
-        HBox categoryButtons =
-                createCategoryButtons(
-                        schemeCards
-                );
-
-        // =====================================================
-        // INITIAL LOAD
-        // =====================================================
-
-        loadSchemesByCategory(
-                "ALL",
-                schemeCards
-        );
-
-        // =====================================================
-        // ADD CONTENT
-        // =====================================================
-
-        mainVBox.getChildren().addAll(
-                pageTitle,
-                pageDescription,
-                categoryButtons,
-                schemeCards
-        );
-
-        // =====================================================
-        // SCROLL
-        // =====================================================
-
-        ScrollPane scrollPane =
-                new ScrollPane();
-
-        scrollPane.setContent(
-                mainVBox
-        );
-
-        scrollPane.setFitToWidth(true);
-
-        scrollPane.setFitToHeight(false);
-
-        scrollPane.setHbarPolicy(
-                ScrollPane.ScrollBarPolicy.NEVER
-        );
-
-        scrollPane.setVbarPolicy(
-                ScrollPane.ScrollBarPolicy.AS_NEEDED
-        );
-
-        scrollPane.setPannable(true);
-
-        scrollPane.setStyle(
-                "-fx-background-color:#050b0a;" +
-                "-fx-background:#050b0a;" +
-                "-fx-control-inner-background:#050b0a;" +
-                "-fx-border-color:transparent;"
-        );
-
-        borderPane.setCenter(
-                scrollPane
-        );
-
-        // =====================================================
+        // =========================================================
         // SCENE
-        // =====================================================
+        // =========================================================
 
-        Scene scene =
-                new Scene(
-                        borderPane,
-                        1368,
-                        768
-                );
+        private static Scene schemesScene;
 
-        schemesScene = scene;
+        // =========================================================
+        // CONTROLLER
+        // =========================================================
 
-        return scene;
-    }
+        private static final SchemeController schemeController = new SchemeController();
 
-    // =========================================================
-    // CATEGORY BUTTONS
-    // =========================================================
+        // =========================================================
+        // GET SCHEMES PAGE
+        // =========================================================
 
-    private static HBox createCategoryButtons(
-            VBox schemeCards) {
+        public static Scene getSchemesPage() {
 
-        HBox categoryBox =
-                new HBox(10);
+                BorderPane borderPane = new BorderPane();
 
-        categoryBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
+                borderPane.setStyle(
+                                "-fx-background-color:" + BG + ";");
 
-        // =====================================================
-        // ALL
-        // =====================================================
+                // =====================================================
+                // NAVBAR
+                // =====================================================
 
-        Button allSchemesButton =
-                createCategoryButton(
-                        "All Schemes",
-                        true
-                );
+                borderPane.setTop(
+                                new NavBar().createNavbar("Schemes"));
 
-        // =====================================================
-        // ANIMAL HUSBANDRY
-        // =====================================================
+                // =====================================================
+                // FOOTER
+                // =====================================================
 
-        Button animalButton =
-                createCategoryButton(
-                        "Animal Husbandry",
-                        false
-                );
+                borderPane.setBottom(
+                                new Footer().createFooter());
 
-        // =====================================================
-        // EQUIPMENT
-        // =====================================================
+                // =====================================================
+                // MAIN CONTENT
+                // =====================================================
 
-        Button equipmentButton =
-                createCategoryButton(
-                        "Equipment Subsidy",
-                        false
-                );
+                VBox mainVBox = new VBox(18);
 
-        // =====================================================
-        // LIVESTOCK INSURANCE
-        // =====================================================
+                mainVBox.setPadding(
+                                new Insets(
+                                                30,
+                                                36,
+                                                30,
+                                                36));
 
-        Button insuranceButton =
-                createCategoryButton(
-                        "Livestock Insurance",
-                        false
-                );
+                mainVBox.setAlignment(
+                                Pos.TOP_LEFT);
 
-        // =====================================================
-        // BUTTON ACTIONS
-        // =====================================================
+                mainVBox.setFillWidth(true);
 
-        allSchemesButton.setOnAction(
-                e -> {
+                mainVBox.setStyle(
+                                "-fx-background-color:" + BG + ";");
 
-                    setSelectedButton(
-                            categoryBox,
-                            allSchemesButton
-                    );
+                // =====================================================
+                // TITLE
+                // =====================================================
 
-                    loadSchemesByCategory(
-                            "ALL",
-                            schemeCards
-                    );
+                Label pageTitle = new Label(
+                                "Government & Industry Schemes");
+
+                pageTitle.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                30));
+
+                pageTitle.setTextFill(
+                                Color.WHITE);
+
+                // =====================================================
+                // DESCRIPTION
+                // =====================================================
+
+                Label pageDescription = new Label(
+                                "Explore available programs, subsidies, and insurance "
+                                                + "schemes designed to support sustainable agriculture "
+                                                + "and animal husbandry. Discover opportunities to "
+                                                + "enhance your farming operations.");
+
+                pageDescription.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.NORMAL,
+                                                13));
+
+                pageDescription.setTextFill(
+                                Color.web(TEXT_SECONDARY));
+
+                pageDescription.setWrapText(true);
+
+                pageDescription.setMaxWidth(
+                                1000);
+
+                // =====================================================
+                // SCHEME CARDS CONTAINER
+                // =====================================================
+
+                VBox schemeCards = new VBox(18);
+
+                schemeCards.setAlignment(
+                                Pos.TOP_LEFT);
+
+                schemeCards.setFillWidth(true);
+
+                // =====================================================
+                // CATEGORY BUTTONS
+                // =====================================================
+
+                HBox categoryButtons = createCategoryButtons(
+                                schemeCards);
+
+                // =====================================================
+                // INITIAL LOAD
+                // =====================================================
+
+                loadSchemesByCategory(
+                                "ALL",
+                                schemeCards);
+
+                // =====================================================
+                // ADD CONTENT
+                // =====================================================
+
+                mainVBox.getChildren().addAll(
+                                pageTitle,
+                                pageDescription,
+                                categoryButtons,
+                                schemeCards);
+
+                // =====================================================
+                // SCROLL PANE
+                // =====================================================
+
+                ScrollPane scrollPane = new ScrollPane();
+
+                scrollPane.setContent(
+                                mainVBox);
+
+                scrollPane.setFitToWidth(true);
+
+                scrollPane.setFitToHeight(false);
+
+                scrollPane.setHbarPolicy(
+                                ScrollPane.ScrollBarPolicy.NEVER);
+
+                scrollPane.setVbarPolicy(
+                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+                scrollPane.setPannable(true);
+
+                scrollPane.setStyle(
+                                "-fx-background-color:" + BG + ";" +
+                                                "-fx-background:" + BG + ";" +
+                                                "-fx-control-inner-background:" + BG + ";" +
+                                                "-fx-border-color:transparent;");
+
+                borderPane.setCenter(
+                                scrollPane);
+
+                // =====================================================
+                // SCENE
+                // =====================================================
+
+                Scene scene = new Scene(
+                                borderPane,
+                                1368,
+                                768);
+
+                schemesScene = scene;
+
+                return scene;
+        }
+
+        // =========================================================
+        // CATEGORY BUTTONS
+        // =========================================================
+
+        private static HBox createCategoryButtons(
+                        VBox schemeCards) {
+
+                HBox categoryBox = new HBox(10);
+
+                categoryBox.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                // =====================================================
+                // ALL
+                // =====================================================
+
+                Button allSchemesButton = createCategoryButton(
+                                "All Schemes",
+                                true);
+
+                // =====================================================
+                // ANIMAL HUSBANDRY
+                // =====================================================
+
+                Button animalButton = createCategoryButton(
+                                "Animal Husbandry",
+                                false);
+
+                // =====================================================
+                // EQUIPMENT
+                // =====================================================
+
+                Button equipmentButton = createCategoryButton(
+                                "Equipment Subsidy",
+                                false);
+
+                // =====================================================
+                // INSURANCE
+                // =====================================================
+
+                Button insuranceButton = createCategoryButton(
+                                "Livestock Insurance",
+                                false);
+
+                // =====================================================
+                // ALL ACTION
+                // =====================================================
+
+                allSchemesButton.setOnAction(
+                                e -> {
+
+                                        setSelectedButton(
+                                                        categoryBox,
+                                                        allSchemesButton);
+
+                                        loadSchemesByCategory(
+                                                        "ALL",
+                                                        schemeCards);
+                                });
+
+                // =====================================================
+                // ANIMAL ACTION
+                // =====================================================
+
+                animalButton.setOnAction(
+                                e -> {
+
+                                        setSelectedButton(
+                                                        categoryBox,
+                                                        animalButton);
+
+                                        loadSchemesByCategory(
+                                                        "Animal Husbandry",
+                                                        schemeCards);
+                                });
+
+                // =====================================================
+                // EQUIPMENT ACTION
+                // =====================================================
+
+                equipmentButton.setOnAction(
+                                e -> {
+
+                                        setSelectedButton(
+                                                        categoryBox,
+                                                        equipmentButton);
+
+                                        loadSchemesByCategory(
+                                                        "Equipment Subsidy",
+                                                        schemeCards);
+                                });
+
+                // =====================================================
+                // INSURANCE ACTION
+                // =====================================================
+
+                insuranceButton.setOnAction(
+                                e -> {
+
+                                        setSelectedButton(
+                                                        categoryBox,
+                                                        insuranceButton);
+
+                                        loadSchemesByCategory(
+                                                        "Livestock Insurance",
+                                                        schemeCards);
+                                });
+
+                // =====================================================
+                // ADD BUTTONS
+                // =====================================================
+
+                categoryBox.getChildren().addAll(
+                                allSchemesButton,
+                                animalButton,
+                                equipmentButton,
+                                insuranceButton);
+
+                return categoryBox;
+        }
+
+        // =========================================================
+        // LOAD SCHEMES BY CATEGORY
+        // =========================================================
+
+        private static void loadSchemesByCategory(
+                        String category,
+                        VBox schemeCards) {
+
+                schemeCards
+                                .getChildren()
+                                .clear();
+
+                List<Scheme> allSchemes;
+
+                try {
+
+                        allSchemes = schemeController.getAllSchemes();
+
+                } catch (Exception e) {
+
+                        e.printStackTrace();
+
+                        schemeCards.getChildren().add(
+                                        createNoSchemeView());
+
+                        return;
                 }
-        );
 
-        animalButton.setOnAction(
-                e -> {
+                // =====================================================
+                // EMPTY
+                // =====================================================
 
-                    setSelectedButton(
-                            categoryBox,
-                            animalButton
-                    );
+                if (allSchemes == null ||
+                                allSchemes.isEmpty()) {
 
-                    loadSchemesByCategory(
-                            "Animal Husbandry",
-                            schemeCards
-                    );
+                        schemeCards.getChildren().add(
+                                        createNoSchemeView());
+
+                        return;
                 }
-        );
 
-        equipmentButton.setOnAction(
-                e -> {
+                // =====================================================
+                // FILTER
+                // =====================================================
 
-                    setSelectedButton(
-                            categoryBox,
-                            equipmentButton
-                    );
+                int count = 0;
 
-                    loadSchemesByCategory(
-                            "Equipment Subsidy",
-                            schemeCards
-                    );
+                for (Scheme scheme : allSchemes) {
+
+                        if (scheme == null) {
+                                continue;
+                        }
+
+                        // Only active schemes
+                        if (!scheme.isActive()) {
+                                continue;
+                        }
+
+                        // ALL
+                        if ("ALL".equalsIgnoreCase(category)) {
+
+                                schemeCards.getChildren().add(
+                                                createSchemeCard(scheme));
+
+                                count++;
+
+                                continue;
+                        }
+
+                        // CATEGORY
+                        String schemeCategory = safeText(
+                                        scheme.getCategory(),
+                                        "");
+
+                        if (schemeCategory.equalsIgnoreCase(
+                                        category)) {
+
+                                schemeCards.getChildren().add(
+                                                createSchemeCard(scheme));
+
+                                count++;
+                        }
                 }
-        );
 
-        insuranceButton.setOnAction(
-                e -> {
+                // =====================================================
+                // NOTHING FOUND
+                // =====================================================
 
-                    setSelectedButton(
-                            categoryBox,
-                            insuranceButton
-                    );
+                if (count == 0) {
 
-                    loadSchemesByCategory(
-                            "Livestock Insurance",
-                            schemeCards
-                    );
+                        schemeCards.getChildren().add(
+                                        createNoSchemeView(
+                                                        category));
                 }
-        );
-
-        // =====================================================
-        // ADD BUTTONS
-        // =====================================================
-
-        categoryBox.getChildren().addAll(
-                allSchemesButton,
-                animalButton,
-                equipmentButton,
-                insuranceButton
-        );
-
-        return categoryBox;
-    }
-
-    // =========================================================
-    // LOAD SCHEMES BY CATEGORY
-    // =========================================================
-
-    private static void loadSchemesByCategory(
-            String category,
-            VBox schemeCards) {
-
-        // -----------------------------------------------------
-        // CLEAR OLD CARDS
-        // -----------------------------------------------------
-
-        schemeCards.getChildren().clear();
-
-        // -----------------------------------------------------
-        // GET FIREBASE DATA
-        // -----------------------------------------------------
-
-        List<Scheme> allSchemes;
-
-        try {
-
-            allSchemes =
-                    schemeController.getAllSchemes();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-            schemeCards.getChildren().add(
-                    createNoSchemeView()
-            );
-
-            return;
         }
 
-        // -----------------------------------------------------
-        // NULL / EMPTY
-        // -----------------------------------------------------
+        // =========================================================
+        // SELECTED CATEGORY
+        // =========================================================
 
-        if (allSchemes == null ||
-                allSchemes.isEmpty()) {
+        private static void setSelectedButton(
+                        HBox categoryBox,
+                        Button selectedButton) {
 
-            schemeCards.getChildren().add(
-                    createNoSchemeView()
-            );
+                for (javafx.scene.Node node : categoryBox.getChildren()) {
 
-            return;
-        }
+                        if (node instanceof Button) {
 
-        // -----------------------------------------------------
-        // FILTER
-        // -----------------------------------------------------
+                                Button button = (Button) node;
 
-        int count = 0;
+                                if (button == selectedButton) {
 
-        for (Scheme scheme : allSchemes) {
+                                        styleSelectedButton(
+                                                        button);
 
-            if (scheme == null) {
-                continue;
-            }
+                                } else {
 
-            // Only active schemes
-            if (!scheme.isActive()) {
-                continue;
-            }
-
-            // ALL
-            if ("ALL".equalsIgnoreCase(category)) {
-
-                schemeCards.getChildren().add(
-                        createSchemeCard(scheme)
-                );
-
-                count++;
-
-                continue;
-            }
-
-            // CATEGORY
-            String schemeCategory =
-                    safeText(
-                            scheme.getCategory(),
-                            ""
-                    );
-
-            if (schemeCategory.equalsIgnoreCase(
-                    category)) {
-
-                schemeCards.getChildren().add(
-                        createSchemeCard(scheme)
-                );
-
-                count++;
-            }
-        }
-
-        // -----------------------------------------------------
-        // NOTHING FOUND
-        // -----------------------------------------------------
-
-        if (count == 0) {
-
-            schemeCards.getChildren().add(
-                    createNoSchemeView(
-                            category
-                    )
-            );
-        }
-    }
-
-    // =========================================================
-    // SELECTED CATEGORY BUTTON
-    // =========================================================
-
-    private static void setSelectedButton(
-            HBox categoryBox,
-            Button selectedButton) {
-
-        for (javafx.scene.Node node :
-                categoryBox.getChildren()) {
-
-            if (node instanceof Button) {
-
-                Button button =
-                        (Button) node;
-
-                if (button == selectedButton) {
-
-                    styleSelectedButton(button);
-
+                                        styleNormalButton(
+                                                        button);
+                                }
+                        }
                 }
-                 else {
-
-                    styleNormalButton(button);
-                }
-            }
-        }
-    }
-
-    // =========================================================
-    // SELECTED BUTTON STYLE
-    // =========================================================
-
-    private static void styleSelectedButton(
-            Button button) {
-
-        button.setTextFill(
-                Color.BLACK
-        );
-
-        button.setBackground(
-                new Background(
-                        new BackgroundFill(
-                                Color.rgb(
-                                        83,
-                                        215,
-                                        74
-                                ),
-                                new CornerRadii(15),
-                                Insets.EMPTY
-                        )
-                )
-        );
-
-        button.setBorder(null);
-    }
-
-    // =========================================================
-    // NORMAL BUTTON STYLE
-    // =========================================================
-
-    private static void styleNormalButton(
-            Button button) {
-
-        button.setTextFill(
-                Color.rgb(
-                        145,
-                        160,
-                        153
-                )
-        );
-
-        button.setBackground(
-                new Background(
-                        new BackgroundFill(
-                                Color.rgb(
-                                        8,
-                                        23,
-                                        19
-                                ),
-                                new CornerRadii(15),
-                                Insets.EMPTY
-                        )
-                )
-        );
-
-        button.setBorder(
-                new Border(
-                        new BorderStroke(
-                                Color.rgb(
-                                        28,
-                                        55,
-                                        45
-                                ),
-                                BorderStrokeStyle.SOLID,
-                                new CornerRadii(15),
-                                new BorderWidths(1)
-                        )
-                )
-        );
-    }
-
-    // =========================================================
-    // NO SCHEME VIEW
-    // =========================================================
-
-    private static VBox createNoSchemeView() {
-
-        return createNoSchemeView(
-                "this category"
-        );
-    }
-
-    private static VBox createNoSchemeView(
-            String category) {
-
-        VBox box =
-                new VBox(10);
-
-        box.setAlignment(
-                Pos.CENTER
-        );
-
-        box.setPadding(
-                new Insets(50)
-        );
-
-        box.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        Label icon =
-                new Label("🌱");
-
-        icon.setFont(
-                Font.font(
-                        "Arial",
-                        30
-                )
-        );
-
-        Label title =
-                new Label(
-                        "No schemes available"
-                );
-
-        title.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        18
-                )
-        );
-
-        title.setTextFill(
-                Color.WHITE
-        );
-
-        Label message =
-                new Label(
-                        "No active government schemes were found for "
-                        + category + "."
-                );
-
-        message.setFont(
-                Font.font(
-                        "Arial",
-                        12
-                )
-        );
-
-        message.setTextFill(
-                Color.rgb(
-                        145,
-                        160,
-                        153
-                )
-        );
-
-        message.setWrapText(true);
-
-        message.setAlignment(
-                Pos.CENTER
-        );
-
-        box.getChildren().addAll(
-                icon,
-                title,
-                message
-        );
-
-        return box;
-    }
-
-    // =========================================================
-    // CREATE SCHEME CARD
-    // =========================================================
-
-    private static VBox createSchemeCard(
-            Scheme scheme) {
-
-        VBox schemeCard =
-                new VBox(10);
-
-        schemeCard.setPadding(
-                new Insets(18)
-        );
-
-        schemeCard.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        schemeCard.setStyle(
-                "-fx-background-color:#0b1714;" +
-                "-fx-background-radius:12;" +
-                "-fx-border-color:#19352b;" +
-                "-fx-border-radius:12;" +
-                "-fx-border-width:1;"
-        );
-
-        // =====================================================
-        // TOP ROW
-        // =====================================================
-
-        HBox topRow =
-                new HBox();
-
-        topRow.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        // =====================================================
-        // ICON
-        // =====================================================
-
-        Label iconLabel =
-                new Label("🌱");
-
-        iconLabel.setPrefSize(
-                45,
-                42
-        );
-
-        iconLabel.setAlignment(
-                Pos.CENTER
-        );
-
-        iconLabel.setFont(
-                Font.font(
-                        "Arial",
-                        20
-                )
-        );
-
-        iconLabel.setBackground(
-                new Background(
-                        new BackgroundFill(
-                                Color.rgb(
-                                        16,
-                                        55,
-                                        39
-                                ),
-                                new CornerRadii(6),
-                                Insets.EMPTY
-                        )
-                )
-        );
-
-        // =====================================================
-        // SPACE
-        // =====================================================
-
-        Region space =
-                new Region();
-
-        HBox.setHgrow(
-                space,
-                Priority.ALWAYS
-        );
-
-        // =====================================================
-        // CATEGORY BADGE
-        // =====================================================
-
-        String category =
-                safeText(
-                        scheme.getCategory(),
-                        "GENERAL"
-                );
-
-        Label badge =
-                new Label(
-                        category.toUpperCase()
-                );
-
-        badge.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        8
-                )
-        );
-
-        badge.setTextFill(
-                Color.rgb(
-                        130,
-                        210,
-                        150
-                )
-        );
-
-        badge.setPadding(
-                new Insets(
-                        4,
-                        8,
-                        4,
-                        8
-                )
-        );
-
-        badge.setBackground(
-                new Background(
-                        new BackgroundFill(
-                                Color.rgb(
-                                        12,
-                                        43,
-                                        30
-                                ),
-                                new CornerRadii(10),
-                                Insets.EMPTY
-                        )
-                )
-        );
-
-        topRow.getChildren().addAll(
-                iconLabel,
-                space,
-                badge
-        );
-
-        // =====================================================
-        // SCHEME NAME
-        // =====================================================
-
-        String schemeName =
-                safeText(
-                        scheme.getSchemeName(),
-                        "Government Scheme"
-                );
-
-        Label nameLabel =
-                new Label(
-                        schemeName
-                );
-
-        nameLabel.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        18
-                )
-        );
-
-        nameLabel.setTextFill(
-                Color.WHITE
-        );
-
-        nameLabel.setWrapText(
-                true
-        );
-
-        // =====================================================
-        // INFORMATION
-        // =====================================================
-
-        String information =
-                safeText(
-                        scheme.getInformation(),
-                        "Information not available."
-                );
-
-        Label informationLabel =
-                new Label(
-                        information
-                );
-
-        informationLabel.setFont(
-                Font.font(
-                        "Arial",
-                        12
-                )
-        );
-
-        informationLabel.setTextFill(
-                Color.rgb(
-                        145,
-                        160,
-                        153
-                )
-        );
-
-        informationLabel.setWrapText(
-                true
-        );
-
-        informationLabel.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        // =====================================================
-        // ELIGIBILITY BOX
-        // =====================================================
-
-        VBox eligibilityBox =
-                new VBox(6);
-
-        eligibilityBox.setPadding(
-                new Insets(12)
-        );
-
-        eligibilityBox.setBackground(
-                new Background(
-                        new BackgroundFill(
-                                Color.rgb(
-                                        8,
-                                        28,
-                                        22
-                                ),
-                                new CornerRadii(7),
-                                Insets.EMPTY
-                        )
-                )
-        );
-
-        Label eligibilityHeading =
-                new Label(
-                        "ⓘ  Eligibility"
-                );
-
-        eligibilityHeading.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        11
-                )
-        );
-
-        eligibilityHeading.setTextFill(
-                Color.rgb(
-                        83,
-                        215,
-                        74
-                )
-        );
-
-        String eligibility =
-                safeText(
-                        scheme.getEligibility(),
-                        "Eligibility information not available."
-                );
-
-        Label eligibilityLabel =
-                new Label(
-                        eligibility
-                );
-
-        eligibilityLabel.setFont(
-                Font.font(
-                        "Arial",
-                        11
-                )
-        );
-
-        eligibilityLabel.setTextFill(
-                Color.rgb(
-                        145,
-                        160,
-                        153
-                )
-        );
-
-        eligibilityLabel.setWrapText(
-                true
-        );
-
-        eligibilityLabel.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        eligibilityBox.getChildren().addAll(
-                eligibilityHeading,
-                eligibilityLabel
-        );
-
-        // =====================================================
-        // APPLY BUTTON
-        // =====================================================
-
-        Button actionButton =
-                new Button(
-                        "Apply Now"
-                );
-
-        actionButton.setPrefHeight(
-                34
-        );
-
-        actionButton.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        actionButton.setCursor(
-                javafx.scene.Cursor.HAND
-        );
-
-        actionButton.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        11
-                )
-        );
-
-        actionButton.setStyle(
-                "-fx-background-color:#53d74a;" +
-                "-fx-text-fill:#06100b;" +
-                "-fx-background-radius:5;" +
-                "-fx-cursor:hand;"
-        );
-
-        actionButton.setOnAction(
-                event -> {
-
-                    openSchemeWebsite(
-                            scheme
-                    );
-                }
-        );
-        Button likeButton =
-        createLikeButton(
-                scheme
-        );
-
-        // =====================================================
-        // ADD CONTENT
-        // =====================================================
-
-        schemeCard.getChildren().addAll(
-                topRow,
-                nameLabel,
-                informationLabel,
-                eligibilityBox,
-                actionButton,
-                likeButton
-        );
-
-        // =====================================================
-        // HOVER
-        // =====================================================
-
-        schemeCard.setOnMouseEntered(
-                event -> {
-
-                    schemeCard.setStyle(
-                            "-fx-background-color:#10221c;" +
-                            "-fx-background-radius:12;" +
-                            "-fx-border-color:#53d74a;" +
-                            "-fx-border-radius:12;" +
-                            "-fx-border-width:1;"
-                    );
-                }
-        );
-
-        schemeCard.setOnMouseExited(
-                event -> {
-
-                    schemeCard.setStyle(
-                            "-fx-background-color:#0b1714;" +
-                            "-fx-background-radius:12;" +
-                            "-fx-border-color:#19352b;" +
-                            "-fx-border-radius:12;" +
-                            "-fx-border-width:1;"
-                    );
-                }
-        );
-
-        return schemeCard;
-    }
-
-    // =========================================================
-    // OPEN APPLICATION WEBSITE
-    // =========================================================
-
-    private static void openSchemeWebsite(
-            Scheme scheme) {
-
-        String url =
-                safeText(
-                        scheme.getApplyUrl(),
-                        ""
-                );
-
-        if (url.isEmpty()) {
-
-            showMessage(
-                    "Application Link",
-                    "Application link is not available for this scheme."
-            );
-
-            return;
         }
 
-        try {
+        // =========================================================
+        // SELECTED BUTTON STYLE
+        // =========================================================
 
-            if (!url.startsWith("http://") &&
-                    !url.startsWith("https://")) {
+        private static void styleSelectedButton(
+                        Button button) {
 
-                url = "https://" + url;
-            }
-
-            if (!Desktop.isDesktopSupported()) {
-
-                showMessage(
-                        "Application Link",
-                        "Your computer does not support opening web links."
-                );
-
-                return;
-            }
-
-            Desktop desktop =
-                    Desktop.getDesktop();
-
-            if (!desktop.isSupported(
-                    Desktop.Action.BROWSE)) {
-
-                showMessage(
-                        "Application Link",
-                        "Your system cannot open web links."
-                );
-
-                return;
-            }
-
-            desktop.browse(
-                    new URI(url)
-            );
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-            showMessage(
-                    "Application Link",
-                    "Unable to open the application website."
-            );
-        }
-    }
-
-    // =========================================================
-    // CATEGORY BUTTON
-    // =========================================================
-
-    private static Button createCategoryButton(
-            String buttonText,
-            boolean selected) {
-
-        Button categoryButton =
-                new Button(
-                        buttonText
-                );
-
-        categoryButton.setPrefHeight(
-                30
-        );
-
-        categoryButton.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        10
-                )
-        );
-
-        categoryButton.setCursor(
-                javafx.scene.Cursor.HAND
-        );
-
-        if (selected) {
-
-            styleSelectedButton(
-                    categoryButton
-            );
-
-        } else {
-
-            styleNormalButton(
-                    categoryButton
-            );
+                button.setStyle(
+                                "-fx-background-color:" + GREEN + ";" +
+                                                "-fx-text-fill:#06100B;" +
+                                                "-fx-background-radius:8;" +
+                                                "-fx-border-radius:8;" +
+                                                "-fx-border-color:" + GREEN + ";" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-padding:8 17 8 17;" +
+                                                "-fx-font-size:12px;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-cursor:hand;" +
+                                                "-fx-background-insets:0;" +
+                                                "-fx-border-insets:0;");
         }
 
-        return categoryButton;
-    }
+        // =========================================================
+        // NORMAL BUTTON STYLE
+        // =========================================================
 
-    // =========================================================
-    // SAFE TEXT
-    // =========================================================
+        private static void styleNormalButton(
+                        Button button) {
 
-    private static String safeText(
-            String value,
-            String defaultValue) {
-
-        if (value == null ||
-                value.trim().isEmpty()) {
-
-            return defaultValue;
+                button.setStyle(
+                                "-fx-background-color:#0B1714;" +
+                                                "-fx-text-fill:" + TEXT_SECONDARY + ";" +
+                                                "-fx-background-radius:8;" +
+                                                "-fx-border-radius:8;" +
+                                                "-fx-border-color:" + BORDER + ";" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-padding:8 17 8 17;" +
+                                                "-fx-font-size:12px;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-cursor:hand;" +
+                                                "-fx-background-insets:0;" +
+                                                "-fx-border-insets:0;");
         }
 
-        return value.trim();
-    }
+        // =========================================================
+        // CATEGORY BUTTON
+        // =========================================================
 
-    // =========================================================
-    // SHOW MESSAGE
-    // =========================================================
+        private static Button createCategoryButton(
+                        String buttonText,
+                        boolean selected) {
 
-    private static void showMessage(
-            String title,
-            String message) {
+                Button categoryButton = new Button(
+                                buttonText);
 
-        Alert alert =
-                new Alert(
-                        Alert.AlertType.INFORMATION
-                );
+                categoryButton.setPrefHeight(
+                                34);
 
-        alert.setTitle(
-                title
-        );
+                categoryButton.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                12));
 
-        alert.setHeaderText(
-                null
-        );
+                categoryButton.setCursor(
+                                javafx.scene.Cursor.HAND);
 
-        alert.setContentText(
-                message
-        );
+                // =====================================================
+                // INITIAL STYLE
+                // =====================================================
 
-        alert.showAndWait();
-    }
+                if (selected) {
 
-    // =========================================================
-    // BACK TO SCHEMES
-    // =========================================================
-
-    public void backtoSchemes() {
-
-        if (schemesScene != null) {
-
-            LoginPage.mainStage.setScene(
-                    schemesScene
-            );
-        }
-    }
-    // =========================================================
-// LIKE / UNLIKE BUTTON
-// =========================================================
-
-private static Button createLikeButton(
-        Scheme scheme) {
-
-    Button likeButton = new Button();
-
-    likeButton.setPrefHeight(34);
-
-    likeButton.setPrefWidth(120);
-
-    likeButton.setCursor(
-            javafx.scene.Cursor.HAND
-    );
-
-    likeButton.setFont(
-            Font.font(
-                    "Arial",
-                    FontWeight.BOLD,
-                    11
-            )
-    );
-
-    updateLikeButton(
-            likeButton,
-            scheme
-    );
-
-    likeButton.setOnAction(
-            event -> {
-
-                if (SavedSchemesManager.isLiked(scheme)) {
-
-                    // -----------------------------------------
-                    // UNLIKE
-                    // -----------------------------------------
-
-                    SavedSchemesManager.removeScheme(
-                            scheme
-                    );
+                        styleSelectedButton(
+                                        categoryButton);
 
                 } else {
 
-                    // -----------------------------------------
-                    // LIKE
-                    // -----------------------------------------
-
-                    SavedSchemesManager.addScheme(
-                            scheme
-                    );
+                        styleNormalButton(
+                                        categoryButton);
                 }
 
-                // Update button
+                // =====================================================
+                // HOVER
+                // =====================================================
+
+                categoryButton.setOnMouseEntered(
+                                e -> {
+
+                                        if (selected) {
+
+                                                categoryButton.setStyle(
+                                                                "-fx-background-color:#68E85A;" +
+                                                                                "-fx-text-fill:#06100B;" +
+                                                                                "-fx-background-radius:8;" +
+                                                                                "-fx-border-radius:8;" +
+                                                                                "-fx-border-color:#68E85A;" +
+                                                                                "-fx-border-width:1;" +
+                                                                                "-fx-padding:8 17 8 17;" +
+                                                                                "-fx-font-size:12px;" +
+                                                                                "-fx-font-weight:bold;" +
+                                                                                "-fx-cursor:hand;");
+
+                                        } else {
+
+                                                categoryButton.setStyle(
+                                                                "-fx-background-color:#163D24;" +
+                                                                                "-fx-text-fill:#FFFFFF;" +
+                                                                                "-fx-background-radius:8;" +
+                                                                                "-fx-border-radius:8;" +
+                                                                                "-fx-border-color:#53D74A;" +
+                                                                                "-fx-border-width:1;" +
+                                                                                "-fx-padding:8 17 8 17;" +
+                                                                                "-fx-font-size:12px;" +
+                                                                                "-fx-font-weight:bold;" +
+                                                                                "-fx-cursor:hand;");
+                                        }
+                                });
+
+                // =====================================================
+                // EXIT HOVER
+                // =====================================================
+
+                categoryButton.setOnMouseExited(
+                                e -> {
+
+                                        if (selected) {
+
+                                                styleSelectedButton(
+                                                                categoryButton);
+
+                                        } else {
+
+                                                styleNormalButton(
+                                                                categoryButton);
+                                        }
+                                });
+
+                return categoryButton;
+        }
+
+        // =========================================================
+        // NO SCHEME VIEW
+        // =========================================================
+
+        private static VBox createNoSchemeView() {
+
+                return createNoSchemeView(
+                                "this category");
+        }
+
+        private static VBox createNoSchemeView(
+                        String category) {
+
+                VBox box = new VBox(10);
+
+                box.setAlignment(
+                                Pos.CENTER);
+
+                box.setPadding(
+                                new Insets(50));
+
+                box.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                box.setStyle(
+                                "-fx-background-color:" + CARD + ";" +
+                                                "-fx-background-radius:12;" +
+                                                "-fx-border-color:" + CARD_BORDER + ";" +
+                                                "-fx-border-radius:12;" +
+                                                "-fx-border-width:1;");
+
+                Label icon = new Label(
+                                "🌱");
+
+                icon.setFont(
+                                Font.font(
+                                                "Arial",
+                                                30));
+
+                Label title = new Label(
+                                "No schemes available");
+
+                title.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                18));
+
+                title.setTextFill(
+                                Color.WHITE);
+
+                Label message = new Label(
+                                "No active government schemes were found for "
+                                                + category + ".");
+
+                message.setFont(
+                                Font.font(
+                                                "Arial",
+                                                12));
+
+                message.setTextFill(
+                                Color.web(TEXT_SECONDARY));
+
+                message.setWrapText(true);
+
+                message.setAlignment(
+                                Pos.CENTER);
+
+                box.getChildren().addAll(
+                                icon,
+                                title,
+                                message);
+
+                return box;
+        }
+
+        // =========================================================
+        // CREATE SCHEME CARD
+        // =========================================================
+
+        private static VBox createSchemeCard(
+                        Scheme scheme) {
+
+                VBox schemeCard = new VBox(12);
+
+                schemeCard.setPadding(
+                                new Insets(18));
+
+                schemeCard.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                // =====================================================
+                // NORMAL CARD
+                // =====================================================
+
+                applyNormalCardStyle(
+                                schemeCard);
+
+                // =====================================================
+                // TOP ROW
+                // =====================================================
+
+                HBox topRow = new HBox();
+
+                topRow.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                // =====================================================
+                // ICON
+                // =====================================================
+
+                Label iconLabel = new Label(
+                                "🌱");
+
+                iconLabel.setPrefSize(
+                                45,
+                                42);
+
+                iconLabel.setAlignment(
+                                Pos.CENTER);
+
+                iconLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                20));
+
+                iconLabel.setStyle(
+                                "-fx-background-color:#103927;" +
+                                                "-fx-background-radius:8;");
+
+                // =====================================================
+                // SPACE
+                // =====================================================
+
+                Region space = new Region();
+
+                HBox.setHgrow(
+                                space,
+                                Priority.ALWAYS);
+
+                // =====================================================
+                // CATEGORY BADGE
+                // =====================================================
+
+                String category = safeText(
+                                scheme.getCategory(),
+                                "GENERAL");
+
+                Label badge = new Label(
+                                category.toUpperCase());
+
+                badge.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                9));
+
+                badge.setTextFill(
+                                Color.web("#82D296"));
+
+                badge.setPadding(
+                                new Insets(
+                                                5,
+                                                10,
+                                                5,
+                                                10));
+
+                badge.setStyle(
+                                "-fx-background-color:#0C2B1E;" +
+                                                "-fx-background-radius:12;");
+
+                topRow.getChildren().addAll(
+                                iconLabel,
+                                space,
+                                badge);
+
+                // =====================================================
+                // SCHEME NAME
+                // =====================================================
+
+                String schemeName = safeText(
+                                scheme.getSchemeName(),
+                                "Government Scheme");
+
+                Label nameLabel = new Label(
+                                schemeName);
+
+                nameLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                18));
+
+                nameLabel.setTextFill(
+                                Color.WHITE);
+
+                nameLabel.setWrapText(
+                                true);
+
+                // =====================================================
+                // INFORMATION
+                // =====================================================
+
+                String information = safeText(
+                                scheme.getInformation(),
+                                "Information not available.");
+
+                Label informationLabel = new Label(
+                                information);
+
+                informationLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.NORMAL,
+                                                12));
+
+                informationLabel.setTextFill(
+                                Color.web(TEXT_SECONDARY));
+
+                informationLabel.setWrapText(
+                                true);
+
+                informationLabel.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                // =====================================================
+                // ELIGIBILITY BOX
+                // =====================================================
+
+                VBox eligibilityBox = new VBox(6);
+
+                eligibilityBox.setPadding(
+                                new Insets(12));
+
+                eligibilityBox.setStyle(
+                                "-fx-background-color:#081C16;" +
+                                                "-fx-background-radius:8;" +
+                                                "-fx-border-color:#123C2B;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-border-radius:8;");
+
+                Label eligibilityHeading = new Label(
+                                "ⓘ  Eligibility");
+
+                eligibilityHeading.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                11));
+
+                eligibilityHeading.setTextFill(
+                                Color.web(GREEN));
+
+                String eligibility = safeText(
+                                scheme.getEligibility(),
+                                "Eligibility information not available.");
+
+                Label eligibilityLabel = new Label(
+                                eligibility);
+
+                eligibilityLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.NORMAL,
+                                                11));
+
+                eligibilityLabel.setTextFill(
+                                Color.web(TEXT_SECONDARY));
+
+                eligibilityLabel.setWrapText(
+                                true);
+
+                eligibilityLabel.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                eligibilityBox.getChildren().addAll(
+                                eligibilityHeading,
+                                eligibilityLabel);
+
+                // =====================================================
+                // APPLY + SAVE ROW
+                // =====================================================
+
+                HBox actionRow = new HBox(10);
+
+                actionRow.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                actionRow.setFillHeight(true);
+
+                // =====================================================
+                // APPLY BUTTON
+                // =====================================================
+
+                Button actionButton = createApplyButton(
+                                scheme);
+
+                HBox.setHgrow(
+                                actionButton,
+                                Priority.ALWAYS);
+
+                // =====================================================
+                // LIKE / SAVE BUTTON
+                // =====================================================
+
+                Button likeButton = createLikeButton(
+                                scheme);
+
+                actionRow.getChildren().addAll(
+                                actionButton,
+                                likeButton);
+
+                // =====================================================
+                // ADD CONTENT
+                // =====================================================
+
+                schemeCard.getChildren().addAll(
+                                topRow,
+                                nameLabel,
+                                informationLabel,
+                                eligibilityBox,
+                                actionRow);
+
+                // =====================================================
+                // HOVER CARD
+                // =====================================================
+
+                schemeCard.setOnMouseEntered(
+                                event -> {
+
+                                        schemeCard.setStyle(
+                                                        "-fx-background-color:" + CARD_HOVER + ";" +
+                                                                        "-fx-background-radius:12;" +
+                                                                        "-fx-border-color:" + GREEN + ";" +
+                                                                        "-fx-border-radius:12;" +
+                                                                        "-fx-border-width:1;");
+                                });
+
+                schemeCard.setOnMouseExited(
+                                event -> {
+
+                                        applyNormalCardStyle(
+                                                        schemeCard);
+                                });
+
+                return schemeCard;
+        }
+
+        // =========================================================
+        // NORMAL CARD STYLE
+        // =========================================================
+
+        private static void applyNormalCardStyle(
+                        VBox card) {
+
+                card.setStyle(
+                                "-fx-background-color:" + CARD + ";" +
+                                                "-fx-background-radius:12;" +
+                                                "-fx-border-color:" + CARD_BORDER + ";" +
+                                                "-fx-border-radius:12;" +
+                                                "-fx-border-width:1;");
+        }
+
+        // =========================================================
+        // CREATE APPLY BUTTON
+        // =========================================================
+
+        private static Button createApplyButton(
+                        Scheme scheme) {
+
+                Button button = new Button(
+                                "Apply Now");
+
+                button.setPrefHeight(
+                                38);
+
+                button.setMinHeight(
+                                38);
+
+                button.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                button.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                12));
+
+                button.setCursor(
+                                javafx.scene.Cursor.HAND);
+
+                // =====================================================
+                // NORMAL
+                // =====================================================
+
+                button.setStyle(
+                                "-fx-background-color:" + GREEN + ";" +
+                                                "-fx-text-fill:#06100B;" +
+                                                "-fx-background-radius:7;" +
+                                                "-fx-border-radius:7;" +
+                                                "-fx-border-color:" + GREEN + ";" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-font-size:12px;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-cursor:hand;");
+
+                // =====================================================
+                // HOVER
+                // =====================================================
+
+                button.setOnMouseEntered(
+                                e -> {
+
+                                        button.setStyle(
+                                                        "-fx-background-color:#68E85A;" +
+                                                                        "-fx-text-fill:#06100B;" +
+                                                                        "-fx-background-radius:7;" +
+                                                                        "-fx-border-radius:7;" +
+                                                                        "-fx-border-color:#68E85A;" +
+                                                                        "-fx-border-width:1;" +
+                                                                        "-fx-font-size:12px;" +
+                                                                        "-fx-font-weight:bold;" +
+                                                                        "-fx-cursor:hand;");
+                                });
+
+                // =====================================================
+                // EXIT
+                // =====================================================
+
+                button.setOnMouseExited(
+                                e -> {
+
+                                        button.setStyle(
+                                                        "-fx-background-color:" + GREEN + ";" +
+                                                                        "-fx-text-fill:#06100B;" +
+                                                                        "-fx-background-radius:7;" +
+                                                                        "-fx-border-radius:7;" +
+                                                                        "-fx-border-color:" + GREEN + ";" +
+                                                                        "-fx-border-width:1;" +
+                                                                        "-fx-font-size:12px;" +
+                                                                        "-fx-font-weight:bold;" +
+                                                                        "-fx-cursor:hand;");
+                                });
+
+                // =====================================================
+                // ACTION
+                // =====================================================
+
+                button.setOnAction(
+                                event -> {
+
+                                        openSchemeWebsite(
+                                                        scheme);
+                                });
+
+                return button;
+        }
+
+        // =========================================================
+        // CREATE LIKE BUTTON
+        // =========================================================
+
+        private static Button createLikeButton(
+                        Scheme scheme) {
+
+                Button likeButton = new Button();
+
+                likeButton.setPrefHeight(
+                                38);
+
+                likeButton.setMinHeight(
+                                38);
+
+                likeButton.setPrefWidth(
+                                125);
+
+                likeButton.setMinWidth(
+                                125);
+
+                likeButton.setMaxWidth(
+                                125);
+
+                likeButton.setCursor(
+                                javafx.scene.Cursor.HAND);
+
+                likeButton.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                12));
+
+                // =====================================================
+                // INITIAL STATE
+                // =====================================================
+
                 updateLikeButton(
-                        likeButton,
-                        scheme
-                );
-            }
-    );
+                                likeButton,
+                                scheme);
 
-    return likeButton;
-}
-// =========================================================
-// UPDATE LIKE BUTTON
-// =========================================================
+                // =====================================================
+                // CLICK
+                // =====================================================
 
-private static void updateLikeButton(
-        Button button,
-        Scheme scheme) {
+                likeButton.setOnAction(
+                                event -> {
 
-    if (SavedSchemesManager.isLiked(scheme)) {
+                                        if (SavedSchemesManager.isLiked(
+                                                        scheme)) {
 
-        button.setText("♥  Save ");
+                                                SavedSchemesManager.removeScheme(
+                                                                scheme);
 
-        button.setStyle(
-                "-fx-background-color:#53d74a;" +
-                "-fx-text-fill:#06100b;" +
-                "-fx-background-radius:5;" +
-                "-fx-border-color:#53d74a;" +
-                "-fx-border-radius:5;" +
-                "-fx-font-weight:bold;" +
-                "-fx-cursor:hand;"
-        );
+                                        } else {
 
-    } else {
+                                                SavedSchemesManager.addScheme(
+                                                                scheme);
+                                        }
 
-        button.setText("♡  Like");
+                                        updateLikeButton(
+                                                        likeButton,
+                                                        scheme);
+                                });
 
-        button.setStyle(
-                "-fx-background-color:#101d18;" +
-                "-fx-text-fill:#53d74a;" +
-                "-fx-background-radius:5;" +
-                "-fx-border-color:#53d74a;" +
-                "-fx-border-width:1;" +
-                "-fx-border-radius:5;" +
-                "-fx-font-weight:bold;" +
-                "-fx-cursor:hand;"
-        );
-    }
-}
+                return likeButton;
+        }
+
+        // =========================================================
+        // UPDATE LIKE BUTTON
+        // =========================================================
+
+        private static void updateLikeButton(
+                        Button button,
+                        Scheme scheme) {
+
+                boolean liked = SavedSchemesManager.isLiked(
+                                scheme);
+
+                if (liked) {
+
+                        // =================================================
+                        // SAVED STATE
+                        // =================================================
+
+                        button.setText(
+                                        "♥  Saved");
+
+                        button.setStyle(
+                                        "-fx-background-color:" + GREEN + ";" +
+                                                        "-fx-text-fill:#06100B;" +
+                                                        "-fx-background-radius:7;" +
+                                                        "-fx-border-radius:7;" +
+                                                        "-fx-border-color:" + GREEN + ";" +
+                                                        "-fx-border-width:1;" +
+                                                        "-fx-font-size:12px;" +
+                                                        "-fx-font-weight:bold;" +
+                                                        "-fx-cursor:hand;");
+
+                        button.setOnMouseEntered(
+                                        e -> {
+
+                                                button.setStyle(
+                                                                "-fx-background-color:#3FB838;" +
+                                                                                "-fx-text-fill:#FFFFFF;" +
+                                                                                "-fx-background-radius:7;" +
+                                                                                "-fx-border-radius:7;" +
+                                                                                "-fx-border-color:#3FB838;" +
+                                                                                "-fx-border-width:1;" +
+                                                                                "-fx-font-size:12px;" +
+                                                                                "-fx-font-weight:bold;" +
+                                                                                "-fx-cursor:hand;");
+                                        });
+
+                        button.setOnMouseExited(
+                                        e -> {
+
+                                                button.setStyle(
+                                                                "-fx-background-color:" + GREEN + ";" +
+                                                                                "-fx-text-fill:#06100B;" +
+                                                                                "-fx-background-radius:7;" +
+                                                                                "-fx-border-radius:7;" +
+                                                                                "-fx-border-color:" + GREEN + ";" +
+                                                                                "-fx-border-width:1;" +
+                                                                                "-fx-font-size:12px;" +
+                                                                                "-fx-font-weight:bold;" +
+                                                                                "-fx-cursor:hand;");
+                                        });
+
+                } else {
+
+                        // =================================================
+                        // NOT SAVED STATE
+                        // =================================================
+
+                        button.setText(
+                                        "♡  Save");
+
+                        button.setStyle(
+                                        "-fx-background-color:#0B1714;" +
+                                                        "-fx-text-fill:" + GREEN + ";" +
+                                                        "-fx-background-radius:7;" +
+                                                        "-fx-border-radius:7;" +
+                                                        "-fx-border-color:" + GREEN + ";" +
+                                                        "-fx-border-width:1;" +
+                                                        "-fx-font-size:12px;" +
+                                                        "-fx-font-weight:bold;" +
+                                                        "-fx-cursor:hand;");
+
+                        button.setOnMouseEntered(
+                                        e -> {
+
+                                                button.setStyle(
+                                                                "-fx-background-color:#163D24;" +
+                                                                                "-fx-text-fill:#FFFFFF;" +
+                                                                                "-fx-background-radius:7;" +
+                                                                                "-fx-border-radius:7;" +
+                                                                                "-fx-border-color:" + GREEN + ";" +
+                                                                                "-fx-border-width:1;" +
+                                                                                "-fx-font-size:12px;" +
+                                                                                "-fx-font-weight:bold;" +
+                                                                                "-fx-cursor:hand;");
+                                        });
+
+                        button.setOnMouseExited(
+                                        e -> {
+
+                                                button.setStyle(
+                                                                "-fx-background-color:#0B1714;" +
+                                                                                "-fx-text-fill:" + GREEN + ";" +
+                                                                                "-fx-background-radius:7;" +
+                                                                                "-fx-border-radius:7;" +
+                                                                                "-fx-border-color:" + GREEN + ";" +
+                                                                                "-fx-border-width:1;" +
+                                                                                "-fx-font-size:12px;" +
+                                                                                "-fx-font-weight:bold;" +
+                                                                                "-fx-cursor:hand;");
+                                        });
+                }
+        }
+
+        // =========================================================
+        // OPEN APPLICATION WEBSITE
+        // =========================================================
+
+        private static void openSchemeWebsite(
+                        Scheme scheme) {
+
+                String url = safeText(
+                                scheme.getApplyUrl(),
+                                "");
+
+                if (url.isEmpty()) {
+
+                        showMessage(
+                                        "Application Link",
+                                        "Application link is not available for this scheme.");
+
+                        return;
+                }
+
+                try {
+
+                        if (!url.startsWith("http://") &&
+                                        !url.startsWith("https://")) {
+
+                                url = "https://" + url;
+                        }
+
+                        if (!Desktop.isDesktopSupported()) {
+
+                                showMessage(
+                                                "Application Link",
+                                                "Your computer does not support opening web links.");
+
+                                return;
+                        }
+
+                        Desktop desktop = Desktop.getDesktop();
+
+                        if (!desktop.isSupported(
+                                        Desktop.Action.BROWSE)) {
+
+                                showMessage(
+                                                "Application Link",
+                                                "Your system cannot open web links.");
+
+                                return;
+                        }
+
+                        desktop.browse(
+                                        new URI(url));
+
+                } catch (Exception e) {
+
+                        e.printStackTrace();
+
+                        showMessage(
+                                        "Application Link",
+                                        "Unable to open the application website.");
+                }
+        }
+
+        // =========================================================
+        // SAFE TEXT
+        // =========================================================
+
+        private static String safeText(
+                        String value,
+                        String defaultValue) {
+
+                if (value == null ||
+                                value.trim().isEmpty()) {
+
+                        return defaultValue;
+                }
+
+                return value.trim();
+        }
+
+        // =========================================================
+        // SHOW MESSAGE
+        // =========================================================
+
+        private static void showMessage(
+                        String title,
+                        String message) {
+
+                Alert alert = new Alert(
+                                Alert.AlertType.INFORMATION);
+
+                alert.setTitle(
+                                title);
+
+                alert.setHeaderText(
+                                null);
+
+                alert.setContentText(
+                                message);
+
+                // =====================================================
+                // DARK ALERT
+                // =====================================================
+
+                alert.getDialogPane()
+                                .setStyle(
+                                                "-fx-background-color:#101718;" +
+                                                                "-fx-border-color:#293334;");
+
+                alert.showAndWait();
+        }
+
+        // =========================================================
+        // BACK TO SCHEMES
+        // =========================================================
+
+        public void backtoSchemes() {
+
+                if (schemesScene != null &&
+                                LoginPage.mainStage != null) {
+
+                        LoginPage.mainStage.setScene(
+                                        schemesScene);
+                }
+        }
 }

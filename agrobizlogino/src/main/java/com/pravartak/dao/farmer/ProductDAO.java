@@ -1,214 +1,6 @@
-// package com.pravartak.dao.farmer;
-
-// import com.google.cloud.firestore.Firestore;
-// import com.pravartak.model.farmer_model.Product;
-
-// import java.util.ArrayList;
-// import java.util.List;
-
-// public class ProductDAO {
-
-//     private final Firestore db;
-
-//     public ProductDAO(Firestore db) {
-
-//         if (db == null) {
-//             throw new IllegalArgumentException(
-//                     "Firestore cannot be null."
-//             );
-//         }
-
-//         this.db = db;
-//     }
-
-//     // =====================================================
-//     // ADD
-//     // =====================================================
-
-//     public boolean addProduct(Product product) {
-
-//         try {
-
-//             db.collection("products")
-//                     .document(
-//                             String.valueOf(
-//                                     product.getProductId()
-//                             )
-//                     )
-//                     .set(product)
-//                     .get();
-
-//             return true;
-
-//         } catch (Exception e) {
-
-//             e.printStackTrace();
-//             return false;
-//         }
-//     }
-
-//     // =====================================================
-//     // ALL PRODUCTS - BUYER
-//     // =====================================================
-
-//     public List<Product> getAllProducts() {
-
-//         List<Product> products =
-//                 new ArrayList<>();
-
-//         try {
-
-//             var snapshot =
-//                     db.collection("products")
-//                             .get()
-//                             .get();
-
-//             for (var document :
-//                     snapshot.getDocuments()) {
-
-//                 Product product =
-//                         document.toObject(
-//                                 Product.class
-//                         );
-
-//                 if (product != null) {
-//                     products.add(product);
-//                 }
-//             }
-
-//         } catch (Exception e) {
-//             e.printStackTrace();
-//         }
-
-//         return products;
-//     }
-
-//     // =====================================================
-//     // ONLY CURRENT FARMER PRODUCTS
-//     // =====================================================
-
-//     public List<Product> getFarmerProducts(
-//             int farmerId) {
-
-//         List<Product> products =
-//                 new ArrayList<>();
-
-//         try {
-
-//             var snapshot =
-//                     db.collection("products")
-//                             .whereEqualTo(
-//                                     "farmerId",
-//                                     farmerId
-//                             )
-//                             .get()
-//                             .get();
-
-//             for (var document :
-//                     snapshot.getDocuments()) {
-
-//                 Product product =
-//                         document.toObject(
-//                                 Product.class
-//                         );
-
-//                 if (product != null) {
-//                     products.add(product);
-//                 }
-//             }
-
-//         } catch (Exception e) {
-//             e.printStackTrace();
-//         }
-
-//         return products;
-//     }
-
-//     // =====================================================
-//     // SINGLE PRODUCT
-//     // =====================================================
-
-//     public Product getProduct(int productId) {
-
-//         try {
-
-//             var document =
-//                     db.collection("products")
-//                             .document(
-//                                     String.valueOf(
-//                                             productId
-//                                     )
-//                             )
-//                             .get()
-//                             .get();
-
-//             if (!document.exists()) {
-//                 return null;
-//             }
-
-//             return document.toObject(
-//                     Product.class
-//             );
-
-//         } catch (Exception e) {
-
-//             e.printStackTrace();
-//             return null;
-//         }
-//     }
-
-//     // =====================================================
-//     // DELETE
-//     // =====================================================
-
-//     public boolean deleteProduct(int productId) {
-
-//         try {
-
-//             db.collection("products")
-//                     .document(
-//                             String.valueOf(productId)
-//                     )
-//                     .delete()
-//                     .get();
-
-//             return true;
-
-//         } catch (Exception e) {
-
-//             e.printStackTrace();
-//             return false;
-//         }
-//     }
-
-//     // =====================================================
-//     // UPDATE
-//     // =====================================================
-
-//     public boolean updateProduct(Product product) {
-
-//         try {
-
-//             db.collection("products")
-//                     .document(
-//                             String.valueOf(
-//                                     product.getProductId()
-//                             )
-//                     )
-//                     .set(product)
-//                     .get();
-
-//             return true;
-
-//         } catch (Exception e) {
-
-//             e.printStackTrace();
-//             return false;
-//         }
-//     }
-// }
 package com.pravartak.dao.farmer;
 
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Firestore;
 import com.pravartak.model.farmer_model.Product;
 
@@ -218,6 +10,10 @@ import java.util.List;
 public class ProductDAO {
 
     private final Firestore db;
+
+    // =====================================================
+    // CONSTRUCTOR
+    // =====================================================
 
     public ProductDAO(Firestore db) {
 
@@ -239,6 +35,25 @@ public class ProductDAO {
 
         try {
 
+            if (product == null) {
+                return false;
+            }
+
+            // -------------------------------------------------
+            // SET UPLOAD TIME
+            // -------------------------------------------------
+
+            if (product.getCreatedAt() == null) {
+
+                product.setCreatedAt(
+                        Timestamp.now()
+                );
+            }
+
+            // -------------------------------------------------
+            // SAVE PRODUCT
+            // -------------------------------------------------
+
             db.collection("products")
                     .document(
                             String.valueOf(
@@ -251,8 +66,6 @@ public class ProductDAO {
             return true;
 
         } catch (Exception e) {
-
-            e.printStackTrace();
 
             return false;
         }
@@ -291,7 +104,7 @@ public class ProductDAO {
 
         } catch (Exception e) {
 
-            e.printStackTrace();
+            // Return products already loaded
         }
 
         return products;
@@ -334,7 +147,7 @@ public class ProductDAO {
 
         } catch (Exception e) {
 
-            e.printStackTrace();
+            // Return empty/loaded list
         }
 
         return products;
@@ -370,8 +183,6 @@ public class ProductDAO {
 
         } catch (Exception e) {
 
-            e.printStackTrace();
-
             return null;
         }
     }
@@ -385,7 +196,9 @@ public class ProductDAO {
             String text) {
 
         List<Product> products =
-                getFarmerProducts(farmerId);
+                getFarmerProducts(
+                        farmerId
+                );
 
         if (text == null ||
                 text.trim().isEmpty()) {
@@ -402,7 +215,8 @@ public class ProductDAO {
         for (Product product :
                 products) {
 
-            boolean matches = false;
+            boolean matches =
+                    false;
 
             if (product.getProductName() != null &&
                     product.getProductName()
@@ -470,8 +284,6 @@ public class ProductDAO {
 
         } catch (Exception e) {
 
-            e.printStackTrace();
-
             return false;
         }
     }
@@ -485,6 +297,47 @@ public class ProductDAO {
 
         try {
 
+            if (product == null) {
+                return false;
+            }
+
+            // -------------------------------------------------
+            // GET EXISTING PRODUCT
+            // -------------------------------------------------
+
+            Product existingProduct =
+                    getProduct(
+                            product.getProductId()
+                    );
+
+            // -------------------------------------------------
+            // PRESERVE ORIGINAL UPLOAD TIME
+            // -------------------------------------------------
+
+            if (product.getCreatedAt() == null &&
+                    existingProduct != null &&
+                    existingProduct.getCreatedAt() != null) {
+
+                product.setCreatedAt(
+                        existingProduct.getCreatedAt()
+                );
+            }
+
+            // -------------------------------------------------
+            // IF OLD PRODUCT DOES NOT HAVE TIMESTAMP
+            // -------------------------------------------------
+
+            if (product.getCreatedAt() == null) {
+
+                product.setCreatedAt(
+                        Timestamp.now()
+                );
+            }
+
+            // -------------------------------------------------
+            // UPDATE PRODUCT
+            // -------------------------------------------------
+
             db.collection("products")
                     .document(
                             String.valueOf(
@@ -497,8 +350,6 @@ public class ProductDAO {
             return true;
 
         } catch (Exception e) {
-
-            e.printStackTrace();
 
             return false;
         }
