@@ -39,7 +39,7 @@
     <groupId>org.openjfx</groupId>
     <artifactId>javafx-web</artifactId>
     <version>17.0.12</version>
-</dependency>
+    </dependency>
 
     <dependency>
     <groupId>io.github.cdimascio</groupId>

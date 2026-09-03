@@ -1,6 +1,6 @@
-
 package com.pravartak.dao.farmer;
 
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.Firestore;
 import com.pravartak.model.farmer_model.Product;
 
@@ -10,6 +10,10 @@ import java.util.List;
 public class ProductDAO {
 
     private final Firestore db;
+
+    // =====================================================
+    // CONSTRUCTOR
+    // =====================================================
 
     public ProductDAO(Firestore db) {
 
@@ -31,6 +35,25 @@ public class ProductDAO {
 
         try {
 
+            if (product == null) {
+                return false;
+            }
+
+            // -------------------------------------------------
+            // SET UPLOAD TIME
+            // -------------------------------------------------
+
+            if (product.getCreatedAt() == null) {
+
+                product.setCreatedAt(
+                        Timestamp.now()
+                );
+            }
+
+            // -------------------------------------------------
+            // SAVE PRODUCT
+            // -------------------------------------------------
+
             db.collection("products")
                     .document(
                             String.valueOf(
@@ -43,8 +66,6 @@ public class ProductDAO {
             return true;
 
         } catch (Exception e) {
-
-            e.printStackTrace();
 
             return false;
         }
@@ -83,7 +104,7 @@ public class ProductDAO {
 
         } catch (Exception e) {
 
-            e.printStackTrace();
+            // Return products already loaded
         }
 
         return products;
@@ -126,7 +147,7 @@ public class ProductDAO {
 
         } catch (Exception e) {
 
-            e.printStackTrace();
+            // Return empty/loaded list
         }
 
         return products;
@@ -162,8 +183,6 @@ public class ProductDAO {
 
         } catch (Exception e) {
 
-            e.printStackTrace();
-
             return null;
         }
     }
@@ -177,7 +196,9 @@ public class ProductDAO {
             String text) {
 
         List<Product> products =
-                getFarmerProducts(farmerId);
+                getFarmerProducts(
+                        farmerId
+                );
 
         if (text == null ||
                 text.trim().isEmpty()) {
@@ -194,7 +215,8 @@ public class ProductDAO {
         for (Product product :
                 products) {
 
-            boolean matches = false;
+            boolean matches =
+                    false;
 
             if (product.getProductName() != null &&
                     product.getProductName()
@@ -262,8 +284,6 @@ public class ProductDAO {
 
         } catch (Exception e) {
 
-            e.printStackTrace();
-
             return false;
         }
     }
@@ -277,6 +297,47 @@ public class ProductDAO {
 
         try {
 
+            if (product == null) {
+                return false;
+            }
+
+            // -------------------------------------------------
+            // GET EXISTING PRODUCT
+            // -------------------------------------------------
+
+            Product existingProduct =
+                    getProduct(
+                            product.getProductId()
+                    );
+
+            // -------------------------------------------------
+            // PRESERVE ORIGINAL UPLOAD TIME
+            // -------------------------------------------------
+
+            if (product.getCreatedAt() == null &&
+                    existingProduct != null &&
+                    existingProduct.getCreatedAt() != null) {
+
+                product.setCreatedAt(
+                        existingProduct.getCreatedAt()
+                );
+            }
+
+            // -------------------------------------------------
+            // IF OLD PRODUCT DOES NOT HAVE TIMESTAMP
+            // -------------------------------------------------
+
+            if (product.getCreatedAt() == null) {
+
+                product.setCreatedAt(
+                        Timestamp.now()
+                );
+            }
+
+            // -------------------------------------------------
+            // UPDATE PRODUCT
+            // -------------------------------------------------
+
             db.collection("products")
                     .document(
                             String.valueOf(
@@ -289,8 +350,6 @@ public class ProductDAO {
             return true;
 
         } catch (Exception e) {
-
-            e.printStackTrace();
 
             return false;
         }

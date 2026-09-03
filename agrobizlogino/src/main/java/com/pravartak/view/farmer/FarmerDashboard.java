@@ -4,6 +4,8 @@ package com.pravartak.view.farmer;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.net.URL;
+import java.time.Duration;
+import java.time.Instant;
 
 import com.pravartak.controller.farmercontoller.FarmerProfileController;
 import com.pravartak.model.farmer_model.FarmerProfile;
@@ -110,10 +112,12 @@ public class FarmerDashboard {
         private Button dashboardButton;
         private Button profileButton;
         private Button aiAdvisorButton;
-        // private Button learningButton;
-        // private Button wishlistButton;
         private Button investmentButton;
         private Button schemesButton;
+        private Button reviewsButton;
+
+        private Button orderRequestsButton;
+        private Button myOrdersButton;
 
         // // // MAIN BORDER PANE
         private BorderPane root;
@@ -230,8 +234,7 @@ public class FarmerDashboard {
                 sidebar.setMaxWidth(300);
                 sidebar.setPadding(new Insets(25, 20, 20, 20));
                 sidebar.setSpacing(7);
-                // sidebar.setBackground(new Background(new BackgroundFill(DARK_GREEN,
-                // CornerRadii.EMPTY, Insets.EMPTY)));
+
                 sidebar.setBackground(new Background(
                                 new BackgroundFill(SIDEBAR, CornerRadii.EMPTY, Insets.EMPTY)));
                 // LOGO
@@ -268,14 +271,6 @@ public class FarmerDashboard {
                 aiAdvisorButton = createMenuButton("✦", "AI Farming Advisor");
                 aiAdvisorButton.setOnAction(event -> showPage("ai"));
 
-                // MY LEARNING
-                // learningButton = createMenuButton("▣", "My Learning");
-                // learningButton.setOnAction(event -> showPage("learning"));
-
-                // WISHLIST
-                // wishlistButton = createMenuButton("♙", "Wishlist");
-                // wishlistButton.setOnAction(event -> showPage("wishlist"));
-
                 // INVESTMENT
                 investmentButton = createMenuButton("₹", "Investment Calculator");
                 investmentButton.setOnAction(event -> showPage("investment"));
@@ -284,10 +279,46 @@ public class FarmerDashboard {
                 schemesButton = createMenuButton("◇", "Schemes & Subsidies");
                 schemesButton.setOnAction(event -> showPage("schemes"));
 
-                // ADD BUTTONS
-                sidebar.getChildren().addAll(homepageButton, dashboardButton, profileButton, aiAdvisorButton,
-                                investmentButton, schemesButton);
+                // =========================================================
+// ORDER REQUESTS
+// =========================================================
 
+orderRequestsButton = createMenuButton("📦", "Order Requests");
+
+orderRequestsButton.setOnAction(event -> {
+
+        showPage("orderRequests");
+});
+
+// =========================================================
+// MY ORDERS
+// =========================================================
+
+myOrdersButton = createMenuButton("📋", "My Orders");
+
+myOrdersButton.setOnAction(event -> {
+
+        showPage("myOrders");
+});
+
+reviewsButton = createMenuButton("⭐", "Customer Reviews");
+
+reviewsButton.setOnAction(event ->
+        showPage("reviews")
+);
+
+                // ADD BUTTONS
+                sidebar.getChildren().addAll(
+        homepageButton,
+        dashboardButton,
+        profileButton,
+        aiAdvisorButton,
+        investmentButton,
+        schemesButton,
+        orderRequestsButton,
+        myOrdersButton,
+        reviewsButton
+);
                 // SPACER
                 Region spacer = new Region();
                 VBox.setVgrow(spacer, Priority.ALWAYS);
@@ -372,24 +403,59 @@ public class FarmerDashboard {
 
         // SELECTED BUTTON
         private void setSelectedMenuButton(Button selectedButton) {
-                Button[] buttons = { homepageButton, dashboardButton, profileButton, aiAdvisorButton, investmentButton,
-                                schemesButton };
 
-                for (Button button : buttons) {
-                        if (button == null) {
-                                continue;
-                        }
+    Button[] buttons = {
+        homepageButton,
+        dashboardButton,
+        profileButton,
+        aiAdvisorButton,
+        investmentButton,
+        schemesButton,
+        orderRequestsButton,
+        myOrdersButton,
+        reviewsButton
+    };
 
-                        button.setTextFill(TEXT_SECONDARY);
-                        button.setFont(Font.font("Arial", FontWeight.NORMAL, 14));
-                        button.setBackground(Background.EMPTY);
-                }
+    for (Button button : buttons) {
 
-                selectedButton.setTextFill(TEXT_PRIMARY);
-                selectedButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-                selectedButton.setBackground(
-                                new Background(new BackgroundFill(GREEN, new CornerRadii(10), Insets.EMPTY)));
+        if (button == null) {
+            continue;
         }
+
+        button.setTextFill(Color.rgb(235, 245, 235));
+        button.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.NORMAL,
+                        14
+                )
+        );
+
+        button.setBackground(
+                Background.EMPTY
+        );
+    }
+
+    selectedButton.setTextFill(Color.WHITE);
+
+    selectedButton.setFont(
+            Font.font(
+                    "Arial",
+                    FontWeight.BOLD,
+                    14
+            )
+    );
+
+    selectedButton.setBackground(
+            new Background(
+                    new BackgroundFill(
+                            GREEN,
+                            new CornerRadii(10),
+                            Insets.EMPTY
+                    )
+            )
+    );
+}
 
         // PAGE NAVIGATION
         // =========================================================
@@ -439,26 +505,6 @@ public class FarmerDashboard {
 
                                 break;
 
-                        // case "learning":
-
-                        // setSelectedMenuButton(learningButton);
-
-                        // root.setCenter(
-                        // createLearningPage()
-                        // );
-
-                        // break;
-
-                        // case "wishlist":
-
-                        // setSelectedMenuButton(wishlistButton);
-
-                        // root.setCenter(
-                        // createWishlistPage()
-                        // );
-
-                        // break;
-
                         case "investment":
 
                                 setSelectedMenuButton(investmentButton);
@@ -476,6 +522,52 @@ public class FarmerDashboard {
                                                 createSavedSchemesSection());
 
                                 break;
+
+                        // =========================================================
+// ORDER REQUESTS
+// =========================================================
+
+case "orderRequests":
+
+        setSelectedMenuButton(
+                orderRequestsButton
+        );
+
+        root.setCenter(
+                new FarmerOrderRequestsPage(farmerId)
+                        .getOrderRequestsPage()
+        );
+
+        break;
+
+        case "reviews":
+
+    setSelectedMenuButton(reviewsButton);
+
+    root.setCenter(
+            new FarmerReviewsPage(farmerId)
+                    .getReviewsPage()
+    );
+
+    break;
+
+
+// =========================================================
+// MY ORDERS
+// =========================================================
+
+case "myOrders":
+
+        setSelectedMenuButton(
+                myOrdersButton
+        );
+
+        root.setCenter(
+                new FarmerOrdersPage(farmerId)
+                        .getOrdersPage()
+        );
+
+        break;
 
                         case "Homepage":
 
@@ -508,13 +600,8 @@ public class FarmerDashboard {
 
                 VBox main = new VBox();
 
-                main.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                DARK_GREEN,
-                                                                CornerRadii.EMPTY,
-                                                                Insets.EMPTY)));
-
+                main.setBackground(new Background(
+                                new BackgroundFill(DARK_GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
                 HBox topBar = createTopBar(
                                 "Farmer Profile",
                                 "View your personal and farming information.");
@@ -784,7 +871,7 @@ public class FarmerDashboard {
                                 130);
 
                 edit.setTextFill(
-                                TEXT_PRIMARY);
+                                Color.DARKGREEN);
 
                 edit.setFont(
                                 Font.font(
@@ -1202,20 +1289,53 @@ public class FarmerDashboard {
 
         // DASHBOARD PAGE
         private VBox createDashboardPage() {
-                VBox main = new VBox();
-                main.setBackground(new Background(new BackgroundFill(BACKGROUND, CornerRadii.EMPTY, Insets.EMPTY)));
 
-                HBox topBar = createTopBar("Farmer Dashboard", "Manage your farm and make smarter decisions.");
+                VBox main = new VBox();
+
+                // Use the same dark background as the dashboard content
+                main.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                DARK_GREEN,
+                                                                CornerRadii.EMPTY,
+                                                                Insets.EMPTY)));
+
+                HBox topBar = createTopBar(
+                                "Farmer Dashboard",
+                                "Manage your farm and make smarter decisions.");
+
                 VBox content = createDashboardContent();
-                content.setBackground(new Background(new BackgroundFill(BACKGROUND, CornerRadii.EMPTY, Insets.EMPTY)));
+
+                content.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                DARK_GREEN,
+                                                                CornerRadii.EMPTY,
+                                                                Insets.EMPTY)));
 
                 ScrollPane scroll = new ScrollPane(content);
-                scroll.setFitToWidth(true);
-                scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-                scroll.setStyle("-fx-background-color: transparent;");
-                VBox.setVgrow(scroll, Priority.ALWAYS);
 
-                main.getChildren().addAll(topBar, scroll);
+                scroll.setFitToWidth(true);
+                scroll.setHbarPolicy(
+                                ScrollPane.ScrollBarPolicy.NEVER);
+
+                // Remove ScrollPane border
+                scroll.setStyle(
+                                "-fx-background-color: transparent;" +
+                                                "-fx-border-color: transparent;" +
+                                                "-fx-focus-color: transparent;" +
+                                                "-fx-faint-focus-color: transparent;");
+
+                scroll.setFocusTraversable(false);
+
+                VBox.setVgrow(
+                                scroll,
+                                Priority.ALWAYS);
+
+                main.getChildren().addAll(
+                                topBar,
+                                scroll);
+
                 return main;
         }
 
@@ -1251,772 +1371,15 @@ public class FarmerDashboard {
 
         private VBox createDashboardContent() {
 
-                VBox content = new VBox();
+                FarmerDashboardHome home = new FarmerDashboardHome(
+                                farmerId);
 
-                content.setPadding(
-                                new Insets(30, 35, 35, 35));
-
-                content.setSpacing(22);
-
-                // ========================================================
-                // WELCOME CARD
-                // ========================================================
-
-                content.getChildren().add(
-                                createWelcomeCard());
-
-                // ========================================================
-                // STAT CARDS
-                // ========================================================
-
-                HBox stats = new HBox();
-
-                stats.setSpacing(20);
-
-                stats.getChildren().addAll(
-
-                                createStat(
-                                                "🛒",
-                                                "My Products",
-                                                "8",
-                                                "Products uploaded"),
-
-                                createStat(
-                                                "📚",
-                                                "Liked Courses",
-                                                "5",
-                                                "Courses liked"),
-
-                                createStat(
-                                                "🏛",
-                                                "Saved Schemes",
-                                                "3",
-                                                "Schemes saved"),
-
-                                createStat(
-                                                "♡",
-                                                "Wishlist",
-                                                "7",
-                                                "Items saved"));
-
-                content.getChildren().add(
-                                stats);
-
-                // ========================================================
-                // LOWER SECTION
-                // ========================================================
-
-                HBox lower = new HBox();
-
-                lower.setSpacing(22);
-
-                // --------------------------------------------------------
-                // MY PRODUCTS
-                // --------------------------------------------------------
-
-                VBox products = createMyProductsCard();
-
-                // --------------------------------------------------------
-                // MY AGRO BIZ
-                // --------------------------------------------------------
-
-                VBox agroBiz = createMyAgroBizCard();
-
-                HBox.setHgrow(
-                                products,
-                                Priority.ALWAYS);
-
-                HBox.setHgrow(
-                                agroBiz,
-                                Priority.ALWAYS);
-
-                lower.getChildren().addAll(
-                                products,
-                                agroBiz);
-
-                content.getChildren().add(
-                                lower);
-
-                // ========================================================
-                // QUICK ACTIONS
-                // ========================================================
-
-                content.getChildren().add(
-                                createQuickActions());
-
-                return content;
+                return home.getDashboardHome();
         }
 
         // ============================================================
         // WELCOME CARD
         // ============================================================
-
-        private HBox createWelcomeCard() {
-
-                HBox card = new HBox();
-
-                card.setPadding(
-                                new Insets(30, 35, 30, 35));
-
-                card.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                card.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                CARD,
-                                                                new CornerRadii(17),
-                                                                Insets.EMPTY)));
-
-                card.setBorder(
-                                new Border(
-                                                new BorderStroke(
-                                                                BORDER,
-                                                                BorderStrokeStyle.SOLID,
-                                                                new CornerRadii(17),
-                                                                new BorderWidths(1))));
-
-                // ========================================================
-                // TEXT
-                // ========================================================
-
-                VBox text = new VBox();
-
-                text.setSpacing(7);
-
-                Label title = new Label(
-                                "Good evening, Farmer! 🌱");
-
-                title.setTextFill(
-                                Color.WHITE);
-
-                title.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                29));
-
-                Label description = new Label(
-                                "Manage your products, courses, schemes and saved items.");
-
-                description.setTextFill(
-                                TEXT_SECONDARY);
-
-                description.setFont(
-                                Font.font(
-                                                "Arial",
-                                                16));
-
-                text.getChildren().addAll(
-                                title,
-                                description);
-
-                // ========================================================
-                // SPACER
-                // ========================================================
-
-                Region spacer = new Region();
-
-                HBox.setHgrow(
-                                spacer,
-                                Priority.ALWAYS);
-
-                // ========================================================
-                // ICON
-                // ========================================================
-
-                Label plant = new Label(
-                                "🌿");
-
-                plant.setFont(
-                                Font.font(
-                                                "Arial",
-                                                60));
-
-                card.getChildren().addAll(
-                                text,
-                                spacer,
-                                plant);
-
-                return card;
-        }
-
-        // ============================================================
-        // STAT CARD
-        // ============================================================
-
-        private VBox createStat(
-                        String icon,
-                        String title,
-                        String value,
-                        String subtitle) {
-
-                VBox card = new VBox();
-
-                card.setSpacing(8);
-
-                card.setPadding(
-                                new Insets(20));
-
-                card.setPrefHeight(
-                                160);
-
-                HBox.setHgrow(
-                                card,
-                                Priority.ALWAYS);
-
-                // ========================================================
-                // CARD BACKGROUND
-                // ========================================================
-
-                card.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                CARD,
-                                                                new CornerRadii(15),
-                                                                Insets.EMPTY)));
-
-                card.setBorder(
-                                new Border(
-                                                new BorderStroke(
-                                                                BORDER,
-                                                                BorderStrokeStyle.SOLID,
-                                                                new CornerRadii(15),
-                                                                new BorderWidths(1))));
-
-                // ========================================================
-                // ICON
-                // ========================================================
-
-                Label iconLabel = new Label(
-                                icon);
-
-                iconLabel.setTextFill(
-                                ACCENT);
-
-                iconLabel.setFont(
-                                Font.font(
-                                                "Arial",
-                                                22));
-
-                iconLabel.setPrefSize(
-                                48,
-                                48);
-
-                iconLabel.setAlignment(
-                                Pos.CENTER);
-
-                iconLabel.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                DARK_GREEN,
-                                                                new CornerRadii(10),
-                                                                Insets.EMPTY)));
-
-                // ========================================================
-                // TITLE
-                // ========================================================
-
-                Label titleLabel = new Label(
-                                title);
-
-                titleLabel.setTextFill(
-                                GREY);
-
-                titleLabel.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                13));
-
-                HBox top = new HBox();
-
-                top.setSpacing(12);
-
-                top.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                top.getChildren().addAll(
-                                iconLabel,
-                                titleLabel);
-
-                // ========================================================
-                // VALUE
-                // ========================================================
-
-                Label valueLabel = new Label(
-                                value);
-
-                valueLabel.setTextFill(
-                                DARK_TEXT);
-
-                valueLabel.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                27));
-
-                // ========================================================
-                // SUBTITLE
-                // ========================================================
-
-                Label sub = new Label(
-                                subtitle);
-
-                sub.setTextFill(
-                                GREEN);
-
-                sub.setFont(
-                                Font.font(
-                                                "Arial",
-                                                12));
-
-                card.getChildren().addAll(
-                                top,
-                                valueLabel,
-                                sub);
-
-                return card;
-        }
-
-        // ============================================================
-        // MY PRODUCTS CARD
-        // ============================================================
-
-        private VBox createMyProductsCard() {
-
-                VBox card = createWhiteCard();
-
-                // ========================================================
-                // TITLE
-                // ========================================================
-
-                Label title = new Label(
-                                "My Products");
-
-                title.setTextFill(
-                                DARK_TEXT);
-
-                title.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                22));
-
-                card.getChildren().add(
-                                title);
-
-                // ========================================================
-                // PRODUCT 1
-                // ========================================================
-
-                card.getChildren().add(
-                                createProductItem(
-                                                "🌾",
-                                                "Organic Wheat",
-                                                "Product uploaded"));
-
-                // ========================================================
-                // PRODUCT 2
-                // ========================================================
-
-                card.getChildren().add(
-                                createProductItem(
-                                                "🌱",
-                                                "Organic Soybean",
-                                                "Product uploaded"));
-
-                // ========================================================
-                // PRODUCT 3
-                // ========================================================
-
-                card.getChildren().add(
-                                createProductItem(
-                                                "🥬",
-                                                "Fresh Vegetables",
-                                                "Product uploaded"));
-
-                return card;
-        }
-
-        // ============================================================
-        // PRODUCT ITEM
-        // ============================================================
-
-        private HBox createProductItem(
-                        String icon,
-                        String name,
-                        String description) {
-
-                HBox row = new HBox();
-
-                row.setSpacing(
-                                12);
-
-                row.setPadding(
-                                new Insets(
-                                                12,
-                                                0,
-                                                8,
-                                                0));
-
-                row.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                // ========================================================
-                // ICON
-                // ========================================================
-
-                Label iconLabel = new Label(
-                                icon);
-
-                iconLabel.setPrefSize(
-                                42,
-                                42);
-
-                iconLabel.setAlignment(
-                                Pos.CENTER);
-
-                iconLabel.setFont(
-                                Font.font(
-                                                "Arial",
-                                                20));
-
-                iconLabel.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                LIGHT_GREEN,
-                                                                new CornerRadii(9),
-                                                                Insets.EMPTY)));
-
-                // ========================================================
-                // TEXT
-                // ========================================================
-
-                VBox text = new VBox();
-
-                text.setSpacing(
-                                3);
-
-                Label nameLabel = new Label(
-                                name);
-
-                nameLabel.setTextFill(
-                                DARK_TEXT);
-
-                nameLabel.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                14));
-
-                Label descriptionLabel = new Label(
-                                description);
-
-                descriptionLabel.setTextFill(
-                                GREY);
-
-                descriptionLabel.setFont(
-                                Font.font(
-                                                "Arial",
-                                                11));
-
-                text.getChildren().addAll(
-                                nameLabel,
-                                descriptionLabel);
-
-                // ========================================================
-                // SPACER
-                // ========================================================
-
-                Region spacer = new Region();
-
-                HBox.setHgrow(
-                                spacer,
-                                Priority.ALWAYS);
-
-                // ========================================================
-                // VIEW
-                // ========================================================
-
-                Label view = new Label(
-                                "View →");
-
-                view.setTextFill(
-                                GREEN);
-
-                view.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                12));
-
-                row.getChildren().addAll(
-                                iconLabel,
-                                text,
-                                spacer,
-                                view);
-
-                return row;
-        }
-
-        // ============================================================
-        // MY AGRO BIZ CARD
-        // ============================================================
-
-        private VBox createMyAgroBizCard() {
-
-                VBox card = createWhiteCard();
-
-                // ========================================================
-                // TITLE
-                // ========================================================
-
-                Label title = new Label(
-                                "My Agro Biz");
-
-                title.setTextFill(
-                                DARK_TEXT);
-
-                title.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                22));
-
-                card.getChildren().add(
-                                title);
-
-                // ========================================================
-                // LIKED COURSES
-                // ========================================================
-
-                card.getChildren().add(
-                                createDashboardItem(
-                                                "📚",
-                                                "Liked Courses",
-                                                "5 courses liked"));
-
-                // ========================================================
-                // SAVED SCHEMES
-                // ========================================================
-
-                card.getChildren().add(
-                                createDashboardItem(
-                                                "🏛",
-                                                "Saved Schemes",
-                                                "3 schemes saved"));
-
-                // ========================================================
-                // WISHLIST
-                // ========================================================
-
-                card.getChildren().add(
-                                createDashboardItem(
-                                                "♡",
-                                                "Wishlist",
-                                                "7 items saved"));
-
-                // ========================================================
-                // AI ADVISOR
-                // ========================================================
-
-                card.getChildren().add(
-                                createDashboardItem(
-                                                "✦",
-                                                "AI Farming Advisor",
-                                                "Ask for farming guidance"));
-
-                return card;
-        }
-
-        // ============================================================
-        // DASHBOARD ITEM
-        // ============================================================
-
-        private HBox createDashboardItem(
-                        String icon,
-                        String title,
-                        String description) {
-
-                HBox row = new HBox();
-
-                row.setSpacing(
-                                12);
-
-                row.setPadding(
-                                new Insets(
-                                                10,
-                                                0,
-                                                10,
-                                                0));
-
-                row.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                // ========================================================
-                // ICON
-                // ========================================================
-
-                Label iconLabel = new Label(
-                                icon);
-
-                iconLabel.setPrefSize(
-                                40,
-                                40);
-
-                iconLabel.setAlignment(
-                                Pos.CENTER);
-
-                iconLabel.setFont(
-                                Font.font(
-                                                "Arial",
-                                                18));
-
-                iconLabel.setTextFill(
-                                GREEN);
-
-                iconLabel.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                LIGHT_GREEN,
-                                                                new CornerRadii(9),
-                                                                Insets.EMPTY)));
-
-                // ========================================================
-                // TEXT
-                // ========================================================
-
-                VBox text = new VBox();
-
-                text.setSpacing(
-                                3);
-
-                Label titleLabel = new Label(
-                                title);
-
-                titleLabel.setTextFill(
-                                DARK_TEXT);
-
-                titleLabel.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                13));
-
-                Label descriptionLabel = new Label(
-                                description);
-
-                descriptionLabel.setTextFill(
-                                GREY);
-
-                descriptionLabel.setFont(
-                                Font.font(
-                                                "Arial",
-                                                11));
-
-                text.getChildren().addAll(
-                                titleLabel,
-                                descriptionLabel);
-
-                row.getChildren().addAll(
-                                iconLabel,
-                                text);
-
-                return row;
-        }
-
-        // ============================================================
-        // QUICK ACTIONS
-        // ============================================================
-
-        private HBox createQuickActions() {
-
-                HBox actions = new HBox();
-
-                actions.setSpacing(
-                                18);
-
-                // ========================================================
-                // AI ADVISOR
-                // ========================================================
-
-                Button ai = createAction(
-                                "✦  Ask AI Advisor");
-
-                ai.setOnAction(
-                                event -> showPage("ai"));
-
-                // ========================================================
-                // LEARNING
-                // ========================================================
-
-                Button learning = createAction(
-                                "▣  My Learning");
-
-                learning.setOnAction(
-                                event -> showPage("learning"));
-
-                // ========================================================
-                // INVESTMENT
-                // ========================================================
-
-                Button investment = createAction(
-                                "₹  Investment Calculator");
-
-                investment.setOnAction(
-                                event -> showPage("investment"));
-
-                // ========================================================
-                // SCHEMES
-                // ========================================================
-
-                Button schemes = createAction(
-                                "◇  Schemes");
-
-                schemes.setOnAction(
-                                event -> showPage("schemes"));
-
-                actions.getChildren().addAll(
-                                ai,
-                                learning,
-                                investment,
-                                schemes);
-
-                return actions;
-        }
-
-        // ACTION BUTTON
-        private Button createAction(String text) {
-                Button button = new Button(text);
-                button.setPrefHeight(55);
-                HBox.setHgrow(button, Priority.ALWAYS);
-                button.setMaxWidth(Double.MAX_VALUE);
-                button.setTextFill(ACCENT);
-                button.setFont(Font.font("Arial", FontWeight.BOLD, 13));
-                button.setBackground(
-                                new Background(new BackgroundFill(CARD, new CornerRadii(11), Insets.EMPTY)));
-                button.setBorder(new Border(new BorderStroke(ACCENT, BorderStrokeStyle.SOLID,
-                                new CornerRadii(11), new BorderWidths(1))));
-                button.setCursor(Cursor.HAND);
-
-                button.setOnMouseEntered(event -> {
-                        button.setBackground(
-                                        new Background(new BackgroundFill(CARD_HOVER, new CornerRadii(11),
-                                                        Insets.EMPTY)));
-                        button.setBorder(new Border(new BorderStroke(ACCENT, BorderStrokeStyle.SOLID,
-                                        new CornerRadii(11), new BorderWidths(1.2))));
-                });
-
-                button.setOnMouseExited(event -> {
-                        button.setBackground(
-                                        new Background(new BackgroundFill(CARD, new CornerRadii(11), Insets.EMPTY)));
-                        button.setBorder(new Border(new BorderStroke(ACCENT, BorderStrokeStyle.SOLID,
-                                        new CornerRadii(11), new BorderWidths(1))));
-                });
-
-                return button;
-        }
 
         private void loadFirebaseUserData() {
 
@@ -2142,10 +1505,6 @@ public class FarmerDashboard {
 
                 imageBox.setAlignment(
                                 Pos.CENTER);
-
-                // =====================================================
-                // LOAD EXISTING PROFILE
-                // =====================================================
 
                 // =====================================================
                 // FORM
@@ -2987,12 +2346,15 @@ public class FarmerDashboard {
 
                 Button cropButton = createSuggestionButton(
                                 "🌾  Which crop should I grow?");
+                                cropButton.setTextFill(DARK_GREEN);
 
                 Button yieldButton = createSuggestionButton(
                                 "↗  How can I improve my yield?");
+                                yieldButton.setTextFill(DARK_GREEN);
 
                 Button irrigationButton = createSuggestionButton(
                                 "💧  Optimize irrigation schedule");
+                                irrigationButton.setTextFill(DARK_GREEN);
 
                 suggestions.getChildren().addAll(
                                 cropButton,
@@ -3005,6 +2367,7 @@ public class FarmerDashboard {
 
                 generatePlanButton = new Button(
                                 "📋  Generate Personalized Farming Plan");
+                                generatePlanButton.setTextFill(DARK_GREEN);
 
                 generatePlanButton.setPrefHeight(
                                 48);
@@ -3149,6 +2512,7 @@ public class FarmerDashboard {
 
                 newPlanButton = new Button(
                                 "← New Farming Plan");
+                                newPlanButton.setTextFill(DARK_GREEN);
 
                 newPlanButton.setPrefHeight(
                                 45);
@@ -3156,8 +2520,8 @@ public class FarmerDashboard {
                 newPlanButton.setPrefWidth(
                                 180);
 
-                newPlanButton.setTextFill(
-                                Color.WHITE);
+                //newPlanButton.setTextFill(
+                               // Color.WHITE);
 
                 newPlanButton.setFont(
                                 Font.font(
@@ -3244,7 +2608,7 @@ public class FarmerDashboard {
                                 120);
 
                 aiAskButton.setTextFill(
-                                Color.WHITE);
+                                Color.DARKGREEN);
 
                 aiAskButton.setFont(
                                 Font.font(
@@ -4918,6 +4282,10 @@ public class FarmerDashboard {
                 Button calculate = createWishlistActionButton("Calculate Investment Plan");
                 calculate.setPrefHeight(48);
                 calculate.setMaxWidth(Double.MAX_VALUE);
+                calculate.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+                calculate.setBackground(new Background(new BackgroundFill(
+                                DARK_GREEN, new CornerRadii(8), Insets.EMPTY)));
+                calculate.setStyle("-fx-background-color:green");
 
                 Label errorLabel = new Label();
                 errorLabel.setTextFill(ERROR);
@@ -5246,7 +4614,7 @@ public class FarmerDashboard {
                 section.setStyle(
                                 "-fx-background-color:#0b1714;" +
                                                 "-fx-background-radius:12;" +
-                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-color:#19352b;" +
                                                 "-fx-border-radius:12;");
 
                 Label title = new Label("♥ Saved Schemes");
@@ -5266,7 +4634,7 @@ public class FarmerDashboard {
                                         "You haven't liked any schemes yet.");
 
                         empty.setStyle(
-                                        "-fx-text-fill:#AAAAAA;" +
+                                        "-fx-text-fill:#91a099;" +
                                                         "-fx-font-size:13px;");
 
                         section.getChildren().add(empty);
@@ -5650,9 +5018,9 @@ public class FarmerDashboard {
                                 new Insets(15));
 
                 card.setStyle(
-                                "-fx-background-color:#172021;" +
+                                "-fx-background-color:#10221c;" +
                                                 "-fx-background-radius:10;" +
-                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-color:#19352b;" +
                                                 "-fx-border-radius:10;");
 
                 Label name = new Label(
@@ -5670,7 +5038,7 @@ public class FarmerDashboard {
                                                 scheme.getCategory());
 
                 category.setStyle(
-                                "-fx-text-fill:#68D34A;" +
+                                "-fx-text-fill:#53d74a;" +
                                                 "-fx-font-size:11px;");
 
                 Label information = new Label(
@@ -5679,7 +5047,7 @@ public class FarmerDashboard {
                 information.setWrapText(true);
 
                 information.setStyle(
-                                "-fx-text-fill: #AAAAAA;" +
+                                "-fx-text-fill:#91a099;" +
                                                 "-fx-font-size:12px;");
 
                 Button dislikeButton = new Button(
@@ -5691,9 +5059,9 @@ public class FarmerDashboard {
                                 javafx.scene.Cursor.HAND);
 
                 dislikeButton.setStyle(
-                                "-fx-background-color: #101d18;" +
-                                                "-fx-text-fill:#68D34A;" +
-                                                "-fx-border-color:#68D34A;" +
+                                "-fx-background-color:#101d18;" +
+                                                "-fx-text-fill:#53d74a;" +
+                                                "-fx-border-color:#53d74a;" +
                                                 "-fx-border-radius:5;" +
                                                 "-fx-background-radius:5;" +
                                                 "-fx-font-weight:bold;" +
@@ -5719,5 +5087,28 @@ public class FarmerDashboard {
                                 dislikeButton);
 
                 return card;
+        }
+
+        private String getTimeAgo(Instant time) {
+                Duration duration = Duration.between(time, Instant.now());
+
+                long minutes = duration.toMinutes();
+
+                if (minutes < 1)
+                        return "Just now";
+
+                if (minutes < 60)
+                        return minutes + " minutes ago";
+
+                long hours = minutes / 60;
+
+                if (hours < 24)
+                        return hours + " hours ago";
+
+                long days = hours / 24;
+
+                return days == 1
+                                ? "1 day ago"
+                                : days + " days ago";
         }
 }

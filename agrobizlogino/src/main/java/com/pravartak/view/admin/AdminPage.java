@@ -4,6 +4,8 @@ package com.pravartak.view.admin;
 import com.pravartak.view.admin.community.AdminCommunityPage;
 import com.pravartak.view.admin.course.AdminLearning;
 import com.pravartak.view.admin.marketplace.AdminMarketplacePage;
+import com.pravartak.view.admin.order.AdminOrdersPage;
+import com.pravartak.view.admin.review.AdminReviewsPage;
 import com.pravartak.view.admin.scheme.SchemeTab;
 import com.pravartak.view.login.LoginPage;
 
@@ -69,10 +71,11 @@ public class AdminPage {
                                 "Dashboard",
                                 "Users",
                                 "Marketplace",
+                                "Orders",
+                                "Reviews",
                                 "Manage Course",
                                 "Community",
                                 "Government Schemes");
-
                 lv.setStyle(
                                 "-fx-background-color:#0D1213;" +
                                                 "-fx-control-inner-background:#0D1213;" +
@@ -272,58 +275,14 @@ public class AdminPage {
                 // SEARCH
                 // =====================================================
 
-                TextField search = new TextField();
-
-                search.setPromptText(
-                                "⌕   Search across AgroBiz Hub...");
-
-                search.setPrefWidth(440);
-
-                search.setStyle(
-                                "-fx-background-color:#0D1213;" +
-                                                "-fx-text-fill:#EEEEEE;" +
-                                                "-fx-prompt-text-fill:#777777;" +
-                                                "-fx-border-color:#242B2C;" +
-                                                "-fx-border-radius:22;" +
-                                                "-fx-background-radius:22;" +
-                                                "-fx-padding:10 18;");
-
-                // =====================================================
-                // PROFILE
-                // =====================================================
-
-                Button profile = new Button("◎ Profile");
-
-                profile.setAlignment(
-                                Pos.CENTER);
-
-                profile.setPrefSize(
-                                35,
-                                35);
-
-                profile.setStyle(
-                                "-fx-background-color:#245D35;" +
-                                                "-fx-background-radius:50%;" +
-                                                "-fx-text-fill:#EEEEEE;" +
-                                                "-fx-font-weight:bold;");
-
-                profile.setOnAction(e -> {
-                        System.out.println("Profile Button Clicked");
-
-                });
-                // =====================================================
-                // TOP BAR COMPONENTS
-                // =====================================================
-
+               
                 // =====================================================
                 // TOP BAR COMPONENTS
                 // =====================================================
 
                 topBar.getChildren().addAll(
                                 headerLogo,
-                                topSpace,
-                                search,
-                                profile);
+                                topSpace);
 
                 bp.setTop(topBar);
 
@@ -463,9 +422,35 @@ public class AdminPage {
                         case "Government Schemes":
 
                                 // Text schemes = createPageTitle(
-                                //                 "Government Schemes");
+                                // "Government Schemes");
 
                                 bp.setCenter(SchemeTab.getSchemesPage());
+
+                                break;
+
+                        // =================================================
+                        // ORDERS
+                        // =================================================
+
+                        case "Orders":
+
+                                AdminOrdersPage ordersPage = new AdminOrdersPage();
+
+                                bp.setCenter(
+                                                ordersPage.getOrdersPage());
+
+                                break;
+
+                        // =================================================
+                        // REVIEWS
+                        // =================================================
+
+                        case "Reviews":
+
+                                AdminReviewsPage reviewsPage = new AdminReviewsPage();
+
+                                bp.setCenter(
+                                                reviewsPage.getReviewsPage());
 
                                 break;
 
@@ -475,12 +460,12 @@ public class AdminPage {
 
                         // case "Settings":
 
-                        //         Text settings = createPageTitle(
-                        //                         "Settings");
+                        // Text settings = createPageTitle(
+                        // "Settings");
 
-                        //         bp.setCenter(settings);
+                        // bp.setCenter(settings);
 
-                        //         break;
+                        // break;
 
                         // =================================================
                         // DEFAULT

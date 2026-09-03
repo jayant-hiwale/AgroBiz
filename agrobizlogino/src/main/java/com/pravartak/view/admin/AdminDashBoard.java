@@ -12,6 +12,10 @@ import com.pravartak.model.admin.Course;
 import com.pravartak.model.admin.User;
 import com.pravartak.model.farmer_model.CommunityPost;
 import com.pravartak.model.farmer_model.Product;
+import com.pravartak.controller.buyercontroller.OrderController;
+import com.pravartak.controller.buyercontroller.ReviewController;
+import com.pravartak.model.buyer_model.Order;
+import com.pravartak.model.buyer_model.Review;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -96,6 +100,8 @@ public class AdminDashBoard extends BorderPane {
     private final CourseController courseController;
     private final ProductController productController;
     private final CommunityController communityController;
+    private final OrderController orderController;
+private final ReviewController reviewController;
 
     // =========================================================
     // STAT LABELS
@@ -107,6 +113,10 @@ public class AdminDashBoard extends BorderPane {
     private final Label productsValue = createValueLabel("0");
     private final Label coursesValue = createValueLabel("0");
     private final Label postsValue = createValueLabel("0");
+    private final Label ordersValue = createValueLabel("0");
+private final Label pendingOrdersValue = createValueLabel("0");
+private final Label reviewsValue = createValueLabel("0");
+private final Label revenueValue = createValueLabel("₹0");
 
     // =========================================================
     // STATUS LABEL
@@ -162,6 +172,11 @@ public class AdminDashBoard extends BorderPane {
                 new CommunityController(
                         new CommunityDAO(db)
                 );
+                orderController =
+        new OrderController();
+
+reviewController =
+        new ReviewController();
 
         createLayout();
 
@@ -444,82 +459,128 @@ public class AdminDashBoard extends BorderPane {
 
     private GridPane createStatsGrid() {
 
-        GridPane grid =
-                new GridPane();
+    GridPane grid =
+            new GridPane();
 
-        grid.setHgap(16);
-        grid.setVgap(16);
+    grid.setHgap(16);
+    grid.setVgap(16);
 
-        VBox totalUsers =
-                createStatCard(
-                        "Total Users",
-                        totalUsersValue,
-                        "Registered accounts",
-                        "👥",
-                        GREEN,
-                        GREEN_DARK
-                );
+    VBox totalUsers =
+            createStatCard(
+                    "Total Users",
+                    totalUsersValue,
+                    "Registered accounts",
+                    "👥",
+                    GREEN,
+                    GREEN_DARK
+            );
 
-        VBox farmers =
-                createStatCard(
-                        "Farmers",
-                        farmersValue,
-                        "Farmer accounts",
-                        "🌾",
-                        GREEN,
-                        GREEN_DARK
-                );
+    VBox farmers =
+            createStatCard(
+                    "Farmers",
+                    farmersValue,
+                    "Farmer accounts",
+                    "🌾",
+                    GREEN,
+                    GREEN_DARK
+            );
 
-        VBox buyers =
-                createStatCard(
-                        "Buyers",
-                        buyersValue,
-                        "Buyer accounts",
-                        "🛒",
-                        BLUE,
-                        BLUE_DARK
-                );
+    VBox buyers =
+            createStatCard(
+                    "Buyers",
+                    buyersValue,
+                    "Buyer accounts",
+                    "🛒",
+                    BLUE,
+                    BLUE_DARK
+            );
 
-        VBox products =
-                createStatCard(
-                        "Products",
-                        productsValue,
-                        "Marketplace listings",
-                        "📦",
-                        ORANGE,
-                        ORANGE_DARK
-                );
+    VBox products =
+            createStatCard(
+                    "Products",
+                    productsValue,
+                    "Marketplace listings",
+                    "📦",
+                    ORANGE,
+                    ORANGE_DARK
+            );
 
-        VBox courses =
-                createStatCard(
-                        "Courses",
-                        coursesValue,
-                        "Learning resources",
-                        "📚",
-                        PURPLE,
-                        PURPLE_DARK
-                );
+    VBox courses =
+            createStatCard(
+                    "Courses",
+                    coursesValue,
+                    "Learning resources",
+                    "📚",
+                    PURPLE,
+                    PURPLE_DARK
+            );
 
-        VBox posts =
-                createStatCard(
-                        "Community Posts",
-                        postsValue,
-                        "Farmer discussions",
-                        "💬",
-                        RED,
-                        RED_DARK
-                );
+    VBox posts =
+            createStatCard(
+                    "Community Posts",
+                    postsValue,
+                    "Farmer discussions",
+                    "💬",
+                    RED,
+                    RED_DARK
+            );
 
-        addGridItem(grid, totalUsers, 0, 0);
-        addGridItem(grid, farmers, 1, 0);
-        addGridItem(grid, buyers, 2, 0);
+    VBox orders =
+            createStatCard(
+                    "Orders",
+                    ordersValue,
+                    "Marketplace orders",
+                    "🛍",
+                    BLUE,
+                    BLUE_DARK
+            );
 
-        addGridItem(grid, products, 0, 1);
-        addGridItem(grid, courses, 1, 1);
-        addGridItem(grid, posts, 2, 1);
+    VBox pendingOrders =
+            createStatCard(
+                    "Pending Orders",
+                    pendingOrdersValue,
+                    "Awaiting action",
+                    "⏳",
+                    ORANGE,
+                    ORANGE_DARK
+            );
 
-        return grid;
-    }
+    VBox reviews =
+            createStatCard(
+                    "Reviews",
+                    reviewsValue,
+                    "Customer reviews",
+                    "⭐",
+                    GREEN,
+                    GREEN_DARK
+            );
+
+    VBox revenue =
+            createStatCard(
+                    "Revenue",
+                    revenueValue,
+                    "Total order value",
+                    "₹",
+                    PURPLE,
+                    PURPLE_DARK
+            );
+
+    addGridItem(grid, totalUsers, 0, 0);
+    addGridItem(grid, farmers, 1, 0);
+    addGridItem(grid, buyers, 2, 0);
+
+    addGridItem(grid, products, 0, 1);
+    addGridItem(grid, courses, 1, 1);
+    addGridItem(grid, posts, 2, 1);
+
+    addGridItem(grid, orders, 0, 2);
+    addGridItem(grid, pendingOrders, 1, 2);
+    addGridItem(grid, reviews, 2, 2);
+
+    addGridItem(grid, revenue, 0, 3);
+
+    return grid;
+}
 
     private void addGridItem(
             GridPane grid,
@@ -839,14 +900,30 @@ public class AdminDashBoard extends BorderPane {
                                 communityController
                                         .getPosts();
 
-                        return new DashboardData(
-                                users,
-                                farmers,
-                                buyers,
-                                products,
-                                courses,
-                                posts
-                        );
+                        // -----------------------------
+// ORDERS
+// -----------------------------
+
+List<Order> orders =
+        orderController.getAllOrders();
+
+// -----------------------------
+// REVIEWS
+// -----------------------------
+
+List<Review> reviews =
+        reviewController.getAllReviews();
+
+                       return new DashboardData(
+        users,
+        farmers,
+        buyers,
+        products,
+        courses,
+        posts,
+        orders,
+        reviews
+);
                     }
                 };
 
@@ -951,6 +1028,50 @@ public class AdminDashBoard extends BorderPane {
             updateCommunityLikes(
                     data.posts
             );
+           // -------------------------------------------------
+// ORDER & REVIEW STATISTICS
+// -------------------------------------------------
+
+ordersValue.setText(
+        String.valueOf(
+                data.orders.size()
+        )
+);
+
+// Pending Orders
+long pendingOrders = data.orders.stream()
+        .filter(order ->
+                "PENDING".equalsIgnoreCase(
+                        order.getOrderStatus()
+                )
+        )
+        .count();
+
+pendingOrdersValue.setText(
+        String.valueOf(pendingOrders)
+);
+
+// Reviews
+reviewsValue.setText(
+        String.valueOf(
+                data.reviews.size()
+        )
+);
+
+// Revenue
+double revenue = data.orders.stream()
+        .filter(order -> {
+            String status = order.getOrderStatus();
+
+            return !"CANCELLED".equalsIgnoreCase(status)
+                    && !"REJECTED".equalsIgnoreCase(status);
+        })
+        .mapToDouble(Order::getTotalAmount)
+        .sum();
+
+revenueValue.setText(
+        "₹" + String.format("%.2f", revenue)
+);
         });
     }
 
@@ -1216,7 +1337,7 @@ public class AdminDashBoard extends BorderPane {
     // DASHBOARD DATA HOLDER
     // =========================================================
 
-    private static class DashboardData {
+            private static class DashboardData {
 
         private final List<User> users;
         private final List<User> farmers;
@@ -1224,19 +1345,25 @@ public class AdminDashBoard extends BorderPane {
 
         private final List<Product> products;
         private final List<Course> courses;
+        private final List<Order> orders;
+private final List<Review> reviews;
         private final List<CommunityPost> posts;
 
-        DashboardData(
-                List<User> users,
-                List<User> farmers,
-                List<User> buyers,
-                List<Product> products,
-                List<Course> courses,
-                List<CommunityPost> posts) {
+       DashboardData(
+        List<User> users,
+        List<User> farmers,
+        List<User> buyers,
+        List<Product> products,
+        List<Course> courses,
+        List<CommunityPost> posts,
+        List<Order> orders,
+        List<Review> reviews) {
 
             this.users = users;
             this.farmers = farmers;
             this.buyers = buyers;
+            this.orders = orders;
+this.reviews = reviews;
 
             this.products = products;
             this.courses = courses;
