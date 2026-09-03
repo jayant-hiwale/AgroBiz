@@ -4,8 +4,6 @@ package com.pravartak.view.farmer;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.net.URL;
-import java.time.Duration;
-import java.time.Instant;
 
 import com.pravartak.controller.farmercontoller.FarmerProfileController;
 import com.pravartak.model.farmer_model.FarmerProfile;
@@ -68,6 +66,7 @@ public class FarmerDashboard {
 
         private final FarmerProfileController profileController;
         private final UserDAO userDAO;
+        private String selectedProfileImageBase64;
         // // // LOGOUT CALLBACK
         // // private final Runnable logoutAction;
 
@@ -86,38 +85,25 @@ public class FarmerDashboard {
         private TextField primaryCropsField;
         private String imageBase64 = "";
 
-        // // // ADMIN THEME COLORS
-        private static final Color BACKGROUND = Color.web("#080C0D");
-        private static final Color SIDEBAR = Color.web("#0D1213");
-        private static final Color CARD = Color.web("#101718");
-        private static final Color CARD_HOVER = Color.web("#172021");
-        private static final Color SELECTED = Color.web("#245D35");
-        private static final Color ACCENT = Color.web("#68D34A");
-        private static final Color TEXT_PRIMARY = Color.web("#EEEEEE");
-        private static final Color TEXT_SECONDARY = Color.web("#AAAAAA");
-        private static final Color BORDER = Color.web("#242B2C");
-        private static final Color ERROR = Color.web("#E57373");
-
-        private static final Color DARK_GREEN = SIDEBAR;
-        private static final Color GREEN = ACCENT;
-        private static final Color LIGHT_GREEN = TEXT_SECONDARY;
-        private static final Color CREAM = BACKGROUND;
-        private static final Color DARK_TEXT = TEXT_PRIMARY;
-        private static final Color GREY = TEXT_SECONDARY;
-        private static final Color CARD_BACKGROUND = CARD;
-        private static final Color BORDER_COLOR = BORDER;
+        // // // COLORS
+        private final Color DARK_GREEN = Color.web("#080C0D");
+        private static final Color GREEN = Color.web("#53d74a");
+        private final Color LIGHT_GREEN = Color.web("#B7D7B2");
+        private final Color CREAM = Color.web("#080C0D");
+        private final Color DARK_TEXT = Color.web("#F4F7F5");
+        private final Color GREY = Color.web("#91A099");
+        private final Color CARD_BACKGROUND = Color.web("#0D1715");
+        private final Color BORDER_COLOR = Color.web("#19352B");
 
         // // // SIDEBAR BUTTONS
         private Button homepageButton;
         private Button dashboardButton;
         private Button profileButton;
         private Button aiAdvisorButton;
+        // private Button learningButton;
+        // private Button wishlistButton;
         private Button investmentButton;
         private Button schemesButton;
-        private Button reviewsButton;
-
-        private Button orderRequestsButton;
-        private Button myOrdersButton;
 
         // // // MAIN BORDER PANE
         private BorderPane root;
@@ -234,19 +220,20 @@ public class FarmerDashboard {
                 sidebar.setMaxWidth(300);
                 sidebar.setPadding(new Insets(25, 20, 20, 20));
                 sidebar.setSpacing(7);
-
+                // sidebar.setBackground(new Background(new BackgroundFill(DARK_GREEN,
+                // CornerRadii.EMPTY, Insets.EMPTY)));
                 sidebar.setBackground(new Background(
-                                new BackgroundFill(SIDEBAR, CornerRadii.EMPTY, Insets.EMPTY)));
+                                new BackgroundFill(Color.web("#080C0D"), CornerRadii.EMPTY, Insets.EMPTY)));
                 // LOGO
                 Label logo = new Label("🌱  Agro Biz");
-                logo.setTextFill(ACCENT);
+                logo.setTextFill(Color.WHITE);
                 logo.setFont(Font.font("Arial", FontWeight.BOLD, 28));
                 sidebar.getChildren().add(logo);
                 sidebar.getChildren().add(createSpace(30));
 
                 // MENU TITLE
                 Label menu = new Label("FARMER MENU");
-                menu.setTextFill(TEXT_SECONDARY);
+                menu.setTextFill(Color.web("#B7D7B2"));
                 menu.setFont(Font.font("Arial", FontWeight.BOLD, 12));
                 menu.setPadding(new Insets(0, 0, 8, 15));
                 sidebar.getChildren().add(menu);
@@ -271,6 +258,14 @@ public class FarmerDashboard {
                 aiAdvisorButton = createMenuButton("✦", "AI Farming Advisor");
                 aiAdvisorButton.setOnAction(event -> showPage("ai"));
 
+                // MY LEARNING
+                // learningButton = createMenuButton("▣", "My Learning");
+                // learningButton.setOnAction(event -> showPage("learning"));
+
+                // WISHLIST
+                // wishlistButton = createMenuButton("♙", "Wishlist");
+                // wishlistButton.setOnAction(event -> showPage("wishlist"));
+
                 // INVESTMENT
                 investmentButton = createMenuButton("₹", "Investment Calculator");
                 investmentButton.setOnAction(event -> showPage("investment"));
@@ -279,46 +274,10 @@ public class FarmerDashboard {
                 schemesButton = createMenuButton("◇", "Schemes & Subsidies");
                 schemesButton.setOnAction(event -> showPage("schemes"));
 
-                // =========================================================
-// ORDER REQUESTS
-// =========================================================
-
-orderRequestsButton = createMenuButton("📦", "Order Requests");
-
-orderRequestsButton.setOnAction(event -> {
-
-        showPage("orderRequests");
-});
-
-// =========================================================
-// MY ORDERS
-// =========================================================
-
-myOrdersButton = createMenuButton("📋", "My Orders");
-
-myOrdersButton.setOnAction(event -> {
-
-        showPage("myOrders");
-});
-
-reviewsButton = createMenuButton("⭐", "Customer Reviews");
-
-reviewsButton.setOnAction(event ->
-        showPage("reviews")
-);
-
                 // ADD BUTTONS
-                sidebar.getChildren().addAll(
-        homepageButton,
-        dashboardButton,
-        profileButton,
-        aiAdvisorButton,
-        investmentButton,
-        schemesButton,
-        orderRequestsButton,
-        myOrdersButton,
-        reviewsButton
-);
+                sidebar.getChildren().addAll(homepageButton, dashboardButton, profileButton, aiAdvisorButton,
+                                investmentButton, schemesButton);
+
                 // SPACER
                 Region spacer = new Region();
                 VBox.setVgrow(spacer, Priority.ALWAYS);
@@ -359,7 +318,7 @@ reviewsButton.setOnAction(event ->
                 logout.setOnMouseEntered(event -> {
 
                         logout.setStyle(
-                                        "-fx-background-color:#633333;" +
+                                        "-fx-background-color:#3A2020;" +
                                                         "-fx-text-fill:#E57373;" +
                                                         "-fx-font-size:14px;" +
                                                         "-fx-font-weight:bold;" +
@@ -395,7 +354,7 @@ reviewsButton.setOnAction(event ->
                 button.setPadding(new Insets(0, 14, 0, 14));
                 button.setCursor(Cursor.HAND);
                 button.setFont(Font.font("Arial", FontWeight.NORMAL, 14));
-                button.setTextFill(TEXT_SECONDARY);
+                button.setTextFill(Color.web("#B7D7B2"));
                 button.setBackground(Background.EMPTY);
                 button.setBorder(Border.EMPTY);
                 return button;
@@ -403,59 +362,24 @@ reviewsButton.setOnAction(event ->
 
         // SELECTED BUTTON
         private void setSelectedMenuButton(Button selectedButton) {
+                Button[] buttons = { homepageButton, dashboardButton, profileButton, aiAdvisorButton, investmentButton,
+                                schemesButton };
 
-    Button[] buttons = {
-        homepageButton,
-        dashboardButton,
-        profileButton,
-        aiAdvisorButton,
-        investmentButton,
-        schemesButton,
-        orderRequestsButton,
-        myOrdersButton,
-        reviewsButton
-    };
+                for (Button button : buttons) {
+                        if (button == null) {
+                                continue;
+                        }
 
-    for (Button button : buttons) {
+                        button.setTextFill(Color.web("#B7D7B2"));
+                        button.setFont(Font.font("Arial", FontWeight.NORMAL, 14));
+                        button.setBackground(Background.EMPTY);
+                }
 
-        if (button == null) {
-            continue;
+                selectedButton.setTextFill(Color.WHITE);
+                selectedButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+                selectedButton.setBackground(
+                                new Background(new BackgroundFill(GREEN, new CornerRadii(10), Insets.EMPTY)));
         }
-
-        button.setTextFill(Color.rgb(235, 245, 235));
-        button.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.NORMAL,
-                        14
-                )
-        );
-
-        button.setBackground(
-                Background.EMPTY
-        );
-    }
-
-    selectedButton.setTextFill(Color.WHITE);
-
-    selectedButton.setFont(
-            Font.font(
-                    "Arial",
-                    FontWeight.BOLD,
-                    14
-            )
-    );
-
-    selectedButton.setBackground(
-            new Background(
-                    new BackgroundFill(
-                            GREEN,
-                            new CornerRadii(10),
-                            Insets.EMPTY
-                    )
-            )
-    );
-}
 
         // PAGE NAVIGATION
         // =========================================================
@@ -505,6 +429,26 @@ reviewsButton.setOnAction(event ->
 
                                 break;
 
+                        // case "learning":
+
+                        // setSelectedMenuButton(learningButton);
+
+                        // root.setCenter(
+                        // createLearningPage()
+                        // );
+
+                        // break;
+
+                        // case "wishlist":
+
+                        // setSelectedMenuButton(wishlistButton);
+
+                        // root.setCenter(
+                        // createWishlistPage()
+                        // );
+
+                        // break;
+
                         case "investment":
 
                                 setSelectedMenuButton(investmentButton);
@@ -522,52 +466,6 @@ reviewsButton.setOnAction(event ->
                                                 createSavedSchemesSection());
 
                                 break;
-
-                        // =========================================================
-// ORDER REQUESTS
-// =========================================================
-
-case "orderRequests":
-
-        setSelectedMenuButton(
-                orderRequestsButton
-        );
-
-        root.setCenter(
-                new FarmerOrderRequestsPage(farmerId)
-                        .getOrderRequestsPage()
-        );
-
-        break;
-
-        case "reviews":
-
-    setSelectedMenuButton(reviewsButton);
-
-    root.setCenter(
-            new FarmerReviewsPage(farmerId)
-                    .getReviewsPage()
-    );
-
-    break;
-
-
-// =========================================================
-// MY ORDERS
-// =========================================================
-
-case "myOrders":
-
-        setSelectedMenuButton(
-                myOrdersButton
-        );
-
-        root.setCenter(
-                new FarmerOrdersPage(farmerId)
-                        .getOrdersPage()
-        );
-
-        break;
 
                         case "Homepage":
 
@@ -600,8 +498,13 @@ case "myOrders":
 
                 VBox main = new VBox();
 
-                main.setBackground(new Background(
-                                new BackgroundFill(DARK_GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+                main.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                DARK_GREEN,
+                                                                CornerRadii.EMPTY,
+                                                                Insets.EMPTY)));
+
                 HBox topBar = createTopBar(
                                 "Farmer Profile",
                                 "View your personal and farming information.");
@@ -620,7 +523,7 @@ case "myOrders":
                 content.setBackground(
                                 new Background(
                                                 new BackgroundFill(
-                                                                BACKGROUND,
+                                                                Color.web("#080C0D"),
                                                                 CornerRadii.EMPTY,
                                                                 Insets.EMPTY)));
 
@@ -723,7 +626,7 @@ case "myOrders":
                 profileHeader.setBackground(
                                 new Background(
                                                 new BackgroundFill(
-                                                                SIDEBAR,
+                                                                Color.web("#0D1715"),
                                                                 new CornerRadii(15),
                                                                 Insets.EMPTY)));
 
@@ -746,7 +649,7 @@ case "myOrders":
                                 90);
 
                 profileImage.setStyle(
-                                "-fx-background-color:#101718;" +
+                                "-fx-background-color:#10221C;" +
                                                 "-fx-background-radius:50;");
 
                 if (profile != null &&
@@ -871,7 +774,7 @@ case "myOrders":
                                 130);
 
                 edit.setTextFill(
-                                Color.DARKGREEN);
+                                Color.WHITE);
 
                 edit.setFont(
                                 Font.font(
@@ -1157,7 +1060,7 @@ case "myOrders":
                                 Pos.CENTER);
 
                 icon.setTextFill(
-                                TEXT_PRIMARY);
+                                Color.WHITE);
 
                 icon.setFont(
                                 Font.font(
@@ -1192,9 +1095,9 @@ case "myOrders":
                                 Double.MAX_VALUE);
 
                 card.setStyle(
-                                "-fx-background-color:#101718;" +
+                                "-fx-background-color:#0D1715;" +
                                                 "-fx-background-radius:15;" +
-                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-color:#19352B;" +
                                                 "-fx-border-radius:15;" +
                                                 "-fx-border-width:1;");
 
@@ -1202,7 +1105,7 @@ case "myOrders":
                                 titleText);
 
                 title.setTextFill(
-                                TEXT_PRIMARY);
+                                Color.WHITE);
 
                 title.setFont(
                                 Font.font(
@@ -1228,7 +1131,7 @@ case "myOrders":
                                 title);
 
                 titleLabel.setTextFill(
-                                TEXT_SECONDARY);
+                                Color.web("#B7C6BD"));
 
                 titleLabel.setFont(
                                 Font.font(
@@ -1240,7 +1143,7 @@ case "myOrders":
                                 getProfileValue(value));
 
                 valueLabel.setTextFill(
-                                TEXT_PRIMARY);
+                                Color.WHITE);
 
                 valueLabel.setFont(
                                 Font.font(
@@ -1258,9 +1161,9 @@ case "myOrders":
                                                 12));
 
                 box.setStyle(
-                                "-fx-background-color:#101718;" +
+                                "-fx-background-color:#101D18;" +
                                                 "-fx-background-radius:7;" +
-                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-color:#19352B;" +
                                                 "-fx-border-radius:7;");
 
                 box.getChildren()
@@ -1289,53 +1192,20 @@ case "myOrders":
 
         // DASHBOARD PAGE
         private VBox createDashboardPage() {
-
                 VBox main = new VBox();
+                main.setBackground(new Background(new BackgroundFill(DARK_GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 
-                // Use the same dark background as the dashboard content
-                main.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                DARK_GREEN,
-                                                                CornerRadii.EMPTY,
-                                                                Insets.EMPTY)));
-
-                HBox topBar = createTopBar(
-                                "Farmer Dashboard",
-                                "Manage your farm and make smarter decisions.");
-
+                HBox topBar = createTopBar("Farmer Dashboard", "Manage your farm and make smarter decisions.");
                 VBox content = createDashboardContent();
-
-                content.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                DARK_GREEN,
-                                                                CornerRadii.EMPTY,
-                                                                Insets.EMPTY)));
+                content.setBackground(new Background(new BackgroundFill(DARK_GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 
                 ScrollPane scroll = new ScrollPane(content);
-
                 scroll.setFitToWidth(true);
-                scroll.setHbarPolicy(
-                                ScrollPane.ScrollBarPolicy.NEVER);
+                scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+                scroll.setStyle("-fx-background-color: transparent;");
+                VBox.setVgrow(scroll, Priority.ALWAYS);
 
-                // Remove ScrollPane border
-                scroll.setStyle(
-                                "-fx-background-color: transparent;" +
-                                                "-fx-border-color: transparent;" +
-                                                "-fx-focus-color: transparent;" +
-                                                "-fx-faint-focus-color: transparent;");
-
-                scroll.setFocusTraversable(false);
-
-                VBox.setVgrow(
-                                scroll,
-                                Priority.ALWAYS);
-
-                main.getChildren().addAll(
-                                topBar,
-                                scroll);
-
+                main.getChildren().addAll(topBar, scroll);
                 return main;
         }
 
@@ -1371,15 +1241,782 @@ case "myOrders":
 
         private VBox createDashboardContent() {
 
-                FarmerDashboardHome home = new FarmerDashboardHome(
-                                farmerId);
+                VBox content = new VBox();
 
-                return home.getDashboardHome();
+                content.setPadding(
+                                new Insets(30, 35, 35, 35));
+
+                content.setSpacing(22);
+
+                // ========================================================
+                // WELCOME CARD
+                // ========================================================
+
+                content.getChildren().add(
+                                createWelcomeCard());
+
+                // ========================================================
+                // STAT CARDS
+                // ========================================================
+
+                HBox stats = new HBox();
+
+                stats.setSpacing(20);
+
+                stats.getChildren().addAll(
+
+                                createStat(
+                                                "🛒",
+                                                "My Products",
+                                                "8",
+                                                "Products uploaded"),
+
+                                createStat(
+                                                "📚",
+                                                "Liked Courses",
+                                                "5",
+                                                "Courses liked"),
+
+                                createStat(
+                                                "🏛",
+                                                "Saved Schemes",
+                                                "3",
+                                                "Schemes saved"),
+
+                                createStat(
+                                                "♡",
+                                                "Wishlist",
+                                                "7",
+                                                "Items saved"));
+
+                content.getChildren().add(
+                                stats);
+
+                // ========================================================
+                // LOWER SECTION
+                // ========================================================
+
+                HBox lower = new HBox();
+
+                lower.setSpacing(22);
+
+                // --------------------------------------------------------
+                // MY PRODUCTS
+                // --------------------------------------------------------
+
+                VBox products = createMyProductsCard();
+
+                // --------------------------------------------------------
+                // MY AGRO BIZ
+                // --------------------------------------------------------
+
+                VBox agroBiz = createMyAgroBizCard();
+
+                HBox.setHgrow(
+                                products,
+                                Priority.ALWAYS);
+
+                HBox.setHgrow(
+                                agroBiz,
+                                Priority.ALWAYS);
+
+                lower.getChildren().addAll(
+                                products,
+                                agroBiz);
+
+                content.getChildren().add(
+                                lower);
+
+                // ========================================================
+                // QUICK ACTIONS
+                // ========================================================
+
+                content.getChildren().add(
+                                createQuickActions());
+
+                return content;
         }
 
         // ============================================================
         // WELCOME CARD
         // ============================================================
+
+        private HBox createWelcomeCard() {
+
+                HBox card = new HBox();
+
+                card.setPadding(
+                                new Insets(30, 35, 30, 35));
+
+                card.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                card.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                CARD_BACKGROUND,
+                                                                new CornerRadii(17),
+                                                                Insets.EMPTY)));
+
+                card.setBorder(
+                                new Border(
+                                                new BorderStroke(
+                                                                BORDER_COLOR,
+                                                                BorderStrokeStyle.SOLID,
+                                                                new CornerRadii(17),
+                                                                new BorderWidths(1))));
+
+                // ========================================================
+                // TEXT
+                // ========================================================
+
+                VBox text = new VBox();
+
+                text.setSpacing(7);
+
+                Label title = new Label(
+                                "Good evening, Farmer! 🌱");
+
+                title.setTextFill(
+                                Color.WHITE);
+
+                title.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                29));
+
+                Label description = new Label(
+                                "Manage your products, courses, schemes and saved items.");
+
+                description.setTextFill(
+                                Color.rgb(
+                                                215,
+                                                235,
+                                                215));
+
+                description.setFont(
+                                Font.font(
+                                                "Arial",
+                                                16));
+
+                text.getChildren().addAll(
+                                title,
+                                description);
+
+                // ========================================================
+                // SPACER
+                // ========================================================
+
+                Region spacer = new Region();
+
+                HBox.setHgrow(
+                                spacer,
+                                Priority.ALWAYS);
+
+                // ========================================================
+                // ICON
+                // ========================================================
+
+                Label plant = new Label(
+                                "🌿");
+
+                plant.setFont(
+                                Font.font(
+                                                "Arial",
+                                                60));
+
+                card.getChildren().addAll(
+                                text,
+                                spacer,
+                                plant);
+
+                return card;
+        }
+
+        // ============================================================
+        // STAT CARD
+        // ============================================================
+
+        private VBox createStat(
+                        String icon,
+                        String title,
+                        String value,
+                        String subtitle) {
+
+                VBox card = new VBox();
+
+                card.setSpacing(8);
+
+                card.setPadding(
+                                new Insets(20));
+
+                card.setPrefHeight(
+                                160);
+
+                HBox.setHgrow(
+                                card,
+                                Priority.ALWAYS);
+
+                // ========================================================
+                // CARD BACKGROUND
+                // ========================================================
+
+                card.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                CARD_BACKGROUND,
+                                                                new CornerRadii(15),
+                                                                Insets.EMPTY)));
+
+                card.setBorder(
+                                new Border(
+                                                new BorderStroke(
+                                                                BORDER_COLOR,
+                                                                BorderStrokeStyle.SOLID,
+                                                                new CornerRadii(15),
+                                                                new BorderWidths(1))));
+
+                // ========================================================
+                // ICON
+                // ========================================================
+
+                Label iconLabel = new Label(
+                                icon);
+
+                iconLabel.setTextFill(
+                                Color.web("#53d74a"));
+
+                iconLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                22));
+
+                iconLabel.setPrefSize(
+                                48,
+                                48);
+
+                iconLabel.setAlignment(
+                                Pos.CENTER);
+
+                iconLabel.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                DARK_GREEN,
+                                                                new CornerRadii(10),
+                                                                Insets.EMPTY)));
+
+                // ========================================================
+                // TITLE
+                // ========================================================
+
+                Label titleLabel = new Label(
+                                title);
+
+                titleLabel.setTextFill(
+                                LIGHT_GREEN);
+
+                titleLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                13));
+
+                HBox top = new HBox();
+
+                top.setSpacing(12);
+
+                top.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                top.getChildren().addAll(
+                                iconLabel,
+                                titleLabel);
+
+                // ========================================================
+                // VALUE
+                // ========================================================
+
+                Label valueLabel = new Label(
+                                value);
+
+                valueLabel.setTextFill(
+                                DARK_TEXT);
+
+                valueLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                27));
+
+                // ========================================================
+                // SUBTITLE
+                // ========================================================
+
+                Label sub = new Label(
+                                subtitle);
+
+                sub.setTextFill(
+                                GREEN);
+
+                sub.setFont(
+                                Font.font(
+                                                "Arial",
+                                                12));
+
+                card.getChildren().addAll(
+                                top,
+                                valueLabel,
+                                sub);
+
+                return card;
+        }
+
+        // ============================================================
+        // MY PRODUCTS CARD
+        // ============================================================
+
+        private VBox createMyProductsCard() {
+
+                VBox card = createWhiteCard();
+
+                // ========================================================
+                // TITLE
+                // ========================================================
+
+                Label title = new Label(
+                                "My Products");
+
+                title.setTextFill(
+                                DARK_TEXT);
+
+                title.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                22));
+
+                card.getChildren().add(
+                                title);
+
+                // ========================================================
+                // PRODUCT 1
+                // ========================================================
+
+                card.getChildren().add(
+                                createProductItem(
+                                                "🌾",
+                                                "Organic Wheat",
+                                                "Product uploaded"));
+
+                // ========================================================
+                // PRODUCT 2
+                // ========================================================
+
+                card.getChildren().add(
+                                createProductItem(
+                                                "🌱",
+                                                "Organic Soybean",
+                                                "Product uploaded"));
+
+                // ========================================================
+                // PRODUCT 3
+                // ========================================================
+
+                card.getChildren().add(
+                                createProductItem(
+                                                "🥬",
+                                                "Fresh Vegetables",
+                                                "Product uploaded"));
+
+                return card;
+        }
+
+        // ============================================================
+        // PRODUCT ITEM
+        // ============================================================
+
+        private HBox createProductItem(
+                        String icon,
+                        String name,
+                        String description) {
+
+                HBox row = new HBox();
+
+                row.setSpacing(
+                                12);
+
+                row.setPadding(
+                                new Insets(
+                                                12,
+                                                0,
+                                                8,
+                                                0));
+
+                row.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                // ========================================================
+                // ICON
+                // ========================================================
+
+                Label iconLabel = new Label(
+                                icon);
+
+                iconLabel.setPrefSize(
+                                42,
+                                42);
+
+                iconLabel.setAlignment(
+                                Pos.CENTER);
+
+                iconLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                20));
+
+                iconLabel.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                LIGHT_GREEN,
+                                                                new CornerRadii(9),
+                                                                Insets.EMPTY)));
+
+                // ========================================================
+                // TEXT
+                // ========================================================
+
+                VBox text = new VBox();
+
+                text.setSpacing(
+                                3);
+
+                Label nameLabel = new Label(
+                                name);
+
+                nameLabel.setTextFill(
+                                DARK_TEXT);
+
+                nameLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                14));
+
+                Label descriptionLabel = new Label(
+                                description);
+
+                descriptionLabel.setTextFill(
+                                GREY);
+
+                descriptionLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                11));
+
+                text.getChildren().addAll(
+                                nameLabel,
+                                descriptionLabel);
+
+                // ========================================================
+                // SPACER
+                // ========================================================
+
+                Region spacer = new Region();
+
+                HBox.setHgrow(
+                                spacer,
+                                Priority.ALWAYS);
+
+                // ========================================================
+                // VIEW
+                // ========================================================
+
+                Label view = new Label(
+                                "View →");
+
+                view.setTextFill(
+                                GREEN);
+
+                view.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                12));
+
+                row.getChildren().addAll(
+                                iconLabel,
+                                text,
+                                spacer,
+                                view);
+
+                return row;
+        }
+
+        // ============================================================
+        // MY AGRO BIZ CARD
+        // ============================================================
+
+        private VBox createMyAgroBizCard() {
+
+                VBox card = createWhiteCard();
+
+                // ========================================================
+                // TITLE
+                // ========================================================
+
+                Label title = new Label(
+                                "My Agro Biz");
+
+                title.setTextFill(
+                                DARK_TEXT);
+
+                title.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                22));
+
+                card.getChildren().add(
+                                title);
+
+                // ========================================================
+                // LIKED COURSES
+                // ========================================================
+
+                card.getChildren().add(
+                                createDashboardItem(
+                                                "📚",
+                                                "Liked Courses",
+                                                "5 courses liked"));
+
+                // ========================================================
+                // SAVED SCHEMES
+                // ========================================================
+
+                card.getChildren().add(
+                                createDashboardItem(
+                                                "🏛",
+                                                "Saved Schemes",
+                                                "3 schemes saved"));
+
+                // ========================================================
+                // WISHLIST
+                // ========================================================
+
+                card.getChildren().add(
+                                createDashboardItem(
+                                                "♡",
+                                                "Wishlist",
+                                                "7 items saved"));
+
+                // ========================================================
+                // AI ADVISOR
+                // ========================================================
+
+                card.getChildren().add(
+                                createDashboardItem(
+                                                "✦",
+                                                "AI Farming Advisor",
+                                                "Ask for farming guidance"));
+
+                return card;
+        }
+
+        // ============================================================
+        // DASHBOARD ITEM
+        // ============================================================
+
+        private HBox createDashboardItem(
+                        String icon,
+                        String title,
+                        String description) {
+
+                HBox row = new HBox();
+
+                row.setSpacing(
+                                12);
+
+                row.setPadding(
+                                new Insets(
+                                                10,
+                                                0,
+                                                10,
+                                                0));
+
+                row.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                // ========================================================
+                // ICON
+                // ========================================================
+
+                Label iconLabel = new Label(
+                                icon);
+
+                iconLabel.setPrefSize(
+                                40,
+                                40);
+
+                iconLabel.setAlignment(
+                                Pos.CENTER);
+
+                iconLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                18));
+
+                iconLabel.setTextFill(
+                                GREEN);
+
+                iconLabel.setBackground(
+                                new Background(
+                                                new BackgroundFill(
+                                                                LIGHT_GREEN,
+                                                                new CornerRadii(9),
+                                                                Insets.EMPTY)));
+
+                // ========================================================
+                // TEXT
+                // ========================================================
+
+                VBox text = new VBox();
+
+                text.setSpacing(
+                                3);
+
+                Label titleLabel = new Label(
+                                title);
+
+                titleLabel.setTextFill(
+                                DARK_TEXT);
+
+                titleLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                13));
+
+                Label descriptionLabel = new Label(
+                                description);
+
+                descriptionLabel.setTextFill(
+                                GREY);
+
+                descriptionLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                11));
+
+                text.getChildren().addAll(
+                                titleLabel,
+                                descriptionLabel);
+
+                row.getChildren().addAll(
+                                iconLabel,
+                                text);
+
+                return row;
+        }
+
+        // ============================================================
+        // QUICK ACTIONS
+        // ============================================================
+
+        private HBox createQuickActions() {
+
+                HBox actions = new HBox();
+
+                actions.setSpacing(
+                                18);
+
+                // ========================================================
+                // AI ADVISOR
+                // ========================================================
+
+                Button ai = createAction(
+                                "✦  Ask AI Advisor");
+
+                ai.setOnAction(
+                                event -> showPage("ai"));
+
+                // ========================================================
+                // LEARNING
+                // ========================================================
+
+                Button learning = createAction(
+                                "▣  My Learning");
+
+                learning.setOnAction(
+                                event -> showPage("learning"));
+
+                // ========================================================
+                // INVESTMENT
+                // ========================================================
+
+                Button investment = createAction(
+                                "₹  Investment Calculator");
+
+                investment.setOnAction(
+                                event -> showPage("investment"));
+
+                // ========================================================
+                // SCHEMES
+                // ========================================================
+
+                Button schemes = createAction(
+                                "◇  Schemes");
+
+                schemes.setOnAction(
+                                event -> showPage("schemes"));
+
+                actions.getChildren().addAll(
+                                ai,
+                                learning,
+                                investment,
+                                schemes);
+
+                return actions;
+        }
+
+        // ACTION BUTTON
+        private Button createAction(String text) {
+                Button button = new Button(text);
+                button.setPrefHeight(55);
+                HBox.setHgrow(button, Priority.ALWAYS);
+                button.setMaxWidth(Double.MAX_VALUE);
+                button.setTextFill(GREEN);
+                button.setFont(Font.font("Arial", FontWeight.BOLD, 13));
+                button.setBackground(
+                                new Background(new BackgroundFill(CARD_BACKGROUND, new CornerRadii(11), Insets.EMPTY)));
+                button.setBorder(new Border(new BorderStroke(Color.web("#19352B"), BorderStrokeStyle.SOLID,
+                                new CornerRadii(11), new BorderWidths(1))));
+                button.setCursor(Cursor.HAND);
+
+                button.setOnMouseEntered(event -> button.setStyle(
+                                "-fx-background-color:#10221C;" +
+                                                "-fx-text-fill:#53D74A;" +
+                                                "-fx-font-size:13px;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-background-radius:11;" +
+                                                "-fx-border-color:#53D74A;" +
+                                                "-fx-border-radius:11;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-cursor:hand;"));
+
+                button.setOnMouseExited(event -> button.setStyle(
+                                "-fx-background-color:#0D1715;" +
+                                                "-fx-text-fill:#53D74A;" +
+                                                "-fx-font-size:13px;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-background-radius:11;" +
+                                                "-fx-border-color:#19352B;" +
+                                                "-fx-border-radius:11;" +
+                                                "-fx-border-width:1;" +
+                                                "-fx-cursor:hand;"));
+
+                return button;
+        }
 
         private void loadFirebaseUserData() {
 
@@ -1448,7 +2085,7 @@ case "myOrders":
                                 "👨‍🌾 Personal & Farm Profile");
 
                 cardTitle.setStyle(
-                                "-fx-text-fill:#68D34A;" +
+                                "-fx-text-fill:#53d74a;" +
                                                 "-fx-font-size:21px;" +
                                                 "-fx-font-weight:bold;");
 
@@ -1456,7 +2093,7 @@ case "myOrders":
                                 "Your information is saved using your unique farmer ID.");
 
                 cardSubtitle.setStyle(
-                                "-fx-text-fill:#777777;" +
+                                "-fx-text-fill:#6F7D76;" +
                                                 "-fx-font-size:13px;");
 
                 // =====================================================
@@ -1478,7 +2115,7 @@ case "myOrders":
                                 150);
 
                 profileImageContainer.setStyle(
-                                "-fx-background-color:#1B2425;" +
+                                "-fx-background-color:#10221C;" +
                                                 "-fx-background-radius:100;");
 
                 showDefaultProfileImage();
@@ -1488,8 +2125,8 @@ case "myOrders":
 
                 changeImage.setStyle(
                                 "-fx-background-color:transparent;" +
-                                                "-fx-text-fill:#68D34A;" +
-                                                "-fx-border-color:#68D34A;" +
+                                                "-fx-text-fill:#53d74a;" +
+                                                "-fx-border-color:#53d74a;" +
                                                 "-fx-border-radius:6;" +
                                                 "-fx-background-radius:6;" +
                                                 "-fx-padding:8 12;" +
@@ -1505,6 +2142,10 @@ case "myOrders":
 
                 imageBox.setAlignment(
                                 Pos.CENTER);
+
+                // =====================================================
+                // LOAD EXISTING PROFILE
+                // =====================================================
 
                 // =====================================================
                 // FORM
@@ -1677,8 +2318,8 @@ case "myOrders":
                                 180);
 
                 saveButton.setStyle(
-                                "-fx-background-color:#68D34A;" +
-                                                "-fx-text-fill:#0D1213;" +
+                                "-fx-background-color:#53d74a;" +
+                                                "-fx-text-fill:#080C0D;" +
                                                 "-fx-font-size:14px;" +
                                                 "-fx-font-weight:bold;" +
                                                 "-fx-background-radius:7;" +
@@ -2346,15 +2987,12 @@ case "myOrders":
 
                 Button cropButton = createSuggestionButton(
                                 "🌾  Which crop should I grow?");
-                                cropButton.setTextFill(DARK_GREEN);
 
                 Button yieldButton = createSuggestionButton(
                                 "↗  How can I improve my yield?");
-                                yieldButton.setTextFill(DARK_GREEN);
 
                 Button irrigationButton = createSuggestionButton(
                                 "💧  Optimize irrigation schedule");
-                                irrigationButton.setTextFill(DARK_GREEN);
 
                 suggestions.getChildren().addAll(
                                 cropButton,
@@ -2367,7 +3005,6 @@ case "myOrders":
 
                 generatePlanButton = new Button(
                                 "📋  Generate Personalized Farming Plan");
-                                generatePlanButton.setTextFill(DARK_GREEN);
 
                 generatePlanButton.setPrefHeight(
                                 48);
@@ -2422,7 +3059,7 @@ case "myOrders":
                 message.setBackground(
                                 new Background(
                                                 new BackgroundFill(
-                                                                SELECTED,
+                                                                Color.rgb(86, 108, 22),
                                                                 new CornerRadii(15),
                                                                 Insets.EMPTY)));
 
@@ -2496,7 +3133,7 @@ case "myOrders":
                                 Double.MAX_VALUE);
 
                 planText.setTextFill(
-                                TEXT_PRIMARY);
+                                Color.web("#91A099"));
 
                 planText.setFont(
                                 Font.font(
@@ -2512,7 +3149,6 @@ case "myOrders":
 
                 newPlanButton = new Button(
                                 "← New Farming Plan");
-                                newPlanButton.setTextFill(DARK_GREEN);
 
                 newPlanButton.setPrefHeight(
                                 45);
@@ -2520,8 +3156,8 @@ case "myOrders":
                 newPlanButton.setPrefWidth(
                                 180);
 
-                //newPlanButton.setTextFill(
-                               // Color.WHITE);
+                newPlanButton.setTextFill(
+                                Color.WHITE);
 
                 newPlanButton.setFont(
                                 Font.font(
@@ -2608,7 +3244,7 @@ case "myOrders":
                                 120);
 
                 aiAskButton.setTextFill(
-                                Color.DARKGREEN);
+                                Color.WHITE);
 
                 aiAskButton.setFont(
                                 Font.font(
@@ -3859,7 +4495,7 @@ case "myOrders":
                 content.setPadding(new Insets(30, 35, 35, 35));
                 content.setBackground(new Background(
                                 new BackgroundFill(
-                                                BACKGROUND,
+                                                Color.web("#080C0D"),
                                                 CornerRadii.EMPTY,
                                                 Insets.EMPTY)));
 
@@ -3949,11 +4585,11 @@ case "myOrders":
                 ImageView productImage = createWishlistImage("/fertilizer.png");
 
                 Label heart = new Label("♥");
-                heart.setTextFill(ERROR);
+                heart.setTextFill(Color.web("#53d74a"));
                 heart.setFont(Font.font("Arial", FontWeight.BOLD, 25));
                 heart.setPadding(new Insets(4, 9, 4, 9));
                 heart.setBackground(new Background(new BackgroundFill(
-                                SIDEBAR, new CornerRadii(20), Insets.EMPTY)));
+                                Color.web("#0F1F19"), new CornerRadii(20), Insets.EMPTY)));
 
                 imageBox.getChildren().addAll(productImage, heart);
                 StackPane.setAlignment(heart, Pos.TOP_RIGHT);
@@ -3961,7 +4597,7 @@ case "myOrders":
 
                 Label type = createWishlistBadge("AGRICULTURAL INPUT");
                 Label price = new Label("₹1,250");
-                price.setTextFill(DARK_GREEN);
+                price.setTextFill(GREEN);
                 price.setFont(Font.font("Arial", FontWeight.BOLD, 18));
 
                 Region priceSpace = new Region();
@@ -3995,11 +4631,11 @@ case "myOrders":
                 ImageView courseImageView = createWishlistImage("/irrigation.png");
 
                 Label heart = new Label("♥");
-                heart.setTextFill(ERROR);
+                heart.setTextFill(Color.web("#53d74a"));
                 heart.setFont(Font.font("Arial", FontWeight.BOLD, 25));
                 heart.setPadding(new Insets(4, 9, 4, 9));
                 heart.setBackground(new Background(new BackgroundFill(
-                                SIDEBAR, new CornerRadii(20), Insets.EMPTY)));
+                                Color.web("#10221C"), new CornerRadii(20), Insets.EMPTY)));
 
                 courseImage.getChildren().addAll(courseImageView, heart);
                 StackPane.setAlignment(heart, Pos.TOP_RIGHT);
@@ -4007,7 +4643,7 @@ case "myOrders":
 
                 Label type = createWishlistBadge("COURSE");
                 Label price = new Label("Free");
-                price.setTextFill(DARK_GREEN);
+                price.setTextFill(GREEN);
                 price.setFont(Font.font("Arial", FontWeight.BOLD, 18));
 
                 Region priceSpace = new Region();
@@ -4060,11 +4696,11 @@ case "myOrders":
         private Label createWishlistBadge(String text) {
 
                 Label badge = new Label(text);
-                badge.setTextFill(DARK_GREEN);
+                badge.setTextFill(GREEN);
                 badge.setFont(Font.font("Arial", FontWeight.BOLD, 10));
                 badge.setPadding(new Insets(5, 8, 5, 8));
                 badge.setBackground(new Background(new BackgroundFill(
-                                SELECTED, new CornerRadii(4), Insets.EMPTY)));
+                                Color.web("#10221C"), new CornerRadii(4), Insets.EMPTY)));
 
                 return badge;
         }
@@ -4072,7 +4708,7 @@ case "myOrders":
         private Label createWishlistTitle(String text) {
 
                 Label title = new Label(text);
-                title.setTextFill(TEXT_PRIMARY);
+                title.setTextFill(Color.web("#F4F7F5"));
                 title.setFont(Font.font("Arial", FontWeight.BOLD, 22));
                 title.setWrapText(true);
 
@@ -4136,7 +4772,7 @@ case "myOrders":
 
                 Button backButton = new Button("← Back to Wishlist");
                 backButton.setCursor(Cursor.HAND);
-                backButton.setTextFill(DARK_GREEN);
+                backButton.setTextFill(GREEN);
                 backButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
                 backButton.setBackground(Background.EMPTY);
                 backButton.setBorder(Border.EMPTY);
@@ -4158,7 +4794,7 @@ case "myOrders":
                 title.setFont(Font.font("Arial", FontWeight.BOLD, 27));
 
                 Label priceLabel = new Label(price);
-                priceLabel.setTextFill(DARK_GREEN);
+                priceLabel.setTextFill(GREEN);
                 priceLabel.setFont(Font.font("Arial", FontWeight.BOLD, 22));
 
                 Label descriptionLabel = new Label(description);
@@ -4256,12 +4892,12 @@ case "myOrders":
                 totalInvestmentField.setPrefHeight(45);
                 totalInvestmentField.setFont(Font.font("Arial", 14));
                 totalInvestmentField.setStyle(
-                                "-fx-background-color: #101718;" +
+                                "-fx-background-color: #101D18;" +
                                                 "-fx-background-radius: 8;" +
-                                                "-fx-border-color: #242B2C;" +
+                                                "-fx-border-color: #19352B;" +
                                                 "-fx-border-radius: 8;" +
                                                 "-fx-padding: 0 12;" +
-                                                "-fx-text-fill: #EEEEEE;");
+                                                "-fx-text-fill: #DCE8DF;");
 
                 Label initialLabel = new Label("Initial Investment");
                 initialLabel.setTextFill(GREY);
@@ -4272,23 +4908,19 @@ case "myOrders":
                 initialInvestmentField.setPrefHeight(45);
                 initialInvestmentField.setFont(Font.font("Arial", 14));
                 initialInvestmentField.setStyle(
-                                "-fx-background-color: #101718;" +
+                                "-fx-background-color: #101D18;" +
                                                 "-fx-background-radius: 8;" +
-                                                "-fx-border-color: #242B2C;" +
+                                                "-fx-border-color: #19352B;" +
                                                 "-fx-border-radius: 8;" +
                                                 "-fx-padding: 0 12;" +
-                                                "-fx-text-fill: #EEEEEE;");
+                                                "-fx-text-fill: #DCE8DF;");
 
                 Button calculate = createWishlistActionButton("Calculate Investment Plan");
                 calculate.setPrefHeight(48);
                 calculate.setMaxWidth(Double.MAX_VALUE);
-                calculate.setFont(Font.font("Arial", FontWeight.BOLD, 15));
-                calculate.setBackground(new Background(new BackgroundFill(
-                                DARK_GREEN, new CornerRadii(8), Insets.EMPTY)));
-                calculate.setStyle("-fx-background-color:green");
 
                 Label errorLabel = new Label();
-                errorLabel.setTextFill(ERROR);
+                errorLabel.setTextFill(Color.web("#E57373"));
                 errorLabel.setFont(Font.font("Arial", 12));
 
                 inputCard.getChildren().addAll(
@@ -4343,8 +4975,8 @@ case "myOrders":
                 progressBar.setPrefHeight(18);
                 progressBar.setMaxWidth(Double.MAX_VALUE);
                 progressBar.setStyle(
-                                "-fx-accent: #68D34A;" +
-                                                "-fx-control-inner-background: #dfe7e0;");
+                                "-fx-accent: #53d74a;" +
+                                                "-fx-control-inner-background: #DFE7E0;");
 
                 Label progressLabel = new Label("Investment Progress: 0%");
                 progressLabel.setTextFill(GREY);
@@ -4397,14 +5029,14 @@ case "myOrders":
                 suggestionCard.setBackground(
                                 new Background(
                                                 new BackgroundFill(
-                                                                CARD_HOVER,
+                                                                Color.web("#10221C"),
                                                                 new CornerRadii(12),
                                                                 Insets.EMPTY)));
 
                 suggestionCard.setBorder(
                                 new Border(
                                                 new BorderStroke(
-                                                                BORDER,
+                                                                Color.web("#2D6B3F"),
                                                                 BorderStrokeStyle.SOLID,
                                                                 new CornerRadii(12),
                                                                 new BorderWidths(1))));
@@ -4415,7 +5047,7 @@ case "myOrders":
 
                 Label suggestionText = new Label(
                                 "Enter your investment details to receive a simple monthly investment suggestion.");
-                suggestionText.setTextFill(TEXT_SECONDARY);
+                suggestionText.setTextFill(Color.web("#C8D5CA"));
                 suggestionText.setFont(Font.font("Arial", 13));
                 suggestionText.setWrapText(true);
 
@@ -4497,7 +5129,7 @@ case "myOrders":
                                         monthRow.setBackground(
                                                         new Background(
                                                                         new BackgroundFill(
-                                                                                        CARD_HOVER,
+                                                                                        Color.web("#0F1F19"),
                                                                                         new CornerRadii(8),
                                                                                         Insets.EMPTY)));
 
@@ -4612,9 +5244,9 @@ case "myOrders":
                                 new Insets(20));
 
                 section.setStyle(
-                                "-fx-background-color:#0b1714;" +
+                                "-fx-background-color:#0D1715;" +
                                                 "-fx-background-radius:12;" +
-                                                "-fx-border-color:#19352b;" +
+                                                "-fx-border-color:#19352B;" +
                                                 "-fx-border-radius:12;");
 
                 Label title = new Label("♥ Saved Schemes");
@@ -4634,7 +5266,7 @@ case "myOrders":
                                         "You haven't liked any schemes yet.");
 
                         empty.setStyle(
-                                        "-fx-text-fill:#91a099;" +
+                                        "-fx-text-fill:#91A099;" +
                                                         "-fx-font-size:13px;");
 
                         section.getChildren().add(empty);
@@ -4679,7 +5311,7 @@ case "myOrders":
                 content.setBackground(
                                 new Background(
                                                 new BackgroundFill(
-                                                                BACKGROUND,
+                                                                Color.web("#080C0D"),
                                                                 CornerRadii.EMPTY,
                                                                 Insets.EMPTY)));
 
@@ -4695,9 +5327,9 @@ case "myOrders":
                                 ScrollPane.ScrollBarPolicy.NEVER);
 
                 scroll.setStyle(
-                                "-fx-background-color:#080C0D;" +
-                                                "-fx-background:#080C0D;" +
-                                                "-fx-control-inner-background:#080C0D;");
+                                "-fx-background-color: #080C0D;" +
+                                                "-fx-background: #080C0D;" +
+                                                "-fx-control-inner-background: #080C0D;");
 
                 VBox.setVgrow(
                                 scroll,
@@ -4809,9 +5441,17 @@ case "myOrders":
                 card.setBackground(
                                 new Background(
                                                 new BackgroundFill(
-                                                                SIDEBAR,
+                                                                CARD_BACKGROUND,
                                                                 new CornerRadii(15),
                                                                 Insets.EMPTY)));
+
+                card.setBorder(
+                                new Border(
+                                                new BorderStroke(
+                                                                BORDER_COLOR,
+                                                                BorderStrokeStyle.SOLID,
+                                                                new CornerRadii(15),
+                                                                new BorderWidths(1))));
 
                 HBox.setHgrow(
                                 card,
@@ -4885,8 +5525,8 @@ case "myOrders":
                                 Double.MAX_VALUE);
 
                 card.setStyle(
-                                "-fx-background-color:#0D1213;" +
-                                                "-fx-border-color:#242B2C;" +
+                                "-fx-background-color:#0D1715;" +
+                                                "-fx-border-color:#19352B;" +
                                                 "-fx-border-radius:14;" +
                                                 "-fx-background-radius:14;");
 
@@ -4911,7 +5551,7 @@ case "myOrders":
                                 title);
 
                 label.setStyle(
-                                "-fx-text-fill:#AAAAAA;" +
+                                "-fx-text-fill:#B7C6BD;" +
                                                 "-fx-font-size:13px;");
 
                 box.getChildren()
@@ -4961,10 +5601,10 @@ case "myOrders":
                         TextField field) {
 
                 field.setStyle(
-                                "-fx-background-color:#101718;" +
-                                                "-fx-text-fill:#EEEEEE;" +
-                                                "-fx-prompt-text-fill:#777777;" +
-                                                "-fx-border-color:#242B2C;" +
+                                "-fx-background-color:#101D18;" +
+                                                "-fx-text-fill:#F4F7F5;" +
+                                                "-fx-prompt-text-fill:#66736D;" +
+                                                "-fx-border-color:#19352B;" +
                                                 "-fx-border-radius:6;" +
                                                 "-fx-background-radius:6;" +
                                                 "-fx-padding:8 10;");
@@ -4978,9 +5618,9 @@ case "myOrders":
                         ComboBox<String> box) {
 
                 box.setStyle(
-                                "-fx-background-color:#101718;" +
-                                                "-fx-text-fill:#EEEEEE;" +
-                                                "-fx-border-color:#242B2C;" +
+                                "-fx-background-color:#101D18;" +
+                                                "-fx-text-fill:#F4F7F5;" +
+                                                "-fx-border-color:#19352B;" +
                                                 "-fx-border-radius:6;" +
                                                 "-fx-background-radius:6;");
         }
@@ -5018,9 +5658,9 @@ case "myOrders":
                                 new Insets(15));
 
                 card.setStyle(
-                                "-fx-background-color:#10221c;" +
+                                "-fx-background-color:#10221C;" +
                                                 "-fx-background-radius:10;" +
-                                                "-fx-border-color:#19352b;" +
+                                                "-fx-border-color:#19352B;" +
                                                 "-fx-border-radius:10;");
 
                 Label name = new Label(
@@ -5047,7 +5687,7 @@ case "myOrders":
                 information.setWrapText(true);
 
                 information.setStyle(
-                                "-fx-text-fill:#91a099;" +
+                                "-fx-text-fill: #91A099;" +
                                                 "-fx-font-size:12px;");
 
                 Button dislikeButton = new Button(
@@ -5059,7 +5699,7 @@ case "myOrders":
                                 javafx.scene.Cursor.HAND);
 
                 dislikeButton.setStyle(
-                                "-fx-background-color:#101d18;" +
+                                "-fx-background-color: #101D18;" +
                                                 "-fx-text-fill:#53d74a;" +
                                                 "-fx-border-color:#53d74a;" +
                                                 "-fx-border-radius:5;" +
@@ -5087,28 +5727,5 @@ case "myOrders":
                                 dislikeButton);
 
                 return card;
-        }
-
-        private String getTimeAgo(Instant time) {
-                Duration duration = Duration.between(time, Instant.now());
-
-                long minutes = duration.toMinutes();
-
-                if (minutes < 1)
-                        return "Just now";
-
-                if (minutes < 60)
-                        return minutes + " minutes ago";
-
-                long hours = minutes / 60;
-
-                if (hours < 24)
-                        return hours + " hours ago";
-
-                long days = hours / 24;
-
-                return days == 1
-                                ? "1 day ago"
-                                : days + " days ago";
         }
 }
