@@ -50,12 +50,12 @@ public class FarmerReviewsPage {
         root.setStyle(
                 "-fx-background-color: #0D1117;"
         );
-         root.setTop(
-                new NavBar(
-                        farmerId,
-                        LoginPage.getLoggedInFirebaseUid()
-                ).createNavbar("⭐ Reviews")
-        );
+        //  root.setTop(
+        //         new NavBar(
+        //                 farmerId,
+        //                 LoginPage.getLoggedInFirebaseUid()
+        //         ).createNavbar("⭐ Reviews")
+        // );
 
         // =====================================================
         // HEADER
@@ -214,9 +214,9 @@ public class FarmerReviewsPage {
         // FOOTER
         // =====================================================
 
-        root.setBottom(
-                new Footer().createFooter()
-        );
+        // root.setBottom(
+        //         new Footer().createFooter()
+        // );
 
         // =====================================================
         // LOAD DATA
