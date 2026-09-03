@@ -13,7 +13,9 @@
             "mainClass": "com.pravartak.Main",
             "projectName": "agrobizlogino",
             //"vmArgs": "--module-path \"C:\\Users\\vivek\\Desktop\\C2W java\\javafx-sdk-21.0.12\\lib\" --add-modules javafx.controls,javafx.fxml"
-            "vmArgs": "--module-path \"D:\\java26\\openjfx-21.0.12_windows-x64_bin-sdk\\javafx-sdk-21.0.12\\lib\" --add-modules javafx.controls,javafx.fxml"
+            //"vmArgs": "--module-path \"D://java2026//javafx-sdk-21.0.12//lib\" --add-modules javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path \"D://java2026//javafx-sdk-21.0.12//lib\" --add-modules javafx.controls,javafx.fxml"
+
 
             //D:\java26\openjfx-21.0.12_windows-x64_bin-sdk\javafx-sdk-21.0.12\lib
         }

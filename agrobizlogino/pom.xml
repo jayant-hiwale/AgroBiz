@@ -38,8 +38,8 @@
     <dependency>
     <groupId>org.openjfx</groupId>
     <artifactId>javafx-web</artifactId>
-    <version>17.0.12</version>
-</dependency>
+    <version>21.0.12</version>
+    </dependency>
 
     <dependency>
     <groupId>io.github.cdimascio</groupId>

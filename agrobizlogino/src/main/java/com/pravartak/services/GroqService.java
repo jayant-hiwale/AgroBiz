@@ -25,12 +25,57 @@ public class GroqService {
      *
      * Do NOT put the real API key directly inside Git-tracked code.
      */
-private static final String API_KEY =
-        Dotenv.configure()
+// private static final String API_KEY =
+//         Dotenv.configure()
+//                 .directory("../")
+//                 .ignoreIfMissing()
+//                 .load()
+//                 .get("GROQ_API_KEY", System.getenv("GROQ_API_KEY"));
+
+    private static final String API_KEY = loadApiKey();
+
+private static String loadApiKey() {
+
+    // 1. Try Windows/system environment variable first
+    String envKey = System.getenv("GROQ_API_KEY");
+
+    if (envKey != null && !envKey.trim().isEmpty()) {
+        return envKey.trim();
+    }
+
+    // 2. Try .env from current working directory
+    try {
+        Dotenv dotenv = Dotenv.configure()
+                .ignoreIfMissing()
+                .load();
+
+        String dotenvKey = dotenv.get("GROQ_API_KEY");
+
+        if (dotenvKey != null && !dotenvKey.trim().isEmpty()) {
+            return dotenvKey.trim();
+        }
+    } catch (Exception e) {
+        System.out.println("Could not load .env from current directory.");
+    }
+
+    // 3. Try parent directory
+    try {
+        Dotenv dotenvParent = Dotenv.configure()
                 .directory("../")
                 .ignoreIfMissing()
-                .load()
-                .get("GROQ_API_KEY", System.getenv("GROQ_API_KEY"));
+                .load();
+
+        String dotenvKey = dotenvParent.get("GROQ_API_KEY");
+
+        if (dotenvKey != null && !dotenvKey.trim().isEmpty()) {
+            return dotenvKey.trim();
+        }
+    } catch (Exception e) {
+        System.out.println("Could not load .env from parent directory.");
+    }
+
+    return null;
+}
 
     /*
      * Groq model.

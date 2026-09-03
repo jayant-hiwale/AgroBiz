@@ -2983,8 +2983,8 @@ public class SplashScreen {
     // SIZE
     // =========================================================
 
-    private static final double WIDTH = 1368;
-    private static final double HEIGHT = 768;
+    private static final double WIDTH = 1553;
+    private static final double HEIGHT = 810;
 
     // =========================================================
     // AGROBIZ COLORS

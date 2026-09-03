@@ -9,7 +9,6 @@ import com.pravartak.model.UserModel;
 import com.pravartak.view.buyer.BuyerHomepage;
 import com.pravartak.view.buyer.BuyerProfilePage;
 
-import com.pravartak.view.buyer.BuyerProfilePage;
 // import com.pravartak.view.farmer.AIAdvisorPage;
 //import com.pravartak.view.farmer.CommunityPage;
 
