@@ -7,6 +7,11 @@ import com.pravartak.dao.farmer.CommunityDAO;
 import com.pravartak.model.farmer_model.CommunityPost;
 import com.pravartak.view.farmer.common.Footer;
 import com.pravartak.view.farmer.common.NavBar;
+import com.pravartak.config.CloudinaryConfig;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+
+import java.util.Map;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -790,8 +795,27 @@ public class CommunityPage {
              * Add Storage upload here when implemented.
              */
 
-            String imageUrl =
-                    "";
+            String imageUrl = "";
+
+if (selectedImage != null) {
+
+    selectedImageLabel.setText(
+            "⏳ Uploading image..."
+    );
+
+    selectedImageLabel.setTextFill(
+            Color.web("#F2A65A")
+    );
+
+    imageUrl =
+            uploadImageToCloudinary(
+                    selectedImage
+            );
+
+    System.out.println(
+            "Cloudinary URL: " + imageUrl
+    );
+}
 
 
             // =================================================
@@ -1085,7 +1109,44 @@ public class CommunityPage {
         }
     }
 
+    // =====================================================
+// UPLOAD IMAGE TO CLOUDINARY
+// =====================================================
 
+private String uploadImageToCloudinary(File imageFile)
+        throws Exception {
+
+    if (imageFile == null || !imageFile.exists()) {
+
+        throw new IllegalArgumentException(
+                "Image file not found."
+        );
+    }
+
+    Cloudinary cloudinary =
+            CloudinaryConfig.getCloudinary();
+
+    Map<?, ?> result =
+            cloudinary.uploader().upload(
+                    imageFile,
+                    ObjectUtils.asMap(
+                            "folder",
+                            "agrobiz/community"
+                    )
+            );
+
+    Object secureUrl =
+            result.get("secure_url");
+
+    if (secureUrl == null) {
+
+        throw new Exception(
+                "Cloudinary did not return image URL."
+        );
+    }
+
+    return secureUrl.toString();
+}
     // =====================================================
     // CREATE POST CARD
     // =====================================================

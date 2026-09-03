@@ -9,13 +9,18 @@ import com.pravartak.view.farmer.LearningPage;
 import com.pravartak.view.farmer.MarketPlace;
 import com.pravartak.view.farmer.SchemesPage;
 import com.pravartak.view.login.LoginPage;
+import com.pravartak.view.farmer.FarmerOrderRequestsPage;
+import com.pravartak.view.farmer.FarmerReviewsPage;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-
+import com.pravartak.view.farmer.common.NavBar;
+import com.pravartak.view.farmer.FarmerChatsPage;
 public class NavBar {
 
     // =========================================================
@@ -151,6 +156,8 @@ public class NavBar {
 
         Button marketplace =
                 navButton("Marketplace");
+                Button chats =
+        navButton("💬 Chats");
 
         Button community =
                 navButton("Community");
@@ -280,6 +287,43 @@ public class NavBar {
                 }
         );
 
+        //chats button
+        if ("Chats".equals(currentPage)) {
+
+    chats.setStyle(
+            navButtonActive()
+    );
+}
+chats.setOnAction(e -> {
+
+    System.out.println(
+            "Farmer Chats clicked"
+    );
+
+    if (!checkFarmerId()) {
+        return;
+    }
+
+    FarmerChatsPage chatsPage =
+            new FarmerChatsPage(
+                    farmerId
+            );
+
+    BorderPane page =
+            chatsPage.getChatsPage();
+
+    Scene scene =
+            new Scene(
+                    page,
+                    1400,
+                    850
+            );
+
+    LoginPage.mainStage.setScene(scene);
+
+    LoginPage.mainStage.show();
+});
+
         // =====================================================
         // COMMUNITY
         // =====================================================
@@ -391,6 +435,38 @@ public class NavBar {
                 }
         );
 
+        Button reviews =
+        navButton("⭐ Reviews");
+
+if ("Reviews".equals(currentPage)) {
+    reviews.setStyle(navButtonActive());
+}
+
+reviews.setOnAction(e -> {
+
+    if (!checkFarmerId()) {
+        return;
+    }
+
+    BorderPane reviewPage =
+            new FarmerReviewsPage(
+                    farmerId
+            ).getReviewsPage();
+
+    Scene scene =
+            new Scene(
+                    reviewPage,
+                    1400,
+                    850
+            );
+
+    LoginPage.mainStage.setScene(
+            scene
+    );
+
+    LoginPage.mainStage.show();
+});
+
         // =====================================================
         // CENTER NAVIGATION
         // =====================================================
@@ -401,16 +477,55 @@ public class NavBar {
                         home,
                         explorer,
                         marketplace,
+                        chats,
                         community,
                         learning,
                         schemes,
-                        aiadvisor
+                        aiadvisor,
+                        reviews
                 );
 
         center.setAlignment(
                 Pos.CENTER
         );
+//notification button
+        Button orderRequests =
+        navButton("🔔 ");
 
+        if ("Order Requests".equals(currentPage)) {
+
+    orderRequests.setStyle(
+            navButtonActive()
+    );
+}
+orderRequests.setOnAction(e -> {
+
+    System.out.println(
+            "Order Requests clicked"
+    );
+
+    if (!checkFarmerId()) {
+        return;
+    }
+
+    FarmerOrderRequestsPage page =
+            new FarmerOrderRequestsPage(
+                    farmerId
+            );
+
+    BorderPane orderPage =
+            page.getOrderRequestsPage();
+
+    Scene scene =
+            new Scene(
+                    orderPage,
+                    1400,
+                    850
+            );
+
+    LoginPage.mainStage.setScene(scene);
+    LoginPage.mainStage.show();
+});
         // =====================================================
         // PROFILE BUTTON
         // =====================================================
@@ -580,6 +695,7 @@ logout.setOnAction(e -> {
 HBox right =
         new HBox(
                 15,
+                orderRequests,
                 profile,
                 logout
         );

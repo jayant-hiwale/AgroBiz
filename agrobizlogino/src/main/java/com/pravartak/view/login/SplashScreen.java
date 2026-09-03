@@ -2424,3 +2424,362 @@ public class SplashScreen {
         }
     }
 }
+// package com.pravartak.view.login;
+
+// import javafx.animation.AnimationTimer;
+// import javafx.animation.FadeTransition;
+// import javafx.animation.KeyFrame;
+// import javafx.animation.KeyValue;
+// import javafx.animation.ParallelTransition;
+// import javafx.animation.ScaleTransition;
+// import javafx.animation.SequentialTransition;
+// import javafx.animation.Timeline;
+// import javafx.animation.PauseTransition;
+// import javafx.animation.Interpolator;
+// import javafx.geometry.Pos;
+// import javafx.scene.Scene;
+// import javafx.scene.control.Label;
+// import javafx.scene.image.Image;
+// import javafx.scene.image.ImageView;
+// import javafx.scene.input.KeyCode;
+// import javafx.scene.layout.StackPane;
+// import javafx.scene.paint.Color;
+// import javafx.scene.shape.Circle;
+// import javafx.scene.shape.Rectangle;
+// import javafx.scene.text.Font;
+// import javafx.scene.text.FontWeight;
+// import javafx.util.Duration;
+
+// import java.net.URL;
+
+// /**
+//  * AgroBiz Splash Screen
+//  *
+//  * Put splash-background.png inside:
+//  * src/main/resources/splash-background.png
+//  *
+//  * The splash automatically opens the next page after loading.
+//  * User can also click anywhere or press ENTER / SPACE to skip it.
+//  */
+// public class SplashScreen {
+
+//     private static final double WIDTH = 1368;
+//     private static final double HEIGHT = 768;
+
+//     private Scene splashScene;
+
+//     private Timeline progressTimeline;
+//     private boolean completed = false;
+
+//     public Scene getSplashScene(Runnable onComplete) {
+
+//         StackPane root = new StackPane();
+
+//         root.setPrefSize(WIDTH, HEIGHT);
+//         root.setStyle("-fx-background-color: #011A0D;");
+
+//         // =====================================================
+//         // BACKGROUND IMAGE
+//         // =====================================================
+
+//         URL imageURL =
+//                 getClass().getResource("/splash-background.png");
+
+//         if (imageURL == null) {
+//             throw new RuntimeException(
+//                     "splash-background.png was not found!\n\n"
+//                     + "Put the generated image here:\n"
+//                     + "src/main/resources/splash-background.png"
+//             );
+//         }
+
+//         Image image =
+//                 new Image(imageURL.toExternalForm());
+
+//         ImageView background =
+//                 new ImageView(image);
+
+//         background.setPreserveRatio(false);
+
+//         background.fitWidthProperty()
+//                 .bind(root.widthProperty());
+
+//         background.fitHeightProperty()
+//                 .bind(root.heightProperty());
+
+//         // =====================================================
+//         // VERY LIGHT DARK OVERLAY
+//         // Keeps the artwork visible while improving readability
+//         // =====================================================
+
+//         Rectangle overlay = new Rectangle();
+
+//         overlay.setFill(
+//                 Color.rgb(0, 20, 10, 0.08)
+//         );
+
+//         overlay.widthProperty()
+//                 .bind(root.widthProperty());
+
+//         overlay.heightProperty()
+//                 .bind(root.heightProperty());
+
+//         // =====================================================
+//         // SUBTLE CENTER GLOW
+//         // =====================================================
+
+//         Circle glow = new Circle(170);
+
+//         glow.setFill(
+//                 Color.rgb(120, 216, 62, 0.07)
+//         );
+
+//         glow.setMouseTransparent(true);
+
+//         // =====================================================
+//         // SMALL STATUS TEXT
+//         // This is dynamic; the main artwork already contains
+//         // the AgroBiz branding and loading design.
+//         // =====================================================
+
+//         Label status =
+//                 new Label("Starting AgroBiz...");
+
+//         status.setTextFill(
+//                 Color.rgb(255, 255, 255, 0.90)
+//         );
+
+//         status.setFont(
+//                 Font.font(
+//                         "Segoe UI",
+//                         FontWeight.BOLD,
+//                         12
+//                 )
+//         );
+
+//         status.setStyle(
+//                 "-fx-background-color: rgba(0,0,0,0.28);"
+//                 + "-fx-background-radius: 18;"
+//                 + "-fx-padding: 8 18 8 18;"
+//         );
+
+//         status.setOpacity(0);
+
+//         StackPane.setAlignment(
+//                 status,
+//                 Pos.BOTTOM_CENTER
+//         );
+
+//         StackPane.setMargin(
+//                 status,
+//                 new javafx.geometry.Insets(38, 0, 38, 0)
+//         );
+
+//         // =====================================================
+//         // ADD LAYERS
+//         // =====================================================
+
+//         root.getChildren().addAll(
+//                 background,
+//                 overlay,
+//                 glow,
+//                 status
+//         );
+
+//         StackPane.setAlignment(
+//                 glow,
+//                 Pos.CENTER
+//         );
+
+//         // =====================================================
+//         // SCENE
+//         // =====================================================
+
+//         splashScene =
+//                 new Scene(
+//                         root,
+//                         WIDTH,
+//                         HEIGHT
+//                 );
+
+//         splashScene.setFill(
+//                 Color.web("#011A0D")
+//         );
+
+//         // =====================================================
+//         // USER ACTIONS
+//         // =====================================================
+
+//         // Click anywhere to skip the splash screen.
+//         root.setOnMouseClicked(
+//                 event -> finishSplash(
+//                         root,
+//                         onComplete
+//                 )
+//         );
+
+//         // ENTER / SPACE also skips the splash screen.
+//         splashScene.setOnKeyPressed(
+//                 event -> {
+
+//                     if (event.getCode() == KeyCode.ENTER
+//                             || event.getCode() == KeyCode.SPACE) {
+
+//                         finishSplash(
+//                                 root,
+//                                 onComplete
+//                         );
+//                     }
+//                 }
+//         );
+
+//         // =====================================================
+//         // INTRO ANIMATION
+//         // =====================================================
+
+//         FadeTransition fadeIn =
+//                 new FadeTransition(
+//                         Duration.millis(900),
+//                         root
+//                 );
+
+//         fadeIn.setFromValue(0);
+//         fadeIn.setToValue(1);
+
+//         ScaleTransition imageZoom =
+//                 new ScaleTransition(
+//                         Duration.seconds(5.5),
+//                         background
+//                 );
+
+//         imageZoom.setFromX(1.02);
+//         imageZoom.setFromY(1.02);
+
+//         imageZoom.setToX(1.0);
+//         imageZoom.setToY(1.0);
+
+//         imageZoom.setInterpolator(
+//                 Interpolator.EASE_OUT
+//         );
+
+//         FadeTransition statusFade =
+//                 new FadeTransition(
+//                         Duration.millis(600),
+//                         status
+//                 );
+
+//         statusFade.setToValue(1);
+
+//         ParallelTransition intro =
+//                 new ParallelTransition(
+//                         fadeIn,
+//                         imageZoom,
+//                         statusFade
+//                 );
+
+//         intro.play();
+
+//         // =====================================================
+//         // LOADING ACTIONS
+//         // =====================================================
+
+//         progressTimeline =
+//                 new Timeline(
+
+//                         new KeyFrame(
+//                                 Duration.ZERO,
+//                                 event -> status.setText(
+//                                         "Starting AgroBiz..."
+//                                 )
+//                         ),
+
+//                         new KeyFrame(
+//                                 Duration.millis(700),
+//                                 event -> status.setText(
+//                                         "Loading farming services..."
+//                                 )
+//                         ),
+
+//                         new KeyFrame(
+//                                 Duration.millis(1400),
+//                                 event -> status.setText(
+//                                         "Preparing AI Advisor..."
+//                                 )
+//                         ),
+
+//                         new KeyFrame(
+//                                 Duration.millis(2100),
+//                                 event -> status.setText(
+//                                         "Connecting farmers and buyers..."
+//                                 )
+//                         ),
+
+//                         new KeyFrame(
+//                                 Duration.millis(2800),
+//                                 event -> status.setText(
+//                                         "Preparing marketplace..."
+//                                 )
+//                         ),
+
+//                         new KeyFrame(
+//                                 Duration.millis(3400),
+//                                 event -> status.setText(
+//                                         "AgroBiz is ready!"
+//                                 )
+//                         ),
+
+//                         new KeyFrame(
+//                                 Duration.millis(3800),
+//                                 event -> finishSplash(
+//                                         root,
+//                                         onComplete
+//                                 )
+//                         )
+//                 );
+
+//         progressTimeline.play();
+
+//         return splashScene;
+//     }
+
+//     // =========================================================
+//     // FINISH SPLASH
+//     // =========================================================
+
+//     private void finishSplash(
+//             StackPane root,
+//             Runnable onComplete) {
+
+//         // Prevent double execution if the user clicks while the
+//         // automatic loading timeline is also finishing.
+//         if (completed) {
+//             return;
+//         }
+
+//         completed = true;
+
+//         if (progressTimeline != null) {
+//             progressTimeline.stop();
+//         }
+
+//         FadeTransition fadeOut =
+//                 new FadeTransition(
+//                         Duration.millis(500),
+//                         root
+//                 );
+
+//         fadeOut.setFromValue(1);
+//         fadeOut.setToValue(0);
+
+//         fadeOut.setOnFinished(
+//                 event -> {
+
+//                     if (onComplete != null) {
+//                         onComplete.run();
+//                     }
+//                 }
+//         );
+
+//         fadeOut.play();
+//     }
+// }

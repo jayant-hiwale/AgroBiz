@@ -1,4 +1,3 @@
-
 package com.pravartak.model;
 
 import java.util.HashMap;
