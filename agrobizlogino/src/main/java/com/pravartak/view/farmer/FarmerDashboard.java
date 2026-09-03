@@ -66,7 +66,6 @@ public class FarmerDashboard {
 
         private final FarmerProfileController profileController;
         private final UserDAO userDAO;
-        private String selectedProfileImageBase64;
         // // // LOGOUT CALLBACK
         // // private final Runnable logoutAction;
 
@@ -85,15 +84,26 @@ public class FarmerDashboard {
         private TextField primaryCropsField;
         private String imageBase64 = "";
 
-        // // // COLORS
-        private final Color DARK_GREEN = Color.rgb(14, 35, 16);
-        private static final Color GREEN = Color.DARKGREEN;
-        private final Color LIGHT_GREEN = Color.rgb(186, 209, 174);
-        private final Color CREAM = Color.rgb(11, 16, 16);
-        private final Color DARK_TEXT = Color.rgb(247, 247, 250);
-        private final Color GREY = Color.rgb(105, 110, 105);
-        private final Color CARD_BACKGROUND = Color.rgb(0, 100, 0);
-        private final Color BORDER_COLOR = Color.rgb(225, 230, 220);
+        // // // ADMIN THEME COLORS
+        private static final Color BACKGROUND = Color.web("#080C0D");
+        private static final Color SIDEBAR = Color.web("#0D1213");
+        private static final Color CARD = Color.web("#101718");
+        private static final Color CARD_HOVER = Color.web("#172021");
+        private static final Color SELECTED = Color.web("#245D35");
+        private static final Color ACCENT = Color.web("#68D34A");
+        private static final Color TEXT_PRIMARY = Color.web("#EEEEEE");
+        private static final Color TEXT_SECONDARY = Color.web("#AAAAAA");
+        private static final Color BORDER = Color.web("#242B2C");
+        private static final Color ERROR = Color.web("#E57373");
+
+        private static final Color DARK_GREEN = SIDEBAR;
+        private static final Color GREEN = ACCENT;
+        private static final Color LIGHT_GREEN = TEXT_SECONDARY;
+        private static final Color CREAM = BACKGROUND;
+        private static final Color DARK_TEXT = TEXT_PRIMARY;
+        private static final Color GREY = TEXT_SECONDARY;
+        private static final Color CARD_BACKGROUND = CARD;
+        private static final Color BORDER_COLOR = BORDER;
 
         // // // SIDEBAR BUTTONS
         private Button homepageButton;
@@ -223,17 +233,17 @@ public class FarmerDashboard {
                 // sidebar.setBackground(new Background(new BackgroundFill(DARK_GREEN,
                 // CornerRadii.EMPTY, Insets.EMPTY)));
                 sidebar.setBackground(new Background(
-                                new BackgroundFill(Color.web("#080c0d"), CornerRadii.EMPTY, Insets.EMPTY)));
+                                new BackgroundFill(SIDEBAR, CornerRadii.EMPTY, Insets.EMPTY)));
                 // LOGO
                 Label logo = new Label("🌱  Agro Biz");
-                logo.setTextFill(Color.WHITE);
+                logo.setTextFill(ACCENT);
                 logo.setFont(Font.font("Arial", FontWeight.BOLD, 28));
                 sidebar.getChildren().add(logo);
                 sidebar.getChildren().add(createSpace(30));
 
                 // MENU TITLE
                 Label menu = new Label("FARMER MENU");
-                menu.setTextFill(Color.rgb(175, 210, 175));
+                menu.setTextFill(TEXT_SECONDARY);
                 menu.setFont(Font.font("Arial", FontWeight.BOLD, 12));
                 menu.setPadding(new Insets(0, 0, 8, 15));
                 sidebar.getChildren().add(menu);
@@ -354,7 +364,7 @@ public class FarmerDashboard {
                 button.setPadding(new Insets(0, 14, 0, 14));
                 button.setCursor(Cursor.HAND);
                 button.setFont(Font.font("Arial", FontWeight.NORMAL, 14));
-                button.setTextFill(Color.rgb(235, 245, 235));
+                button.setTextFill(TEXT_SECONDARY);
                 button.setBackground(Background.EMPTY);
                 button.setBorder(Border.EMPTY);
                 return button;
@@ -370,12 +380,12 @@ public class FarmerDashboard {
                                 continue;
                         }
 
-                        button.setTextFill(Color.rgb(235, 245, 235));
+                        button.setTextFill(TEXT_SECONDARY);
                         button.setFont(Font.font("Arial", FontWeight.NORMAL, 14));
                         button.setBackground(Background.EMPTY);
                 }
 
-                selectedButton.setTextFill(Color.WHITE);
+                selectedButton.setTextFill(TEXT_PRIMARY);
                 selectedButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
                 selectedButton.setBackground(
                                 new Background(new BackgroundFill(GREEN, new CornerRadii(10), Insets.EMPTY)));
@@ -463,7 +473,7 @@ public class FarmerDashboard {
                                 setSelectedMenuButton(schemesButton);
 
                                 root.setCenter(
-                                                 createSavedSchemesSection());
+                                                createSavedSchemesSection());
 
                                 break;
 
@@ -523,7 +533,7 @@ public class FarmerDashboard {
                 content.setBackground(
                                 new Background(
                                                 new BackgroundFill(
-                                                                Color.web("#050b0a"),
+                                                                BACKGROUND,
                                                                 CornerRadii.EMPTY,
                                                                 Insets.EMPTY)));
 
@@ -626,7 +636,7 @@ public class FarmerDashboard {
                 profileHeader.setBackground(
                                 new Background(
                                                 new BackgroundFill(
-                                                                Color.DARKGREEN,
+                                                                SIDEBAR,
                                                                 new CornerRadii(15),
                                                                 Insets.EMPTY)));
 
@@ -649,7 +659,7 @@ public class FarmerDashboard {
                                 90);
 
                 profileImage.setStyle(
-                                "-fx-background-color:#1B2420;" +
+                                "-fx-background-color:#101718;" +
                                                 "-fx-background-radius:50;");
 
                 if (profile != null &&
@@ -774,7 +784,7 @@ public class FarmerDashboard {
                                 130);
 
                 edit.setTextFill(
-                                Color.WHITE);
+                                TEXT_PRIMARY);
 
                 edit.setFont(
                                 Font.font(
@@ -1018,9 +1028,9 @@ public class FarmerDashboard {
                                 ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
                 scroll.setStyle(
-                                "-fx-background-color:#050b0a;" +
-                                                "-fx-background:#050b0a;" +
-                                                "-fx-control-inner-background:#050b0a;");
+                                "-fx-background-color:#080C0D;" +
+                                                "-fx-background:#080C0D;" +
+                                                "-fx-control-inner-background:#080C0D;");
 
                 VBox.setVgrow(
                                 scroll,
@@ -1060,7 +1070,7 @@ public class FarmerDashboard {
                                 Pos.CENTER);
 
                 icon.setTextFill(
-                                Color.WHITE);
+                                TEXT_PRIMARY);
 
                 icon.setFont(
                                 Font.font(
@@ -1095,9 +1105,9 @@ public class FarmerDashboard {
                                 Double.MAX_VALUE);
 
                 card.setStyle(
-                                "-fx-background-color:#0D1213;" +
+                                "-fx-background-color:#101718;" +
                                                 "-fx-background-radius:15;" +
-                                                "-fx-border-color:#26382B;" +
+                                                "-fx-border-color:#242B2C;" +
                                                 "-fx-border-radius:15;" +
                                                 "-fx-border-width:1;");
 
@@ -1105,7 +1115,7 @@ public class FarmerDashboard {
                                 titleText);
 
                 title.setTextFill(
-                                Color.WHITE);
+                                TEXT_PRIMARY);
 
                 title.setFont(
                                 Font.font(
@@ -1131,7 +1141,7 @@ public class FarmerDashboard {
                                 title);
 
                 titleLabel.setTextFill(
-                                Color.web("#A9B7AC"));
+                                TEXT_SECONDARY);
 
                 titleLabel.setFont(
                                 Font.font(
@@ -1143,7 +1153,7 @@ public class FarmerDashboard {
                                 getProfileValue(value));
 
                 valueLabel.setTextFill(
-                                Color.WHITE);
+                                TEXT_PRIMARY);
 
                 valueLabel.setFont(
                                 Font.font(
@@ -1161,9 +1171,9 @@ public class FarmerDashboard {
                                                 12));
 
                 box.setStyle(
-                                "-fx-background-color:#101516;" +
+                                "-fx-background-color:#101718;" +
                                                 "-fx-background-radius:7;" +
-                                                "-fx-border-color:#303839;" +
+                                                "-fx-border-color:#242B2C;" +
                                                 "-fx-border-radius:7;");
 
                 box.getChildren()
@@ -1193,11 +1203,11 @@ public class FarmerDashboard {
         // DASHBOARD PAGE
         private VBox createDashboardPage() {
                 VBox main = new VBox();
-                main.setBackground(new Background(new BackgroundFill(GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+                main.setBackground(new Background(new BackgroundFill(BACKGROUND, CornerRadii.EMPTY, Insets.EMPTY)));
 
                 HBox topBar = createTopBar("Farmer Dashboard", "Manage your farm and make smarter decisions.");
                 VBox content = createDashboardContent();
-                content.setBackground(new Background(new BackgroundFill(DARK_GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+                content.setBackground(new Background(new BackgroundFill(BACKGROUND, CornerRadii.EMPTY, Insets.EMPTY)));
 
                 ScrollPane scroll = new ScrollPane(content);
                 scroll.setFitToWidth(true);
@@ -1354,9 +1364,17 @@ public class FarmerDashboard {
                 card.setBackground(
                                 new Background(
                                                 new BackgroundFill(
-                                                                DARK_GREEN,
+                                                                CARD,
                                                                 new CornerRadii(17),
                                                                 Insets.EMPTY)));
+
+                card.setBorder(
+                                new Border(
+                                                new BorderStroke(
+                                                                BORDER,
+                                                                BorderStrokeStyle.SOLID,
+                                                                new CornerRadii(17),
+                                                                new BorderWidths(1))));
 
                 // ========================================================
                 // TEXT
@@ -1382,10 +1400,7 @@ public class FarmerDashboard {
                                 "Manage your products, courses, schemes and saved items.");
 
                 description.setTextFill(
-                                Color.rgb(
-                                                215,
-                                                235,
-                                                215));
+                                TEXT_SECONDARY);
 
                 description.setFont(
                                 Font.font(
@@ -1457,9 +1472,17 @@ public class FarmerDashboard {
                 card.setBackground(
                                 new Background(
                                                 new BackgroundFill(
-                                                                GREEN,
+                                                                CARD,
                                                                 new CornerRadii(15),
                                                                 Insets.EMPTY)));
+
+                card.setBorder(
+                                new Border(
+                                                new BorderStroke(
+                                                                BORDER,
+                                                                BorderStrokeStyle.SOLID,
+                                                                new CornerRadii(15),
+                                                                new BorderWidths(1))));
 
                 // ========================================================
                 // ICON
@@ -1469,7 +1492,7 @@ public class FarmerDashboard {
                                 icon);
 
                 iconLabel.setTextFill(
-                                Color.YELLOW);
+                                ACCENT);
 
                 iconLabel.setFont(
                                 Font.font(
@@ -1969,13 +1992,29 @@ public class FarmerDashboard {
                 button.setPrefHeight(55);
                 HBox.setHgrow(button, Priority.ALWAYS);
                 button.setMaxWidth(Double.MAX_VALUE);
-                button.setTextFill(DARK_GREEN);
+                button.setTextFill(ACCENT);
                 button.setFont(Font.font("Arial", FontWeight.BOLD, 13));
                 button.setBackground(
-                                new Background(new BackgroundFill(Color.WHITE, new CornerRadii(11), Insets.EMPTY)));
-                button.setBorder(new Border(new BorderStroke(Color.rgb(215, 225, 210), BorderStrokeStyle.SOLID,
+                                new Background(new BackgroundFill(CARD, new CornerRadii(11), Insets.EMPTY)));
+                button.setBorder(new Border(new BorderStroke(ACCENT, BorderStrokeStyle.SOLID,
                                 new CornerRadii(11), new BorderWidths(1))));
                 button.setCursor(Cursor.HAND);
+
+                button.setOnMouseEntered(event -> {
+                        button.setBackground(
+                                        new Background(new BackgroundFill(CARD_HOVER, new CornerRadii(11),
+                                                        Insets.EMPTY)));
+                        button.setBorder(new Border(new BorderStroke(ACCENT, BorderStrokeStyle.SOLID,
+                                        new CornerRadii(11), new BorderWidths(1.2))));
+                });
+
+                button.setOnMouseExited(event -> {
+                        button.setBackground(
+                                        new Background(new BackgroundFill(CARD, new CornerRadii(11), Insets.EMPTY)));
+                        button.setBorder(new Border(new BorderStroke(ACCENT, BorderStrokeStyle.SOLID,
+                                        new CornerRadii(11), new BorderWidths(1))));
+                });
+
                 return button;
         }
 
@@ -2054,7 +2093,7 @@ public class FarmerDashboard {
                                 "Your information is saved using your unique farmer ID.");
 
                 cardSubtitle.setStyle(
-                                "-fx-text-fill:#888888;" +
+                                "-fx-text-fill:#777777;" +
                                                 "-fx-font-size:13px;");
 
                 // =====================================================
@@ -2280,7 +2319,7 @@ public class FarmerDashboard {
 
                 saveButton.setStyle(
                                 "-fx-background-color:#68D34A;" +
-                                                "-fx-text-fill:#080C0D;" +
+                                                "-fx-text-fill:#0D1213;" +
                                                 "-fx-font-size:14px;" +
                                                 "-fx-font-weight:bold;" +
                                                 "-fx-background-radius:7;" +
@@ -3020,7 +3059,7 @@ public class FarmerDashboard {
                 message.setBackground(
                                 new Background(
                                                 new BackgroundFill(
-                                                                Color.rgb(86, 108, 22),
+                                                                SELECTED,
                                                                 new CornerRadii(15),
                                                                 Insets.EMPTY)));
 
@@ -3094,7 +3133,7 @@ public class FarmerDashboard {
                                 Double.MAX_VALUE);
 
                 planText.setTextFill(
-                                Color.DARKSLATEGRAY);
+                                TEXT_PRIMARY);
 
                 planText.setFont(
                                 Font.font(
@@ -4456,7 +4495,7 @@ public class FarmerDashboard {
                 content.setPadding(new Insets(30, 35, 35, 35));
                 content.setBackground(new Background(
                                 new BackgroundFill(
-                                                Color.web("#080c0d"),
+                                                BACKGROUND,
                                                 CornerRadii.EMPTY,
                                                 Insets.EMPTY)));
 
@@ -4490,7 +4529,7 @@ public class FarmerDashboard {
                 ScrollPane scroll = new ScrollPane(content);
                 scroll.setFitToWidth(true);
                 scroll.setFitToHeight(true);
-                scroll.setStyle("-fx-background-color: #080c0d;  -fx-control-inner-background: #080c0d;");
+                scroll.setStyle("-fx-background-color: #080C0D;  -fx-control-inner-background: #080C0D;");
                 scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 scroll.setBackground(Background.EMPTY);
@@ -4500,7 +4539,7 @@ public class FarmerDashboard {
                 javafx.scene.Node viewport = scroll.lookup(".viewport");
 
                 if (viewport != null) {
-                        viewport.setStyle("-fx-background-color: #080c0d;");
+                        viewport.setStyle("-fx-background-color: #080C0D;");
                 }
 
                 VBox.setVgrow(scroll, Priority.ALWAYS);
@@ -4546,11 +4585,11 @@ public class FarmerDashboard {
                 ImageView productImage = createWishlistImage("/fertilizer.png");
 
                 Label heart = new Label("♥");
-                heart.setTextFill(Color.rgb(200, 20, 25));
+                heart.setTextFill(ERROR);
                 heart.setFont(Font.font("Arial", FontWeight.BOLD, 25));
                 heart.setPadding(new Insets(4, 9, 4, 9));
                 heart.setBackground(new Background(new BackgroundFill(
-                                Color.rgb(255, 250, 245), new CornerRadii(20), Insets.EMPTY)));
+                                SIDEBAR, new CornerRadii(20), Insets.EMPTY)));
 
                 imageBox.getChildren().addAll(productImage, heart);
                 StackPane.setAlignment(heart, Pos.TOP_RIGHT);
@@ -4592,11 +4631,11 @@ public class FarmerDashboard {
                 ImageView courseImageView = createWishlistImage("/irrigation.png");
 
                 Label heart = new Label("♥");
-                heart.setTextFill(Color.rgb(200, 20, 25));
+                heart.setTextFill(ERROR);
                 heart.setFont(Font.font("Arial", FontWeight.BOLD, 25));
                 heart.setPadding(new Insets(4, 9, 4, 9));
                 heart.setBackground(new Background(new BackgroundFill(
-                                Color.rgb(214, 244, 209), new CornerRadii(20), Insets.EMPTY)));
+                                SIDEBAR, new CornerRadii(20), Insets.EMPTY)));
 
                 courseImage.getChildren().addAll(courseImageView, heart);
                 StackPane.setAlignment(heart, Pos.TOP_RIGHT);
@@ -4661,7 +4700,7 @@ public class FarmerDashboard {
                 badge.setFont(Font.font("Arial", FontWeight.BOLD, 10));
                 badge.setPadding(new Insets(5, 8, 5, 8));
                 badge.setBackground(new Background(new BackgroundFill(
-                                Color.rgb(229, 240, 222), new CornerRadii(4), Insets.EMPTY)));
+                                SELECTED, new CornerRadii(4), Insets.EMPTY)));
 
                 return badge;
         }
@@ -4669,7 +4708,7 @@ public class FarmerDashboard {
         private Label createWishlistTitle(String text) {
 
                 Label title = new Label(text);
-                title.setTextFill(Color.rgb(15, 20, 15));
+                title.setTextFill(TEXT_PRIMARY);
                 title.setFont(Font.font("Arial", FontWeight.BOLD, 22));
                 title.setWrapText(true);
 
@@ -4780,9 +4819,9 @@ public class FarmerDashboard {
                 scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
                 scroll.setStyle(
-                                "-fx-background-color: #050b0a;" +
-                                                "-fx-background: #050b0a;" +
-                                                "-fx-control-inner-background: #050b0a;");
+                                "-fx-background-color: #080C0D;" +
+                                                "-fx-background: #080C0D;" +
+                                                "-fx-control-inner-background: #080C0D;");
                 ;
 
                 VBox.setVgrow(scroll, Priority.ALWAYS);
@@ -4853,12 +4892,12 @@ public class FarmerDashboard {
                 totalInvestmentField.setPrefHeight(45);
                 totalInvestmentField.setFont(Font.font("Arial", 14));
                 totalInvestmentField.setStyle(
-                                "-fx-background-color: #ffffff;" +
+                                "-fx-background-color: #101718;" +
                                                 "-fx-background-radius: 8;" +
-                                                "-fx-border-color: #263a2b;" +
+                                                "-fx-border-color: #242B2C;" +
                                                 "-fx-border-radius: 8;" +
                                                 "-fx-padding: 0 12;" +
-                                                "-fx-text-fill: #172018;");
+                                                "-fx-text-fill: #EEEEEE;");
 
                 Label initialLabel = new Label("Initial Investment");
                 initialLabel.setTextFill(GREY);
@@ -4869,19 +4908,19 @@ public class FarmerDashboard {
                 initialInvestmentField.setPrefHeight(45);
                 initialInvestmentField.setFont(Font.font("Arial", 14));
                 initialInvestmentField.setStyle(
-                                "-fx-background-color: #ffffff;" +
+                                "-fx-background-color: #101718;" +
                                                 "-fx-background-radius: 8;" +
-                                                "-fx-border-color: #263a2b;" +
+                                                "-fx-border-color: #242B2C;" +
                                                 "-fx-border-radius: 8;" +
                                                 "-fx-padding: 0 12;" +
-                                                "-fx-text-fill: #172018;");
+                                                "-fx-text-fill: #EEEEEE;");
 
                 Button calculate = createWishlistActionButton("Calculate Investment Plan");
                 calculate.setPrefHeight(48);
                 calculate.setMaxWidth(Double.MAX_VALUE);
 
                 Label errorLabel = new Label();
-                errorLabel.setTextFill(Color.web("#e57373"));
+                errorLabel.setTextFill(ERROR);
                 errorLabel.setFont(Font.font("Arial", 12));
 
                 inputCard.getChildren().addAll(
@@ -4936,7 +4975,7 @@ public class FarmerDashboard {
                 progressBar.setPrefHeight(18);
                 progressBar.setMaxWidth(Double.MAX_VALUE);
                 progressBar.setStyle(
-                                "-fx-accent: #68d34a;" +
+                                "-fx-accent: #68D34A;" +
                                                 "-fx-control-inner-background: #dfe7e0;");
 
                 Label progressLabel = new Label("Investment Progress: 0%");
@@ -4990,14 +5029,14 @@ public class FarmerDashboard {
                 suggestionCard.setBackground(
                                 new Background(
                                                 new BackgroundFill(
-                                                                Color.web("#102517"),
+                                                                CARD_HOVER,
                                                                 new CornerRadii(12),
                                                                 Insets.EMPTY)));
 
                 suggestionCard.setBorder(
                                 new Border(
                                                 new BorderStroke(
-                                                                Color.web("#2d6b3f"),
+                                                                BORDER,
                                                                 BorderStrokeStyle.SOLID,
                                                                 new CornerRadii(12),
                                                                 new BorderWidths(1))));
@@ -5008,7 +5047,7 @@ public class FarmerDashboard {
 
                 Label suggestionText = new Label(
                                 "Enter your investment details to receive a simple monthly investment suggestion.");
-                suggestionText.setTextFill(Color.web("#c8d5ca"));
+                suggestionText.setTextFill(TEXT_SECONDARY);
                 suggestionText.setFont(Font.font("Arial", 13));
                 suggestionText.setWrapText(true);
 
@@ -5090,7 +5129,7 @@ public class FarmerDashboard {
                                         monthRow.setBackground(
                                                         new Background(
                                                                         new BackgroundFill(
-                                                                                        Color.web("#101914"),
+                                                                                        CARD_HOVER,
                                                                                         new CornerRadii(8),
                                                                                         Insets.EMPTY)));
 
@@ -5179,9 +5218,9 @@ public class FarmerDashboard {
                                 ScrollPane.ScrollBarPolicy.NEVER);
 
                 scroll.setStyle(
-                                "-fx-background-color: #080c0d;" +
-                                                "-fx-background: #080c0d;" +
-                                                "-fx-control-inner-background: #080c0d;");
+                                "-fx-background-color: #080C0D;" +
+                                                "-fx-background: #080C0D;" +
+                                                "-fx-control-inner-background: #080C0D;");
 
                 VBox.setVgrow(
                                 scroll,
@@ -5199,62 +5238,52 @@ public class FarmerDashboard {
 
         private VBox createSavedSchemesSection() {
 
-    VBox section = new VBox(15);
+                VBox section = new VBox(15);
 
-    section.setPadding(
-            new Insets(20)
-    );
+                section.setPadding(
+                                new Insets(20));
 
-    section.setStyle(
-            "-fx-background-color:#0b1714;" +
-            "-fx-background-radius:12;" +
-            "-fx-border-color:#19352b;" +
-            "-fx-border-radius:12;"
-    );
+                section.setStyle(
+                                "-fx-background-color:#0b1714;" +
+                                                "-fx-background-radius:12;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:12;");
 
-    Label title =
-            new Label("♥ Saved Schemes");
+                Label title = new Label("♥ Saved Schemes");
 
-    title.setStyle(
-            "-fx-text-fill:white;" +
-            "-fx-font-size:20px;" +
-            "-fx-font-weight:bold;"
-    );
+                title.setStyle(
+                                "-fx-text-fill:white;" +
+                                                "-fx-font-size:20px;" +
+                                                "-fx-font-weight:bold;");
 
-    List<Scheme> schemes =
-            SavedSchemesManager.getSchemes();
+                List<Scheme> schemes = SavedSchemesManager.getSchemes();
 
-    section.getChildren().add(title);
+                section.getChildren().add(title);
 
-    if (schemes.isEmpty()) {
+                if (schemes.isEmpty()) {
 
-        Label empty =
-                new Label(
-                        "You haven't liked any schemes yet."
-                );
+                        Label empty = new Label(
+                                        "You haven't liked any schemes yet.");
 
-        empty.setStyle(
-                "-fx-text-fill:#91a099;" +
-                "-fx-font-size:13px;"
-        );
+                        empty.setStyle(
+                                        "-fx-text-fill:#AAAAAA;" +
+                                                        "-fx-font-size:13px;");
 
-        section.getChildren().add(empty);
+                        section.getChildren().add(empty);
 
-        return section;
-    }
+                        return section;
+                }
 
-    for (Scheme scheme : schemes) {
+                for (Scheme scheme : schemes) {
 
-        section.getChildren().add(
-                createSavedSchemeCard(
-                        scheme,
-                        section
-                )
-        );
-    }
+                        section.getChildren().add(
+                                        createSavedSchemeCard(
+                                                        scheme,
+                                                        section));
+                }
 
-    return section;
-}
+                return section;
+        }
 
         // =========================================================
         // SIMPLE PAGE
@@ -5282,7 +5311,7 @@ public class FarmerDashboard {
                 content.setBackground(
                                 new Background(
                                                 new BackgroundFill(
-                                                                Color.web("#050b0a"),
+                                                                BACKGROUND,
                                                                 CornerRadii.EMPTY,
                                                                 Insets.EMPTY)));
 
@@ -5298,9 +5327,9 @@ public class FarmerDashboard {
                                 ScrollPane.ScrollBarPolicy.NEVER);
 
                 scroll.setStyle(
-                                "-fx-background-color: DarkGreen;" +
-                                                "-fx-background: DarkGreen;" +
-                                                "-fx-control-inner-background: DARKGREEN;");
+                                "-fx-background-color:#080C0D;" +
+                                                "-fx-background:#080C0D;" +
+                                                "-fx-control-inner-background:#080C0D;");
 
                 VBox.setVgrow(
                                 scroll,
@@ -5412,7 +5441,7 @@ public class FarmerDashboard {
                 card.setBackground(
                                 new Background(
                                                 new BackgroundFill(
-                                                                Color.DARKGREEN,
+                                                                SIDEBAR,
                                                                 new CornerRadii(15),
                                                                 Insets.EMPTY)));
 
@@ -5514,7 +5543,7 @@ public class FarmerDashboard {
                                 title);
 
                 label.setStyle(
-                                "-fx-text-fill:#BBBBBB;" +
+                                "-fx-text-fill:#AAAAAA;" +
                                                 "-fx-font-size:13px;");
 
                 box.getChildren()
@@ -5564,10 +5593,10 @@ public class FarmerDashboard {
                         TextField field) {
 
                 field.setStyle(
-                                "-fx-background-color:#101516;" +
+                                "-fx-background-color:#101718;" +
                                                 "-fx-text-fill:#EEEEEE;" +
                                                 "-fx-prompt-text-fill:#777777;" +
-                                                "-fx-border-color:#303839;" +
+                                                "-fx-border-color:#242B2C;" +
                                                 "-fx-border-radius:6;" +
                                                 "-fx-background-radius:6;" +
                                                 "-fx-padding:8 10;");
@@ -5581,9 +5610,9 @@ public class FarmerDashboard {
                         ComboBox<String> box) {
 
                 box.setStyle(
-                                "-fx-background-color:#101516;" +
+                                "-fx-background-color:#101718;" +
                                                 "-fx-text-fill:#EEEEEE;" +
-                                                "-fx-border-color:#303839;" +
+                                                "-fx-border-color:#242B2C;" +
                                                 "-fx-border-radius:6;" +
                                                 "-fx-background-radius:6;");
         }
@@ -5610,104 +5639,85 @@ public class FarmerDashboard {
 
                 alert.showAndWait();
         }
+
         private VBox createSavedSchemeCard(
-        Scheme scheme,
-        VBox section) {
+                        Scheme scheme,
+                        VBox section) {
 
-    VBox card =
-            new VBox(8);
+                VBox card = new VBox(8);
 
-    card.setPadding(
-            new Insets(15)
-    );
+                card.setPadding(
+                                new Insets(15));
 
-    card.setStyle(
-            "-fx-background-color:#10221c;" +
-            "-fx-background-radius:10;" +
-            "-fx-border-color:#19352b;" +
-            "-fx-border-radius:10;"
-    );
+                card.setStyle(
+                                "-fx-background-color:#172021;" +
+                                                "-fx-background-radius:10;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:10;");
 
-    Label name =
-            new Label(
-                    scheme.getSchemeName()
-            );
+                Label name = new Label(
+                                scheme.getSchemeName());
 
-    name.setWrapText(true);
+                name.setWrapText(true);
 
-    name.setStyle(
-            "-fx-text-fill:white;" +
-            "-fx-font-size:16px;" +
-            "-fx-font-weight:bold;"
-    );
+                name.setStyle(
+                                "-fx-text-fill:white;" +
+                                                "-fx-font-size:16px;" +
+                                                "-fx-font-weight:bold;");
 
-    Label category =
-            new Label(
-                    "Category: " +
-                    scheme.getCategory()
-            );
+                Label category = new Label(
+                                "Category: " +
+                                                scheme.getCategory());
 
-    category.setStyle(
-            "-fx-text-fill:#53d74a;" +
-            "-fx-font-size:11px;"
-    );
+                category.setStyle(
+                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-font-size:11px;");
 
-    Label information =
-            new Label(
-                    scheme.getInformation()
-            );
+                Label information = new Label(
+                                scheme.getInformation());
 
-    information.setWrapText(true);
+                information.setWrapText(true);
 
-    information.setStyle(
-            "-fx-text-fill:#91a099;" +
-            "-fx-font-size:12px;"
-    );
+                information.setStyle(
+                                "-fx-text-fill: #AAAAAA;" +
+                                                "-fx-font-size:12px;");
 
-    Button dislikeButton =
-            new Button(
-                    "♥  Dislike"
-            );
+                Button dislikeButton = new Button(
+                                "♥  Dislike");
 
-    dislikeButton.setPrefHeight(32);
+                dislikeButton.setPrefHeight(32);
 
-    dislikeButton.setCursor(
-            javafx.scene.Cursor.HAND
-    );
+                dislikeButton.setCursor(
+                                javafx.scene.Cursor.HAND);
 
-    dislikeButton.setStyle(
-            "-fx-background-color:#101d18;" +
-            "-fx-text-fill:#53d74a;" +
-            "-fx-border-color:#53d74a;" +
-            "-fx-border-radius:5;" +
-            "-fx-background-radius:5;" +
-            "-fx-font-weight:bold;" +
-            "-fx-cursor:hand;"
-    );
+                dislikeButton.setStyle(
+                                "-fx-background-color: #101d18;" +
+                                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-border-color:#68D34A;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-cursor:hand;");
 
-    dislikeButton.setOnAction(e -> {
+                dislikeButton.setOnAction(e -> {
 
-        SavedSchemesManager.removeScheme(
-                scheme
-        );
+                        SavedSchemesManager.removeScheme(
+                                        scheme);
 
-        section.getChildren().clear();
+                        section.getChildren().clear();
 
-        VBox refreshed =
-                createSavedSchemesSection();
+                        VBox refreshed = createSavedSchemesSection();
 
-        section.getChildren().addAll(
-                refreshed.getChildren()
-        );
-    });
+                        section.getChildren().addAll(
+                                        refreshed.getChildren());
+                });
 
-    card.getChildren().addAll(
-            name,
-            category,
-            information,
-            dislikeButton
-    );
+                card.getChildren().addAll(
+                                name,
+                                category,
+                                information,
+                                dislikeButton);
 
-    return card;
-}
+                return card;
+        }
 }

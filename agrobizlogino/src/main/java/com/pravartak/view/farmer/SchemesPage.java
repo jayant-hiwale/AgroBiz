@@ -1382,8 +1382,8 @@ public class SchemesPage {
 
                 alert.getDialogPane()
                                 .setStyle(
-                                                "-fx-background-color:#101718;" +
-                                                                "-fx-border-color:#293334;");
+                                                "-fx-background-color: #101718;" +
+                                                                "-fx-border-color: #293334;");
 
                 alert.showAndWait();
         }
