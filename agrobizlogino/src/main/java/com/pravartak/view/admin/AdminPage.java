@@ -254,7 +254,7 @@ public class AdminPage {
                 // HEADER LOGO
                 // =====================================================
 
-                Label headerLogo = new Label("AgroBiz Hub");
+                Label headerLogo = new Label("AgroBiz ");
 
                 headerLogo.setStyle(
                                 "-fx-text-fill:#68D34A;" +
