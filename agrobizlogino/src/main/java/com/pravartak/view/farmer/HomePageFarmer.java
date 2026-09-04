@@ -870,8 +870,7 @@ public class HomePageFarmer {
 
         Label mainTitle =
                 new Label(
-                        "     Revolutionize Your\n"
-                                + "Livestock Management with AI"
+                        "Learn Farming. Start Smart. Grow Better."
                 );
 
         mainTitle.setFont(

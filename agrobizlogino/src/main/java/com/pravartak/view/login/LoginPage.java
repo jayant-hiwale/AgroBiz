@@ -1204,7 +1204,7 @@ loginCard.setMinHeight(550);
         // =====================================================
 
         Label loginIcon =
-                new Label("●");
+                new Label("🚜");
 
         loginIcon.setAlignment(
                 Pos.CENTER
@@ -1272,7 +1272,7 @@ loginCard.setMinHeight(550);
 
         Label welcomeTitle =
                 new Label(
-                        "Welcome Back"
+                        "Welcome to AgroBiz"
                 );
 
         welcomeTitle.setTextFill(

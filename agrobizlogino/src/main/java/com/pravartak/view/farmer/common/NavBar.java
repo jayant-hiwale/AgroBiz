@@ -122,7 +122,7 @@ public class NavBar {
 
         Label logo =
                 new Label(
-                        "Agro Biz"
+                        "AgroBiz"
                 );
 
         logo.setStyle(
@@ -343,12 +343,15 @@ chats.setOnAction(e -> {
                     );
 
                     CommunityPage communityPage =
-                            new CommunityPage();
+        new CommunityPage(
+                farmerId,
+                firebaseUid
+        );
 
-                    LoginPage.mainStage.setScene(
-                            communityPage
-                                    .getCommunityScene()
-                    );
+LoginPage.mainStage.setScene(
+        communityPage
+                .getCommunityScene()
+);
                 }
         );
 
