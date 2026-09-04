@@ -904,7 +904,7 @@ public class buyerTop {
                 Pos.CENTER_LEFT
         );
 
-        left.setPrefWidth(360);
+        left.setPrefWidth(550);
 
         // =====================================================
         // NAVIGATION BUTTONS
@@ -1216,7 +1216,7 @@ notificationButton.setOnAction(e -> {
         );
 
         right.setPrefWidth(
-                360
+                550
         );
 
         // =====================================================

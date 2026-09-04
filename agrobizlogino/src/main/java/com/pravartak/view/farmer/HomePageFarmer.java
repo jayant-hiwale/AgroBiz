@@ -1242,6 +1242,80 @@ public class HomePageFarmer {
                         + "-fx-background-radius:6;"
                         + "-fx-cursor:hand;"
         );
+        generateButton.setOnAction(
+        event -> {
+
+            System.out.println(
+                    "Generate Plan button clicked"
+            );
+
+            // Get logged-in farmer information
+            int loggedInFarmerId =
+                    LoginPage.getLoggedInFarmerId();
+
+            String loggedInFirebaseUid =
+                    LoginPage.getLoggedInFirebaseUid();
+
+
+            System.out.println(
+                    "Farmer ID = "
+                            + loggedInFarmerId
+            );
+
+            System.out.println(
+                    "Firebase UID = "
+                            + loggedInFirebaseUid
+            );
+
+
+            // =====================================================
+            // CHECK FARMER ID
+            // =====================================================
+
+            if (loggedInFarmerId <= 0) {
+
+                System.out.println(
+                        "ERROR: Farmer ID is missing."
+                );
+
+                return;
+            }
+
+
+            // =====================================================
+            // CHECK FIREBASE UID
+            // =====================================================
+
+            if (loggedInFirebaseUid == null ||
+                    loggedInFirebaseUid.trim().isEmpty()) {
+
+                System.out.println(
+                        "ERROR: Firebase UID is missing."
+                );
+
+                return;
+            }
+
+
+            // =====================================================
+            // OPEN FARMER DASHBOARD AI ADVISOR
+            // =====================================================
+
+            FarmerDashboard dashboard =
+                    new FarmerDashboard(
+                            loggedInFarmerId,
+                            loggedInFirebaseUid
+                    );
+
+
+            LoginPage.mainStage.setScene(
+                    dashboard.getAIAdvisorScene()
+            );
+
+
+            LoginPage.mainStage.show();
+        }
+);
 
         thirdHBox.getChildren().addAll(
                 thirdTextVBox,

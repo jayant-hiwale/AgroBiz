@@ -220,7 +220,7 @@ public class Ai {
         // =====================================================
 
         Label plantIcon =
-                new Label("🌱");
+                new Label("🛒");
 
         plantIcon.setStyle(
                 "-fx-font-size: 62px;" +
@@ -306,7 +306,7 @@ public class Ai {
 
         chatScrollPane.setStyle(
                 "-fx-background-color: transparent;" +
-                "-fx-background: #001A12;"
+                "-fx-background: #0D1117;"
         );
 
         StackPane center =

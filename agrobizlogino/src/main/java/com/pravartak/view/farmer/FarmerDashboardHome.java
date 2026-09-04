@@ -1604,6 +1604,10 @@ import com.pravartak.dao.farmer.FarmerLearningDAO;
 import com.pravartak.model.admin.Course;
 import com.pravartak.model.farmer_model.Product;
 import com.pravartak.view.login.LoginPage;
+import com.pravartak.controller.buyercontroller.OrderController;
+import com.pravartak.controller.buyercontroller.ReviewController;
+import com.pravartak.model.buyer_model.Order;
+import com.pravartak.model.buyer_model.Review;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -1640,22 +1644,26 @@ public class FarmerDashboardHome {
 
     private final FarmerLearningDAO farmerLearningDAO;
 
+    private final OrderController orderController;
+
+private final ReviewController reviewController;
+
 
     // =========================================================
     // AGROBIZ FARMER THEME
     // =========================================================
 
     private static final Color BACKGROUND =
-            Color.web("#15201a");
+            Color.web("#050B0A");
 
     private static final Color DARK_GREEN =
             Color.web("#122a1d");
 
     private static final Color CARD_BACKGROUND =
-            Color.web("#1a3c25");
+            Color.web("#0D1213");
 
     private static final Color SECONDARY_CARD =
-            Color.web("#12291A");
+            Color.web("#050B0A");
 
     private static final Color GREEN =
             Color.web("#7ED957");
@@ -1680,18 +1688,62 @@ public class FarmerDashboardHome {
     // CONSTRUCTOR
     // =========================================================
 
-    public FarmerDashboardHome(
-            int farmerId) {
+//     public FarmerDashboardHome(
+//             int farmerId) {
 
-        this.farmerId =
-                farmerId;
+//         this.farmerId =
+//                 farmerId;
 
-        this.productController =
-                new ProductController();
+//         this.productController =
+//                 new ProductController();
 
-        this.farmerLearningDAO =
-                new FarmerLearningDAO();
-    }
+//         this.farmerLearningDAO =
+//                 new FarmerLearningDAO();
+//     }
+// public FarmerDashboardHome(
+//         int farmerId) {
+
+//     this.farmerId =
+//             farmerId;
+
+//     this.productController =
+//             new ProductController();
+
+//     this.farmerLearningDAO =
+//             new FarmerLearningDAO();
+
+//     this.orderController =
+//             new OrderController();
+
+//     this.reviewController =
+//             new ReviewController();
+//}
+private final String farmerName;
+
+public FarmerDashboardHome(
+        int farmerId,
+        String farmerName) {
+
+    this.farmerId = farmerId;
+
+    this.farmerName =
+            (farmerName == null ||
+             farmerName.trim().isEmpty())
+                    ? "Farmer"
+                    : farmerName.trim();
+
+    this.productController =
+            new ProductController();
+
+    this.farmerLearningDAO =
+            new FarmerLearningDAO();
+
+    this.orderController =
+            new OrderController();
+
+    this.reviewController =
+            new ReviewController();
+}
 
 
     // =========================================================
@@ -1721,6 +1773,7 @@ public class FarmerDashboardHome {
                         )
                 )
         );
+        content.setStyle("-fx-background-color:#050B0A;");
 
         content.setBorder(null);
 
@@ -1737,6 +1790,13 @@ public class FarmerDashboardHome {
 
         int schemesCount =
                 SavedSchemesManager.getCount();
+
+        int totalOrders = getTotalOrders();
+
+double totalRating = getTotalRating();
+
+double totalProfit = getTotalProfit();
+
 
 
         // =====================================================
@@ -1819,6 +1879,51 @@ public class FarmerDashboardHome {
                 stats
         );
 
+        // =====================================================
+// ORDER / RATING / PROFIT CARDS
+// =====================================================
+
+stats.add(
+        createStatCard(
+                "📦",
+                "Total Orders",
+                String.valueOf(
+                        totalOrders
+                ),
+                "Orders received"
+        ),
+        0,
+        1
+);
+
+stats.add(
+        createStatCard(
+                "⭐",
+                "Total Ratings",
+                String.format(
+                        "%.1f",
+                        totalRating
+                ),
+                "Average customer rating"
+        ),
+        1,
+        1
+);
+
+stats.add(
+        createStatCard(
+                "₹",
+                "Total Profit",
+                "₹" + String.format(
+                        "%,.0f",
+                        totalProfit
+                ),
+                "Total earnings from orders"
+        ),
+        2,
+        1
+);
+
 
         // =====================================================
         // AGROBIZ CARD
@@ -1886,10 +1991,16 @@ public class FarmerDashboardHome {
         );
 
 
+        // Label title =
+        //         new Label(
+        //                 "Welcome back, Farmer! 🌱"
+        //         );
         Label title =
-                new Label(
-                        "Welcome back, Farmer! 🌱"
-                );
+        new Label(
+                "Welcome back, "
+                + farmerName
+                + "! 🌱"
+        );
 
         title.setTextFill(
                 TEXT
@@ -3026,6 +3137,129 @@ public class FarmerDashboardHome {
             return 0;
         }
     }
+
+    // =========================================================
+// GET TOTAL ORDERS
+// =========================================================
+
+// =========================================================
+// GET TOTAL ORDERS
+// =========================================================
+
+private int getTotalOrders() {
+
+    try {
+
+        List<Order> orders =
+                orderController.getFarmerOrders(
+                        farmerId
+                );
+
+        if (orders == null) {
+            return 0;
+        }
+
+        return orders.size();
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+
+        return 0;
+    }
+}
+
+
+// =========================================================
+// GET TOTAL RATING
+// =========================================================
+
+// =========================================================
+// GET TOTAL RATING
+// =========================================================
+
+private double getTotalRating() {
+
+    try {
+
+        List<Review> reviews =
+                reviewController.getFarmerReviews(
+                        farmerId
+                );
+
+        if (reviews == null ||
+                reviews.isEmpty()) {
+
+            return 0.0;
+        }
+
+        double totalRating = 0.0;
+
+        for (Review review : reviews) {
+
+            if (review == null) {
+                continue;
+            }
+
+            totalRating +=
+                    review.getRating();
+        }
+
+        return totalRating / reviews.size();
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+
+        return 0.0;
+    }
+}
+
+
+// =========================================================
+// GET TOTAL PROFIT
+// =========================================================
+
+// =========================================================
+// GET TOTAL PROFIT
+// =========================================================
+
+private double getTotalProfit() {
+
+    try {
+
+        List<Order> orders =
+                orderController.getFarmerOrders(
+                        farmerId
+                );
+
+        if (orders == null ||
+                orders.isEmpty()) {
+
+            return 0.0;
+        }
+
+        double totalProfit = 0.0;
+
+        for (Order order : orders) {
+
+            if (order == null) {
+                continue;
+            }
+
+            totalProfit +=
+                    order.getTotalAmount();
+        }
+
+        return totalProfit;
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+
+        return 0.0;
+    }
+}
 
 
     // =========================================================

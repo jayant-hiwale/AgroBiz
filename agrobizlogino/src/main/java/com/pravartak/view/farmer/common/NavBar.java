@@ -141,7 +141,7 @@ public class NavBar {
         );
 
         left.setPrefWidth(
-                220
+                300
         );
 
         // =====================================================
@@ -704,7 +704,7 @@ right.setAlignment(
 );
 
 right.setPrefWidth(
-        350
+        400
 );
         // =====================================================
         // ADD EVERYTHING
