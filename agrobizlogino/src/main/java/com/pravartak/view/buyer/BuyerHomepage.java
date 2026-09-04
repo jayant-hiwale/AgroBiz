@@ -12,11 +12,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import com.pravartak.controller.Buyercontroller;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -37,10 +32,7 @@ public class BuyerHomepage {
     public Scene getBuyerHomePage() {
 
         BorderPane root = new BorderPane();
-        
-        // 🌾 1. High-Resolution Farm Background Image
-        // टीप: तुमच्या प्रोजेक्टमध्ये assets/farm_bg.jpg किंवा शेताचा फोटो जोडा.
-        // जर ऑनलाईन फोटो वापरायचा नसेल, तर स्थानिक इमेजचा Path द्या.
+
         try {
             Image bgImage = new Image("https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600&auto=format&fit=crop");
             BackgroundImage backgroundImage = new BackgroundImage(
@@ -52,7 +44,7 @@ public class BuyerHomepage {
             );
             root.setBackground(new Background(backgroundImage));
         } catch (Exception e) {
-            // Fallback Gradient Background जर इमेज लोड झाली नाही तर
+            // Fallback Gradient Background 
             root.setStyle("-fx-background: linear-gradient(to bottom, #A2D2A4, #3B7A57);");
         }
 

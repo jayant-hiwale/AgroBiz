@@ -1,3 +1,4 @@
+
 package com.pravartak.view.buyer.common;
 
 import com.pravartak.view.buyer.Ai;
@@ -71,30 +72,22 @@ public class buyerTop {
         HBox center = new HBox(25,home,market,watchlist,Aiadvisor);
         center.setAlignment(Pos.CENTER);
 
-        // Right
-        Button sell = new Button("◇ List for Sale");
-
-        sell.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-text-fill: #68d34a;" +
-                        "-fx-border-color: #68d34a;" +
-                        "-fx-border-radius: 5;" +
-                        "-fx-cursor: hand;");
 
         // sell.setOnAction(e -> openAddProductPage());
+        
 
-        Label notification = new Label("♧");
-        Label profile = new Label("◎");
-        Label login = new Label("Login");
+         Button profile = navButton("◎ Profile");
+         HBox right = new HBox(15,profile);
 
-        notification.setStyle(
-                "-fx-text-fill: #bbbbbb; -fx-font-size: 18px;");
+        //  if (currentPage.equals("◎ Profile")) {
+        //     profile.setStyle(navButtonActive());
 
-        profile.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 18px;");
+        // }
 
-        login.setStyle("-fx-text-fill: #bbbbbb;");
-
-        HBox right = new HBox(15,sell,notification,profile,login);
+        // profile.setOnAction(e -> {
+        //       BuyerProfilePage bpp = new BuyerProfilePage();
+        //       LoginPage.mainStage.setScene(bpp.gatProfilePageScean());
+        // });
 
         right.setAlignment(Pos.CENTER_RIGHT);
         right.setPrefWidth(450);

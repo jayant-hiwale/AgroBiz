@@ -1,9 +1,5 @@
 package com.pravartak.view.login;
 
-import com.pravartak.view.buyer.BuyerAIAdvisorPage;
-// import com.pravartak.view.farmer.AIAdvisorPage;
-import com.pravartak.view.farmer.CommunityPage;
-
 import java.net.URL;
 import com.pravartak.view.farmer.HomePageFarmer;
 import com.pravartak.controller.buyercontroller.Contactcontroller;
@@ -299,8 +295,8 @@ public class LoginPage extends Application {
             String contact = contactField.getText();
             String password = passwordField.getText();
 
-            String admincontact = "admin@agrobiz.com";
-            String adminPasssword = "admin123";
+            String admincontact = "a";
+            String adminPasssword = "a";
 
             // ================= EMPTY FIELD CHECK =================
 
