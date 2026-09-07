@@ -311,7 +311,7 @@ public class AIAdvisorPage {
                                 false);
 
                 attachmentLabel = new Label(
-                                "📎 Image attached");
+                                "🗁 Image attached");
 
                 attachmentLabel.setTextFill(
                                 GREY);
@@ -338,39 +338,34 @@ public class AIAdvisorPage {
                 // CHAT INPUT BAR
                 // ========================================================
 
-                HBox inputBar = new HBox(10);
+               HBox inputBar = new HBox(10);
 
-                inputBar.setAlignment(
-                                Pos.CENTER_LEFT);
+                inputBar.setAlignment(Pos.CENTER_LEFT);
 
                 inputBar.setPadding(
-                                new Insets(
-                                                8,
-                                                10,
-                                                8,
-                                                12));
+                        new Insets(5, 8, 5, 8));
 
                 inputBar.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                CARD,
-                                                                new CornerRadii(25),
-                                                                Insets.EMPTY)));
+                        new Background(
+                                new BackgroundFill(
+                                        CARD,
+                                        new CornerRadii(25),
+                                        Insets.EMPTY)));
 
                 inputBar.setBorder(
-                                new Border(
-                                                new BorderStroke(
-                                                                BORDER,
-                                                                BorderStrokeStyle.SOLID,
-                                                                new CornerRadii(25),
-                                                                new BorderWidths(1))));
+                        new Border(
+                                new BorderStroke(
+                                        BORDER,
+                                        BorderStrokeStyle.SOLID,
+                                        new CornerRadii(25),
+                                        new BorderWidths(1))));
 
                 // ========================================================
                 // ATTACH BUTTON
                 // ========================================================
 
                 attachButton = new Button(
-                                "📎");
+                                "🗁");
 
                 styleAttachButton(
                                 attachButton);
@@ -462,7 +457,7 @@ public class AIAdvisorPage {
                 selectedImage = file;
 
                 attachmentLabel.setText(
-                                "📎 " + file.getName());
+                                "🗁 " + file.getName());
 
                 attachmentArea.setVisible(
                                 true);
@@ -945,64 +940,69 @@ public class AIAdvisorPage {
         // ATTACH BUTTON STYLE
         // ============================================================
 
-        private static void styleAttachButton(
-                        Button button) {
+        private static void styleAttachButton(Button button) {
 
-                button.setPrefSize(
-                                42,
-                                42);
+        button.setMinSize(42, 42);
+        button.setPrefSize(42, 42);
+        button.setMaxSize(42, 42);
 
-                button.setTextFill(
-                                DARK_TEXT);
+        button.setPadding(Insets.EMPTY);
 
-                button.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                18));
+        button.setTextFill(DARK_TEXT);
 
-                button.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                LIGHT_GREEN,
-                                                                new CornerRadii(20),
-                                                                Insets.EMPTY)));
+        button.setFont(
+                Font.font(
+                        "Segoe UI Symbol",
+                        FontWeight.BOLD,
+                        18));
 
-                button.setBorder(
-                                new Border(
-                                                new BorderStroke(
-                                                                BORDER,
-                                                                BorderStrokeStyle.SOLID,
-                                                                new CornerRadii(20),
-                                                                new BorderWidths(1))));
+        button.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                LIGHT_GREEN,
+                                new CornerRadii(21),
+                                Insets.EMPTY)));
+
+        button.setBorder(
+                new Border(
+                        new BorderStroke(
+                                BORDER,
+                                BorderStrokeStyle.SOLID,
+                                new CornerRadii(21),
+                                new BorderWidths(1))));
+
+        button.setAlignment(Pos.CENTER);
         }
-
         // ============================================================
         // SEND BUTTON STYLE
         // ============================================================
 
-        private static void styleSendButton(
-                        Button button) {
+        private static void styleSendButton(Button button) {
 
-                button.setPrefSize(
-                                44,
-                                44);
+        button.setMinSize(44, 44);
+        button.setPrefSize(44, 44);
+        button.setMaxSize(44, 44);
 
-                button.setTextFill(
-                                Color.WHITE);
+        button.setPadding(Insets.EMPTY);
 
-                button.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                20));
+        button.setTextFill(Color.WHITE);
 
-                button.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                GREEN,
-                                                                new CornerRadii(22),
-                                                                Insets.EMPTY)));
+        button.setFont(
+                Font.font(
+                        "Segoe UI Symbol",
+                        FontWeight.BOLD,
+                        20));
+
+        button.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                GREEN,
+                                new CornerRadii(22),
+                                Insets.EMPTY)));
+
+        button.setBorder(Border.EMPTY);
+
+        button.setAlignment(Pos.CENTER);
         }
 
         // ============================================================
