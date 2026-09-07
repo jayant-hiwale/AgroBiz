@@ -48,7 +48,7 @@ public class FarmerReviewsPage {
         BorderPane root = new BorderPane();
 
         root.setStyle(
-                "-fx-background-color: #0D1117;"
+                "-fx-background-color: #050B0A;"
         );
         //  root.setTop(
         //         new NavBar(
@@ -190,8 +190,8 @@ public class FarmerReviewsPage {
         scrollPane.setFitToWidth(true);
 
         scrollPane.setStyle(
-                "-fx-background-color: #0D1117;" +
-                "-fx-background: #0D1117;"
+                "-fx-background-color: #050B0A;" +
+                "-fx-background: #050B0A;"
         );
 
         VBox mainContent =
@@ -326,7 +326,7 @@ public class FarmerReviewsPage {
         );
 
         card.setStyle(
-                "-fx-background-color: #161B22;" +
+                "-fx-background-color: #101516;" +
                 "-fx-background-radius: 15;" +
                 "-fx-border-color: #30363D;" +
                 "-fx-border-radius: 15;"
@@ -576,7 +576,7 @@ productnameLabel.setTextFill(Color.WHITE);
         );
 
         card.setStyle(
-                "-fx-background-color: #161B22;" +
+                "-fx-background-color: #101516;" +
                 "-fx-background-radius: 14;" +
                 "-fx-border-color: #30363D;" +
                 "-fx-border-radius: 14;"

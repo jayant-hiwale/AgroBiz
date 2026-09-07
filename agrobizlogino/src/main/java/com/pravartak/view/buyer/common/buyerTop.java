@@ -841,6 +841,7 @@ package com.pravartak.view.buyer.common;
 
 import com.pravartak.controller.buyercontroller.OrderController;
 import com.pravartak.view.buyer.Ai;
+import com.pravartak.view.buyer.BuyerChatsPage;
 import com.pravartak.view.buyer.BuyerHomepage;
 import com.pravartak.view.buyer.BuyerMarketPlace;
 import com.pravartak.view.buyer.BuyerOrdersPage;
@@ -889,7 +890,7 @@ public class buyerTop {
         // =====================================================
 
         Label logo = new Label(
-                "Agro Biz"
+                "AgroBiz"
         );
 
         logo.setStyle(
@@ -904,7 +905,7 @@ public class buyerTop {
                 Pos.CENTER_LEFT
         );
 
-        left.setPrefWidth(360);
+        left.setPrefWidth(500);
 
         // =====================================================
         // NAVIGATION BUTTONS
@@ -924,6 +925,10 @@ public class buyerTop {
 
         Button Aiadvisor =
                 navButton("AI Advisor");
+
+        Button chats =
+        navButton("💬 Chats");
+        
         Button notifications =
         new Button("🔔 Notifications");
 
@@ -1014,6 +1019,24 @@ public class buyerTop {
                     watchlistPage.getWatchlistPage()
             );
         });
+        if (currentPage.equals("Chats")) {
+
+    chats.setStyle(
+            navButtonActive()
+    );
+}
+
+chats.setOnAction(e -> {
+
+    BuyerChatsPage chatsPage =
+            new BuyerChatsPage();
+
+    LoginPage.mainStage.setScene(
+            new Scene(
+                    chatsPage.getChatsPage()
+            )
+    );
+});
 
         // =====================================================
         // AI ADVISOR
@@ -1095,12 +1118,13 @@ notificationButton.setOnAction(e -> {
 
         HBox center =
                 new HBox(
-                        18,
+                        15,
                         home,
                         market,
                         orders,
                         watchlist,
-                        Aiadvisor
+                        Aiadvisor,
+                        chats
                 );
 
         center.setAlignment(
@@ -1216,7 +1240,7 @@ notificationButton.setOnAction(e -> {
         );
 
         right.setPrefWidth(
-                360
+                500
         );
 
         // =====================================================

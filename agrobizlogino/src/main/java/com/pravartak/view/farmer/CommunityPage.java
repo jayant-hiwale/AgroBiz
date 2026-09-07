@@ -10,6 +10,10 @@ import com.pravartak.view.farmer.common.NavBar;
 import com.pravartak.config.CloudinaryConfig;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.pravartak.controller.farmercontoller.FarmerProfileController;
+import com.pravartak.dao.UserDAO;
+import com.pravartak.model.farmer_model.FarmerProfile;
+import com.pravartak.model.UserModel;
 
 import java.util.Map;
 
@@ -100,33 +104,53 @@ public class CommunityPage {
 
     private File selectedImage;
 
-    private Firestore db;
+private int farmerId;
+private String firebaseUid;
+
+private String farmerName = "Farmer";
+
+private Firestore db;
+
+private FarmerProfileController profileController;
+private UserDAO userDAO;
 
 
     // =====================================================
     // CONSTRUCTOR
     // =====================================================
 
-    public CommunityPage() {
+   public CommunityPage(int farmerId, String firebaseUid) {
 
-        // Get existing Firebase Firestore
-        this.db = FirebaseConfig.getFirestore();
+    this.farmerId = farmerId;
+    this.firebaseUid = firebaseUid;
 
-        if (this.db == null) {
+    // Get existing Firebase Firestore
+    this.db = FirebaseConfig.getFirestore();
 
-            throw new IllegalStateException(
-                    "Firestore is not initialized."
-            );
-        }
-
-        // Create DAO
-        CommunityDAO dao =
-                new CommunityDAO(this.db);
-
-        // Create Controller
-        this.controller =
-                new CommunityController(dao);
+    if (this.db == null) {
+        throw new IllegalStateException(
+                "Firestore is not initialized."
+        );
     }
+
+    // Controllers / DAO
+    this.profileController =
+            new FarmerProfileController();
+
+    this.userDAO =
+            new UserDAO();
+
+    // Load actual farmer name
+    loadFarmerName();
+
+    // Community DAO
+    CommunityDAO dao =
+            new CommunityDAO(this.db);
+
+    // Community Controller
+    this.controller =
+            new CommunityController(dao);
+}
 
 
     // =====================================================
@@ -782,11 +806,7 @@ public class CommunityPage {
              * logged-in farmer information.
              */
 
-            String farmerId =
-                    "CURRENT_FARMER_ID";
-
-            String farmerName =
-                    "Current Farmer";
+            
 
 
             /*
@@ -822,12 +842,12 @@ if (selectedImage != null) {
             // SAVE POST
             // =================================================
 
-            controller.createPost(
-                    farmerId,
-                    farmerName,
-                    content,
-                    imageUrl
-            );
+           controller.createPost(
+        String.valueOf(farmerId),
+        farmerName,
+        content,
+        imageUrl
+);
 
 
             // =================================================
@@ -1327,8 +1347,8 @@ private String uploadImageToCloudinary(File imageFile)
                 Image image =
                         new Image(
                                 imageUrl,
-                                700,
-                                400,
+                                250,
+                                120,
                                 true,
                                 true
                         );
@@ -1554,4 +1574,41 @@ private String uploadImageToCloudinary(File imageFile)
 
         alert.showAndWait();
     }
+    private void loadFarmerName() {
+
+    farmerName = "Farmer";
+
+    try {
+
+        FarmerProfile profile =
+                profileController.getProfile(farmerId);
+
+        if (profile != null
+                && profile.getName() != null
+                && !profile.getName().trim().isEmpty()) {
+
+            farmerName =
+                    profile.getName().trim();
+
+            return;
+        }
+
+        UserModel user =
+                userDAO.getUserByUid(firebaseUid);
+
+        if (user != null
+                && user.getFullName() != null
+                && !user.getFullName().trim().isEmpty()) {
+
+            farmerName =
+                    user.getFullName().trim();
+        }
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+
+        farmerName = "Farmer";
+    }
+}
 }
