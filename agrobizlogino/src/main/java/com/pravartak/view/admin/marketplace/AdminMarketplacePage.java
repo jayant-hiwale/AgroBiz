@@ -25,902 +25,744 @@ import javafx.scene.layout.VBox;
 
 public class AdminMarketplacePage {
 
-    private final ProductController productController;
-    private final FarmerProfileController farmerProfileController;
+        private final ProductController productController;
+        private final FarmerProfileController farmerProfileController;
 
-    private FlowPane productGrid;
-    private Label resultLabel;
+        private FlowPane productGrid;
+        private Label resultLabel;
 
-    // =====================================================
-    // CONSTRUCTOR
-    // =====================================================
+        // =====================================================
+        // CONSTRUCTOR
+        // =====================================================
 
-    public AdminMarketplacePage() {
+        public AdminMarketplacePage() {
 
-        productController =
-                new ProductController();
+                productController = new ProductController();
 
-        farmerProfileController =
-                new FarmerProfileController();
-    }
+                farmerProfileController = new FarmerProfileController();
+        }
 
-    // =====================================================
-    // MAIN PAGE
-    // =====================================================
+        // =====================================================
+        // MAIN PAGE
+        // =====================================================
 
-    public VBox getMarketplacePage() {
+        public VBox getMarketplacePage() {
 
-        VBox content =
-                new VBox(15);
+                VBox content = new VBox(15);
 
-        content.setPadding(
-                new Insets(
-                        25,
-                        20,
-                        30,
-                        20
-                )
-        );
+                content.setPadding(
+                                new Insets(
+                                                25,
+                                                20,
+                                                30,
+                                                20));
 
-        content.setStyle(
-                "-fx-background-color:#080C0D;"
-        );
+                content.setStyle(
+                                "-fx-background-color:#080C0D;");
 
-        Label title =
-                new Label(
-                        "Marketplace Management"
-                );
+                Label title = new Label(
+                                "Marketplace Management");
 
-        title.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-font-size:34px;" +
-                "-fx-font-weight:bold;"
-        );
+                title.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:34px;" +
+                                                "-fx-font-weight:bold;");
 
-        Label description =
-                new Label(
-                        "View and manage all products listed by farmers."
-                );
+                Label description = new Label(
+                                "View and manage all products listed by farmers.");
 
-        description.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-font-size:14px;"
-        );
+                description.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:14px;");
 
-        VBox marketplaceArea =
-                createMarketplaceArea();
+                VBox marketplaceArea = createMarketplaceArea();
 
-        VBox.setVgrow(
-                marketplaceArea,
-                Priority.ALWAYS
-        );
+                VBox.setVgrow(
+                                marketplaceArea,
+                                Priority.ALWAYS);
 
-        content.getChildren().addAll(
-                title,
-                description,
-                marketplaceArea
-        );
+                content.getChildren().addAll(
+                                title,
+                                description,
+                                marketplaceArea);
 
-        return content;
-    }
+                return content;
+        }
 
-    // =====================================================
-    // MARKETPLACE AREA
-    // =====================================================
+        // =====================================================
+        // MARKETPLACE AREA
+        // =====================================================
 
-    private VBox createMarketplaceArea() {
+        private VBox createMarketplaceArea() {
 
-        VBox area =
-                new VBox(15);
+                VBox area = new VBox(15);
 
-        area.setPadding(
-                new Insets(15)
-        );
+                area.setPadding(
+                                new Insets(15));
 
-        area.setStyle(
-                "-fx-background-color:#0D1213;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-radius:12;" +
-                "-fx-background-radius:12;"
-        );
+                area.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:12;" +
+                                                "-fx-background-radius:12;");
 
-        // =================================================
-        // TOP BAR
-        // =================================================
+                // =================================================
+                // TOP BAR
+                // =================================================
 
-        HBox top =
-                new HBox(12);
+                HBox top = new HBox(12);
 
-        top.setAlignment(
-                Pos.CENTER_LEFT
-        );
+                top.setAlignment(
+                                Pos.CENTER_LEFT);
 
-        resultLabel =
-                new Label(
-                        "All Products"
-                );
+                resultLabel = new Label(
+                                "All Products");
 
-        resultLabel.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-font-size:13px;"
-        );
+                resultLabel.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:13px;");
 
-        Region spacer =
-                new Region();
+                Region spacer = new Region();
 
-        HBox.setHgrow(
-                spacer,
-                Priority.ALWAYS
-        );
+                HBox.setHgrow(
+                                spacer,
+                                Priority.ALWAYS);
 
-        TextField searchBox =
-                new TextField();
+                TextField searchBox = new TextField();
 
-        searchBox.setPromptText(
-                "Search products..."
-        );
+                searchBox.setPromptText(
+                                "Search products...");
 
-        searchBox.setPrefWidth(
-                230
-        );
+                searchBox.setPrefWidth(
+                                230);
 
-        searchBox.setStyle(
-                "-fx-background-color:#101516;" +
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-prompt-text-fill:#777777;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-radius:6;" +
-                "-fx-background-radius:6;" +
-                "-fx-padding:9 12;"
-        );
+                searchBox.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-prompt-text-fill:#777777;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:6;" +
+                                                "-fx-background-radius:6;" +
+                                                "-fx-padding:9 12;");
 
-        searchBox.setOnKeyReleased(
-                e -> searchProducts(
-                        searchBox.getText()
-                )
-        );
+                searchBox.setOnKeyReleased(
+                                e -> searchProducts(
+                                                searchBox.getText()));
 
-        Button refreshButton =
-                new Button(
-                        "Refresh"
-                );
+                Button refreshButton = new Button(
+                                "Refresh");
 
-        refreshButton.setStyle(
-                "-fx-background-color:transparent;" +
-                "-fx-text-fill:#68D34A;" +
-                "-fx-border-color:#68D34A;" +
-                "-fx-border-radius:5;" +
-                "-fx-padding:7 12;" +
-                "-fx-cursor:hand;"
-        );
+                refreshButton.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-border-color:#68D34A;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-padding:7 12;" +
+                                                "-fx-cursor:hand;");
 
-        refreshButton.setOnAction(
-                e -> loadProducts()
-        );
+                refreshButton.setOnAction(
+                                e -> loadProducts());
 
-        top.getChildren().addAll(
-                resultLabel,
-                spacer,
-                searchBox,
-                refreshButton
-        );
+                top.getChildren().addAll(
+                                resultLabel,
+                                spacer,
+                                searchBox,
+                                refreshButton);
 
-        // =================================================
-        // PRODUCT GRID
-        // =================================================
+                // =================================================
+                // PRODUCT GRID
+                // =================================================
 
-        productGrid =
-                new FlowPane();
+                productGrid = new FlowPane();
 
-        productGrid.setHgap(15);
-        productGrid.setVgap(15);
+                productGrid.setHgap(15);
+                productGrid.setVgap(15);
 
-        productGrid.setPadding(
-                new Insets(5)
-        );
+                productGrid.setPadding(
+                                new Insets(5));
 
-        productGrid.setAlignment(
-                Pos.TOP_LEFT
-        );
+                productGrid.setAlignment(
+                                Pos.TOP_LEFT);
 
-        ScrollPane scroll =
-                new ScrollPane(
+                ScrollPane scroll = new ScrollPane(
+                                productGrid);
+
+                scroll.setFitToWidth(
+                                true);
+
+                scroll.setStyle(
+                                "-fx-background:#0D1213;" +
+                                                "-fx-background-color:#0D1213;" +
+                                                "-fx-control-inner-background:#0D1213;");
+
+                VBox.setVgrow(
+                                scroll,
+                                Priority.ALWAYS);
+
+                loadProducts();
+
+                area.getChildren().addAll(
+                                top,
+                                scroll);
+
+                return area;
+        }
+
+        // =====================================================
+        // LOAD ALL PRODUCTS
+        // =====================================================
+
+        private void loadProducts() {
+
+                productGrid
+                                .getChildren()
+                                .clear();
+
+                List<Product> products = productController
+                                .getAllProducts();
+
+                resultLabel.setText(
+                                "All Products ("
+                                                + products.size()
+                                                + ")");
+
+                if (products.isEmpty()) {
+
+                        Label empty = new Label(
+                                        "No products available.");
+
+                        empty.setStyle(
+                                        "-fx-text-fill:#777777;" +
+                                                        "-fx-font-size:15px;");
+
                         productGrid
-                );
+                                        .getChildren()
+                                        .add(empty);
 
-        scroll.setFitToWidth(
-                true
-        );
+                        return;
+                }
 
-        scroll.setStyle(
-                "-fx-background:#0D1213;" +
-                "-fx-background-color:#0D1213;" +
-                "-fx-control-inner-background:#0D1213;"
-        );
+                for (Product product : products) {
 
-        VBox.setVgrow(
-                scroll,
-                Priority.ALWAYS
-        );
-
-        loadProducts();
-
-        area.getChildren().addAll(
-                top,
-                scroll
-        );
-
-        return area;
-    }
-
-    // =====================================================
-    // LOAD ALL PRODUCTS
-    // =====================================================
-
-    private void loadProducts() {
-
-        productGrid
-                .getChildren()
-                .clear();
-
-        List<Product> products =
-                productController
-                        .getAllProducts();
-
-        resultLabel.setText(
-                "All Products ("
-                + products.size()
-                + ")"
-        );
-
-        if (products.isEmpty()) {
-
-            Label empty =
-                    new Label(
-                            "No products available."
-                    );
-
-            empty.setStyle(
-                    "-fx-text-fill:#777777;" +
-                    "-fx-font-size:15px;"
-            );
-
-            productGrid
-                    .getChildren()
-                    .add(empty);
-
-            return;
+                        productGrid
+                                        .getChildren()
+                                        .add(
+                                                        createProductCard(
+                                                                        product));
+                }
         }
 
-        for (Product product :
-                products) {
+        // =====================================================
+        // PRODUCT CARD
+        // =====================================================
 
-            productGrid
-                    .getChildren()
-                    .add(
-                            createProductCard(
-                                    product
-                            )
-                    );
-        }
-    }
+        private VBox createProductCard(
+                        Product product) {
 
-    // =====================================================
-    // PRODUCT CARD
-    // =====================================================
+                VBox card = new VBox();
 
-    private VBox createProductCard(
-            Product product) {
+                card.setPrefWidth(
+                                250);
 
-        VBox card =
-                new VBox();
+                card.setMaxWidth(
+                                250);
 
-        card.setPrefWidth(
-                250
-        );
+                card.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:12;" +
+                                                "-fx-background-radius:12;");
 
-        card.setMaxWidth(
-                250
-        );
+                // =================================================
+                // IMAGE
+                // =================================================
 
-        card.setStyle(
-                "-fx-background-color:#101516;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-radius:12;" +
-                "-fx-background-radius:12;"
-        );
+                StackPane image = new StackPane();
 
-        // =================================================
-        // IMAGE
-        // =================================================
+                image.setPrefHeight(
+                                135);
 
-        StackPane image =
-                new StackPane();
+                image.setMinHeight(
+                                135);
 
-        image.setPrefHeight(
-                135
-        );
+                image.setStyle(
+                                "-fx-background-color:#1B2425;" +
+                                                "-fx-background-radius:12 12 0 0;");
 
-        image.setMinHeight(
-                135
-        );
+                String imagePath = product.getImagePath();
 
-        image.setStyle(
-                "-fx-background-color:#1B2425;" +
-                "-fx-background-radius:12 12 0 0;"
-        );
+                if (imagePath != null &&
+                                !imagePath.trim().isEmpty()) {
 
-        String imagePath =
-                product.getImagePath();
+                        try {
 
-        if (imagePath != null &&
-                !imagePath.trim().isEmpty()) {
+                                Image img = new Image(
+                                                imagePath,
+                                                250,
+                                                135,
+                                                true,
+                                                true);
 
-            try {
+                                ImageView imageView = new ImageView(img);
 
-                Image img =
-                        new Image(
-                                imagePath,
-                                250,
-                                135,
-                                true,
-                                true
-                        );
+                                imageView.setFitWidth(
+                                                250);
 
-                ImageView imageView =
-                        new ImageView(img);
+                                imageView.setFitHeight(
+                                                135);
 
-                imageView.setFitWidth(
-                        250
-                );
+                                imageView.setPreserveRatio(
+                                                true);
 
-                imageView.setFitHeight(
-                        135
-                );
+                                image.getChildren()
+                                                .add(imageView);
 
-                imageView.setPreserveRatio(
-                        true
-                );
+                        } catch (Exception e) {
+
+                                addImagePlaceholder(
+                                                image);
+                        }
+
+                } else {
+
+                        addImagePlaceholder(
+                                        image);
+                }
+
+                // =================================================
+                // STATUS
+                // =================================================
+
+                String statusText = product.getStatus();
+
+                if (statusText == null ||
+                                statusText.trim().isEmpty()) {
+
+                        statusText = "Active";
+                }
+
+                Label status = new Label(
+                                statusText);
+
+                status.setStyle(
+                                "-fx-background-color:#245D35;" +
+                                                "-fx-text-fill:white;" +
+                                                "-fx-padding:5 8;" +
+                                                "-fx-background-radius:5;");
+
+                StackPane.setAlignment(
+                                status,
+                                Pos.TOP_LEFT);
+
+                StackPane.setMargin(
+                                status,
+                                new Insets(10));
 
                 image.getChildren()
-                        .add(imageView);
+                                .add(status);
 
-            } catch (Exception e) {
+                // =================================================
+                // DETAILS
+                // =================================================
 
-                addImagePlaceholder(
-                        image
-                );
-            }
+                VBox details = new VBox(7);
 
-        } else {
+                details.setPadding(
+                                new Insets(12));
 
-            addImagePlaceholder(
-                    image
-            );
+                Label name = new Label(
+                                safe(
+                                                product.getProductName()));
+
+                name.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:16px;" +
+                                                "-fx-font-weight:bold;");
+
+                Label category = new Label(
+                                safe(
+                                                product.getCategory()));
+
+                category.setStyle(
+                                "-fx-text-fill:#888888;" +
+                                                "-fx-font-size:11px;");
+
+                Label price = new Label(
+                                "₹"
+                                                + product.getPrice()
+                                                + " / "
+                                                + safe(product.getUnit()));
+
+                price.setStyle(
+                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-font-size:17px;" +
+                                                "-fx-font-weight:bold;");
+
+                Label quantity = new Label(
+                                "Stock: "
+                                                + product.getQuantity()
+                                                + " "
+                                                + safe(product.getUnit()));
+
+                quantity.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:12px;");
+
+                // =================================================
+                // FARMER
+                // =================================================
+
+                FarmerProfile farmer = farmerProfileController
+                                .getProfile(
+                                                product.getFarmerId());
+
+                String farmerName = "Unknown Farmer";
+
+                if (farmer != null) {
+
+                        farmerName = getFarmerName(
+                                        farmer);
+                }
+
+                Label farmerLabel = new Label(
+                                "Farmer: "
+                                                + farmerName);
+
+                farmerLabel.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:12px;");
+
+                // =================================================
+                // BUTTONS
+                // =================================================
+
+                Button edit = new Button(
+                                "Edit");
+
+                Button delete = new Button(
+                                "Delete");
+
+                Button contact = new Button(
+                                "Contact Farmer");
+
+                edit.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                delete.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                contact.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                HBox.setHgrow(
+                                edit,
+                                Priority.ALWAYS);
+
+                HBox.setHgrow(
+                                delete,
+                                Priority.ALWAYS);
+
+                // =================================================
+                // EDIT STYLE
+                // =================================================
+
+                edit.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-border-color:#68D34A;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-padding:7 8;" +
+                                                "-fx-cursor:hand;");
+
+                // =================================================
+                // DELETE STYLE
+                // =================================================
+
+                delete.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-text-fill:#E57373;" +
+                                                "-fx-border-color:#E57373;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-padding:7 8;" +
+                                                "-fx-cursor:hand;");
+
+                // =================================================
+                // CONTACT STYLE
+                // =================================================
+
+                contact.setStyle(
+                                "-fx-background-color:#245D35;" +
+                                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-border-color:#245D35;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-padding:7 8;" +
+                                                "-fx-cursor:hand;");
+
+                // =================================================
+                // BUTTON ACTIONS
+                // =================================================
+
+                edit.setOnAction(
+                                e -> editProduct(
+                                                product));
+
+                delete.setOnAction(
+                                e -> deleteProduct(
+                                                product));
+
+                contact.setOnAction(
+                                e -> showFarmerDetails(
+                                                product));
+
+                HBox firstButtons = new HBox(
+                                8,
+                                edit,
+                                delete);
+
+                firstButtons.setFillHeight(
+                                true);
+
+                details.getChildren().addAll(
+                                name,
+                                category,
+                                price,
+                                quantity,
+                                farmerLabel,
+                                firstButtons,
+                                contact);
+
+                card.getChildren().addAll(
+                                image,
+                                details);
+
+                return card;
         }
 
-        // =================================================
-        // STATUS
-        // =================================================
+        // =====================================================
+        // CONTACT FARMER
+        // =====================================================
 
-        String statusText =
-                product.getStatus();
+        private void showFarmerDetails(
+                        Product product) {
 
-        if (statusText == null ||
-                statusText.trim().isEmpty()) {
+                FarmerProfile farmer = farmerProfileController
+                                .getProfile(
+                                                product.getFarmerId());
 
-            statusText =
-                    "Active";
+                if (farmer == null) {
+
+                        showAlert(
+                                        Alert.AlertType.WARNING,
+                                        "Farmer Not Found",
+                                        "Farmer details could not be found.");
+
+                        return;
+                }
+
+                FarmerDetailsDialog dialog = new FarmerDetailsDialog(
+                                farmer);
+
+                dialog.show();
         }
 
-        Label status =
-                new Label(
-                        statusText
-                );
+        // =====================================================
+        // DELETE PRODUCT
+        // =====================================================
 
-        status.setStyle(
-                "-fx-background-color:#245D35;" +
-                "-fx-text-fill:white;" +
-                "-fx-padding:5 8;" +
-                "-fx-background-radius:5;"
-        );
+        private void deleteProduct(
+                        Product product) {
 
-        StackPane.setAlignment(
-                status,
-                Pos.TOP_LEFT
-        );
+                Alert confirmation = new Alert(
+                                Alert.AlertType.CONFIRMATION);
 
-        StackPane.setMargin(
-                status,
-                new Insets(10)
-        );
+                confirmation.setTitle(
+                                "Delete Product");
 
-        image.getChildren()
-                .add(status);
+                confirmation.setHeaderText(
+                                "Delete this product?");
 
-        // =================================================
-        // DETAILS
-        // =================================================
+                confirmation.setContentText(
+                                "Are you sure you want to delete \""
+                                                + safe(product.getProductName())
+                                                + "\"?");
 
-        VBox details =
-                new VBox(7);
+                confirmation.showAndWait()
+                                .ifPresent(response -> {
 
-        details.setPadding(
-                new Insets(12)
-        );
+                                        if (response == javafx.scene.control.ButtonType.OK) {
 
-        Label name =
-                new Label(
-                        safe(
-                                product.getProductName()
-                        )
-                );
+                                                boolean deleted = productController
+                                                                .deleteProduct(
+                                                                                product.getProductId());
 
-        name.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-font-size:16px;" +
-                "-fx-font-weight:bold;"
-        );
+                                                if (deleted) {
 
-        Label category =
-                new Label(
-                        safe(
-                                product.getCategory()
-                        )
-                );
+                                                        loadProducts();
 
-        category.setStyle(
-                "-fx-text-fill:#888888;" +
-                "-fx-font-size:11px;"
-        );
+                                                } else {
 
-        Label price =
-                new Label(
-                        "₹"
-                        + product.getPrice()
-                        + " / "
-                        + safe(product.getUnit())
-                );
-
-        price.setStyle(
-                "-fx-text-fill:#68D34A;" +
-                "-fx-font-size:17px;" +
-                "-fx-font-weight:bold;"
-        );
-
-        Label quantity =
-                new Label(
-                        "Stock: "
-                        + product.getQuantity()
-                        + " "
-                        + safe(product.getUnit())
-                );
-
-        quantity.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-font-size:12px;"
-        );
-
-        // =================================================
-        // FARMER
-        // =================================================
-
-        FarmerProfile farmer =
-                farmerProfileController
-                        .getProfile(
-                                product.getFarmerId()
-                        );
-
-        String farmerName =
-                "Unknown Farmer";
-
-        if (farmer != null) {
-
-            farmerName =
-                    getFarmerName(
-                            farmer
-                    );
+                                                        showAlert(
+                                                                        Alert.AlertType.ERROR,
+                                                                        "Delete Failed",
+                                                                        "Unable to delete the product.");
+                                                }
+                                        }
+                                });
         }
 
-        Label farmerLabel =
-                new Label(
-                        "Farmer: "
-                        + farmerName
-                );
+        // =====================================================
+        // EDIT PRODUCT
+        // =====================================================
 
-        farmerLabel.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-font-size:12px;"
-        );
+        private void editProduct(
+                        Product product) {
 
-        // =================================================
-        // BUTTONS
-        // =================================================
+                AdminEditProductPage editPage = new AdminEditProductPage(
+                                product);
 
-        Button edit =
-                new Button(
-                        "Edit"
-                );
+                editPage.show();
 
-        Button delete =
-                new Button(
-                        "Delete"
-                );
-
-        Button contact =
-                new Button(
-                        "Contact Farmer"
-                );
-
-        edit.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        delete.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        contact.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        HBox.setHgrow(
-                edit,
-                Priority.ALWAYS
-        );
-
-        HBox.setHgrow(
-                delete,
-                Priority.ALWAYS
-        );
-
-        // =================================================
-        // EDIT STYLE
-        // =================================================
-
-        edit.setStyle(
-                "-fx-background-color:transparent;" +
-                "-fx-text-fill:#68D34A;" +
-                "-fx-border-color:#68D34A;" +
-                "-fx-border-radius:5;" +
-                "-fx-padding:7 8;" +
-                "-fx-cursor:hand;"
-        );
-
-        // =================================================
-        // DELETE STYLE
-        // =================================================
-
-        delete.setStyle(
-                "-fx-background-color:transparent;" +
-                "-fx-text-fill:#E57373;" +
-                "-fx-border-color:#E57373;" +
-                "-fx-border-radius:5;" +
-                "-fx-padding:7 8;" +
-                "-fx-cursor:hand;"
-        );
-
-        // =================================================
-        // CONTACT STYLE
-        // =================================================
-
-        contact.setStyle(
-                "-fx-background-color:#245D35;" +
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-border-color:#245D35;" +
-                "-fx-border-radius:5;" +
-                "-fx-padding:7 8;" +
-                "-fx-cursor:hand;"
-        );
-
-        // =================================================
-        // BUTTON ACTIONS
-        // =================================================
-
-        edit.setOnAction(
-                e -> editProduct(
-                        product
-                )
-        );
-
-        delete.setOnAction(
-                e -> deleteProduct(
-                        product
-                )
-        );
-
-        contact.setOnAction(
-                e -> showFarmerDetails(
-                        product
-                )
-        );
-
-        HBox firstButtons =
-                new HBox(
-                        8,
-                        edit,
-                        delete
-                );
-
-        firstButtons.setFillHeight(
-                true
-        );
-
-        details.getChildren().addAll(
-                name,
-                category,
-                price,
-                quantity,
-                farmerLabel,
-                firstButtons,
-                contact
-        );
-
-        card.getChildren().addAll(
-                image,
-                details
-        );
-
-        return card;
-    }
-
-    // =====================================================
-    // CONTACT FARMER
-    // =====================================================
-
-    private void showFarmerDetails(
-            Product product) {
-
-        FarmerProfile farmer =
-                farmerProfileController
-                        .getProfile(
-                                product.getFarmerId()
-                        );
-
-        if (farmer == null) {
-
-            showAlert(
-                    Alert.AlertType.WARNING,
-                    "Farmer Not Found",
-                    "Farmer details could not be found."
-            );
-
-            return;
+                // Refresh marketplace after
+                // edit window is closed.
+                loadProducts();
         }
 
-        FarmerDetailsDialog dialog =
-                new FarmerDetailsDialog(
-                        farmer
-                );
+        // =====================================================
+        // SEARCH
+        // =====================================================
 
-        dialog.show();
-    }
+        private void searchProducts(
+                        String text) {
 
-    // =====================================================
-    // DELETE PRODUCT
-    // =====================================================
+                if (text == null ||
+                                text.trim().isEmpty()) {
 
-    private void deleteProduct(
-            Product product) {
+                        loadProducts();
 
-        Alert confirmation =
-                new Alert(
-                        Alert.AlertType.CONFIRMATION
-                );
+                        return;
+                }
 
-        confirmation.setTitle(
-                "Delete Product"
-        );
+                List<Product> products = productController
+                                .searchAllProducts(
+                                                text);
 
-        confirmation.setHeaderText(
-                "Delete this product?"
-        );
+                productGrid
+                                .getChildren()
+                                .clear();
 
-        confirmation.setContentText(
-                "Are you sure you want to delete \""
-                + safe(product.getProductName())
-                + "\"?"
-        );
+                resultLabel.setText(
+                                "Found "
+                                                + products.size()
+                                                + " products");
 
-        confirmation.showAndWait()
-                .ifPresent(response -> {
+                for (Product product : products) {
 
-                    if (response ==
-                            javafx.scene.control.ButtonType.OK) {
+                        productGrid
+                                        .getChildren()
+                                        .add(
+                                                        createProductCard(
+                                                                        product));
+                }
+        }
 
-                        boolean deleted =
-                                productController
-                                        .deleteProduct(
-                                                product.getProductId()
-                                        );
+        // =====================================================
+        // FARMER NAME
+        // =====================================================
 
-                        if (deleted) {
+        private String getFarmerName(
+                        FarmerProfile farmer) {
 
-                            loadProducts();
+                /*
+                 * This method uses reflection so this class
+                 * does not assume which name getter your
+                 * FarmerProfile currently has.
+                 */
 
-                        } else {
+                try {
 
-                            showAlert(
-                                    Alert.AlertType.ERROR,
-                                    "Delete Failed",
-                                    "Unable to delete the product."
-                            );
+                        var method = farmer.getClass()
+                                        .getMethod(
+                                                        "getFullName");
+
+                        Object value = method.invoke(farmer);
+
+                        if (value != null) {
+
+                                return value.toString();
                         }
-                    }
-                });
-    }
 
-    // =====================================================
-    // EDIT PRODUCT
-    // =====================================================
+                } catch (Exception ignored) {
+                }
 
-    private void editProduct(
-        Product product) {
+                try {
 
-    AdminEditProductPage editPage =
-            new AdminEditProductPage(
-                    product
-            );
+                        var method = farmer.getClass()
+                                        .getMethod(
+                                                        "getName");
 
-    editPage.show();
+                        Object value = method.invoke(farmer);
 
-    // Refresh marketplace after
-    // edit window is closed.
-    loadProducts();
-}
+                        if (value != null) {
 
-    // =====================================================
-    // SEARCH
-    // =====================================================
+                                return value.toString();
+                        }
 
-    private void searchProducts(
-            String text) {
+                } catch (Exception ignored) {
+                }
 
-        if (text == null ||
-                text.trim().isEmpty()) {
-
-            loadProducts();
-
-            return;
+                return "Farmer #" +
+                                farmer.getFarmerId();
         }
 
-        List<Product> products =
-                productController
-                        .searchAllProducts(
-                                text
-                        );
+        // =====================================================
+        // IMAGE PLACEHOLDER
+        // =====================================================
 
-        productGrid
-                .getChildren()
-                .clear();
+        private void addImagePlaceholder(
+                        StackPane box) {
 
-        resultLabel.setText(
-                "Found "
-                + products.size()
-                + " products"
-        );
+                Label label = new Label(
+                                "Product Image");
 
-        for (Product product :
-                products) {
+                label.setStyle(
+                                "-fx-text-fill:#666666;" +
+                                                "-fx-font-size:13px;");
 
-            productGrid
-                    .getChildren()
-                    .add(
-                            createProductCard(
-                                    product
-                            )
-                    );
-        }
-    }
-
-    // =====================================================
-    // FARMER NAME
-    // =====================================================
-
-    private String getFarmerName(
-            FarmerProfile farmer) {
-
-        /*
-         * This method uses reflection so this class
-         * does not assume which name getter your
-         * FarmerProfile currently has.
-         */
-
-        try {
-
-            var method =
-                    farmer.getClass()
-                            .getMethod(
-                                    "getFullName"
-                            );
-
-            Object value =
-                    method.invoke(farmer);
-
-            if (value != null) {
-
-                return value.toString();
-            }
-
-        } catch (Exception ignored) {
+                box.getChildren()
+                                .add(label);
         }
 
-        try {
+        // =====================================================
+        // SAFE
+        // =====================================================
 
-            var method =
-                    farmer.getClass()
-                            .getMethod(
-                                    "getName"
-                            );
+        private String safe(
+                        String value) {
 
-            Object value =
-                    method.invoke(farmer);
+                if (value == null ||
+                                value.trim().isEmpty()) {
 
-            if (value != null) {
+                        return "Not provided";
+                }
 
-                return value.toString();
-            }
-
-        } catch (Exception ignored) {
+                return value;
         }
 
-        return "Farmer #" +
-                farmer.getFarmerId();
-    }
+        // =====================================================
+        // ALERT
+        // =====================================================
 
-    // =====================================================
-    // IMAGE PLACEHOLDER
-    // =====================================================
+        private void showAlert(
+                        Alert.AlertType type,
+                        String title,
+                        String message) {
 
-    private void addImagePlaceholder(
-            StackPane box) {
+                Alert alert = new Alert(type);
 
-        Label label =
-                new Label(
-                        "Product Image"
-                );
+                alert.setTitle(title);
+                alert.setHeaderText(null);
+                alert.setContentText(message);
 
-        label.setStyle(
-                "-fx-text-fill:#666666;" +
-                "-fx-font-size:13px;"
-        );
-
-        box.getChildren()
-                .add(label);
-    }
-
-    // =====================================================
-    // SAFE
-    // =====================================================
-
-    private String safe(
-            String value) {
-
-        if (value == null ||
-                value.trim().isEmpty()) {
-
-            return "Not provided";
+                alert.showAndWait();
         }
-
-        return value;
-    }
-
-    // =====================================================
-    // ALERT
-    // =====================================================
-
-    private void showAlert(
-            Alert.AlertType type,
-            String title,
-            String message) {
-
-        Alert alert =
-                new Alert(type);
-
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-
-        alert.showAndWait();
-    }
 }

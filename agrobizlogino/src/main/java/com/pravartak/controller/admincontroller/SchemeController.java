@@ -471,7 +471,7 @@
 //             scheme.setInformation(
 //                     scheme.getInformation()
 //                             .trim());
-            
+
 //             scheme.setApplyUrl(
 //                     scheme.getApplyUrl()
 //                             .trim());
@@ -818,9 +818,8 @@ public class SchemeController {
 
         try {
 
-            Scheme scheme =
-                    schemeDAO.getScheme(
-                            schemeId.trim());
+            Scheme scheme = schemeDAO.getScheme(
+                    schemeId.trim());
 
             if (scheme == null) {
                 return false;

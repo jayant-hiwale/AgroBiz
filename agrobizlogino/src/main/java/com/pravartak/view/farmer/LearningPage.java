@@ -32,63 +32,33 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 
-/**
- * =========================================================
- * MY LEARNING PAGE
- * =========================================================
- *
- * This page displays only courses added by the
- * currently logged-in farmer from Explorer.
- *
- * Explorer:
- *
- *      + Add to My Learning
- *
- *              ↓
- *
- *      FarmerLearningDAO
- *
- *              ↓
- *
- *          My Learning
- *
- *              ↓
- *
- *      Continue Learning
- *
- *              ↓
- *
- *       FarmerModulesPage
- *
- * =========================================================
- */
 public class LearningPage {
 
     private Scene learningpagScene;
 
-    // =========================================================
+    
     // DAO
-    // =========================================================
+    
 
     private final FarmerLearningDAO farmerLearningDAO;
 
-    // =========================================================
+    
     // COURSE CONTAINER
-    // =========================================================
+    
 
     private FlowPane courseContainer;
 
-    // =========================================================
+    
     // COURSE LIST
-    // =========================================================
+    
 
     private List<Course> myCourses =
             new ArrayList<>();
 
 
-    // =========================================================
+    
     // CONSTRUCTOR
-    // =========================================================
+    
 
     public LearningPage() {
 
@@ -97,15 +67,13 @@ public class LearningPage {
     }
 
 
-    // =========================================================
+    
     // GET LEARNING PAGE
-    // =========================================================
+    
 
     public Scene get_learning_pageScene() {
 
-        // =====================================================
         // MAIN BORDER PANE
-        // =====================================================
 
         BorderPane borderPane =
                 new BorderPane();
@@ -115,9 +83,7 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // NAVBAR
-        // =====================================================
 
         borderPane.setTop(
                 new NavBar().createNavbar(
@@ -126,18 +92,14 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // FOOTER
-        // =====================================================
 
         borderPane.setBottom(
                 new Footer().createFooter()
         );
 
 
-        // =====================================================
         // MAIN CONTENT
-        // =====================================================
 
         VBox mainContent =
                 new VBox(25);
@@ -156,33 +118,25 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // HEADER
-        // =====================================================
 
         VBox header =
                 createPageHeader();
 
 
-        // =====================================================
         // LEARNING SUMMARY
-        // =====================================================
 
         // HBox summary =
         //         createLearningSummary();
 
 
-        // =====================================================
         // SECTION HEADER
-        // =====================================================
 
         HBox sectionHeader =
                 createSectionHeader();
 
 
-        // =====================================================
         // COURSE CONTAINER
-        // =====================================================
 
         courseContainer =
                 new FlowPane();
@@ -213,16 +167,12 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // LOAD COURSES
-        // =====================================================
 
         loadMyCourses();
 
 
-        // =====================================================
         // ADD EVERYTHING
-        // =====================================================
 
         mainContent
                 .getChildren()
@@ -233,9 +183,7 @@ public class LearningPage {
                 );
 
 
-        // =====================================================
         // SCROLL PANE
-        // =====================================================
 
         ScrollPane scrollPane =
                 new ScrollPane(
@@ -260,18 +208,14 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // CENTER
-        // =====================================================
 
         borderPane.setCenter(
                 scrollPane
         );
 
 
-        // =====================================================
         // SCENE
-        // =====================================================
 
         learningpagScene =
                 new Scene(
@@ -285,9 +229,9 @@ public class LearningPage {
     }
 
 
-    // =========================================================
+    
     // PAGE HEADER
-    // =========================================================
+    
 
     private VBox createPageHeader() {
 
@@ -304,9 +248,7 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // TITLE ROW
-        // =====================================================
 
         HBox titleRow =
                 new HBox();
@@ -415,9 +357,7 @@ public class LearningPage {
                 );
 
 
-        // =====================================================
         // SUBTITLE
-        // =====================================================
 
         Label subtitle =
                 new Label(
@@ -449,72 +389,10 @@ public class LearningPage {
     }
 
 
-    // =========================================================
-    // LEARNING SUMMARY
-    // =========================================================
-
-//     private HBox createLearningSummary() {
-
-//         HBox summary =
-//                 new HBox(15);
-
-//         summary.setAlignment(
-//                 Pos.CENTER_LEFT
-//         );
-
-
-        // =====================================================
-        // COURSES CARD
-        // =====================================================
-
-        // VBox coursesBox =
-        //         createSummaryCard(
-        //                 "📚",
-        //                 "My Courses",
-        //                 "Courses added from Explorer"
-        //         );
-
-
-        // =====================================================
-        // LEARNING CARD
-        // =====================================================
-
-        // VBox learningBox =
-        //         createSummaryCard(
-        //                 "🌱",
-        //                 "Keep Growing",
-        //                 "Build your farming knowledge"
-        //         );
-
-
-        // =====================================================
-        // EXPLORE CARD
-        // =====================================================
-
-//         VBox exploreBox =
-//                 createSummaryCard(
-//                         "🔎",
-//                         "Discover More",
-//                         "Find new farming courses"
-//                 );
-
-
-//         summary
-//                 .getChildren()
-//                 .addAll(
-//                         coursesBox,
-//                         learningBox,
-//                         exploreBox
-//                 );
-
-
-//         return summary;
-//     }
-
-
-    // =========================================================
+    
+    
     // SUMMARY CARD
-    // =========================================================
+    
 
     private VBox createSummaryCard(
             String iconText,
@@ -625,9 +503,9 @@ public class LearningPage {
     }
 
 
-    // =========================================================
+    
     // SECTION HEADER
-    // =========================================================
+    
 
     private HBox createSectionHeader() {
 
@@ -698,9 +576,9 @@ public class LearningPage {
     }
 
 
-    // =========================================================
+    
     // LOAD MY COURSES
-    // =========================================================
+    
 
     private void loadMyCourses() {
 
@@ -709,18 +587,14 @@ public class LearningPage {
         }
 
 
-        // =====================================================
         // CLEAR
-        // =====================================================
 
         courseContainer
                 .getChildren()
                 .clear();
 
 
-        // =====================================================
         // LOADING
-        // =====================================================
 
         ProgressIndicator loading =
                 new ProgressIndicator();
@@ -740,9 +614,9 @@ public class LearningPage {
 
         try {
 
-            // =================================================
+            
             // GET FARMER ID
-            // =================================================
+            
 
             int farmerId =
                     LoginPage
@@ -755,9 +629,9 @@ public class LearningPage {
             );
 
 
-            // =================================================
+            
             // CHECK FARMER
-            // =================================================
+            
 
             if (farmerId <= 0) {
 
@@ -773,9 +647,9 @@ public class LearningPage {
             }
 
 
-            // =================================================
+            
             // GET ONLY FARMER COURSES
-            // =================================================
+            
 
             myCourses =
                     farmerLearningDAO
@@ -789,9 +663,9 @@ public class LearningPage {
                     .clear();
 
 
-            // =================================================
+            
             // EMPTY
-            // =================================================
+            
 
             if (myCourses == null ||
                     myCourses.isEmpty()) {
@@ -804,9 +678,9 @@ public class LearningPage {
             }
 
 
-            // =================================================
+            
             // DISPLAY
-            // =================================================
+            
 
             for (Course course : myCourses) {
 
@@ -846,9 +720,9 @@ public class LearningPage {
     }
 
 
-    // =========================================================
+    
     // EMPTY MESSAGE
-    // =========================================================
+    
 
     private void showEmptyMessage(
             String message) {
@@ -999,9 +873,9 @@ public class LearningPage {
     }
 
 
-    // =========================================================
+    
     // CREATE COURSE CARD
-    // =========================================================
+    
 
     private VBox createCourseCard(
             Course course) {
@@ -1024,9 +898,7 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // CARD STYLES
-        // =====================================================
 
         String normalStyle =
                 "-fx-background-color:#101516;" +
@@ -1049,9 +921,7 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // IMAGE
-        // =====================================================
 
         StackPane image =
                 createCourseImage(
@@ -1059,9 +929,7 @@ public class LearningPage {
                 );
 
 
-        // =====================================================
         // CATEGORY BADGE
-        // =====================================================
 
         Label category =
                 new Label(
@@ -1098,9 +966,7 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // TITLE
-        // =====================================================
 
         Label title =
                 new Label(
@@ -1131,9 +997,7 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // SHORT DESCRIPTION
-        // =====================================================
 
         Label description =
                 new Label(
@@ -1162,9 +1026,7 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // INFORMATION
-        // =====================================================
 
         HBox information =
                 new HBox(8);
@@ -1226,9 +1088,7 @@ public class LearningPage {
                 );
 
 
-        // =====================================================
         // SPACER
-        // =====================================================
 
         Region spacer =
                 new Region();
@@ -1239,9 +1099,7 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // CONTINUE BUTTON
-        // =====================================================
 
         Button continueButton =
                 new Button(
@@ -1279,9 +1137,7 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // BUTTON HOVER
-        // =====================================================
 
         continueButton.setOnMouseEntered(
                 e -> {
@@ -1309,9 +1165,7 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // CONTINUE LEARNING ACTION
-        // =====================================================
 
         continueButton.setOnAction(
                 e -> {
@@ -1323,27 +1177,108 @@ public class LearningPage {
         );
 
 
-        // =====================================================
-        // CARD CLICK
-        // =====================================================
+        // REMOVE BUTTON
 
-        card.setOnMouseClicked(
-                e -> {
-
-                    if (e.getTarget()
-                            != continueButton) {
-
-                        openCourse(
-                                course
-                        );
-                    }
-                }
+Button removeButton =
+        new Button(
+                "Remove from My Learning"
         );
 
+removeButton.setPrefWidth(
+        276
+);
 
-        // =====================================================
+removeButton.setPrefHeight(
+        36
+);
+
+removeButton.setFont(
+        Font.font(
+                "Arial",
+                FontWeight.BOLD,
+                12
+        )
+);
+
+removeButton.setTextFill(
+        Color.web("#E6A0A0")
+);
+
+removeButton.setStyle(
+        "-fx-background-color:#241719;" +
+        "-fx-background-radius:9;" +
+        "-fx-border-color:#5A3035;" +
+        "-fx-border-radius:9;" +
+        "-fx-cursor:hand;"
+);
+
+removeButton.setCursor(
+        Cursor.HAND
+);
+
+removeButton.setOnMouseEntered(
+        e -> {
+
+            removeButton.setStyle(
+                    "-fx-background-color:#3A1D20;" +
+                    "-fx-text-fill:#FF8F8F;" +
+                    "-fx-background-radius:9;" +
+                    "-fx-border-color:#D45C5C;" +
+                    "-fx-border-radius:9;" +
+                    "-fx-cursor:hand;"
+            );
+        }
+);
+
+removeButton.setOnMouseExited(
+        e -> {
+
+            removeButton.setStyle(
+                    "-fx-background-color:#241719;" +
+                    "-fx-text-fill:#E6A0A0;" +
+                    "-fx-background-radius:9;" +
+                    "-fx-border-color:#5A3035;" +
+                    "-fx-border-radius:9;" +
+                    "-fx-cursor:hand;"
+            );
+        }
+);
+
+removeButton.setOnAction(
+        e -> {
+
+            removeCourseFromLearning(
+                    course
+            );
+        }
+);
+
+continueButton.setOnMouseClicked(
+        e -> e.consume()
+);
+
+removeButton.setOnMouseClicked(
+        e -> e.consume()
+);
+
+
+
+        // CARD CLICK
+
+       card.setOnMouseClicked(
+        e -> {
+
+            if (!e.getTarget().equals(continueButton) &&
+                    !e.getTarget().equals(removeButton)) {
+
+                openCourse(
+                        course
+                );
+            }
+        }
+);
+
         // CARD HOVER
-        // =====================================================
 
         card.setOnMouseEntered(
                 e -> {
@@ -1365,9 +1300,7 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // ADD CONTENT
-        // =====================================================
 
         card.getChildren()
                 .addAll(
@@ -1377,7 +1310,8 @@ public class LearningPage {
                         description,
                         information,
                         spacer,
-                        continueButton
+                        continueButton,
+                        removeButton
                 );
 
 
@@ -1385,9 +1319,9 @@ public class LearningPage {
     }
 
 
-    // =========================================================
+    
     // COURSE IMAGE
-    // =========================================================
+    
 
     private StackPane createCourseImage(
             String imageUrl) {
@@ -1412,9 +1346,7 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // CLIP
-        // =====================================================
 
         Rectangle clip =
                 new Rectangle(
@@ -1440,9 +1372,7 @@ public class LearningPage {
         );
 
 
-        // =====================================================
         // IMAGE
-        // =====================================================
 
         ImageView imageView =
                 new ImageView();
@@ -1498,9 +1428,7 @@ public class LearningPage {
         }
 
 
-        // =====================================================
         // PLACEHOLDER
-        // =====================================================
 
         if (!imageLoaded) {
 
@@ -1528,9 +1456,7 @@ public class LearningPage {
         }
 
 
-        // =====================================================
         // ADD IMAGE
-        // =====================================================
 
         container
                 .getChildren()
@@ -1543,10 +1469,10 @@ public class LearningPage {
     }
 
 
-    // =========================================================
+    
     // OPEN COURSE MODULES
-    // =========================================================
-
+    
+    
     private void openCourse(
             Course course) {
 
@@ -1581,9 +1507,9 @@ public class LearningPage {
 
         try {
 
-            // =================================================
+            
             // OPEN MODULE PAGE
-            // =================================================
+            
 
             FarmerModulesPage modulesPage =
                     new FarmerModulesPage(
@@ -1609,9 +1535,9 @@ public class LearningPage {
     }
 
 
-    // =========================================================
+    
     // SAFE STRING
-    // =========================================================
+    
 
     private String safeValue(
             String value,
@@ -1625,4 +1551,117 @@ public class LearningPage {
 
         return value.trim();
     }
+    // REMOVE COURSE FROM MY LEARNING
+
+// =========================================================
+// REMOVE COURSE FROM MY LEARNING
+// =========================================================
+
+private void removeCourseFromLearning(Course course) {
+
+    if (course == null) {
+        return;
+    }
+
+    try {
+
+        // -------------------------------------------------
+        // GET LOGGED-IN FARMER
+        // -------------------------------------------------
+
+        int farmerId =
+                LoginPage.getLoggedInFarmerId();
+
+        if (farmerId <= 0) {
+
+            System.out.println(
+                    "Invalid farmer ID."
+            );
+
+            return;
+        }
+
+        // -------------------------------------------------
+        // GET COURSE ID
+        // Course.getCourseId() returns int
+        // -------------------------------------------------
+
+        int courseId =
+                course.getCourseId();
+
+        if (courseId <= 0) {
+
+            System.out.println(
+                    "Invalid course ID."
+            );
+
+            return;
+        }
+
+        System.out.println(
+                "================================"
+        );
+
+        System.out.println(
+                "Removing Course From My Learning"
+        );
+
+        System.out.println(
+                "Farmer ID = "
+                + farmerId
+        );
+
+        System.out.println(
+                "Course ID = "
+                + courseId
+        );
+
+        System.out.println(
+                "Course Title = "
+                + course.getTitle()
+        );
+
+        System.out.println(
+                "================================"
+        );
+
+        // -------------------------------------------------
+        // REMOVE ONLY FROM FARMER LEARNING
+        // -------------------------------------------------
+
+        boolean removed =
+                farmerLearningDAO.removeCourse(
+                        farmerId,
+                        courseId
+                );
+
+        // -------------------------------------------------
+        // CHECK RESULT
+        // -------------------------------------------------
+
+        if (removed) {
+
+            System.out.println(
+                    "Course removed successfully from My Learning."
+            );
+
+            // Refresh course cards
+            loadMyCourses();
+
+        } else {
+
+            System.out.println(
+                    "Unable to remove course from My Learning."
+            );
+        }
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+
+        System.out.println(
+                "Error while removing course from My Learning."
+        );
+    }
+}
 }

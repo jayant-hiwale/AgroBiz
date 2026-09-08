@@ -22,551 +22,460 @@ import java.util.Map;
 
 public class FarmerChatsPage {
 
-    private final int farmerId;
+        private final int farmerId;
 
-    private final ChatController chatController;
+        private final ChatController chatController;
 
-    private VBox chatsContainer;
+        private VBox chatsContainer;
 
-    // =========================================================
-    // CONSTRUCTOR
-    // =========================================================
+        // =========================================================
+        // CONSTRUCTOR
+        // =========================================================
 
-    public FarmerChatsPage(int farmerId) {
+        public FarmerChatsPage(int farmerId) {
 
-        this.farmerId = farmerId;
+                this.farmerId = farmerId;
 
-        chatController =
-                new ChatController();
-    }
+                chatController = new ChatController();
+        }
 
-    // =========================================================
-    // PAGE
-    // =========================================================
+        // =========================================================
+        // PAGE
+        // =========================================================
 
-    public BorderPane getChatsPage() {
+        public BorderPane getChatsPage() {
 
-        BorderPane root =
-                new BorderPane();
+                BorderPane root = new BorderPane();
 
-        root.setStyle(
-                "-fx-background-color:#0D1117;"
-        );
+                root.setStyle(
+                                "-fx-background-color:#0D1117;");
 
-        // =====================================================
-        // NAVBAR
-        // =====================================================
+                // =====================================================
+                // NAVBAR
+                // =====================================================
 
-        root.setTop(
-                new NavBar(
-                        farmerId,
-                        LoginPage.getLoggedInFirebaseUid()
-                ).createNavbar("Chats")
-        );
+                root.setTop(
+                                new NavBar(
+                                                farmerId,
+                                                LoginPage.getLoggedInFirebaseUid()).createNavbar("Chats"));
 
-        // =====================================================
-        // FOOTER
-        // =====================================================
+                // =====================================================
+                // FOOTER
+                // =====================================================
 
-        root.setBottom(
-                new Footer().createFooter()
-        );
+                root.setBottom(
+                                new Footer().createFooter());
 
-        // =====================================================
-        // MAIN
-        // =====================================================
+                // =====================================================
+                // MAIN
+                // =====================================================
 
-        VBox main =
-                new VBox(18);
+                VBox main = new VBox(18);
 
-        main.setPadding(
-                new Insets(
-                        30,
-                        40,
-                        30,
-                        40
-                )
-        );
+                main.setPadding(
+                                new Insets(
+                                                30,
+                                                40,
+                                                30,
+                                                40));
 
-        Label title =
-                new Label(
-                        "💬 Farmer Chats"
-                );
+                Label title = new Label(
+                                "💬 Farmer Chats");
 
-        title.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-font-size:30px;" +
-                "-fx-font-weight:bold;"
-        );
+                title.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:30px;" +
+                                                "-fx-font-weight:bold;");
 
-        Label subtitle =
-                new Label(
-                        "Chat with buyers interested in your products."
-                );
+                Label subtitle = new Label(
+                                "Chat with buyers interested in your products.");
 
-        subtitle.setStyle(
-                "-fx-text-fill:#888888;" +
-                "-fx-font-size:14px;"
-        );
+                subtitle.setStyle(
+                                "-fx-text-fill:#888888;" +
+                                                "-fx-font-size:14px;");
 
-        chatsContainer =
-                new VBox(14);
+                chatsContainer = new VBox(14);
 
-        chatsContainer.setPadding(
-                new Insets(5)
-        );
+                chatsContainer.setPadding(
+                                new Insets(5));
 
-        ScrollPane scroll =
-                new ScrollPane(
-                        chatsContainer
-                );
+                ScrollPane scroll = new ScrollPane(
+                                chatsContainer);
 
-        scroll.setFitToWidth(true);
+                scroll.setFitToWidth(true);
 
-        scroll.setStyle(
-                "-fx-background:#0D1117;" +
-                "-fx-background-color:#0D1117;" +
-                "-fx-control-inner-background:#0D1117;" +
-                "-fx-border-color:transparent;"
-        );
+                scroll.setStyle(
+                                "-fx-background:#0D1117;" +
+                                                "-fx-background-color:#0D1117;" +
+                                                "-fx-control-inner-background:#0D1117;" +
+                                                "-fx-border-color:transparent;");
 
-        VBox.setVgrow(
-                scroll,
-                Priority.ALWAYS
-        );
+                VBox.setVgrow(
+                                scroll,
+                                Priority.ALWAYS);
 
-        main.getChildren().addAll(
-                title,
-                subtitle,
-                scroll
-        );
+                main.getChildren().addAll(
+                                title,
+                                subtitle,
+                                scroll);
 
-        root.setCenter(
-                main
-        );
+                root.setCenter(
+                                main);
 
-        // =====================================================
+                // =====================================================
+                // LOAD CHATS
+                // =====================================================
+
+                loadChats();
+
+                return root;
+        }
+
+        // =========================================================
         // LOAD CHATS
-        // =====================================================
+        // =========================================================
 
-        loadChats();
-
-        return root;
-    }
-
-    // =========================================================
-    // LOAD CHATS
-    // =========================================================
-
-    private void loadChats() {
-
-        chatsContainer
-                .getChildren()
-                .clear();
-
-        try {
-
-            List<Map<String, Object>> chats =
-                    chatController
-                            .getFarmerChats(
-                                    farmerId
-                            );
-
-            if (chats == null ||
-                    chats.isEmpty()) {
-
-                showEmpty(
-                        "No buyer chats yet."
-                );
-
-                return;
-            }
-
-            for (Map<String, Object> chat :
-                    chats) {
+        private void loadChats() {
 
                 chatsContainer
-                        .getChildren()
-                        .add(
-                                createChatCard(
-                                        chat
-                                )
-                        );
-            }
+                                .getChildren()
+                                .clear();
 
-        } catch (Exception e) {
+                try {
 
-            e.printStackTrace();
+                        List<Map<String, Object>> chats = chatController
+                                        .getFarmerChats(
+                                                        farmerId);
 
-            showEmpty(
-                    "Unable to load chats."
-            );
-        }
-    }
+                        if (chats == null ||
+                                        chats.isEmpty()) {
 
-    // =========================================================
-    // CHAT CARD
-    // =========================================================
+                                showEmpty(
+                                                "No buyer chats yet.");
 
-    private VBox createChatCard(
-            Map<String, Object> chat) {
+                                return;
+                        }
 
-        VBox card =
-                new VBox(10);
+                        for (Map<String, Object> chat : chats) {
 
-        card.setMaxWidth(
-                1000
-        );
+                                chatsContainer
+                                                .getChildren()
+                                                .add(
+                                                                createChatCard(
+                                                                                chat));
+                        }
 
-        card.setPadding(
-                new Insets(18)
-        );
+                } catch (Exception e) {
 
-        card.setStyle(
-                "-fx-background-color:#101516;" +
-                "-fx-background-radius:12;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-radius:12;"
-        );
+                        e.printStackTrace();
 
-        // =====================================================
-        // BUYER NAME
-        // =====================================================
-
-        String buyerName =
-                getString(
-                        chat.get("buyerName"),
-                        "Buyer"
-                );
-
-        Label buyer =
-                new Label(
-                        "👤  " + buyerName
-                );
-
-        buyer.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-font-size:18px;" +
-                "-fx-font-weight:bold;"
-        );
-
-        // =====================================================
-        // BUYER UID
-        // =====================================================
-
-        String buyerUid =
-                getString(
-                        chat.get("buyerUid"),
-                        ""
-                );
-
-        Label uid =
-                new Label(
-                        "Buyer ID: "
-                                + shortUid(buyerUid)
-                );
-
-        uid.setStyle(
-                "-fx-text-fill:#777777;" +
-                "-fx-font-size:12px;"
-        );
-
-        // =====================================================
-        // LAST MESSAGE
-        // =====================================================
-
-        String lastMessage =
-                getString(
-                        chat.get("lastMessage"),
-                        "No messages yet"
-                );
-
-        Label message =
-                new Label(
-                        lastMessage
-                );
-
-        message.setWrapText(true);
-
-        message.setMaxWidth(
-                700
-        );
-
-        message.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-font-size:14px;"
-        );
-
-        // =====================================================
-        // UPDATED TIME
-        // =====================================================
-
-        String timeText =
-                "";
-
-        Object updatedAt =
-                chat.get("updatedAt");
-
-        if (updatedAt instanceof
-                com.google.cloud.Timestamp) {
-
-            com.google.cloud.Timestamp timestamp =
-                    (com.google.cloud.Timestamp)
-                            updatedAt;
-
-            timeText =
-                    timestamp.toString();
+                        showEmpty(
+                                        "Unable to load chats.");
+                }
         }
 
-        Label time =
-                new Label(
-                        timeText
-                );
+        // =========================================================
+        // CHAT CARD
+        // =========================================================
 
-        time.setStyle(
-                "-fx-text-fill:#666666;" +
-                "-fx-font-size:11px;"
-        );
+        private VBox createChatCard(
+                        Map<String, Object> chat) {
 
-        // =====================================================
-        // OPEN BUTTON
-        // =====================================================
+                VBox card = new VBox(10);
 
-        Button open =
-                new Button(
-                        "Open Chat →"
-                );
+                card.setMaxWidth(
+                                1000);
 
-        open.setStyle(
-                "-fx-background-color:#68D34A;" +
-                "-fx-text-fill:#081008;" +
-                "-fx-font-weight:bold;" +
-                "-fx-background-radius:8;" +
-                "-fx-padding:9 18;" +
-                "-fx-cursor:hand;"
-        );
+                card.setPadding(
+                                new Insets(18));
 
-        int chatFarmerId =
-                getInt(
-                        chat.get("farmerId")
-                );
+                card.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-background-radius:12;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:12;");
 
-        open.setOnAction(e -> {
+                // =====================================================
+                // BUYER NAME
+                // =====================================================
 
-            openChat(
-                    buyerUid,
-                    buyerName,
-                    chatFarmerId
-            );
-        });
+                String buyerName = getString(
+                                chat.get("buyerName"),
+                                "Buyer");
 
-        HBox bottom =
-                new HBox(15);
+                Label buyer = new Label(
+                                "👤  " + buyerName);
 
-        bottom.setAlignment(
-                Pos.CENTER_LEFT
-        );
+                buyer.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:18px;" +
+                                                "-fx-font-weight:bold;");
 
-        HBox.setHgrow(
-                time,
-                Priority.ALWAYS
-        );
+                // =====================================================
+                // BUYER UID
+                // =====================================================
 
-        bottom.getChildren().addAll(
-                time,
-                open
-        );
+                String buyerUid = getString(
+                                chat.get("buyerUid"),
+                                "");
 
-        card.getChildren().addAll(
-                buyer,
-                uid,
-                message,
-                bottom
-        );
+                Label uid = new Label(
+                                "Buyer ID: "
+                                                + shortUid(buyerUid));
 
-        return card;
-    }
+                uid.setStyle(
+                                "-fx-text-fill:#777777;" +
+                                                "-fx-font-size:12px;");
 
-    // =========================================================
-    // OPEN CHAT
-    // =========================================================
+                // =====================================================
+                // LAST MESSAGE
+                // =====================================================
 
-    private void openChat(
-            String buyerUid,
-            String buyerName,
-            int farmerId) {
+                String lastMessage = getString(
+                                chat.get("lastMessage"),
+                                "No messages yet");
 
-        try {
+                Label message = new Label(
+                                lastMessage);
 
-            FarmerChatPage chatPage =
-                    new FarmerChatPage(
-                            buyerUid,
-                            buyerName,
-                            farmerId
-                    );
+                message.setWrapText(true);
 
-            BorderPane page =
-                    chatPage.getChatPage();
+                message.setMaxWidth(
+                                700);
 
-            Scene scene =
-                    new Scene(
-                            page,
-                            1400,
-                            850
-                    );
+                message.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:14px;");
 
-            LoginPage.mainStage
-                    .setScene(scene);
+                // =====================================================
+                // UPDATED TIME
+                // =====================================================
 
-            LoginPage.mainStage.show();
+                String timeText = "";
 
-        } catch (Exception e) {
+                Object updatedAt = chat.get("updatedAt");
 
-            e.printStackTrace();
+                if (updatedAt instanceof com.google.cloud.Timestamp) {
 
-            showAlert(
-                    Alert.AlertType.ERROR,
-                    "Unable to open chat."
-            );
-        }
-    }
+                        com.google.cloud.Timestamp timestamp = (com.google.cloud.Timestamp) updatedAt;
 
-    // =========================================================
-    // EMPTY
-    // =========================================================
+                        timeText = timestamp.toString();
+                }
 
-    private void showEmpty(
-            String text) {
+                Label time = new Label(
+                                timeText);
 
-        VBox box =
-                new VBox(10);
+                time.setStyle(
+                                "-fx-text-fill:#666666;" +
+                                                "-fx-font-size:11px;");
 
-        box.setAlignment(
-                Pos.CENTER
-        );
+                // =====================================================
+                // OPEN BUTTON
+                // =====================================================
 
-        box.setPadding(
-                new Insets(80)
-        );
+                Button open = new Button(
+                                "Open Chat →");
 
-        Label icon =
-                new Label("💬");
+                open.setStyle(
+                                "-fx-background-color:#68D34A;" +
+                                                "-fx-text-fill:#081008;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-background-radius:8;" +
+                                                "-fx-padding:9 18;" +
+                                                "-fx-cursor:hand;");
 
-        icon.setStyle(
-                "-fx-font-size:45px;"
-        );
+                int chatFarmerId = getInt(
+                                chat.get("farmerId"));
 
-        Label label =
-                new Label(text);
+                open.setOnAction(e -> {
 
-        label.setStyle(
-                "-fx-text-fill:#777777;" +
-                "-fx-font-size:16px;"
-        );
+                        openChat(
+                                        buyerUid,
+                                        buyerName,
+                                        chatFarmerId);
+                });
 
-        box.getChildren().addAll(
-                icon,
-                label
-        );
+                HBox bottom = new HBox(15);
 
-        chatsContainer
-                .getChildren()
-                .add(box);
-    }
+                bottom.setAlignment(
+                                Pos.CENTER_LEFT);
 
-    // =========================================================
-    // STRING
-    // =========================================================
+                HBox.setHgrow(
+                                time,
+                                Priority.ALWAYS);
 
-    private String getString(
-            Object value,
-            String defaultValue) {
+                bottom.getChildren().addAll(
+                                time,
+                                open);
 
-        if (value == null) {
-            return defaultValue;
+                card.getChildren().addAll(
+                                buyer,
+                                uid,
+                                message,
+                                bottom);
+
+                return card;
         }
 
-        String text =
-                String.valueOf(value);
+        // =========================================================
+        // OPEN CHAT
+        // =========================================================
 
-        if (text.trim().isEmpty()) {
-            return defaultValue;
+        private void openChat(
+                        String buyerUid,
+                        String buyerName,
+                        int farmerId) {
+
+                try {
+
+                        FarmerChatPage chatPage = new FarmerChatPage(
+                                        buyerUid,
+                                        buyerName,
+                                        farmerId);
+
+                        BorderPane page = chatPage.getChatPage();
+
+                        Scene scene = new Scene(
+                                        page,
+                                        1400,
+                                        850);
+
+                        LoginPage.mainStage
+                                        .setScene(scene);
+
+                        LoginPage.mainStage.show();
+
+                } catch (Exception e) {
+
+                        e.printStackTrace();
+
+                        showAlert(
+                                        Alert.AlertType.ERROR,
+                                        "Unable to open chat.");
+                }
         }
 
-        return text;
-    }
+        // =========================================================
+        // EMPTY
+        // =========================================================
 
-    // =========================================================
-    // INT
-    // =========================================================
+        private void showEmpty(
+                        String text) {
 
-    private int getInt(
-            Object value) {
+                VBox box = new VBox(10);
 
-        if (value instanceof Number) {
+                box.setAlignment(
+                                Pos.CENTER);
 
-            return ((Number) value)
-                    .intValue();
+                box.setPadding(
+                                new Insets(80));
+
+                Label icon = new Label("💬");
+
+                icon.setStyle(
+                                "-fx-font-size:45px;");
+
+                Label label = new Label(text);
+
+                label.setStyle(
+                                "-fx-text-fill:#777777;" +
+                                                "-fx-font-size:16px;");
+
+                box.getChildren().addAll(
+                                icon,
+                                label);
+
+                chatsContainer
+                                .getChildren()
+                                .add(box);
         }
 
-        try {
+        // =========================================================
+        // STRING
+        // =========================================================
 
-            return Integer.parseInt(
-                    String.valueOf(value)
-            );
+        private String getString(
+                        Object value,
+                        String defaultValue) {
 
-        } catch (Exception e) {
+                if (value == null) {
+                        return defaultValue;
+                }
 
-            return 0;
-        }
-    }
+                String text = String.valueOf(value);
 
-    // =========================================================
-    // SHORT UID
-    // =========================================================
+                if (text.trim().isEmpty()) {
+                        return defaultValue;
+                }
 
-    private String shortUid(
-            String uid) {
-
-        if (uid == null ||
-                uid.isEmpty()) {
-
-            return "Not available";
+                return text;
         }
 
-        if (uid.length() <= 12) {
-            return uid;
+        // =========================================================
+        // INT
+        // =========================================================
+
+        private int getInt(
+                        Object value) {
+
+                if (value instanceof Number) {
+
+                        return ((Number) value)
+                                        .intValue();
+                }
+
+                try {
+
+                        return Integer.parseInt(
+                                        String.valueOf(value));
+
+                } catch (Exception e) {
+
+                        return 0;
+                }
         }
 
-        return uid.substring(
-                0,
-                12
-        ) + "...";
-    }
+        // =========================================================
+        // SHORT UID
+        // =========================================================
 
-    // =========================================================
-    // ALERT
-    // =========================================================
+        private String shortUid(
+                        String uid) {
 
-    private void showAlert(
-            Alert.AlertType type,
-            String message) {
+                if (uid == null ||
+                                uid.isEmpty()) {
 
-        Alert alert =
-                new Alert(type);
+                        return "Not available";
+                }
 
-        alert.setTitle(
-                "AgroBiz"
-        );
+                if (uid.length() <= 12) {
+                        return uid;
+                }
 
-        alert.setHeaderText(
-                null
-        );
+                return uid.substring(
+                                0,
+                                12) + "...";
+        }
 
-        alert.setContentText(
-                message
-        );
+        // =========================================================
+        // ALERT
+        // =========================================================
 
-        alert.showAndWait();
-    }
+        private void showAlert(
+                        Alert.AlertType type,
+                        String message) {
+
+                Alert alert = new Alert(type);
+
+                alert.setTitle(
+                                "AgroBiz");
+
+                alert.setHeaderText(
+                                null);
+
+                alert.setContentText(
+                                message);
+
+                alert.showAndWait();
+        }
 }

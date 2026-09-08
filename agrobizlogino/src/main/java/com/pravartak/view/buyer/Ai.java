@@ -28,913 +28,761 @@ import java.util.concurrent.Executors;
 
 public class Ai {
 
-    // =========================================================
-    // SERVICES
-    // =========================================================
+        // =========================================================
+        // SERVICES
+        // =========================================================
 
-    private final GroqService groqService;
+        private final GroqService groqService;
 
-    // One background thread so the JavaFX UI does not freeze
-    private final ExecutorService executor =
-            Executors.newSingleThreadExecutor();
+        // One background thread so the JavaFX UI does not freeze
+        private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    // =========================================================
-    // UI REFERENCES
-    // =========================================================
+        // =========================================================
+        // UI REFERENCES
+        // =========================================================
 
-    private VBox chatBox;
-    private ScrollPane chatScrollPane;
-    private TextField questionField;
-    private Label statusLabel;
+        private VBox chatBox;
+        private ScrollPane chatScrollPane;
+        private TextField questionField;
+        private Label statusLabel;
 
-    // =========================================================
-    // CONSTRUCTOR
-    // =========================================================
+        // =========================================================
+        // CONSTRUCTOR
+        // =========================================================
 
-    public Ai() {
-        groqService = new GroqService();
-    }
+        public Ai() {
+                groqService = new GroqService();
+        }
 
-    // =========================================================
-    // MAIN SCENE
-    // =========================================================
+        // =========================================================
+        // MAIN SCENE
+        // =========================================================
 
-    public Scene gatAiScene() {
+        public Scene gatAiScene() {
 
-        BorderPane out = new BorderPane();
+                BorderPane out = new BorderPane();
 
-        out.setStyle(
-                "-fx-background-color: #F4F8F3;"
-        );
+                out.setStyle(
+                                "-fx-background-color: #F4F8F3;");
 
-        out.setTop(
-                new buyerTop().createBuyerTop(
-                        "AI Advisor"
-                )
-        );
+                out.setTop(
+                                new buyerTop().createBuyerTop(
+                                                "AI Advisor"));
 
-        out.setBottom(
-                new Footer().createFooter()
-        );
+                out.setBottom(
+                                new Footer().createFooter());
 
-        BorderPane root = new BorderPane();
+                BorderPane root = new BorderPane();
 
-        root.setPadding(
-                new Insets(0)
-        );
+                root.setPadding(
+                                new Insets(0));
 
-        root.setStyle(
-                "-fx-background-color: linear-gradient(to bottom right, #001D14, #003523);" +
-                "-fx-border-color: #1C4F37;"
-        );
+                root.setStyle(
+                                "-fx-background-color: linear-gradient(to bottom right, #001D14, #003523);" +
+                                                "-fx-border-color: #1C4F37;");
 
-        root.setTop(
-                createHeader()
-        );
+                root.setTop(
+                                createHeader());
 
-        root.setCenter(
-                createChatArea()
-        );
+                root.setCenter(
+                                createChatArea());
 
-        root.setBottom(
-                createInputArea(root)
-        );
+                root.setBottom(
+                                createInputArea(root));
 
-        out.setCenter(root);
+                out.setCenter(root);
 
-        return new Scene(out);
-    }
+                return new Scene(out);
+        }
 
-    // =========================================================
-    // HEADER
-    // =========================================================
+        // =========================================================
+        // HEADER
+        // =========================================================
 
-    private VBox createHeader() {
+        private VBox createHeader() {
 
-        Label icon = new Label("✦");
+                Label icon = new Label("✦");
 
-        icon.setStyle(
-                "-fx-font-size: 20px;" +
-                "-fx-text-fill: #69E878;" +
-                "-fx-font-weight: bold;"
-        );
+                icon.setStyle(
+                                "-fx-font-size: 20px;" +
+                                                "-fx-text-fill: #69E878;" +
+                                                "-fx-font-weight: bold;");
 
-        Label title =
-                new Label("AI Buyer Advisor");
+                Label title = new Label("AI Buyer Advisor");
 
-        title.setStyle(
-                "-fx-font-size: 20px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: white;"
-        );
+                title.setStyle(
+                                "-fx-font-size: 20px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-text-fill: white;");
 
-        HBox titleRow =
-                new HBox(
-                        14,
-                        icon,
-                        title
-                );
+                HBox titleRow = new HBox(
+                                14,
+                                icon,
+                                title);
 
-        titleRow.setAlignment(
-                Pos.CENTER_LEFT
-        );
+                titleRow.setAlignment(
+                                Pos.CENTER_LEFT);
 
-        VBox leftHeader =
-                new VBox(titleRow);
+                VBox leftHeader = new VBox(titleRow);
 
-        Region spacer =
-                new Region();
+                Region spacer = new Region();
 
-        HBox.setHgrow(
-                spacer,
-                Priority.ALWAYS
-        );
+                HBox.setHgrow(
+                                spacer,
+                                Priority.ALWAYS);
 
-        Button pastSessions =
-                new Button(
-                        "↶   Past Sessions"
-                );
+                Button pastSessions = new Button(
+                                "↶   Past Sessions");
 
-        pastSessions.setStyle(
-                "-fx-background-color: #073E29;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 15px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 8;" +
-                "-fx-padding: 10 16;"
-        );
+                pastSessions.setStyle(
+                                "-fx-background-color: #073E29;" +
+                                                "-fx-text-fill: white;" +
+                                                "-fx-font-size: 15px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-background-radius: 8;" +
+                                                "-fx-padding: 10 16;");
 
-        // =====================================================
+                // =====================================================
+                // PAST SESSIONS
+                // =====================================================
+
+                pastSessions.setOnAction(
+                                event -> showPastSessions());
+
+                HBox headerRow = new HBox(
+                                leftHeader,
+                                spacer,
+                                pastSessions);
+
+                headerRow.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                VBox header = new VBox(headerRow);
+
+                header.setPadding(
+                                new Insets(
+                                                14,
+                                                18,
+                                                10,
+                                                18));
+
+                return header;
+        }
+
+        // =========================================================
+        // CHAT AREA
+        // =========================================================
+
+        private StackPane createChatArea() {
+
+                chatBox = new VBox(12);
+
+                chatBox.setAlignment(
+                                Pos.TOP_CENTER);
+
+                chatBox.setPadding(
+                                new Insets(20));
+
+                // =====================================================
+                // WELCOME ICON
+                // =====================================================
+
+                Label plantIcon = new Label("🛒");
+
+                plantIcon.setStyle(
+                                "-fx-font-size: 62px;" +
+                                                "-fx-background-color: #0B3D27;" +
+                                                "-fx-background-radius: 50%;" +
+                                                "-fx-padding: 24;");
+
+                // =====================================================
+                // WELCOME TITLE
+                // =====================================================
+
+                Label welcome = new Label(
+                                "Hello! I'm your AI Buyer Advisor");
+
+                welcome.setStyle(
+                                "-fx-font-size: 27px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-text-fill: white;");
+
+                // =====================================================
+                // WELCOME DESCRIPTION
+                // =====================================================
+
+                Label helpText = new Label(
+                                "Ask about agricultural markets, crop prices,\n"
+                                                + "produce quality, procurement, storage, or logistics.");
+
+                helpText.setAlignment(
+                                Pos.CENTER);
+
+                helpText.setStyle(
+                                "-fx-font-size: 17px;" +
+                                                "-fx-text-fill: #A8B9B0;");
+
+                VBox welcomeBox = new VBox(
+                                16,
+                                plantIcon,
+                                welcome,
+                                helpText);
+
+                welcomeBox.setAlignment(
+                                Pos.CENTER);
+
+                chatBox.getChildren().add(
+                                welcomeBox);
+
+                // =====================================================
+                // SCROLL PANE
+                // =====================================================
+
+                chatScrollPane = new ScrollPane(
+                                chatBox);
+
+                chatScrollPane.setFitToWidth(
+                                true);
+
+                chatScrollPane.setFitToHeight(
+                                false);
+
+                chatScrollPane.setHbarPolicy(
+                                ScrollPane.ScrollBarPolicy.NEVER);
+
+                chatScrollPane.setVbarPolicy(
+                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+                chatScrollPane.setStyle(
+                                "-fx-background-color: transparent;" +
+                                                "-fx-background: #0D1117;");
+
+                StackPane center = new StackPane(
+                                chatScrollPane);
+
+                center.setPadding(
+                                new Insets(
+                                                0,
+                                                10,
+                                                5,
+                                                10));
+
+                return center;
+        }
+
+        // =========================================================
+        // INPUT AREA
+        // =========================================================
+
+        private VBox createInputArea(
+                        BorderPane root) {
+
+                // =====================================================
+                // UPLOAD BUTTON
+                // =====================================================
+
+                Button uploadButton = new Button("+");
+
+                uploadButton.setStyle(
+                                "-fx-background-color: transparent;" +
+                                                "-fx-border-color: #377653;" +
+                                                "-fx-border-radius: 8;" +
+                                                "-fx-text-fill: white;" +
+                                                "-fx-font-size: 24px;" +
+                                                "-fx-padding: 7 12;");
+
+                uploadButton.setOnAction(
+                                event -> uploadImage(
+                                                root.getScene().getWindow()));
+
+                // =====================================================
+                // QUESTION FIELD
+                // =====================================================
+
+                questionField = new TextField();
+
+                questionField.setPromptText(
+                                "Ask about agricultural markets, prices, or buying...");
+
+                questionField.setStyle(
+                                "-fx-background-color: transparent;" +
+                                                "-fx-text-fill: white;" +
+                                                "-fx-prompt-text-fill: #A0B3A8;" +
+                                                "-fx-font-size: 16px;");
+
+                // Press ENTER
+                questionField.setOnAction(
+                                event -> sendQuestion());
+
+                // =====================================================
+                // SEND BUTTON
+                // =====================================================
+
+                Button sendButton = new Button("➤");
+
+                sendButton.setStyle(
+                                "-fx-background-color: #63E66D;" +
+                                                "-fx-text-fill: #002D16;" +
+                                                "-fx-font-size: 24px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-background-radius: 8;" +
+                                                "-fx-padding: 7 14;");
+
+                sendButton.setOnAction(
+                                event -> sendQuestion());
+
+                // =====================================================
+                // INPUT BOX
+                // =====================================================
+
+                HBox inputBox = new HBox(
+                                12,
+                                uploadButton,
+                                questionField,
+                                sendButton);
+
+                inputBox.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                inputBox.setPadding(
+                                new Insets(
+                                                8,
+                                                12,
+                                                8,
+                                                12));
+
+                HBox.setHgrow(
+                                questionField,
+                                Priority.ALWAYS);
+
+                inputBox.setStyle(
+                                "-fx-background-color: #06351F;" +
+                                                "-fx-border-color: #29633F;" +
+                                                "-fx-border-radius: 9;" +
+                                                "-fx-background-radius: 9;");
+
+                // =====================================================
+                // STATUS
+                // =====================================================
+
+                statusLabel = new Label();
+
+                statusLabel.setStyle(
+                                "-fx-text-fill: #98B5A2;" +
+                                                "-fx-font-size: 13px;");
+
+                // =====================================================
+                // WARNING
+                // =====================================================
+
+                Label warning = new Label(
+                                "🔒 AI Assistant can make mistakes. "
+                                                + "Please verify important market information.");
+
+                warning.setStyle(
+                                "-fx-text-fill: #91A79A;" +
+                                                "-fx-font-size: 13px;");
+
+                // =====================================================
+                // BOTTOM
+                // =====================================================
+
+                VBox bottom = new VBox(
+                                7,
+                                inputBox,
+                                statusLabel);
+
+                bottom.setAlignment(
+                                Pos.CENTER);
+
+                bottom.setPadding(
+                                new Insets(
+                                                3,
+                                                8,
+                                                6,
+                                                8));
+
+                return bottom;
+        }
+
+        // =========================================================
+        // SEND QUESTION
+        // =========================================================
+
+        private void sendQuestion() {
+
+                if (questionField == null) {
+                        return;
+                }
+
+                String question = questionField
+                                .getText()
+                                .trim();
+
+                // =====================================================
+                // EMPTY QUESTION
+                // =====================================================
+
+                if (question.isEmpty()) {
+
+                        setStatus(
+                                        "Please type a question first.");
+
+                        return;
+                }
+
+                // =====================================================
+                // ADD USER MESSAGE
+                // =====================================================
+
+                addUserMessage(question);
+
+                // Clear input immediately
+                questionField.clear();
+
+                // =====================================================
+                // STATUS
+                // =====================================================
+
+                setStatus(
+                                "AI is preparing your answer...");
+
+                // =====================================================
+                // DISABLE INPUT WHILE REQUEST IS RUNNING
+                // =====================================================
+
+                questionField.setDisable(true);
+
+                // =====================================================
+                // CALL GROQ IN BACKGROUND
+                // =====================================================
+
+                executor.submit(
+                                () -> {
+
+                                        try {
+
+                                                String answer = groqService.askBuyerQuestion(
+                                                                question);
+
+                                                Platform.runLater(
+                                                                () -> {
+
+                                                                        addAIMessage(answer);
+
+                                                                        setStatus(
+                                                                                        "Response generated.");
+
+                                                                        questionField.setDisable(
+                                                                                        false);
+
+                                                                        questionField.requestFocus();
+
+                                                                        scrollToBottom();
+                                                                });
+
+                                        } catch (Exception e) {
+
+                                                e.printStackTrace();
+
+                                                Platform.runLater(
+                                                                () -> {
+
+                                                                        addAIMessage(
+                                                                                        "I couldn't generate a response right now.\n\n"
+                                                                                                        + "Please try again in a moment.");
+
+                                                                        setStatus(
+                                                                                        "AI request failed: "
+                                                                                                        + getSafeErrorMessage(
+                                                                                                                        e));
+
+                                                                        questionField.setDisable(
+                                                                                        false);
+
+                                                                        questionField.requestFocus();
+
+                                                                        scrollToBottom();
+                                                                });
+                                        }
+                                });
+        }
+
+        // =========================================================
+        // USER MESSAGE
+        // =========================================================
+
+        private void addUserMessage(
+                        String question) {
+
+                Label userMessage = new Label(
+                                "You\n\n" + question);
+
+                userMessage.setWrapText(
+                                true);
+
+                userMessage.setMaxWidth(
+                                650);
+
+                userMessage.setStyle(
+                                "-fx-background-color: #125C31;" +
+                                                "-fx-text-fill: white;" +
+                                                "-fx-background-radius: 12;" +
+                                                "-fx-padding: 12;" +
+                                                "-fx-font-size: 15px;");
+
+                HBox container = new HBox(
+                                userMessage);
+
+                container.setAlignment(
+                                Pos.CENTER_RIGHT);
+
+                container.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                chatBox.getChildren().add(
+                                container);
+
+                scrollToBottom();
+        }
+
+        // =========================================================
+        // AI MESSAGE
+        // =========================================================
+
+        private void addAIMessage(
+                        String answer) {
+
+                if (answer == null ||
+                                answer.isBlank()) {
+
+                        answer = "I couldn't generate a useful answer for that question.";
+                }
+
+                Label aiMessage = new Label(
+                                "AI Buyer Advisor\n\n"
+                                                + answer);
+
+                aiMessage.setWrapText(
+                                true);
+
+                aiMessage.setMaxWidth(
+                                700);
+
+                aiMessage.setStyle(
+                                "-fx-background-color: #163C29;" +
+                                                "-fx-text-fill: #E8F5E9;" +
+                                                "-fx-background-radius: 12;" +
+                                                "-fx-padding: 14;" +
+                                                "-fx-font-size: 15px;");
+
+                HBox container = new HBox(
+                                aiMessage);
+
+                container.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                container.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                chatBox.getChildren().add(
+                                container);
+
+                scrollToBottom();
+        }
+
+        // =========================================================
+        // AUTOMATIC SCROLL
+        // =========================================================
+
+        private void scrollToBottom() {
+
+                if (chatScrollPane == null) {
+                        return;
+                }
+
+                Platform.runLater(
+                                () -> {
+
+                                        chatScrollPane.layout();
+
+                                        chatScrollPane.setVvalue(
+                                                        1.0);
+                                });
+        }
+
+        // =========================================================
         // PAST SESSIONS
-        // =====================================================
+        // =========================================================
 
-        pastSessions.setOnAction(
-                event -> showPastSessions()
-        );
+        private void showPastSessions() {
 
-        HBox headerRow =
-                new HBox(
-                        leftHeader,
-                        spacer,
-                        pastSessions
-                );
+                // For now we keep the existing project behaviour
+                // without requiring a separate controller.
 
-        headerRow.setAlignment(
-                Pos.CENTER_LEFT
-        );
+                addAIMessage(
+                                "Past Sessions\n\n"
+                                                + "No saved buyer AI sessions are available yet.");
 
-        VBox header =
-                new VBox(headerRow);
+                setStatus(
+                                "Past Sessions opened.");
 
-        header.setPadding(
-                new Insets(
-                        14,
-                        18,
-                        10,
-                        18
-                )
-        );
+                scrollToBottom();
+        }
 
-        return header;
-    }
+        // =========================================================
+        // IMAGE UPLOAD
+        // =========================================================
 
-    // =========================================================
-    // CHAT AREA
-    // =========================================================
+        private void uploadImage(
+                        Window owner) {
 
-    private StackPane createChatArea() {
+                FileChooser chooser = new FileChooser();
 
-        chatBox =
-                new VBox(12);
+                chooser.setTitle(
+                                "Select Crop or Produce Image");
 
-        chatBox.setAlignment(
-                Pos.TOP_CENTER
-        );
+                chooser.getExtensionFilters().add(
+                                new FileChooser.ExtensionFilter(
+                                                "Image Files",
+                                                "*.png",
+                                                "*.jpg",
+                                                "*.jpeg",
+                                                "*.webp"));
 
-        chatBox.setPadding(
-                new Insets(20)
-        );
+                File selectedFile = chooser.showOpenDialog(
+                                owner);
 
-        // =====================================================
-        // WELCOME ICON
-        // =====================================================
+                if (selectedFile == null) {
 
-        Label plantIcon =
-                new Label("🛒");
+                        return;
+                }
 
-        plantIcon.setStyle(
-                "-fx-font-size: 62px;" +
-                "-fx-background-color: #0B3D27;" +
-                "-fx-background-radius: 50%;" +
-                "-fx-padding: 24;"
-        );
+                Path imagePath = selectedFile.toPath();
 
-        // =====================================================
-        // WELCOME TITLE
-        // =====================================================
+                setStatus(
+                                "Selected image: "
+                                                + selectedFile.getName());
 
-        Label welcome =
-                new Label(
-                        "Hello! I'm your AI Buyer Advisor"
-                );
+                // =====================================================
+                // IMAGE QUESTION
+                // =====================================================
 
-        welcome.setStyle(
-                "-fx-font-size: 27px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: white;"
-        );
+                String question = "I have uploaded this agricultural produce image. "
+                                + "As a buyer, help me understand the visible "
+                                + "quality, condition, possible defects, grading "
+                                + "considerations, and buying-related points. "
+                                + "Do not make a certain diagnosis from the image alone.";
 
-        // =====================================================
-        // WELCOME DESCRIPTION
-        // =====================================================
+                addUserMessage(
+                                "Image uploaded: "
+                                                + selectedFile.getName());
 
-        Label helpText =
-                new Label(
-                        "Ask about agricultural markets, crop prices,\n"
-                        + "produce quality, procurement, storage, or logistics."
-                );
+                setStatus(
+                                "Analyzing uploaded image...");
 
-        helpText.setAlignment(
-                Pos.CENTER
-        );
+                questionField.setDisable(
+                                true);
 
-        helpText.setStyle(
-                "-fx-font-size: 17px;" +
-                "-fx-text-fill: #A8B9B0;"
-        );
+                // =====================================================
+                // SEND IMAGE TO GROQ
+                // =====================================================
 
-        VBox welcomeBox =
-                new VBox(
-                        16,
-                        plantIcon,
-                        welcome,
-                        helpText
-                );
+                executor.submit(
+                                () -> {
 
-        welcomeBox.setAlignment(
-                Pos.CENTER
-        );
+                                        try {
 
-        chatBox.getChildren().add(
-                welcomeBox
-        );
+                                                String answer = groqService.askBuyerQuestionWithImage(
+                                                                question,
+                                                                imagePath);
 
-        // =====================================================
-        // SCROLL PANE
-        // =====================================================
+                                                Platform.runLater(
+                                                                () -> {
 
-        chatScrollPane =
-                new ScrollPane(
-                        chatBox
-                );
+                                                                        addAIMessage(
+                                                                                        answer);
 
-        chatScrollPane.setFitToWidth(
-                true
-        );
+                                                                        setStatus(
+                                                                                        "Image analysis completed.");
 
-        chatScrollPane.setFitToHeight(
-                false
-        );
+                                                                        questionField.setDisable(
+                                                                                        false);
 
-        chatScrollPane.setHbarPolicy(
-                ScrollPane.ScrollBarPolicy.NEVER
-        );
+                                                                        questionField.requestFocus();
 
-        chatScrollPane.setVbarPolicy(
-                ScrollPane.ScrollBarPolicy.AS_NEEDED
-        );
+                                                                        scrollToBottom();
+                                                                });
 
-        chatScrollPane.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-background: #0D1117;"
-        );
+                                        } catch (Exception e) {
 
-        StackPane center =
-                new StackPane(
-                        chatScrollPane
-                );
+                                                e.printStackTrace();
 
-        center.setPadding(
-                new Insets(
-                        0,
-                        10,
-                        5,
-                        10
-                )
-        );
+                                                Platform.runLater(
+                                                                () -> {
 
-        return center;
-    }
+                                                                        addAIMessage(
+                                                                                        "I couldn't analyze the image right now.");
 
-    // =========================================================
-    // INPUT AREA
-    // =========================================================
+                                                                        setStatus(
+                                                                                        "Image analysis failed: "
+                                                                                                        + getSafeErrorMessage(
+                                                                                                                        e));
 
-    private VBox createInputArea(
-            BorderPane root) {
+                                                                        questionField.setDisable(
+                                                                                        false);
 
-        // =====================================================
-        // UPLOAD BUTTON
-        // =====================================================
+                                                                        questionField.requestFocus();
 
-        Button uploadButton =
-                new Button("▧");
+                                                                        scrollToBottom();
+                                                                });
+                                        }
+                                });
+        }
 
-        uploadButton.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-border-color: #377653;" +
-                "-fx-border-radius: 8;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 24px;" +
-                "-fx-padding: 7 12;"
-        );
-
-        uploadButton.setOnAction(
-                event ->
-                        uploadImage(
-                                root.getScene().getWindow()
-                        )
-        );
-
-        // =====================================================
-        // QUESTION FIELD
-        // =====================================================
-
-        questionField =
-                new TextField();
-
-        questionField.setPromptText(
-                "Ask about agricultural markets, prices, or buying..."
-        );
-
-        questionField.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-text-fill: white;" +
-                "-fx-prompt-text-fill: #A0B3A8;" +
-                "-fx-font-size: 16px;"
-        );
-
-        // Press ENTER
-        questionField.setOnAction(
-                event ->
-                        sendQuestion()
-        );
-
-        // =====================================================
-        // SEND BUTTON
-        // =====================================================
-
-        Button sendButton =
-                new Button("➤");
-
-        sendButton.setStyle(
-                "-fx-background-color: #63E66D;" +
-                "-fx-text-fill: #002D16;" +
-                "-fx-font-size: 24px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 8;" +
-                "-fx-padding: 7 14;"
-        );
-
-        sendButton.setOnAction(
-                event ->
-                        sendQuestion()
-        );
-
-        // =====================================================
-        // INPUT BOX
-        // =====================================================
-
-        HBox inputBox =
-                new HBox(
-                        12,
-                        uploadButton,
-                        questionField,
-                        sendButton
-                );
-
-        inputBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        inputBox.setPadding(
-                new Insets(
-                        8,
-                        12,
-                        8,
-                        12
-                )
-        );
-
-        HBox.setHgrow(
-                questionField,
-                Priority.ALWAYS
-        );
-
-        inputBox.setStyle(
-                "-fx-background-color: #06351F;" +
-                "-fx-border-color: #29633F;" +
-                "-fx-border-radius: 9;" +
-                "-fx-background-radius: 9;"
-        );
-
-        // =====================================================
+        // =========================================================
         // STATUS
-        // =====================================================
+        // =========================================================
 
-        statusLabel =
-                new Label();
+        private void setStatus(
+                        String message) {
 
-        statusLabel.setStyle(
-                "-fx-text-fill: #98B5A2;" +
-                "-fx-font-size: 13px;"
-        );
-
-        // =====================================================
-        // WARNING
-        // =====================================================
-
-        Label warning =
-                new Label(
-                        "🔒 AI Assistant can make mistakes. "
-                        + "Please verify important market information."
-                );
-
-        warning.setStyle(
-                "-fx-text-fill: #91A79A;" +
-                "-fx-font-size: 13px;"
-        );
-
-        // =====================================================
-        // BOTTOM
-        // =====================================================
-
-        VBox bottom =
-                new VBox(
-                        7,
-                        inputBox,
-                        statusLabel,
-                        warning
-                );
-
-        bottom.setAlignment(
-                Pos.CENTER
-        );
-
-        bottom.setPadding(
-                new Insets(
-                        3,
-                        8,
-                        6,
-                        8
-                )
-        );
-
-        return bottom;
-    }
-
-    // =========================================================
-    // SEND QUESTION
-    // =========================================================
-
-    private void sendQuestion() {
-
-        if (questionField == null) {
-            return;
-        }
-
-        String question =
-                questionField
-                        .getText()
-                        .trim();
-
-        // =====================================================
-        // EMPTY QUESTION
-        // =====================================================
-
-        if (question.isEmpty()) {
-
-            setStatus(
-                    "Please type a question first."
-            );
-
-            return;
-        }
-
-        // =====================================================
-        // ADD USER MESSAGE
-        // =====================================================
-
-        addUserMessage(question);
-
-        // Clear input immediately
-        questionField.clear();
-
-        // =====================================================
-        // STATUS
-        // =====================================================
-
-        setStatus(
-                "AI is preparing your answer..."
-        );
-
-        // =====================================================
-        // DISABLE INPUT WHILE REQUEST IS RUNNING
-        // =====================================================
-
-        questionField.setDisable(true);
-
-        // =====================================================
-        // CALL GROQ IN BACKGROUND
-        // =====================================================
-
-        executor.submit(
-                () -> {
-
-                    try {
-
-                        String answer =
-                                groqService.askBuyerQuestion(
-                                        question
-                                );
-
-                        Platform.runLater(
+                Platform.runLater(
                                 () -> {
 
-                                    addAIMessage(answer);
+                                        if (statusLabel != null) {
 
-                                    setStatus(
-                                            "Response generated."
-                                    );
+                                                statusLabel.setText(
+                                                                message);
+                                        }
+                                });
+        }
 
-                                    questionField.setDisable(
-                                            false
-                                    );
+        // =========================================================
+        // ERROR MESSAGE
+        // =========================================================
 
-                                    questionField.requestFocus();
+        private String getSafeErrorMessage(
+                        Exception e) {
 
-                                    scrollToBottom();
-                                }
-                        );
+                if (e == null ||
+                                e.getMessage() == null ||
+                                e.getMessage().isBlank()) {
 
-                    } catch (Exception e) {
-
-                        e.printStackTrace();
-
-                        Platform.runLater(
-                                () -> {
-
-                                    addAIMessage(
-                                            "I couldn't generate a response right now.\n\n"
-                                            + "Please try again in a moment."
-                                    );
-
-                                    setStatus(
-                                            "AI request failed: "
-                                            + getSafeErrorMessage(e)
-                                    );
-
-                                    questionField.setDisable(
-                                            false
-                                    );
-
-                                    questionField.requestFocus();
-
-                                    scrollToBottom();
-                                }
-                        );
-                    }
+                        return "Please try again.";
                 }
-        );
-    }
 
-    // =========================================================
-    // USER MESSAGE
-    // =========================================================
+                String message = e.getMessage();
 
-    private void addUserMessage(
-            String question) {
+                // Avoid dumping a huge API response into the UI
+                if (message.length() > 180) {
 
-        Label userMessage =
-                new Label(
-                        "You\n\n" + question
-                );
-
-        userMessage.setWrapText(
-                true
-        );
-
-        userMessage.setMaxWidth(
-                650
-        );
-
-        userMessage.setStyle(
-                "-fx-background-color: #125C31;" +
-                "-fx-text-fill: white;" +
-                "-fx-background-radius: 12;" +
-                "-fx-padding: 12;" +
-                "-fx-font-size: 15px;"
-        );
-
-        HBox container =
-                new HBox(
-                        userMessage
-                );
-
-        container.setAlignment(
-                Pos.CENTER_RIGHT
-        );
-
-        container.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        chatBox.getChildren().add(
-                container
-        );
-
-        scrollToBottom();
-    }
-
-    // =========================================================
-    // AI MESSAGE
-    // =========================================================
-
-    private void addAIMessage(
-            String answer) {
-
-        if (answer == null ||
-                answer.isBlank()) {
-
-            answer =
-                    "I couldn't generate a useful answer for that question.";
-        }
-
-        Label aiMessage =
-                new Label(
-                        "AI Buyer Advisor\n\n"
-                        + answer
-                );
-
-        aiMessage.setWrapText(
-                true
-        );
-
-        aiMessage.setMaxWidth(
-                700
-        );
-
-        aiMessage.setStyle(
-                "-fx-background-color: #163C29;" +
-                "-fx-text-fill: #E8F5E9;" +
-                "-fx-background-radius: 12;" +
-                "-fx-padding: 14;" +
-                "-fx-font-size: 15px;"
-        );
-
-        HBox container =
-                new HBox(
-                        aiMessage
-                );
-
-        container.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        container.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        chatBox.getChildren().add(
-                container
-        );
-
-        scrollToBottom();
-    }
-
-    // =========================================================
-    // AUTOMATIC SCROLL
-    // =========================================================
-
-    private void scrollToBottom() {
-
-        if (chatScrollPane == null) {
-            return;
-        }
-
-        Platform.runLater(
-                () -> {
-
-                    chatScrollPane.layout();
-
-                    chatScrollPane.setVvalue(
-                            1.0
-                    );
+                        message = message.substring(
+                                        0,
+                                        180)
+                                        + "...";
                 }
-        );
-    }
 
-    // =========================================================
-    // PAST SESSIONS
-    // =========================================================
-
-    private void showPastSessions() {
-
-        // For now we keep the existing project behaviour
-        // without requiring a separate controller.
-
-        addAIMessage(
-                "Past Sessions\n\n"
-                + "No saved buyer AI sessions are available yet."
-        );
-
-        setStatus(
-                "Past Sessions opened."
-        );
-
-        scrollToBottom();
-    }
-
-    // =========================================================
-    // IMAGE UPLOAD
-    // =========================================================
-
-    private void uploadImage(
-            Window owner) {
-
-        FileChooser chooser =
-                new FileChooser();
-
-        chooser.setTitle(
-                "Select Crop or Produce Image"
-        );
-
-        chooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter(
-                        "Image Files",
-                        "*.png",
-                        "*.jpg",
-                        "*.jpeg",
-                        "*.webp"
-                )
-        );
-
-        File selectedFile =
-                chooser.showOpenDialog(
-                        owner
-                );
-
-        if (selectedFile == null) {
-
-            return;
+                return message;
         }
-
-        Path imagePath =
-                selectedFile.toPath();
-
-        setStatus(
-                "Selected image: "
-                + selectedFile.getName()
-        );
-
-        // =====================================================
-        // IMAGE QUESTION
-        // =====================================================
-
-        String question =
-                "I have uploaded this agricultural produce image. "
-                + "As a buyer, help me understand the visible "
-                + "quality, condition, possible defects, grading "
-                + "considerations, and buying-related points. "
-                + "Do not make a certain diagnosis from the image alone.";
-
-        addUserMessage(
-                "Image uploaded: "
-                + selectedFile.getName()
-        );
-
-        setStatus(
-                "Analyzing uploaded image..."
-        );
-
-        questionField.setDisable(
-                true
-        );
-
-        // =====================================================
-        // SEND IMAGE TO GROQ
-        // =====================================================
-
-        executor.submit(
-                () -> {
-
-                    try {
-
-                        String answer =
-                                groqService.askBuyerQuestionWithImage(
-                                        question,
-                                        imagePath
-                                );
-
-                        Platform.runLater(
-                                () -> {
-
-                                    addAIMessage(
-                                            answer
-                                    );
-
-                                    setStatus(
-                                            "Image analysis completed."
-                                    );
-
-                                    questionField.setDisable(
-                                            false
-                                    );
-
-                                    questionField.requestFocus();
-
-                                    scrollToBottom();
-                                }
-                        );
-
-                    } catch (Exception e) {
-
-                        e.printStackTrace();
-
-                        Platform.runLater(
-                                () -> {
-
-                                    addAIMessage(
-                                            "I couldn't analyze the image right now."
-                                    );
-
-                                    setStatus(
-                                            "Image analysis failed: "
-                                            + getSafeErrorMessage(e)
-                                    );
-
-                                    questionField.setDisable(
-                                            false
-                                    );
-
-                                    questionField.requestFocus();
-
-                                    scrollToBottom();
-                                }
-                        );
-                    }
-                }
-        );
-    }
-
-    // =========================================================
-    // STATUS
-    // =========================================================
-
-    private void setStatus(
-            String message) {
-
-        Platform.runLater(
-                () -> {
-
-                    if (statusLabel != null) {
-
-                        statusLabel.setText(
-                                message
-                        );
-                    }
-                }
-        );
-    }
-
-    // =========================================================
-    // ERROR MESSAGE
-    // =========================================================
-
-    private String getSafeErrorMessage(
-            Exception e) {
-
-        if (e == null ||
-                e.getMessage() == null ||
-                e.getMessage().isBlank()) {
-
-            return "Please try again.";
-        }
-
-        String message =
-                e.getMessage();
-
-        // Avoid dumping a huge API response into the UI
-        if (message.length() > 180) {
-
-            message =
-                    message.substring(
-                            0,
-                            180
-                    )
-                    + "...";
-        }
-
-        return message;
-    }
 }

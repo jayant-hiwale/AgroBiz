@@ -8,8 +8,7 @@ import java.util.List;
 
 public class CartManager {
 
-    private static final List<CartItem> cartItems =
-            new ArrayList<>();
+    private static final List<CartItem> cartItems = new ArrayList<>();
 
     // =====================================================
     // ADD PRODUCT
@@ -25,11 +24,9 @@ public class CartManager {
 
         for (CartItem item : cartItems) {
 
-            if (item.getProduct().getProductId()
-                    == product.getProductId()) {
+            if (item.getProduct().getProductId() == product.getProductId()) {
 
-                double newQuantity =
-                        item.getQuantity() + quantity;
+                double newQuantity = item.getQuantity() + quantity;
 
                 if (newQuantity > product.getQuantity()) {
                     newQuantity = product.getQuantity();
@@ -44,9 +41,7 @@ public class CartManager {
         cartItems.add(
                 new CartItem(
                         product,
-                        quantity
-                )
-        );
+                        quantity));
     }
 
     // =====================================================
@@ -61,11 +56,8 @@ public class CartManager {
         }
 
         cartItems.removeIf(
-                item ->
-                        item.getProduct()
-                                .getProductId()
-                                == product.getProductId()
-        );
+                item -> item.getProduct()
+                        .getProductId() == product.getProductId());
     }
 
     // =====================================================
@@ -82,8 +74,7 @@ public class CartManager {
 
         for (CartItem item : cartItems) {
 
-            if (item.getProduct().getProductId()
-                    == product.getProductId()) {
+            if (item.getProduct().getProductId() == product.getProductId()) {
 
                 if (quantity <= 0) {
 
@@ -110,8 +101,7 @@ public class CartManager {
     public static List<CartItem> getCartItems() {
 
         return new ArrayList<>(
-                cartItems
-        );
+                cartItems);
     }
 
     // =====================================================
@@ -168,8 +158,7 @@ public class CartManager {
 
         for (CartItem item : cartItems) {
 
-            if (item.getProduct().getProductId()
-                    == product.getProductId()) {
+            if (item.getProduct().getProductId() == product.getProductId()) {
 
                 return true;
             }
