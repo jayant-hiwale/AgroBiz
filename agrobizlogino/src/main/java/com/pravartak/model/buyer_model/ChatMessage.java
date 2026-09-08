@@ -88,33 +88,27 @@ public class ChatMessage {
 
     public Map<String, Object> toMap() {
 
-        Map<String, Object> map =
-                new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
 
         map.put(
                 "messageId",
-                messageId
-        );
+                messageId);
 
         map.put(
                 "senderId",
-                senderId
-        );
+                senderId);
 
         map.put(
                 "senderType",
-                senderType
-        );
+                senderType);
 
         map.put(
                 "message",
-                message
-        );
+                message);
 
         map.put(
                 "timestamp",
-                timestamp
-        );
+                timestamp);
 
         return map;
     }

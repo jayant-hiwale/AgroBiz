@@ -235,68 +235,55 @@ public class Product {
 
     public Map<String, Object> toMap() {
 
-        Map<String, Object> map =
-                new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
 
         map.put(
                 "productId",
-                productId
-        );
+                productId);
 
         map.put(
                 "farmerId",
-                farmerId
-        );
+                farmerId);
 
         map.put(
                 "productName",
-                productName
-        );
+                productName);
 
         map.put(
                 "category",
-                category
-        );
+                category);
 
         map.put(
                 "description",
-                description
-        );
+                description);
 
         map.put(
                 "price",
-                price
-        );
+                price);
 
         map.put(
                 "unit",
-                unit
-        );
+                unit);
 
         map.put(
                 "quantity",
-                quantity
-        );
+                quantity);
 
         map.put(
                 "location",
-                location
-        );
+                location);
 
         map.put(
                 "imagePath",
-                imagePath
-        );
+                imagePath);
 
         map.put(
                 "status",
-                status
-        );
+                status);
 
         map.put(
                 "orders",
-                orders
-        );
+                orders);
 
         // =================================================
         // ACTIVITY TIMESTAMP
@@ -306,8 +293,7 @@ public class Product {
 
             map.put(
                     "createdAt",
-                    createdAt
-            );
+                    createdAt);
         }
 
         return map;

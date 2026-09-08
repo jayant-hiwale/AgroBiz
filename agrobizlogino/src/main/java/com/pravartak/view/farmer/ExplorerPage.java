@@ -10,7 +10,6 @@ import com.pravartak.view.farmer.common.Footer;
 import com.pravartak.view.farmer.common.NavBar;
 import com.pravartak.view.login.LoginPage;
 
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -33,7 +32,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-
 /**
  * =========================================================
  * EXPLORER PAGE
@@ -51,7 +49,7 @@ import javafx.scene.text.FontWeight;
  * Courses are loaded from:
  *
  * Firestore
- *      courses
+ * courses
  *
  * Farmer selected courses are stored through:
  *
@@ -61,1953 +59,1571 @@ import javafx.scene.text.FontWeight;
  */
 public class ExplorerPage {
 
-        
-
-    // =========================================================
-    // SCENE
-    // =========================================================
-
-    private Scene explorepageScene;
-
-    // =========================================================
-    // DAOs
-    // =========================================================
-
-    private final FirebaseCourseDAO courseDAO;
-
-    private final FarmerLearningDAO farmerLearningDAO;
-
-    // =========================================================
-    // COURSE CONTAINER
-    // =========================================================
-
-    private FlowPane courseContainer;
-
-    // =========================================================
-    // ALL COURSES
-    // =========================================================
-
-    private List<Course> allCourses =
-            new ArrayList<>();
-
-    // =========================================================
-    // CURRENT CATEGORY
-    // =========================================================
-
-    private String selectedCategory =
-            "All Categories";
-
-    // =========================================================
-    // SEARCH FIELD
-    // =========================================================
-
-    private TextField searchField;
-    private int selectedCourseId = -1;
-
-
-    // =========================================================
-    // CONSTRUCTOR
-    // =========================================================
-
-    public ExplorerPage() {
-
-        courseDAO =
-                new FirebaseCourseDAO();
-
-        farmerLearningDAO =
-                new FarmerLearningDAO();
-                selectedCourseId = -1;
-    }
-    public ExplorerPage(int selectedCourseId) {
-    courseDAO = new FirebaseCourseDAO();
-    farmerLearningDAO = new FarmerLearningDAO();
-    this.selectedCourseId = selectedCourseId;
-}
-
-    // =========================================================
-    // GET EXPLORER PAGE
-    // =========================================================
-
-    public Scene getExplorerPage() {
-
-        // =====================================================
-        // MAIN BORDER PANE
-        // =====================================================
-
-        BorderPane borderPane =
-                new BorderPane();
-
-        borderPane.setStyle(
-                "-fx-background-color:#080c0d;"
-        );
-
-
-        // =====================================================
-        // NAVBAR
-        // =====================================================
-
-        borderPane.setTop(
-                new NavBar().createNavbar(
-                        "Explorer"
-                )
-        );
-
-
-        // =====================================================
-        // FOOTER
-        // =====================================================
-
-        borderPane.setBottom(
-                new Footer().createFooter()
-        );
-
-
-        // =====================================================
-        // MAIN CONTENT
-        // =====================================================
-
-        VBox mainVBox =
-                new VBox(25);
-
-        mainVBox.setPadding(
-                new Insets(
-                        35,
-                        45,
-                        45,
-                        45
-                )
-        );
-
-        mainVBox.setAlignment(
-                Pos.TOP_CENTER
-        );
-
-        mainVBox.setStyle(
-                "-fx-background-color:#080c0d;"
-        );
-
-
-        // =====================================================
-        // PAGE TITLE
-        // =====================================================
-
-        Label mainTitle =
-                new Label(
-                        "Explore Farming\n"
-                        + "Courses"
-                );
-
-        mainTitle.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        42
-                )
-        );
-
-        mainTitle.setTextFill(
-                Color.web("#eeeeee")
-        );
-
-        mainTitle.setAlignment(
-                Pos.CENTER
-        );
-
-        mainTitle.setTextAlignment(
-                javafx.scene.text.TextAlignment.CENTER
-        );
-
-
-        // =====================================================
-        // DESCRIPTION
-        // =====================================================
-
-        Label description =
-                new Label(
-                        "Discover practical farming courses, "
-                        + "modern agricultural techniques, and "
-                        + "knowledge to grow your farming business."
-                );
-
-        description.setFont(
-                Font.font(
-                        "Arial",
-                        15
-                )
-        );
-
-        description.setTextFill(
-                Color.web("#aaaaaa")
-        );
-
-        description.setWrapText(true);
-
-        description.setAlignment(
-                Pos.CENTER
-        );
-
-        description.setTextAlignment(
-                javafx.scene.text.TextAlignment.CENTER
-        );
-
-        description.setMaxWidth(
-                750
-        );
-
-
-        // =====================================================
-        // SEARCH FIELD
-        // =====================================================
-
-        searchField =
-                new TextField();
-
-        searchField.setPromptText(
-                "Search courses, categories, difficulty..."
-        );
-
-        searchField.setPrefHeight(
-                48
-        );
-
-        searchField.setPrefWidth(
-                620
-        );
-
-        searchField.setPadding(
-                new Insets(
-                        0,
-                        18,
-                        0,
-                        18
-                )
-        );
-
-        searchField.setStyle(
-                "-fx-background-color:#101516;" +
-                "-fx-text-fill:#eeeeee;" +
-                "-fx-prompt-text-fill:#777777;" +
-                "-fx-border-color:#242b2c;" +
-                "-fx-border-radius:8;" +
-                "-fx-background-radius:8;"
-        );
-
-
-        // =====================================================
-        // SEARCH BUTTON
-        // =====================================================
-
-        Button searchButton =
-                new Button(
-                        "Search"
-                );
-
-        searchButton.setPrefWidth(
-                90
-        );
-
-        searchButton.setPrefHeight(
-                42
-        );
-
-        searchButton.setStyle(
-                "-fx-background-color:#68d34a;" +
-                "-fx-text-fill:#080c0d;" +
-                "-fx-font-weight:bold;" +
-                "-fx-background-radius:6;" +
-                "-fx-cursor:hand;"
-        );
-
-
-        // =====================================================
-        // SEARCH BUTTON HOVER
-        // =====================================================
-
-        searchButton.setOnMouseEntered(
-                e -> {
-
-                    searchButton.setStyle(
-                            "-fx-background-color:#82df68;" +
-                            "-fx-text-fill:#080c0d;" +
-                            "-fx-font-weight:bold;" +
-                            "-fx-background-radius:6;" +
-                            "-fx-cursor:hand;"
-                    );
-                }
-        );
-
-
-        searchButton.setOnMouseExited(
-                e -> {
-
-                    searchButton.setStyle(
-                            "-fx-background-color:#68d34a;" +
-                            "-fx-text-fill:#080c0d;" +
-                            "-fx-font-weight:bold;" +
-                            "-fx-background-radius:6;" +
-                            "-fx-cursor:hand;"
-                    );
-                }
-        );
-
-
-        // =====================================================
-        // SEARCH ACTION
-        // =====================================================
-
-        searchButton.setOnAction(
-                e -> {
-
-                    filterCourses();
-                }
-        );
-
-
-        // =====================================================
-        // SEARCH WHILE TYPING
-        // =====================================================
-
-        searchField.textProperty()
-                .addListener(
-                        (observable,
-                         oldValue,
-                         newValue) -> {
-
-                            filterCourses();
-                        }
-                );
-
-
-        // =====================================================
-        // SEARCH HBOX
-        // =====================================================
-
-        HBox searchHBox =
-                new HBox(8);
-
-        searchHBox.setAlignment(
-                Pos.CENTER
-        );
-
-        searchHBox.setMaxWidth(
-                720
-        );
-
-        searchHBox.setPadding(
-                new Insets(
-                        5,
-                        8,
-                        5,
-                        8
-                )
-        );
-
-        searchHBox.setStyle(
-                "-fx-background-color:#0d1213;" +
-                "-fx-background-radius:10;" +
-                "-fx-border-color:#242b2c;" +
-                "-fx-border-radius:10;"
-        );
-
-        searchHBox.getChildren()
-                .addAll(
-                        searchField,
-                        searchButton
-                );
-
-
-        // =====================================================
-        // CATEGORY FILTERS
-        // =====================================================
-
-        Button allCategories =
-                createCategoryButton(
-                        "All Categories",
-                        true
-                );
-
-        Button poultry =
-                createCategoryButton(
-                        "Poultry",
-                        false
-                );
-
-        Button dairy =
-                createCategoryButton(
-                        "Dairy Cattle",
-                        false
-                );
-
-        Button aquatic =
-                createCategoryButton(
-                        "Aquaculture",
-                        false
-                );
-
-        Button swine =
-                createCategoryButton(
-                        "Swine",
-                        false
-                );
-
-        Button ruminants =
-                createCategoryButton(
-                        "Small Ruminants",
-                        false
-                );
-
-        Button nursery =
-                createCategoryButton(
-                        "Plant Nursery",
-                        false
-                );
-
-
-        // =====================================================
-        // CATEGORY ACTIONS
-        // =====================================================
-
-        allCategories.setOnAction(
-                e -> selectCategory(
-                        "All Categories",
-                        allCategories,
-                        poultry,
-                        dairy,
-                        aquatic,
-                        swine,
-                        ruminants,
-                        nursery
-                )
-        );
-
-        poultry.setOnAction(
-                e -> selectCategory(
-                        "Poultry",
-                        allCategories,
-                        poultry,
-                        dairy,
-                        aquatic,
-                        swine,
-                        ruminants,
-                        nursery
-                )
-        );
-
-        dairy.setOnAction(
-                e -> selectCategory(
-                        "Dairy Cattle",
-                        allCategories,
-                        poultry,
-                        dairy,
-                        aquatic,
-                        swine,
-                        ruminants,
-                        nursery
-                )
-        );
-
-        aquatic.setOnAction(
-                e -> selectCategory(
-                        "Aquaculture",
-                        allCategories,
-                        poultry,
-                        dairy,
-                        aquatic,
-                        swine,
-                        ruminants,
-                        nursery
-                )
-        );
-
-        swine.setOnAction(
-                e -> selectCategory(
-                        "Swine",
-                        allCategories,
-                        poultry,
-                        dairy,
-                        aquatic,
-                        swine,
-                        ruminants,
-                        nursery
-                )
-        );
-
-        ruminants.setOnAction(
-                e -> selectCategory(
-                        "Small Ruminants",
-                        allCategories,
-                        poultry,
-                        dairy,
-                        aquatic,
-                        swine,
-                        ruminants,
-                        nursery
-                )
-        );
-
-        nursery.setOnAction(
-                e -> selectCategory(
-                        "Plant Nursery",
-                        allCategories,
-                        poultry,
-                        dairy,
-                        aquatic,
-                        swine,
-                        ruminants,
-                        nursery
-                )
-        );
-
-
-        // =====================================================
-        // CATEGORY FILTER BOX
-        // =====================================================
-
-        HBox categoryFilterBox =
-                new HBox(10);
-
-        categoryFilterBox.setAlignment(
-                Pos.CENTER
-        );
-
-        categoryFilterBox.setMaxWidth(
-                1050
-        );
-
-        categoryFilterBox.getChildren()
-                .addAll(
-                        allCategories,
-                        poultry,
-                        dairy,
-                        aquatic,
-                        swine,
-                        ruminants,
-                        nursery
-                );
-
-
-        // =====================================================
-        // COURSE SECTION TITLE
-        // =====================================================
-
-        Label courseSectionTitle =
-                new Label(
-                        "Available Courses"
-                );
-
-        courseSectionTitle.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        24
-                )
-        );
-
-        courseSectionTitle.setTextFill(
-                Color.web("#eeeeee")
-        );
-
-
-        // =====================================================
-        // COURSE CONTAINER
-        // =====================================================
-
-        courseContainer =
-                new FlowPane();
-
-        courseContainer.setHgap(
-                20
-        );
-
-        courseContainer.setVgap(
-                20
-        );
-
-        courseContainer.setAlignment(
-                Pos.TOP_CENTER
-        );
-
-        courseContainer.setPrefWrapLength(
-                1000
-        );
-
-        courseContainer.setPadding(
-                new Insets(
-                        5,
-                        0,
-                        25,
-                        0
-                )
-        );
-
-
-        // =====================================================
-        // LOAD COURSES
-        // =====================================================
-
-        loadCourses();
-
-        if (selectedCourseId > 0) {
-
-    List<Course> selectedCourses = new ArrayList<>();
-
-    for (Course course : allCourses) {
-
-        if (course != null &&
-                course.getCourseId() == selectedCourseId) {
-
-            selectedCourses.add(course);
-            break;
-        }
-    }
-
-    allCourses = selectedCourses;
-}
-
-
-        // =====================================================
-        // ADD CONTENT
-        // =====================================================
-
-        mainVBox.getChildren()
-                .addAll(
-                        mainTitle,
-                        description,
-                        searchHBox,
-                        categoryFilterBox,
-                        courseSectionTitle,
-                        courseContainer
-                );
-
-
-        // =====================================================
-        // SCROLL PANE
-        // =====================================================
-
-        ScrollPane scrollPane =
-                new ScrollPane();
-
-        scrollPane.setContent(
-                mainVBox
-        );
-
-        scrollPane.setFitToWidth(
-                true
-        );
-
-        scrollPane.setHbarPolicy(
-                ScrollPane.ScrollBarPolicy.NEVER
-        );
-
-        scrollPane.setVbarPolicy(
-                ScrollPane.ScrollBarPolicy.AS_NEEDED
-        );
-
-        scrollPane.setStyle(
-                "-fx-background-color:#080c0d;" +
-                "-fx-background:#080c0d;"
-        );
-
-
-        // =====================================================
-        // CENTER
-        // =====================================================
-
-        borderPane.setCenter(
-                scrollPane
-        );
-
-
-        // =====================================================
+        // =========================================================
         // SCENE
-        // =====================================================
+        // =========================================================
 
-        explorepageScene =
-                new Scene(
-                        borderPane,
-                        1200,
-                        750
-                );
+        private Scene explorepageScene;
 
-        return explorepageScene;
-    }
+        // =========================================================
+        // DAOs
+        // =========================================================
 
+        private final FirebaseCourseDAO courseDAO;
 
-    // =========================================================
-    // CREATE CATEGORY BUTTON
-    // =========================================================
+        private final FarmerLearningDAO farmerLearningDAO;
 
-    private Button createCategoryButton(
-            String text,
-            boolean active) {
+        // =========================================================
+        // COURSE CONTAINER
+        // =========================================================
 
-        Button button =
-                new Button(text);
+        private FlowPane courseContainer;
 
-        if (active) {
+        // =========================================================
+        // ALL COURSES
+        // =========================================================
 
-            button.setStyle(
-                    "-fx-background-color:#68d34a;" +
-                    "-fx-text-fill:#080c0d;" +
-                    "-fx-font-weight:bold;" +
-                    "-fx-background-radius:6;" +
-                    "-fx-padding:8 14;" +
-                    "-fx-cursor:hand;"
-            );
+        private List<Course> allCourses = new ArrayList<>();
 
-        } else {
+        // =========================================================
+        // CURRENT CATEGORY
+        // =========================================================
 
-            button.setStyle(
-                    "-fx-background-color:#101516;" +
-                    "-fx-text-fill:#aaaaaa;" +
-                    "-fx-border-color:#242b2c;" +
-                    "-fx-border-radius:6;" +
-                    "-fx-background-radius:6;" +
-                    "-fx-padding:8 14;" +
-                    "-fx-cursor:hand;"
-            );
+        private String selectedCategory = "All Categories";
+
+        // =========================================================
+        // SEARCH FIELD
+        // =========================================================
+
+        private TextField searchField;
+        private int selectedCourseId = -1;
+
+        // =========================================================
+        // CONSTRUCTOR
+        // =========================================================
+
+        public ExplorerPage() {
+
+                courseDAO = new FirebaseCourseDAO();
+
+                farmerLearningDAO = new FarmerLearningDAO();
+                selectedCourseId = -1;
         }
 
-        return button;
-    }
-
-
-    // =========================================================
-    // SELECT CATEGORY
-    // =========================================================
-
-    private void selectCategory(
-            String category,
-            Button all,
-            Button poultry,
-            Button dairy,
-            Button aquatic,
-            Button swine,
-            Button ruminants,
-            Button nursery) {
-
-        selectedCategory =
-                category;
-
-
-        // =====================================================
-        // RESET ALL BUTTONS
-        // =====================================================
-
-        Button[] buttons = {
-                all,
-                poultry,
-                dairy,
-                aquatic,
-                swine,
-                ruminants,
-                nursery
-        };
-
-
-        for (Button button : buttons) {
-
-            button.setStyle(
-                    "-fx-background-color:#101516;" +
-                    "-fx-text-fill:#aaaaaa;" +
-                    "-fx-border-color:#242b2c;" +
-                    "-fx-border-radius:6;" +
-                    "-fx-background-radius:6;" +
-                    "-fx-padding:8 14;" +
-                    "-fx-cursor:hand;"
-            );
+        public ExplorerPage(int selectedCourseId) {
+                courseDAO = new FirebaseCourseDAO();
+                farmerLearningDAO = new FarmerLearningDAO();
+                this.selectedCourseId = selectedCourseId;
         }
 
+        // =========================================================
+        // GET EXPLORER PAGE
+        // =========================================================
 
-        // =====================================================
-        // ACTIVE BUTTON
-        // =====================================================
+        public Scene getExplorerPage() {
 
-        for (Button button : buttons) {
+                // =====================================================
+                // MAIN BORDER PANE
+                // =====================================================
 
-            if (button.getText()
-                    .equals(category)) {
+                BorderPane borderPane = new BorderPane();
 
-                button.setStyle(
-                        "-fx-background-color:#68d34a;" +
-                        "-fx-text-fill:#080c0d;" +
-                        "-fx-font-weight:bold;" +
-                        "-fx-background-radius:6;" +
-                        "-fx-padding:8 14;" +
-                        "-fx-cursor:hand;"
-                );
+                borderPane.setStyle(
+                                "-fx-background-color:#080c0d;");
 
-                break;
-            }
-        }
+                // =====================================================
+                // NAVBAR
+                // =====================================================
 
+                borderPane.setTop(
+                                new NavBar().createNavbar(
+                                                "Explorer"));
 
-        // =====================================================
-        // FILTER
-        // =====================================================
+                // =====================================================
+                // FOOTER
+                // =====================================================
 
-        filterCourses();
-    }
+                borderPane.setBottom(
+                                new Footer().createFooter());
 
+                // =====================================================
+                // MAIN CONTENT
+                // =====================================================
 
-    // =========================================================
-    // LOAD COURSES
-    // =========================================================
+                VBox mainVBox = new VBox(25);
 
-//     private void loadCourses() {
+                mainVBox.setPadding(
+                                new Insets(
+                                                35,
+                                                45,
+                                                45,
+                                                45));
 
-//         courseContainer
-//                 .getChildren()
-//                 .clear();
+                mainVBox.setAlignment(
+                                Pos.TOP_CENTER);
 
+                mainVBox.setStyle(
+                                "-fx-background-color:#080c0d;");
 
-//         // =====================================================
-//         // LOADING INDICATOR
-//         // =====================================================
+                // =====================================================
+                // PAGE TITLE
+                // =====================================================
 
-//         ProgressIndicator loading =
-//                 new ProgressIndicator();
+                Label mainTitle = new Label(
+                                "Explore Farming\n"
+                                                + "Courses");
 
-//         loading.setPrefSize(
-//                 45,
-//                 45
-//         );
+                mainTitle.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                42));
 
-//         courseContainer
-//                 .getChildren()
-//                 .add(
-//                         loading
-//                 );
+                mainTitle.setTextFill(
+                                Color.web("#eeeeee"));
 
+                mainTitle.setAlignment(
+                                Pos.CENTER);
 
-//         try {
+                mainTitle.setTextAlignment(
+                                javafx.scene.text.TextAlignment.CENTER);
 
-//             // =================================================
-//             // GET PUBLISHED COURSES
-//             // =================================================
+                // =====================================================
+                // DESCRIPTION
+                // =====================================================
 
-//             allCourses =
-//                     courseDAO
-//                             .getPublishedCourses();
+                Label description = new Label(
+                                "Discover practical farming courses, "
+                                                + "modern agricultural techniques, and "
+                                                + "knowledge to grow your farming business.");
 
+                description.setFont(
+                                Font.font(
+                                                "Arial",
+                                                15));
 
-//             courseContainer
-//                     .getChildren()
-//                     .clear();
+                description.setTextFill(
+                                Color.web("#aaaaaa"));
 
+                description.setWrapText(true);
 
-//             // =================================================
-//             // EMPTY
-//             // =================================================
+                description.setAlignment(
+                                Pos.CENTER);
 
-//             if (allCourses == null ||
-//                     allCourses.isEmpty()) {
+                description.setTextAlignment(
+                                javafx.scene.text.TextAlignment.CENTER);
 
-//                 showEmptyMessage(
-//                         "No courses are available yet."
-//                 );
+                description.setMaxWidth(
+                                750);
 
-//                 return;
-//             }
+                // =====================================================
+                // SEARCH FIELD
+                // =====================================================
 
+                searchField = new TextField();
 
-//             // =================================================
-//             // DISPLAY
-//             // =================================================
+                searchField.setPromptText(
+                                "Search courses, categories, difficulty...");
 
-//             displayCourses(
-//                     allCourses
-//             );
+                searchField.setPrefHeight(
+                                48);
 
+                searchField.setPrefWidth(
+                                620);
 
-//         } catch (Exception e) {
+                searchField.setPadding(
+                                new Insets(
+                                                0,
+                                                18,
+                                                0,
+                                                18));
 
-//             e.printStackTrace();
+                searchField.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-text-fill:#eeeeee;" +
+                                                "-fx-prompt-text-fill:#777777;" +
+                                                "-fx-border-color:#242b2c;" +
+                                                "-fx-border-radius:8;" +
+                                                "-fx-background-radius:8;");
 
+                // =====================================================
+                // SEARCH BUTTON
+                // =====================================================
 
-//             courseContainer
-//                     .getChildren()
-//                     .clear();
+                Button searchButton = new Button(
+                                "Search");
 
+                searchButton.setPrefWidth(
+                                90);
 
-//             showEmptyMessage(
-//                     "Unable to load courses."
-//             );
-//         }
-//     }
-private void loadCourses() {
+                searchButton.setPrefHeight(
+                                42);
 
-    courseContainer
-            .getChildren()
-            .clear();
+                searchButton.setStyle(
+                                "-fx-background-color:#68d34a;" +
+                                                "-fx-text-fill:#080c0d;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-background-radius:6;" +
+                                                "-fx-cursor:hand;");
 
-    ProgressIndicator loading =
-            new ProgressIndicator();
+                // =====================================================
+                // SEARCH BUTTON HOVER
+                // =====================================================
 
-    loading.setPrefSize(
-            45,
-            45
-    );
+                searchButton.setOnMouseEntered(
+                                e -> {
 
-    courseContainer
-            .getChildren()
-            .add(
-                    loading
-            );
+                                        searchButton.setStyle(
+                                                        "-fx-background-color:#82df68;" +
+                                                                        "-fx-text-fill:#080c0d;" +
+                                                                        "-fx-font-weight:bold;" +
+                                                                        "-fx-background-radius:6;" +
+                                                                        "-fx-cursor:hand;");
+                                });
 
-    try {
+                searchButton.setOnMouseExited(
+                                e -> {
 
-        // =================================================
-        // GET ALL PUBLISHED COURSES
-        // =================================================
+                                        searchButton.setStyle(
+                                                        "-fx-background-color:#68d34a;" +
+                                                                        "-fx-text-fill:#080c0d;" +
+                                                                        "-fx-font-weight:bold;" +
+                                                                        "-fx-background-radius:6;" +
+                                                                        "-fx-cursor:hand;");
+                                });
 
-        List<Course> publishedCourses =
-                courseDAO.getPublishedCourses();
+                // =====================================================
+                // SEARCH ACTION
+                // =====================================================
 
-        if (publishedCourses == null) {
+                searchButton.setOnAction(
+                                e -> {
 
-            publishedCourses =
-                    new ArrayList<>();
-        }
+                                        filterCourses();
+                                });
 
-        // =================================================
-        // NORMAL EXPLORER
-        // Show all courses
-        // =================================================
+                // =====================================================
+                // SEARCH WHILE TYPING
+                // =====================================================
 
-        if (selectedCourseId <= 0) {
+                searchField.textProperty()
+                                .addListener(
+                                                (observable,
+                                                                oldValue,
+                                                                newValue) -> {
 
-            allCourses =
-                    new ArrayList<>(
-                            publishedCourses
-                    );
-        }
+                                                        filterCourses();
+                                                });
 
-        // =================================================
-        // SELECTED COURSE EXPLORER
-        // Show ONLY clicked course
-        // =================================================
+                // =====================================================
+                // SEARCH HBOX
+                // =====================================================
 
-        else {
+                HBox searchHBox = new HBox(8);
 
-            allCourses =
-                    new ArrayList<>();
+                searchHBox.setAlignment(
+                                Pos.CENTER);
 
-            for (Course course : publishedCourses) {
+                searchHBox.setMaxWidth(
+                                720);
 
-                if (course == null) {
-                    continue;
+                searchHBox.setPadding(
+                                new Insets(
+                                                5,
+                                                8,
+                                                5,
+                                                8));
+
+                searchHBox.setStyle(
+                                "-fx-background-color:#0d1213;" +
+                                                "-fx-background-radius:10;" +
+                                                "-fx-border-color:#242b2c;" +
+                                                "-fx-border-radius:10;");
+
+                searchHBox.getChildren()
+                                .addAll(
+                                                searchField,
+                                                searchButton);
+
+                // =====================================================
+                // CATEGORY FILTERS
+                // =====================================================
+
+                Button allCategories = createCategoryButton(
+                                "All Categories",
+                                true);
+
+                Button poultry = createCategoryButton(
+                                "Poultry",
+                                false);
+
+                Button dairy = createCategoryButton(
+                                "Dairy Cattle",
+                                false);
+
+                Button aquatic = createCategoryButton(
+                                "Aquaculture",
+                                false);
+
+                Button swine = createCategoryButton(
+                                "Swine",
+                                false);
+
+                Button ruminants = createCategoryButton(
+                                "Small Ruminants",
+                                false);
+
+                Button nursery = createCategoryButton(
+                                "Plant Nursery",
+                                false);
+
+                // =====================================================
+                // CATEGORY ACTIONS
+                // =====================================================
+
+                allCategories.setOnAction(
+                                e -> selectCategory(
+                                                "All Categories",
+                                                allCategories,
+                                                poultry,
+                                                dairy,
+                                                aquatic,
+                                                swine,
+                                                ruminants,
+                                                nursery));
+
+                poultry.setOnAction(
+                                e -> selectCategory(
+                                                "Poultry",
+                                                allCategories,
+                                                poultry,
+                                                dairy,
+                                                aquatic,
+                                                swine,
+                                                ruminants,
+                                                nursery));
+
+                dairy.setOnAction(
+                                e -> selectCategory(
+                                                "Dairy Cattle",
+                                                allCategories,
+                                                poultry,
+                                                dairy,
+                                                aquatic,
+                                                swine,
+                                                ruminants,
+                                                nursery));
+
+                aquatic.setOnAction(
+                                e -> selectCategory(
+                                                "Aquaculture",
+                                                allCategories,
+                                                poultry,
+                                                dairy,
+                                                aquatic,
+                                                swine,
+                                                ruminants,
+                                                nursery));
+
+                swine.setOnAction(
+                                e -> selectCategory(
+                                                "Swine",
+                                                allCategories,
+                                                poultry,
+                                                dairy,
+                                                aquatic,
+                                                swine,
+                                                ruminants,
+                                                nursery));
+
+                ruminants.setOnAction(
+                                e -> selectCategory(
+                                                "Small Ruminants",
+                                                allCategories,
+                                                poultry,
+                                                dairy,
+                                                aquatic,
+                                                swine,
+                                                ruminants,
+                                                nursery));
+
+                nursery.setOnAction(
+                                e -> selectCategory(
+                                                "Plant Nursery",
+                                                allCategories,
+                                                poultry,
+                                                dairy,
+                                                aquatic,
+                                                swine,
+                                                ruminants,
+                                                nursery));
+
+                // =====================================================
+                // CATEGORY FILTER BOX
+                // =====================================================
+
+                HBox categoryFilterBox = new HBox(10);
+
+                categoryFilterBox.setAlignment(
+                                Pos.CENTER);
+
+                categoryFilterBox.setMaxWidth(
+                                1050);
+
+                categoryFilterBox.getChildren()
+                                .addAll(
+                                                allCategories,
+                                                poultry,
+                                                dairy,
+                                                aquatic,
+                                                swine,
+                                                ruminants,
+                                                nursery);
+
+                // =====================================================
+                // COURSE SECTION TITLE
+                // =====================================================
+
+                Label courseSectionTitle = new Label(
+                                "Available Courses");
+
+                courseSectionTitle.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                24));
+
+                courseSectionTitle.setTextFill(
+                                Color.web("#eeeeee"));
+
+                // =====================================================
+                // COURSE CONTAINER
+                // =====================================================
+
+                courseContainer = new FlowPane();
+
+                courseContainer.setHgap(
+                                20);
+
+                courseContainer.setVgap(
+                                20);
+
+                courseContainer.setAlignment(
+                                Pos.TOP_CENTER);
+
+                courseContainer.setPrefWrapLength(
+                                1000);
+
+                courseContainer.setPadding(
+                                new Insets(
+                                                5,
+                                                0,
+                                                25,
+                                                0));
+
+                // =====================================================
+                // LOAD COURSES
+                // =====================================================
+
+                loadCourses();
+
+                if (selectedCourseId > 0) {
+
+                        List<Course> selectedCourses = new ArrayList<>();
+
+                        for (Course course : allCourses) {
+
+                                if (course != null &&
+                                                course.getCourseId() == selectedCourseId) {
+
+                                        selectedCourses.add(course);
+                                        break;
+                                }
+                        }
+
+                        allCourses = selectedCourses;
                 }
 
-                if (course.getCourseId() ==
-                        selectedCourseId) {
+                // =====================================================
+                // ADD CONTENT
+                // =====================================================
 
-                    allCourses.add(
-                            course
-                    );
+                mainVBox.getChildren()
+                                .addAll(
+                                                mainTitle,
+                                                description,
+                                                searchHBox,
+                                                categoryFilterBox,
+                                                courseSectionTitle,
+                                                courseContainer);
 
-                    break;
+                // =====================================================
+                // SCROLL PANE
+                // =====================================================
+
+                ScrollPane scrollPane = new ScrollPane();
+
+                scrollPane.setContent(
+                                mainVBox);
+
+                scrollPane.setFitToWidth(
+                                true);
+
+                scrollPane.setHbarPolicy(
+                                ScrollPane.ScrollBarPolicy.NEVER);
+
+                scrollPane.setVbarPolicy(
+                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+                scrollPane.setStyle(
+                                "-fx-background-color:#080c0d;" +
+                                                "-fx-background:#080c0d;");
+
+                // =====================================================
+                // CENTER
+                // =====================================================
+
+                borderPane.setCenter(
+                                scrollPane);
+
+                // =====================================================
+                // SCENE
+                // =====================================================
+
+                explorepageScene = new Scene(
+                                borderPane,
+                                1200,
+                                750);
+
+                return explorepageScene;
+        }
+
+        // =========================================================
+        // CREATE CATEGORY BUTTON
+        // =========================================================
+
+        private Button createCategoryButton(
+                        String text,
+                        boolean active) {
+
+                Button button = new Button(text);
+
+                if (active) {
+
+                        button.setStyle(
+                                        "-fx-background-color:#68d34a;" +
+                                                        "-fx-text-fill:#080c0d;" +
+                                                        "-fx-font-weight:bold;" +
+                                                        "-fx-background-radius:6;" +
+                                                        "-fx-padding:8 14;" +
+                                                        "-fx-cursor:hand;");
+
+                } else {
+
+                        button.setStyle(
+                                        "-fx-background-color:#101516;" +
+                                                        "-fx-text-fill:#aaaaaa;" +
+                                                        "-fx-border-color:#242b2c;" +
+                                                        "-fx-border-radius:6;" +
+                                                        "-fx-background-radius:6;" +
+                                                        "-fx-padding:8 14;" +
+                                                        "-fx-cursor:hand;");
                 }
-            }
+
+                return button;
         }
 
-        // =================================================
-        // CLEAR LOADING
-        // =================================================
+        // =========================================================
+        // SELECT CATEGORY
+        // =========================================================
 
-        courseContainer
-                .getChildren()
-                .clear();
+        private void selectCategory(
+                        String category,
+                        Button all,
+                        Button poultry,
+                        Button dairy,
+                        Button aquatic,
+                        Button swine,
+                        Button ruminants,
+                        Button nursery) {
 
-        // =================================================
-        // COURSE NOT FOUND
-        // =================================================
+                selectedCategory = category;
 
-        if (allCourses.isEmpty()) {
+                // =====================================================
+                // RESET ALL BUTTONS
+                // =====================================================
 
-            if (selectedCourseId > 0) {
+                Button[] buttons = {
+                                all,
+                                poultry,
+                                dairy,
+                                aquatic,
+                                swine,
+                                ruminants,
+                                nursery
+                };
 
-                showEmptyMessage(
-                        "This course is no longer available."
-                );
+                for (Button button : buttons) {
 
-            } else {
-
-                showEmptyMessage(
-                        "No courses are available yet."
-                );
-            }
-
-            return;
-        }
-
-        // =================================================
-        // DISPLAY
-        // =================================================
-
-        displayCourses(
-                allCourses
-        );
-
-    } catch (Exception e) {
-
-        e.printStackTrace();
-
-        courseContainer
-                .getChildren()
-                .clear();
-
-        showEmptyMessage(
-                "Unable to load courses."
-        );
-    }
-}
-
-
-    // =========================================================
-    // FILTER COURSES
-    // =========================================================
-
-    private void filterCourses() {
-
-        if (allCourses == null) {
-
-            return;
-        }
-
-
-        String searchText =
-                searchField == null
-                        ? ""
-                        : searchField
-                                .getText()
-                                .trim()
-                                .toLowerCase();
-
-
-        List<Course> filteredCourses =
-                new ArrayList<>();
-
-
-        for (Course course : allCourses) {
-
-            if (course == null) {
-
-                continue;
-            }
-
-
-            // =================================================
-            // CATEGORY FILTER
-            // =================================================
-
-            boolean categoryMatches =
-                    selectedCategory
-                            .equals(
-                                    "All Categories"
-                            );
-
-
-            if (!categoryMatches) {
-
-                String courseCategory =
-                        safeValue(
-                                course.getCategory(),
-                                ""
-                        ).toLowerCase();
-
-
-                categoryMatches =
-                        courseCategory
-                                .contains(
-                                        selectedCategory
-                                                .toLowerCase()
-                                );
-            }
-
-
-            if (!categoryMatches) {
-
-                continue;
-            }
-
-
-            // =================================================
-            // SEARCH FILTER
-            // =================================================
-
-            if (!searchText.isEmpty()) {
-
-                String title =
-                        safeValue(
-                                course.getTitle(),
-                                ""
-                        ).toLowerCase();
-
-                String category =
-                        safeValue(
-                                course.getCategory(),
-                                ""
-                        ).toLowerCase();
-
-                String difficulty =
-                        safeValue(
-                                course.getDifficulty(),
-                                ""
-                        ).toLowerCase();
-
-                String language =
-                        safeValue(
-                                course.getLanguage(),
-                                ""
-                        ).toLowerCase();
-
-
-                boolean matches =
-                        title.contains(searchText)
-                        || category.contains(searchText)
-                        || difficulty.contains(searchText)
-                        || language.contains(searchText);
-
-
-                if (!matches) {
-
-                    continue;
+                        button.setStyle(
+                                        "-fx-background-color:#101516;" +
+                                                        "-fx-text-fill:#aaaaaa;" +
+                                                        "-fx-border-color:#242b2c;" +
+                                                        "-fx-border-radius:6;" +
+                                                        "-fx-background-radius:6;" +
+                                                        "-fx-padding:8 14;" +
+                                                        "-fx-cursor:hand;");
                 }
-            }
 
+                // =====================================================
+                // ACTIVE BUTTON
+                // =====================================================
 
-            filteredCourses
-                    .add(course);
+                for (Button button : buttons) {
+
+                        if (button.getText()
+                                        .equals(category)) {
+
+                                button.setStyle(
+                                                "-fx-background-color:#68d34a;" +
+                                                                "-fx-text-fill:#080c0d;" +
+                                                                "-fx-font-weight:bold;" +
+                                                                "-fx-background-radius:6;" +
+                                                                "-fx-padding:8 14;" +
+                                                                "-fx-cursor:hand;");
+
+                                break;
+                        }
+                }
+
+                // =====================================================
+                // FILTER
+                // =====================================================
+
+                filterCourses();
         }
 
+        // =========================================================
+        // LOAD COURSES
+        // =========================================================
 
-        // =====================================================
-        // DISPLAY FILTERED COURSES
-        // =====================================================
+        // private void loadCourses() {
 
-        displayCourses(
-                filteredCourses
-        );
-    }
+        // courseContainer
+        // .getChildren()
+        // .clear();
 
+        // // =====================================================
+        // // LOADING INDICATOR
+        // // =====================================================
 
-    // =========================================================
-    // DISPLAY COURSES
-    // =========================================================
+        // ProgressIndicator loading =
+        // new ProgressIndicator();
 
-    private void displayCourses(
-            List<Course> courses) {
+        // loading.setPrefSize(
+        // 45,
+        // 45
+        // );
 
-        courseContainer
-                .getChildren()
-                .clear();
+        // courseContainer
+        // .getChildren()
+        // .add(
+        // loading
+        // );
 
+        // try {
 
-        if (courses == null ||
-                courses.isEmpty()) {
+        // // =================================================
+        // // GET PUBLISHED COURSES
+        // // =================================================
 
-            showEmptyMessage(
-                    "No courses found."
-            );
+        // allCourses =
+        // courseDAO
+        // .getPublishedCourses();
 
-            return;
+        // courseContainer
+        // .getChildren()
+        // .clear();
+
+        // // =================================================
+        // // EMPTY
+        // // =================================================
+
+        // if (allCourses == null ||
+        // allCourses.isEmpty()) {
+
+        // showEmptyMessage(
+        // "No courses are available yet."
+        // );
+
+        // return;
+        // }
+
+        // // =================================================
+        // // DISPLAY
+        // // =================================================
+
+        // displayCourses(
+        // allCourses
+        // );
+
+        // } catch (Exception e) {
+
+        // e.printStackTrace();
+
+        // courseContainer
+        // .getChildren()
+        // .clear();
+
+        // showEmptyMessage(
+        // "Unable to load courses."
+        // );
+        // }
+        // }
+        private void loadCourses() {
+
+                courseContainer
+                                .getChildren()
+                                .clear();
+
+                ProgressIndicator loading = new ProgressIndicator();
+
+                loading.setPrefSize(
+                                45,
+                                45);
+
+                courseContainer
+                                .getChildren()
+                                .add(
+                                                loading);
+
+                try {
+
+                        // =================================================
+                        // GET ALL PUBLISHED COURSES
+                        // =================================================
+
+                        List<Course> publishedCourses = courseDAO.getPublishedCourses();
+
+                        if (publishedCourses == null) {
+
+                                publishedCourses = new ArrayList<>();
+                        }
+
+                        // =================================================
+                        // NORMAL EXPLORER
+                        // Show all courses
+                        // =================================================
+
+                        if (selectedCourseId <= 0) {
+
+                                allCourses = new ArrayList<>(
+                                                publishedCourses);
+                        }
+
+                        // =================================================
+                        // SELECTED COURSE EXPLORER
+                        // Show ONLY clicked course
+                        // =================================================
+
+                        else {
+
+                                allCourses = new ArrayList<>();
+
+                                for (Course course : publishedCourses) {
+
+                                        if (course == null) {
+                                                continue;
+                                        }
+
+                                        if (course.getCourseId() == selectedCourseId) {
+
+                                                allCourses.add(
+                                                                course);
+
+                                                break;
+                                        }
+                                }
+                        }
+
+                        // =================================================
+                        // CLEAR LOADING
+                        // =================================================
+
+                        courseContainer
+                                        .getChildren()
+                                        .clear();
+
+                        // =================================================
+                        // COURSE NOT FOUND
+                        // =================================================
+
+                        if (allCourses.isEmpty()) {
+
+                                if (selectedCourseId > 0) {
+
+                                        showEmptyMessage(
+                                                        "This course is no longer available.");
+
+                                } else {
+
+                                        showEmptyMessage(
+                                                        "No courses are available yet.");
+                                }
+
+                                return;
+                        }
+
+                        // =================================================
+                        // DISPLAY
+                        // =================================================
+
+                        displayCourses(
+                                        allCourses);
+
+                } catch (Exception e) {
+
+                        e.printStackTrace();
+
+                        courseContainer
+                                        .getChildren()
+                                        .clear();
+
+                        showEmptyMessage(
+                                        "Unable to load courses.");
+                }
         }
 
+        // =========================================================
+        // FILTER COURSES
+        // =========================================================
 
-        for (Course course : courses) {
+        private void filterCourses() {
 
-            if (course == null) {
-
-                continue;
-            }
-
-
-            VBox card =
-                    createCourseCard(
-                            course
-                    );
-
-
-            courseContainer
-                    .getChildren()
-                    .add(
-                            card
-                    );
-        }
-    }
-
-
-    // =========================================================
-    // EMPTY MESSAGE
-    // =========================================================
-
-    private void showEmptyMessage(
-            String message) {
-
-        VBox emptyBox =
-                new VBox(10);
-
-        emptyBox.setAlignment(
-                Pos.CENTER
-        );
-
-        emptyBox.setPrefWidth(
-                1050
-        );
-
-        emptyBox.setPadding(
-                new Insets(50)
-        );
-
-
-        Label icon =
-                new Label("📚");
-
-        icon.setFont(
-                Font.font(
-                        "Arial",
-                        35
-                )
-        );
-
-
-        Label messageLabel =
-                new Label(
-                        message
-                );
-
-        messageLabel.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        15
-                )
-        );
-
-        messageLabel.setTextFill(
-                Color.web("#AFC4B2")
-        );
-
-
-        emptyBox
-                .getChildren()
-                .addAll(
-                        icon,
-                        messageLabel
-                );
-
-
-        courseContainer
-                .getChildren()
-                .add(
-                        emptyBox
-                );
-    }
-
-
-    // =========================================================
-    // CREATE COURSE CARD
-    // =========================================================
-
-    private VBox createCourseCard(
-            Course course) {
-
-        VBox card =
-                new VBox(10);
-
-        card.setPrefWidth(
-                285
-        );
-
-        card.setPrefHeight(
-                350
-        );
-
-        card.setPadding(
-                new Insets(12)
-        );
-
-
-        // =====================================================
-        // NORMAL CARD STYLE
-        // =====================================================
-
-        String normalCardStyle =
-                "-fx-background-color:#101516;" +
-                "-fx-background-radius:16;" +
-                "-fx-border-color:#242b2c;" +
-                "-fx-border-radius:16;" +
-                "-fx-border-width:1;";
-
-
-        String hoverCardStyle =
-                "-fx-background-color:#17221a;" +
-                "-fx-background-radius:16;" +
-                "-fx-border-color:#68d34a;" +
-                "-fx-border-radius:16;" +
-                "-fx-border-width:1;";
-
-
-        card.setStyle(
-                normalCardStyle
-        );
-
-
-        // =====================================================
-        // IMAGE
-        // =====================================================
-
-        StackPane imageContainer =
-                createCourseImage(
-                        course.getThumbnailUrl()
-                );
-
-
-        // =====================================================
-        // TITLE
-        // =====================================================
-
-        Label title =
-                new Label(
-                        safeValue(
-                                course.getTitle(),
-                                "Untitled Course"
-                        )
-                );
-
-        title.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        18
-                )
-        );
-
-        title.setTextFill(
-                Color.WHITE
-        );
-
-        title.setWrapText(
-                true
-        );
-
-        title.setMaxWidth(
-                255
-        );
-
-
-        // =====================================================
-        // CATEGORY
-        // =====================================================
-
-        Label category =
-                new Label(
-                        safeValue(
-                                course.getCategory(),
-                                "General"
-                        )
-                );
-
-        category.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        12
-                )
-        );
-
-        category.setTextFill(
-                Color.web("#68d34a")
-        );
-
-
-        // =====================================================
-        // COURSE DESCRIPTION
-        //
-        // Your current Course model doesn't have a
-        // description field, so we use a general message.
-        // =====================================================
-
-        Label description =
-                new Label(
-                        "Learn practical techniques and "
-                        + "modern methods for better farming."
-                );
-
-        description.setFont(
-                Font.font(
-                        "Arial",
-                        12
-                )
-        );
-
-        description.setTextFill(
-                Color.web("#888888")
-        );
-
-        description.setWrapText(
-                true
-        );
-
-        description.setMaxWidth(
-                255
-        );
-
-
-        // =====================================================
-        // COURSE INFORMATION
-        // =====================================================
-
-        HBox information =
-                createCourseInformation(
-                        course
-                );
-
-
-        // =====================================================
-        // SPACER
-        // =====================================================
-
-        Region spacer =
-                new Region();
-
-        VBox.setVgrow(
-                spacer,
-                Priority.ALWAYS
-        );
-
-
-        // =====================================================
-        // ADD BUTTON
-        // =====================================================
-
-        Button addButton =
-                new Button(
-                        "+ Add to My Learning"
-                );
-
-        addButton.setPrefWidth(
-                261
-        );
-
-        addButton.setPrefHeight(
-                42
-        );
-
-        addButton.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        13
-        ));
-
-
-        // =====================================================
-        // CHECK CURRENT FARMER
-        // =====================================================
-
-        int farmerId =
-                LoginPage
-                        .getLoggedInFarmerId();
-
-
-        boolean alreadyAdded =
-                farmerLearningDAO
-                        .isCourseAdded(
-                                farmerId,
-                                course.getCourseId()
-                        );
-
-
-        if (alreadyAdded) {
-
-            setAddedButtonStyle(
-                    addButton
-            );
-
-        } else {
-
-            setAddButtonStyle(
-                    addButton
-            );
-        }
-
-
-        // =====================================================
-        // ADD BUTTON ACTION
-        // =====================================================
-
-        addButton.setOnAction(
-                e -> {
-
-                    int currentFarmerId =
-                            LoginPage
-                                    .getLoggedInFarmerId();
-
-
-                    // -----------------------------------------
-                    // CHECK FARMER ID
-                    // -----------------------------------------
-
-                    if (currentFarmerId <= 0) {
-
-                        System.out.println(
-                                "ERROR: Farmer ID is missing."
-                        );
+                if (allCourses == null) {
 
                         return;
-                    }
+                }
 
+                String searchText = searchField == null
+                                ? ""
+                                : searchField
+                                                .getText()
+                                                .trim()
+                                                .toLowerCase();
 
-                    // -----------------------------------------
-                    // ADD COURSE
-                    // -----------------------------------------
+                List<Course> filteredCourses = new ArrayList<>();
 
-                    boolean added =
-                            farmerLearningDAO
-                                    .addCourse(
-                                            currentFarmerId,
-                                            course.getCourseId()
-                                    );
+                for (Course course : allCourses) {
 
+                        if (course == null) {
 
-                    // -----------------------------------------
-                    // SUCCESS
-                    // -----------------------------------------
+                                continue;
+                        }
 
-                    if (added) {
+                        // =================================================
+                        // CATEGORY FILTER
+                        // =================================================
+
+                        boolean categoryMatches = selectedCategory
+                                        .equals(
+                                                        "All Categories");
+
+                        if (!categoryMatches) {
+
+                                String courseCategory = safeValue(
+                                                course.getCategory(),
+                                                "").toLowerCase();
+
+                                categoryMatches = courseCategory
+                                                .contains(
+                                                                selectedCategory
+                                                                                .toLowerCase());
+                        }
+
+                        if (!categoryMatches) {
+
+                                continue;
+                        }
+
+                        // =================================================
+                        // SEARCH FILTER
+                        // =================================================
+
+                        if (!searchText.isEmpty()) {
+
+                                String title = safeValue(
+                                                course.getTitle(),
+                                                "").toLowerCase();
+
+                                String category = safeValue(
+                                                course.getCategory(),
+                                                "").toLowerCase();
+
+                                String difficulty = safeValue(
+                                                course.getDifficulty(),
+                                                "").toLowerCase();
+
+                                String language = safeValue(
+                                                course.getLanguage(),
+                                                "").toLowerCase();
+
+                                boolean matches = title.contains(searchText)
+                                                || category.contains(searchText)
+                                                || difficulty.contains(searchText)
+                                                || language.contains(searchText);
+
+                                if (!matches) {
+
+                                        continue;
+                                }
+                        }
+
+                        filteredCourses
+                                        .add(course);
+                }
+
+                // =====================================================
+                // DISPLAY FILTERED COURSES
+                // =====================================================
+
+                displayCourses(
+                                filteredCourses);
+        }
+
+        // =========================================================
+        // DISPLAY COURSES
+        // =========================================================
+
+        private void displayCourses(
+                        List<Course> courses) {
+
+                courseContainer
+                                .getChildren()
+                                .clear();
+
+                if (courses == null ||
+                                courses.isEmpty()) {
+
+                        showEmptyMessage(
+                                        "No courses found.");
+
+                        return;
+                }
+
+                for (Course course : courses) {
+
+                        if (course == null) {
+
+                                continue;
+                        }
+
+                        VBox card = createCourseCard(
+                                        course);
+
+                        courseContainer
+                                        .getChildren()
+                                        .add(
+                                                        card);
+                }
+        }
+
+        // =========================================================
+        // EMPTY MESSAGE
+        // =========================================================
+
+        private void showEmptyMessage(
+                        String message) {
+
+                VBox emptyBox = new VBox(10);
+
+                emptyBox.setAlignment(
+                                Pos.CENTER);
+
+                emptyBox.setPrefWidth(
+                                1050);
+
+                emptyBox.setPadding(
+                                new Insets(50));
+
+                Label icon = new Label("📚");
+
+                icon.setFont(
+                                Font.font(
+                                                "Arial",
+                                                35));
+
+                Label messageLabel = new Label(
+                                message);
+
+                messageLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                15));
+
+                messageLabel.setTextFill(
+                                Color.web("#AFC4B2"));
+
+                emptyBox
+                                .getChildren()
+                                .addAll(
+                                                icon,
+                                                messageLabel);
+
+                courseContainer
+                                .getChildren()
+                                .add(
+                                                emptyBox);
+        }
+
+        // =========================================================
+        // CREATE COURSE CARD
+        // =========================================================
+
+        private VBox createCourseCard(
+                        Course course) {
+
+                VBox card = new VBox(10);
+
+                card.setPrefWidth(
+                                285);
+
+                card.setPrefHeight(
+                                350);
+
+                card.setPadding(
+                                new Insets(12));
+
+                // =====================================================
+                // NORMAL CARD STYLE
+                // =====================================================
+
+                String normalCardStyle = "-fx-background-color:#101516;" +
+                                "-fx-background-radius:16;" +
+                                "-fx-border-color:#242b2c;" +
+                                "-fx-border-radius:16;" +
+                                "-fx-border-width:1;";
+
+                String hoverCardStyle = "-fx-background-color:#17221a;" +
+                                "-fx-background-radius:16;" +
+                                "-fx-border-color:#68d34a;" +
+                                "-fx-border-radius:16;" +
+                                "-fx-border-width:1;";
+
+                card.setStyle(
+                                normalCardStyle);
+
+                // =====================================================
+                // IMAGE
+                // =====================================================
+
+                StackPane imageContainer = createCourseImage(
+                                course.getThumbnailUrl());
+
+                // =====================================================
+                // TITLE
+                // =====================================================
+
+                Label title = new Label(
+                                safeValue(
+                                                course.getTitle(),
+                                                "Untitled Course"));
+
+                title.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                18));
+
+                title.setTextFill(
+                                Color.WHITE);
+
+                title.setWrapText(
+                                true);
+
+                title.setMaxWidth(
+                                255);
+
+                // =====================================================
+                // CATEGORY
+                // =====================================================
+
+                Label category = new Label(
+                                safeValue(
+                                                course.getCategory(),
+                                                "General"));
+
+                category.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                12));
+
+                category.setTextFill(
+                                Color.web("#68d34a"));
+
+                // =====================================================
+                // COURSE DESCRIPTION
+                //
+                // Your current Course model doesn't have a
+                // description field, so we use a general message.
+                // =====================================================
+
+                Label description = new Label(
+                                "Learn practical techniques and "
+                                                + "modern methods for better farming.");
+
+                description.setFont(
+                                Font.font(
+                                                "Arial",
+                                                12));
+
+                description.setTextFill(
+                                Color.web("#888888"));
+
+                description.setWrapText(
+                                true);
+
+                description.setMaxWidth(
+                                255);
+
+                // =====================================================
+                // COURSE INFORMATION
+                // =====================================================
+
+                HBox information = createCourseInformation(
+                                course);
+
+                // =====================================================
+                // SPACER
+                // =====================================================
+
+                Region spacer = new Region();
+
+                VBox.setVgrow(
+                                spacer,
+                                Priority.ALWAYS);
+
+                // =====================================================
+                // ADD BUTTON
+                // =====================================================
+
+                Button addButton = new Button(
+                                "+ Add to My Learning");
+
+                addButton.setPrefWidth(
+                                261);
+
+                addButton.setPrefHeight(
+                                42);
+
+                addButton.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                13));
+
+                // =====================================================
+                // CHECK CURRENT FARMER
+                // =====================================================
+
+                int farmerId = LoginPage
+                                .getLoggedInFarmerId();
+
+                boolean alreadyAdded = farmerLearningDAO
+                                .isCourseAdded(
+                                                farmerId,
+                                                course.getCourseId());
+
+                if (alreadyAdded) {
 
                         setAddedButtonStyle(
-                                addButton
-                        );
+                                        addButton);
 
-                        addButton.setText(
-                                "✓ Added to My Learning"
-                        );
+                } else {
 
-                        addButton.setDisable(
-                                true
-                        );
-
-                        System.out.println(
-                                "Course added successfully: "
-                                + course.getTitle()
-                        );
-                    }
+                        setAddButtonStyle(
+                                        addButton);
                 }
-        );
 
+                // =====================================================
+                // ADD BUTTON ACTION
+                // =====================================================
 
-        // =====================================================
-        // CARD HOVER
-        // =====================================================
+                addButton.setOnAction(
+                                e -> {
 
-        card.setOnMouseEntered(
-                e -> {
+                                        int currentFarmerId = LoginPage
+                                                        .getLoggedInFarmerId();
 
-                    card.setStyle(
-                            hoverCardStyle
-                    );
-                }
-        );
+                                        // -----------------------------------------
+                                        // CHECK FARMER ID
+                                        // -----------------------------------------
 
+                                        if (currentFarmerId <= 0) {
 
-        card.setOnMouseExited(
-                e -> {
+                                                System.out.println(
+                                                                "ERROR: Farmer ID is missing.");
 
-                    card.setStyle(
-                            normalCardStyle
-                    );
-                }
-        );
+                                                return;
+                                        }
 
+                                        // -----------------------------------------
+                                        // ADD COURSE
+                                        // -----------------------------------------
 
-        // =====================================================
-        // ADD EVERYTHING
-        // =====================================================
+                                        boolean added = farmerLearningDAO
+                                                        .addCourse(
+                                                                        currentFarmerId,
+                                                                        course.getCourseId());
 
-        card.getChildren()
-                .addAll(
-                        imageContainer,
-                        title,
-                        category,
-                        description,
-                        information,
-                        spacer,
-                        addButton
-                );
+                                        // -----------------------------------------
+                                        // SUCCESS
+                                        // -----------------------------------------
 
+                                        if (added) {
 
-        return card;
-    }
+                                                setAddedButtonStyle(
+                                                                addButton);
 
+                                                addButton.setText(
+                                                                "✓ Added to My Learning");
 
-    // =========================================================
-    // COURSE INFORMATION
-    // =========================================================
+                                                addButton.setDisable(
+                                                                true);
 
-    private HBox createCourseInformation(
-            Course course) {
+                                                System.out.println(
+                                                                "Course added successfully: "
+                                                                                + course.getTitle());
+                                        }
+                                });
 
-        HBox information =
-                new HBox(8);
+                // =====================================================
+                // CARD HOVER
+                // =====================================================
 
-        information.setAlignment(
-                Pos.CENTER_LEFT
-        );
+                card.setOnMouseEntered(
+                                e -> {
 
+                                        card.setStyle(
+                                                        hoverCardStyle);
+                                });
 
-        // =====================================================
-        // DIFFICULTY
-        // =====================================================
+                card.setOnMouseExited(
+                                e -> {
 
-        Label difficulty =
-                new Label(
-                        "● "
-                        + safeValue(
-                                course.getDifficulty(),
-                                "Beginner"
-                        )
-                );
+                                        card.setStyle(
+                                                        normalCardStyle);
+                                });
 
-        difficulty.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        11
-                )
-        );
+                // =====================================================
+                // ADD EVERYTHING
+                // =====================================================
 
-        difficulty.setTextFill(
-                Color.web("#AFC4B2")
-        );
+                card.getChildren()
+                                .addAll(
+                                                imageContainer,
+                                                title,
+                                                category,
+                                                description,
+                                                information,
+                                                spacer,
+                                                addButton);
 
+                return card;
+        }
 
-        // =====================================================
-        // LANGUAGE
-        // =====================================================
+        // =========================================================
+        // COURSE INFORMATION
+        // =========================================================
 
-        Label language =
-                new Label(
-                        "• "
-                        + safeValue(
-                                course.getLanguage(),
-                                "English"
-                        )
-                );
+        private HBox createCourseInformation(
+                        Course course) {
 
-        language.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        11
-                )
-        );
+                HBox information = new HBox(8);
 
-        language.setTextFill(
-                Color.web("#AFC4B2")
-        );
+                information.setAlignment(
+                                Pos.CENTER_LEFT);
 
+                // =====================================================
+                // DIFFICULTY
+                // =====================================================
 
-        information
-                .getChildren()
-                .addAll(
-                        difficulty,
-                        language
-                );
+                Label difficulty = new Label(
+                                "● "
+                                                + safeValue(
+                                                                course.getDifficulty(),
+                                                                "Beginner"));
 
+                difficulty.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                11));
 
-        return information;
-    }
+                difficulty.setTextFill(
+                                Color.web("#AFC4B2"));
 
+                // =====================================================
+                // LANGUAGE
+                // =====================================================
 
-    // =========================================================
-    // COURSE IMAGE
-    // =========================================================
+                Label language = new Label(
+                                "• "
+                                                + safeValue(
+                                                                course.getLanguage(),
+                                                                "English"));
 
-    private StackPane createCourseImage(
-            String imageUrl) {
+                language.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                11));
 
-        StackPane container =
-                new StackPane();
+                language.setTextFill(
+                                Color.web("#AFC4B2"));
 
+                information
+                                .getChildren()
+                                .addAll(
+                                                difficulty,
+                                                language);
 
-        container.setPrefWidth(
-                261
-        );
+                return information;
+        }
 
-        container.setPrefHeight(
-                135
-        );
+        // =========================================================
+        // COURSE IMAGE
+        // =========================================================
 
-        container.setMaxWidth(
-                261
-        );
+        private StackPane createCourseImage(
+                        String imageUrl) {
 
-        container.setMaxHeight(
-                135
-        );
+                StackPane container = new StackPane();
 
+                container.setPrefWidth(
+                                261);
 
-        // =====================================================
-        // CLIP
-        // =====================================================
+                container.setPrefHeight(
+                                135);
 
-        Rectangle clip =
-                new Rectangle(
-                        261,
-                        135
-                );
+                container.setMaxWidth(
+                                261);
 
-        clip.setArcWidth(
-                18
-        );
+                container.setMaxHeight(
+                                135);
 
-        clip.setArcHeight(
-                18
-        );
+                // =====================================================
+                // CLIP
+                // =====================================================
 
-        container.setClip(
-                clip
-        );
-
-
-        // =====================================================
-        // BACKGROUND
-        // =====================================================
-
-        container.setStyle(
-                "-fx-background-color:#193522;"
-        );
-
-
-        // =====================================================
-        // IMAGE VIEW
-        // =====================================================
-
-        ImageView imageView =
-                new ImageView();
-
-
-        imageView.setFitWidth(
-                261
-        );
-
-        imageView.setFitHeight(
-                135
-        );
-
-        imageView.setPreserveRatio(
-                false
-        );
-
-
-        // =====================================================
-        // LOAD IMAGE
-        // =====================================================
-
-        if (imageUrl != null &&
-                !imageUrl.trim().isEmpty()) {
-
-            try {
-
-                Image image =
-                        new Image(
-                                imageUrl,
+                Rectangle clip = new Rectangle(
                                 261,
-                                135,
-                                false,
-                                true,
-                                true
-                        );
+                                135);
 
-                imageView.setImage(
-                        image
-                );
+                clip.setArcWidth(
+                                18);
 
-            } catch (Exception e) {
+                clip.setArcHeight(
+                                18);
 
-                addExplorerPlaceholder(
-                        container
-                );
-            }
+                container.setClip(
+                                clip);
 
-        } else {
+                // =====================================================
+                // BACKGROUND
+                // =====================================================
 
-            addExplorerPlaceholder(
-                    container
-            );
+                container.setStyle(
+                                "-fx-background-color:#193522;");
+
+                // =====================================================
+                // IMAGE VIEW
+                // =====================================================
+
+                ImageView imageView = new ImageView();
+
+                imageView.setFitWidth(
+                                261);
+
+                imageView.setFitHeight(
+                                135);
+
+                imageView.setPreserveRatio(
+                                false);
+
+                // =====================================================
+                // LOAD IMAGE
+                // =====================================================
+
+                if (imageUrl != null &&
+                                !imageUrl.trim().isEmpty()) {
+
+                        try {
+
+                                Image image = new Image(
+                                                imageUrl,
+                                                261,
+                                                135,
+                                                false,
+                                                true,
+                                                true);
+
+                                imageView.setImage(
+                                                image);
+
+                        } catch (Exception e) {
+
+                                addExplorerPlaceholder(
+                                                container);
+                        }
+
+                } else {
+
+                        addExplorerPlaceholder(
+                                        container);
+                }
+
+                // =====================================================
+                // ADD IMAGE VIEW
+                // =====================================================
+
+                container
+                                .getChildren()
+                                .add(
+                                                imageView);
+
+                return container;
         }
 
+        // =========================================================
+        // IMAGE PLACEHOLDER
+        // =========================================================
 
-        // =====================================================
-        // ADD IMAGE VIEW
-        // =====================================================
+        private void addExplorerPlaceholder(
+                        StackPane container) {
 
-        container
-                .getChildren()
-                .add(
-                        imageView
-                );
+                Label placeholder = new Label(
+                                "🌱");
 
+                placeholder.setFont(
+                                Font.font(
+                                                "Arial",
+                                                40));
 
-        return container;
-    }
+                placeholder.setTextFill(
+                                Color.web("#68d34a"));
 
+                container
+                                .getChildren()
+                                .add(
+                                                placeholder);
+        }
 
-    // =========================================================
-    // IMAGE PLACEHOLDER
-    // =========================================================
+        // =========================================================
+        // ADD BUTTON STYLE
+        // =========================================================
 
-    private void addExplorerPlaceholder(
-            StackPane container) {
+        private void setAddButtonStyle(
+                        Button button) {
 
-        Label placeholder =
-                new Label(
-                        "🌱"
-                );
+                button.setText(
+                                "+ Add to My Learning");
 
-        placeholder.setFont(
-                Font.font(
-                        "Arial",
-                        40
-                )
-        );
+                button.setDisable(
+                                false);
 
-        placeholder.setTextFill(
-                Color.web("#68d34a")
-        );
+                button.setTextFill(
+                                Color.web("#080c0d"));
 
-
-        container
-                .getChildren()
-                .add(
-                        placeholder
-                );
-    }
-
-
-    // =========================================================
-    // ADD BUTTON STYLE
-    // =========================================================
-
-    private void setAddButtonStyle(
-            Button button) {
-
-        button.setText(
-                "+ Add to My Learning"
-        );
-
-        button.setDisable(
-                false
-        );
-
-        button.setTextFill(
-                Color.web("#080c0d")
-        );
-
-        button.setStyle(
-                "-fx-background-color:#68d34a;" +
-                "-fx-text-fill:#080c0d;" +
-                "-fx-font-weight:bold;" +
-                "-fx-background-radius:9;" +
-                "-fx-cursor:hand;"
-        );
-
-
-        // =====================================================
-        // HOVER
-        // =====================================================
-
-        button.setOnMouseEntered(
-                e -> {
-
-                    if (!button.isDisabled()) {
-
-                        button.setStyle(
-                                "-fx-background-color:#82df68;" +
-                                "-fx-text-fill:#080c0d;" +
-                                "-fx-font-weight:bold;" +
-                                "-fx-background-radius:9;" +
-                                "-fx-cursor:hand;"
-                        );
-                    }
-                }
-        );
-
-
-        button.setOnMouseExited(
-                e -> {
-
-                    if (!button.isDisabled()) {
-
-                        button.setStyle(
+                button.setStyle(
                                 "-fx-background-color:#68d34a;" +
-                                "-fx-text-fill:#080c0d;" +
-                                "-fx-font-weight:bold;" +
-                                "-fx-background-radius:9;" +
-                                "-fx-cursor:hand;"
-                        );
-                    }
-                }
-        );
-    }
+                                                "-fx-text-fill:#080c0d;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-background-radius:9;" +
+                                                "-fx-cursor:hand;");
 
+                // =====================================================
+                // HOVER
+                // =====================================================
 
-    // =========================================================
-    // ADDED BUTTON STYLE
-    // =========================================================
+                button.setOnMouseEntered(
+                                e -> {
 
-    private void setAddedButtonStyle(
-            Button button) {
+                                        if (!button.isDisabled()) {
 
-        button.setText(
-                "✓ Added to My Learning"
-        );
+                                                button.setStyle(
+                                                                "-fx-background-color:#82df68;" +
+                                                                                "-fx-text-fill:#080c0d;" +
+                                                                                "-fx-font-weight:bold;" +
+                                                                                "-fx-background-radius:9;" +
+                                                                                "-fx-cursor:hand;");
+                                        }
+                                });
 
-        button.setDisable(
-                true
-        );
+                button.setOnMouseExited(
+                                e -> {
 
-        button.setStyle(
-                "-fx-background-color:#193522;" +
-                "-fx-text-fill:#68d34a;" +
-                "-fx-font-weight:bold;" +
-                "-fx-border-color:#68d34a;" +
-                "-fx-border-radius:9;" +
-                "-fx-background-radius:9;"
-        );
-    }
+                                        if (!button.isDisabled()) {
 
-
-    // =========================================================
-    // SAFE STRING
-    // =========================================================
-
-    private String safeValue(
-            String value,
-            String defaultValue) {
-
-        if (value == null ||
-                value.trim().isEmpty()) {
-
-            return defaultValue;
+                                                button.setStyle(
+                                                                "-fx-background-color:#68d34a;" +
+                                                                                "-fx-text-fill:#080c0d;" +
+                                                                                "-fx-font-weight:bold;" +
+                                                                                "-fx-background-radius:9;" +
+                                                                                "-fx-cursor:hand;");
+                                        }
+                                });
         }
 
-        return value.trim();
-    }
+        // =========================================================
+        // ADDED BUTTON STYLE
+        // =========================================================
 
+        private void setAddedButtonStyle(
+                        Button button) {
 
-    // =========================================================
-    // BACK TO EXPLORER
-    // =========================================================
+                button.setText(
+                                "✓ Added to My Learning");
 
-    public void backtoexplorer() {
+                button.setDisable(
+                                true);
 
-        LoginPage.mainStage
-                .setScene(
-                        explorepageScene
-                );
-    }
+                button.setStyle(
+                                "-fx-background-color:#193522;" +
+                                                "-fx-text-fill:#68d34a;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-border-color:#68d34a;" +
+                                                "-fx-border-radius:9;" +
+                                                "-fx-background-radius:9;");
+        }
+
+        // =========================================================
+        // SAFE STRING
+        // =========================================================
+
+        private String safeValue(
+                        String value,
+                        String defaultValue) {
+
+                if (value == null ||
+                                value.trim().isEmpty()) {
+
+                        return defaultValue;
+                }
+
+                return value.trim();
+        }
+
+        // =========================================================
+        // BACK TO EXPLORER
+        // =========================================================
+
+        public void backtoexplorer() {
+
+                LoginPage.mainStage
+                                .setScene(
+                                                explorepageScene);
+        }
 }

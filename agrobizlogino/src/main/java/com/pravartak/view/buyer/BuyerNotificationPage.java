@@ -461,559 +461,475 @@ import java.util.List;
 
 public class BuyerNotificationPage {
 
-    private BorderPane root;
+        private BorderPane root;
 
-    private VBox notificationContainer;
+        private VBox notificationContainer;
 
-    private final OrderController orderController;
+        private final OrderController orderController;
 
-    public BuyerNotificationPage() {
+        public BuyerNotificationPage() {
 
-        orderController =
-                new OrderController();
-    }
+                orderController = new OrderController();
+        }
 
-    // =========================================================
-    // MAIN PAGE
-    // =========================================================
+        // =========================================================
+        // MAIN PAGE
+        // =========================================================
 
-    public BorderPane getNotificationPage() {
+        public BorderPane getNotificationPage() {
 
-        root = new BorderPane();
+                root = new BorderPane();
 
-        root.setStyle(
-                "-fx-background-color:#0D1117;"
-        );
+                root.setStyle(
+                                "-fx-background-color:#0D1117;");
 
-        // =====================================================
-        // NAVBAR
-        // =====================================================
+                // =====================================================
+                // NAVBAR
+                // =====================================================
 
-        root.setTop(
-                new buyerTop()
-                        .createBuyerTop("Notifications")
-        );
+                root.setTop(
+                                new buyerTop()
+                                                .createBuyerTop("Notifications"));
 
-        // =====================================================
-        // MAIN CONTENT
-        // =====================================================
+                // =====================================================
+                // MAIN CONTENT
+                // =====================================================
 
-        VBox main =
-                new VBox(20);
+                VBox main = new VBox(20);
 
-        main.setPadding(
-                new Insets(
-                        30,
-                        50,
-                        30,
-                        50
-                )
-        );
+                main.setPadding(
+                                new Insets(
+                                                30,
+                                                50,
+                                                30,
+                                                50));
 
-        Label title =
-                new Label(
-                        "🔔 Notifications"
-                );
+                Label title = new Label(
+                                "🔔 Notifications");
 
-        title.setStyle(
-                "-fx-text-fill:white;" +
-                "-fx-font-size:28px;" +
-                "-fx-font-weight:bold;"
-        );
+                title.setStyle(
+                                "-fx-text-fill:white;" +
+                                                "-fx-font-size:28px;" +
+                                                "-fx-font-weight:bold;");
 
-        Label subtitle =
-                new Label(
-                        "Updates about your orders"
-                );
+                Label subtitle = new Label(
+                                "Updates about your orders");
 
-        subtitle.setStyle(
-                "-fx-text-fill:#8b949e;" +
-                "-fx-font-size:14px;"
-        );
+                subtitle.setStyle(
+                                "-fx-text-fill:#8b949e;" +
+                                                "-fx-font-size:14px;");
 
-        notificationContainer =
-                new VBox(15);
+                notificationContainer = new VBox(15);
 
-        loadNotifications();
+                loadNotifications();
 
-        main.getChildren().addAll(
-                title,
-                subtitle,
+                main.getChildren().addAll(
+                                title,
+                                subtitle,
+                                notificationContainer);
+
+                root.setCenter(main);
+
+                return root;
+        }
+
+        // =========================================================
+        // LOAD NOTIFICATIONS
+        // =========================================================
+
+        private void loadNotifications() {
+
                 notificationContainer
-        );
+                                .getChildren()
+                                .clear();
 
-        root.setCenter(main);
+                String buyerUid = BuyerProfilePage.currentBuyerUid;
 
-        return root;
-    }
+                if (buyerUid == null ||
+                                buyerUid.trim().isEmpty()) {
 
-    // =========================================================
-    // LOAD NOTIFICATIONS
-    // =========================================================
+                        showEmpty(
+                                        "Please login again to view notifications.");
 
-    private void loadNotifications() {
+                        return;
+                }
 
-        notificationContainer
-                .getChildren()
-                .clear();
+                List<Order> notifications = orderController
+                                .getBuyerUnreadNotifications(
+                                                buyerUid);
 
-        String buyerUid =
-                BuyerProfilePage.currentBuyerUid;
+                if (notifications == null ||
+                                notifications.isEmpty()) {
 
-        if (buyerUid == null ||
-                buyerUid.trim().isEmpty()) {
+                        showEmpty(
+                                        "No new notifications");
 
-            showEmpty(
-                    "Please login again to view notifications."
-            );
+                        return;
+                }
 
-            return;
+                for (Order order : notifications) {
+
+                        notificationContainer
+                                        .getChildren()
+                                        .add(
+                                                        createNotificationCard(
+                                                                        order));
+                }
         }
 
-        List<Order> notifications =
+        // =========================================================
+        // NOTIFICATION CARD
+        // =========================================================
+
+        private VBox createNotificationCard(
+                        Order order) {
+
+                VBox card = new VBox(12);
+
+                card.setPadding(
+                                new Insets(20));
+
+                card.setStyle(
+                                "-fx-background-color:#161B22;" +
+                                                "-fx-background-radius:12;" +
+                                                "-fx-border-color:#2A3138;" +
+                                                "-fx-border-radius:12;");
+
+                // =====================================================
+                // DETERMINE STATUS
+                // =====================================================
+
+                boolean accepted = "ACCEPTED".equalsIgnoreCase(
+                                order.getOrderStatus());
+
+                boolean rejected = "REJECTED".equalsIgnoreCase(
+                                order.getOrderStatus());
+
+                // =====================================================
+                // TOP
+                // =====================================================
+
+                HBox top = new HBox(10);
+
+                top.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                Label icon;
+
+                Label title;
+
+                if (accepted) {
+
+                        icon = new Label("✅");
+
+                        title = new Label(
+                                        "Order Accepted");
+
+                        title.setStyle(
+                                        "-fx-text-fill:#68d34a;" +
+                                                        "-fx-font-size:18px;" +
+                                                        "-fx-font-weight:bold;");
+
+                } else if (rejected) {
+
+                        icon = new Label("❌");
+
+                        title = new Label(
+                                        "Order Rejected");
+
+                        title.setStyle(
+                                        "-fx-text-fill:#ff5c67;" +
+                                                        "-fx-font-size:18px;" +
+                                                        "-fx-font-weight:bold;");
+
+                } else {
+
+                        icon = new Label("🔔");
+
+                        title = new Label(
+                                        "Order Update");
+
+                        title.setStyle(
+                                        "-fx-text-fill:#68d34a;" +
+                                                        "-fx-font-size:18px;" +
+                                                        "-fx-font-weight:bold;");
+                }
+
+                icon.setStyle(
+                                "-fx-font-size:25px;");
+
+                top.getChildren().addAll(
+                                icon,
+                                title);
+
+                // =====================================================
+                // MESSAGE
+                // =====================================================
+
+                String messageText;
+
+                if (accepted) {
+
+                        messageText = "The farmer has accepted your order.";
+
+                } else if (rejected) {
+
+                        messageText = "The farmer has rejected your order.";
+
+                } else {
+
+                        messageText = "There is an update on your order.";
+                }
+
+                Label message = new Label(
+                                messageText);
+
+                message.setStyle(
+                                "-fx-text-fill:#d0d7de;" +
+                                                "-fx-font-size:14px;");
+
+                // =====================================================
+                // ORDER ID
+                // =====================================================
+
+                Label orderId = new Label(
+                                "Order ID: "
+                                                + getSafe(
+                                                                order.getOrderId()));
+
+                orderId.setStyle(
+                                "-fx-text-fill:#8b949e;" +
+                                                "-fx-font-size:13px;");
+
+                // =====================================================
+                // FARMER
+                // =====================================================
+
+                Label farmer = new Label(
+                                "Farmer: "
+                                                + getFarmerName(order));
+
+                farmer.setStyle(
+                                "-fx-text-fill:#8b949e;" +
+                                                "-fx-font-size:13px;");
+
+                // =====================================================
+                // TOTAL
+                // =====================================================
+
+                Label amount = new Label(
+                                String.format(
+                                                "Order Amount: ₹%.2f",
+                                                order.getTotalAmount()));
+
+                amount.setStyle(
+                                "-fx-text-fill:white;" +
+                                                "-fx-font-size:15px;" +
+                                                "-fx-font-weight:bold;");
+
+                // =====================================================
+                // BUTTONS
+                // =====================================================
+
+                HBox buttons = new HBox(10);
+
+                // -----------------------------------------------------
+                // VIEW ORDER
+                // -----------------------------------------------------
+
+                Button viewOrder = new Button(
+                                "View Order");
+
+                if (rejected) {
+
+                        viewOrder.setStyle(
+                                        "-fx-background-color:#3A1518;" +
+                                                        "-fx-text-fill:#FF6B6B;" +
+                                                        "-fx-font-weight:bold;" +
+                                                        "-fx-background-radius:8;" +
+                                                        "-fx-padding:9 18;" +
+                                                        "-fx-cursor:hand;");
+
+                } else {
+
+                        viewOrder.setStyle(
+                                        "-fx-background-color:#68d34a;" +
+                                                        "-fx-text-fill:#081008;" +
+                                                        "-fx-font-weight:bold;" +
+                                                        "-fx-background-radius:8;" +
+                                                        "-fx-padding:9 18;" +
+                                                        "-fx-cursor:hand;");
+                }
+
+                viewOrder.setOnAction(e -> {
+
+                        markAsRead(order);
+
+                        openOrdersPage();
+                });
+
+                // -----------------------------------------------------
+                // MARK AS READ
+                // -----------------------------------------------------
+
+                Button markRead = new Button(
+                                "Mark as Read");
+
+                markRead.setStyle(
+                                "-fx-background-color:#21262D;" +
+                                                "-fx-text-fill:#c9d1d9;" +
+                                                "-fx-background-radius:8;" +
+                                                "-fx-padding:9 18;" +
+                                                "-fx-cursor:hand;");
+
+                markRead.setOnAction(e -> {
+
+                        markAsRead(order);
+
+                        loadNotifications();
+                });
+
+                buttons.getChildren().addAll(
+                                viewOrder,
+                                markRead);
+
+                // =====================================================
+                // ADD TO CARD
+                // =====================================================
+
+                card.getChildren().addAll(
+                                top,
+                                message,
+                                orderId,
+                                farmer,
+                                amount,
+                                buttons);
+
+                return card;
+        }
+
+        // =========================================================
+        // FARMER NAME
+        // =========================================================
+
+        private String getFarmerName(
+                        Order order) {
+
+                if (order.getFarmerName() != null &&
+                                !order.getFarmerName()
+                                                .trim()
+                                                .isEmpty()) {
+
+                        return order.getFarmerName();
+                }
+
+                return "Farmer "
+                                + order.getFarmerId();
+        }
+
+        // =========================================================
+        // MARK READ
+        // =========================================================
+
+        private void markAsRead(
+                        Order order) {
+
+                if (order == null ||
+                                order.getOrderId() == null) {
+
+                        return;
+                }
+
                 orderController
-                        .getBuyerUnreadNotifications(
-                                buyerUid
-                        );
-
-        if (notifications == null ||
-                notifications.isEmpty()) {
-
-            showEmpty(
-                    "No new notifications"
-            );
-
-            return;
+                                .markBuyerNotificationRead(
+                                                order.getOrderId());
         }
 
-        for (Order order :
-                notifications) {
+        // =========================================================
+        // OPEN ORDERS
+        // =========================================================
 
-            notificationContainer
-                    .getChildren()
-                    .add(
-                            createNotificationCard(
-                                    order
-                            )
-                    );
-        }
-    }
+        private void openOrdersPage() {
 
-    // =========================================================
-    // NOTIFICATION CARD
-    // =========================================================
+                try {
 
-    private VBox createNotificationCard(
-            Order order) {
+                        BuyerOrdersPage ordersPage = new BuyerOrdersPage();
 
-        VBox card =
-                new VBox(12);
+                        BorderPane page = ordersPage.getOrdersPage();
 
-        card.setPadding(
-                new Insets(20)
-        );
+                        Scene scene = new Scene(
+                                        page,
+                                        1400,
+                                        850);
 
-        card.setStyle(
-                "-fx-background-color:#161B22;" +
-                "-fx-background-radius:12;" +
-                "-fx-border-color:#2A3138;" +
-                "-fx-border-radius:12;"
-        );
+                        LoginPage.mainStage
+                                        .setScene(scene);
 
-        // =====================================================
-        // DETERMINE STATUS
-        // =====================================================
+                        LoginPage.mainStage.show();
 
-        boolean accepted =
-                "ACCEPTED".equalsIgnoreCase(
-                        order.getOrderStatus()
-                );
+                } catch (Exception e) {
 
-        boolean rejected =
-                "REJECTED".equalsIgnoreCase(
-                        order.getOrderStatus()
-                );
+                        e.printStackTrace();
 
-        // =====================================================
-        // TOP
-        // =====================================================
-
-        HBox top =
-                new HBox(10);
-
-        top.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        Label icon;
-
-        Label title;
-
-        if (accepted) {
-
-            icon =
-                    new Label("✅");
-
-            title =
-                    new Label(
-                            "Order Accepted"
-                    );
-
-            title.setStyle(
-                    "-fx-text-fill:#68d34a;" +
-                    "-fx-font-size:18px;" +
-                    "-fx-font-weight:bold;"
-            );
-
-        } else if (rejected) {
-
-            icon =
-                    new Label("❌");
-
-            title =
-                    new Label(
-                            "Order Rejected"
-                    );
-
-            title.setStyle(
-                    "-fx-text-fill:#ff5c67;" +
-                    "-fx-font-size:18px;" +
-                    "-fx-font-weight:bold;"
-            );
-
-        } else {
-
-            icon =
-                    new Label("🔔");
-
-            title =
-                    new Label(
-                            "Order Update"
-                    );
-
-            title.setStyle(
-                    "-fx-text-fill:#68d34a;" +
-                    "-fx-font-size:18px;" +
-                    "-fx-font-weight:bold;"
-            );
+                        showAlert(
+                                        Alert.AlertType.ERROR,
+                                        "Unable to open Orders.");
+                }
         }
 
-        icon.setStyle(
-                "-fx-font-size:25px;"
-        );
+        // =========================================================
+        // EMPTY STATE
+        // =========================================================
 
-        top.getChildren().addAll(
-                icon,
-                title
-        );
+        private void showEmpty(
+                        String text) {
 
-        // =====================================================
-        // MESSAGE
-        // =====================================================
+                Label empty = new Label(text);
 
-        String messageText;
+                empty.setStyle(
+                                "-fx-text-fill:#8b949e;" +
+                                                "-fx-font-size:16px;");
 
-        if (accepted) {
-
-            messageText =
-                    "The farmer has accepted your order.";
-
-        } else if (rejected) {
-
-            messageText =
-                    "The farmer has rejected your order.";
-
-        } else {
-
-            messageText =
-                    "There is an update on your order.";
+                notificationContainer
+                                .getChildren()
+                                .add(empty);
         }
 
-        Label message =
-                new Label(
-                        messageText
-                );
+        // =========================================================
+        // SAFE STRING
+        // =========================================================
 
-        message.setStyle(
-                "-fx-text-fill:#d0d7de;" +
-                "-fx-font-size:14px;"
-        );
+        private String getSafe(
+                        String value) {
 
-        // =====================================================
-        // ORDER ID
-        // =====================================================
+                if (value == null ||
+                                value.trim().isEmpty()) {
 
-        Label orderId =
-                new Label(
-                        "Order ID: "
-                                + getSafe(
-                                order.getOrderId()
-                        )
-                );
+                        return "Not available";
+                }
 
-        orderId.setStyle(
-                "-fx-text-fill:#8b949e;" +
-                "-fx-font-size:13px;"
-        );
-
-        // =====================================================
-        // FARMER
-        // =====================================================
-
-        Label farmer =
-                new Label(
-                        "Farmer: "
-                                + getFarmerName(order)
-                );
-
-        farmer.setStyle(
-                "-fx-text-fill:#8b949e;" +
-                "-fx-font-size:13px;"
-        );
-
-        // =====================================================
-        // TOTAL
-        // =====================================================
-
-        Label amount =
-                new Label(
-                        String.format(
-                                "Order Amount: ₹%.2f",
-                                order.getTotalAmount()
-                        )
-                );
-
-        amount.setStyle(
-                "-fx-text-fill:white;" +
-                "-fx-font-size:15px;" +
-                "-fx-font-weight:bold;"
-        );
-
-        // =====================================================
-        // BUTTONS
-        // =====================================================
-
-        HBox buttons =
-                new HBox(10);
-
-        // -----------------------------------------------------
-        // VIEW ORDER
-        // -----------------------------------------------------
-
-        Button viewOrder =
-                new Button(
-                        "View Order"
-                );
-
-        if (rejected) {
-
-            viewOrder.setStyle(
-                    "-fx-background-color:#3A1518;" +
-                    "-fx-text-fill:#FF6B6B;" +
-                    "-fx-font-weight:bold;" +
-                    "-fx-background-radius:8;" +
-                    "-fx-padding:9 18;" +
-                    "-fx-cursor:hand;"
-            );
-
-        } else {
-
-            viewOrder.setStyle(
-                    "-fx-background-color:#68d34a;" +
-                    "-fx-text-fill:#081008;" +
-                    "-fx-font-weight:bold;" +
-                    "-fx-background-radius:8;" +
-                    "-fx-padding:9 18;" +
-                    "-fx-cursor:hand;"
-            );
+                return value;
         }
 
-        viewOrder.setOnAction(e -> {
+        // =========================================================
+        // ALERT
+        // =========================================================
 
-            markAsRead(order);
+        private void showAlert(
+                        Alert.AlertType type,
+                        String message) {
 
-            openOrdersPage();
-        });
+                Alert alert = new Alert(type);
 
-        // -----------------------------------------------------
-        // MARK AS READ
-        // -----------------------------------------------------
+                alert.setTitle(
+                                "AgroBiz");
 
-        Button markRead =
-                new Button(
-                        "Mark as Read"
-                );
+                alert.setHeaderText(
+                                null);
 
-        markRead.setStyle(
-                "-fx-background-color:#21262D;" +
-                "-fx-text-fill:#c9d1d9;" +
-                "-fx-background-radius:8;" +
-                "-fx-padding:9 18;" +
-                "-fx-cursor:hand;"
-        );
+                alert.setContentText(
+                                message);
 
-        markRead.setOnAction(e -> {
-
-            markAsRead(order);
-
-            loadNotifications();
-        });
-
-        buttons.getChildren().addAll(
-                viewOrder,
-                markRead
-        );
-
-        // =====================================================
-        // ADD TO CARD
-        // =====================================================
-
-        card.getChildren().addAll(
-                top,
-                message,
-                orderId,
-                farmer,
-                amount,
-                buttons
-        );
-
-        return card;
-    }
-
-    // =========================================================
-    // FARMER NAME
-    // =========================================================
-
-    private String getFarmerName(
-            Order order) {
-
-        if (order.getFarmerName() != null &&
-                !order.getFarmerName()
-                        .trim()
-                        .isEmpty()) {
-
-            return order.getFarmerName();
+                alert.showAndWait();
         }
-
-        return "Farmer "
-                + order.getFarmerId();
-    }
-
-    // =========================================================
-    // MARK READ
-    // =========================================================
-
-    private void markAsRead(
-            Order order) {
-
-        if (order == null ||
-                order.getOrderId() == null) {
-
-            return;
-        }
-
-        orderController
-                .markBuyerNotificationRead(
-                        order.getOrderId()
-                );
-    }
-
-    // =========================================================
-    // OPEN ORDERS
-    // =========================================================
-
-    private void openOrdersPage() {
-
-        try {
-
-            BuyerOrdersPage ordersPage =
-                    new BuyerOrdersPage();
-
-            BorderPane page =
-                    ordersPage.getOrdersPage();
-
-            Scene scene =
-                    new Scene(
-                            page,
-                            1400,
-                            850
-                    );
-
-            LoginPage.mainStage
-                    .setScene(scene);
-
-            LoginPage.mainStage.show();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-            showAlert(
-                    Alert.AlertType.ERROR,
-                    "Unable to open Orders."
-            );
-        }
-    }
-
-    // =========================================================
-    // EMPTY STATE
-    // =========================================================
-
-    private void showEmpty(
-            String text) {
-
-        Label empty =
-                new Label(text);
-
-        empty.setStyle(
-                "-fx-text-fill:#8b949e;" +
-                "-fx-font-size:16px;"
-        );
-
-        notificationContainer
-                .getChildren()
-                .add(empty);
-    }
-
-    // =========================================================
-    // SAFE STRING
-    // =========================================================
-
-    private String getSafe(
-            String value) {
-
-        if (value == null ||
-                value.trim().isEmpty()) {
-
-            return "Not available";
-        }
-
-        return value;
-    }
-
-    // =========================================================
-    // ALERT
-    // =========================================================
-
-    private void showAlert(
-            Alert.AlertType type,
-            String message) {
-
-        Alert alert =
-                new Alert(type);
-
-        alert.setTitle(
-                "AgroBiz"
-        );
-
-        alert.setHeaderText(
-                null
-        );
-
-        alert.setContentText(
-                message
-        );
-
-        alert.showAndWait();
-    }
 }

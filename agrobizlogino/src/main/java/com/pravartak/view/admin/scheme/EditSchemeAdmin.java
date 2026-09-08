@@ -27,7 +27,7 @@ public class EditSchemeAdmin {
         private TextArea eligibilityArea;
 
         private TextArea informationArea;
-        
+
         private TextField applyUrlField;
 
         // =========================================================
@@ -148,23 +148,21 @@ public class EditSchemeAdmin {
                                 informationArea);
 
                 // =====================================================
-// APPLY URL
-// =====================================================
+                // APPLY URL
+                // =====================================================
 
-Label applyUrlLabel =
-        createLabel(
-                "Official Application URL");
+                Label applyUrlLabel = createLabel(
+                                "Official Application URL");
 
-applyUrlField =
-        new TextField(
-                safe(
-                        scheme.getApplyUrl()));
+                applyUrlField = new TextField(
+                                safe(
+                                                scheme.getApplyUrl()));
 
-applyUrlField.setPromptText(
-        "https://example.gov.in/apply");
+                applyUrlField.setPromptText(
+                                "https://example.gov.in/apply");
 
-styleTextField(
-        applyUrlField);
+                styleTextField(
+                                applyUrlField);
 
                 // =====================================================
                 // SAVE
@@ -268,9 +266,8 @@ styleTextField(
                 String information = informationArea.getText()
                                 .trim();
 
-                String applyUrl =
-        applyUrlField.getText()
-                .trim();
+                String applyUrl = applyUrlField.getText()
+                                .trim();
 
                 if (name.isEmpty() ||
                                 eligibility.isEmpty() ||
@@ -291,7 +288,7 @@ styleTextField(
 
                 scheme.setInformation(
                                 information);
-                
+
                 scheme.setApplyUrl(
                                 applyUrl);
 
@@ -300,11 +297,10 @@ styleTextField(
 
                 if (success) {
 
-                        AdminPage adminPage =
-                 new AdminPage();
+                        AdminPage adminPage = new AdminPage();
 
-        LoginPage.mainStage.setScene(
-                adminPage.getAdminPage("Government Schemes"));
+                        LoginPage.mainStage.setScene(
+                                        adminPage.getAdminPage("Government Schemes"));
                 } else {
 
                         showError(
@@ -390,11 +386,10 @@ styleTextField(
 
         private void goBack() {
 
-                AdminPage adminPage =
-                 new AdminPage();
+                AdminPage adminPage = new AdminPage();
 
-        LoginPage.mainStage.setScene(
-                adminPage.getAdminPage("Government Schemes"));
+                LoginPage.mainStage.setScene(
+                                adminPage.getAdminPage("Government Schemes"));
         }
 
         // =========================================================

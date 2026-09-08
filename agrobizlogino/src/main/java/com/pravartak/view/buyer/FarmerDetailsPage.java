@@ -27,810 +27,597 @@ import javafx.stage.Stage;
 
 public class FarmerDetailsPage {
 
-    private final int farmerId;
-    private final String productName;
-
-    public FarmerDetailsPage(
-            int farmerId,
-            String productName) {
-
-        this.farmerId = farmerId;
-        this.productName = productName;
-    }
-
-    // =========================================================
-    // SHOW PAGE
-    // =========================================================
-
-    public void show() {
-
-        Stage stage =
-                new Stage();
-
-        stage.initModality(
-                Modality.APPLICATION_MODAL
-        );
-
-        stage.setTitle(
-                "Farmer Details"
-        );
-
-        stage.setWidth(
-                600
-        );
-
-        stage.setHeight(
-                700
-        );
-
-        BorderPane root =
-                new BorderPane();
-
-        root.setStyle(
-                "-fx-background-color:#080C0D;"
-        );
-
-        // =====================================================
-        // TITLE
-        // =====================================================
-
-        Label title =
-                new Label(
-                        "Farmer Details"
-                );
-
-        title.setStyle(
-                "-fx-text-fill:#68D34A;" +
-                "-fx-font-size:27px;" +
-                "-fx-font-weight:bold;"
-        );
-
-        title.setPadding(
-                new Insets(
-                        25,
-                        30,
-                        15,
-                        30
-                )
-        );
-
-        root.setTop(
-                title
-        );
-
-
-        // =====================================================
-        // DETAILS
-        // =====================================================
-
-        VBox details =
-                createDetails();
-
-
-        ScrollPane scroll =
-                new ScrollPane(
-                        details
-                );
-
-        scroll.setFitToWidth(
-                true
-        );
-
-        scroll.setHbarPolicy(
-                ScrollPane.ScrollBarPolicy.NEVER
-        );
-
-        scroll.setVbarPolicy(
-                ScrollPane.ScrollBarPolicy.AS_NEEDED
-        );
-
-        scroll.setStyle(
-                "-fx-background-color:#080C0D;" +
-                "-fx-background:#080C0D;" +
-                "-fx-control-inner-background:#080C0D;"
-        );
-
-
-        root.setCenter(
-                scroll
-        );
-
-
-        // =====================================================
-        // SCENE
-        // =====================================================
-
-        Scene scene =
-                new Scene(
-                        root
-                );
-
-        stage.setScene(
-                scene
-        );
-
-        stage.showAndWait();
-    }
-
-
-    // =========================================================
-    // CREATE DETAILS
-    // =========================================================
-
-    private VBox createDetails() {
-
-        VBox main =
-                new VBox(
-                        18
-                );
-
-        main.setPadding(
-                new Insets(
-                        10,
-                        25,
-                        30,
-                        25
-                )
-        );
-
-
-        try {
-
-            // =================================================
-            // FIREBASE
-            // =================================================
-
-            Firestore db =
-                    FirebaseConfig.getFirestore();
-
-
-            var document =
-                    db.collection("farmers")
-                            .document(
-                                    String.valueOf(
-                                            farmerId
-                                    )
-                            )
-                            .get()
-                            .get();
-
-
-            if (!document.exists()) {
-
-                return createError(
-                        "Farmer details not found.\n\n"
-                        + "Farmer ID: "
-                        + farmerId
-                );
-            }
-
-
-            FarmerProfile farmer =
-                    document.toObject(
-                            FarmerProfile.class
-                    );
-
-
-            if (farmer == null) {
-
-                return createError(
-                        "Farmer profile could not be loaded."
-                );
-            }
-
-
-            // =================================================
-            // PROFILE HEADER
-            // =================================================
-
-            VBox profileCard =
-                    new VBox(
-                            12
-                    );
-
-            profileCard.setAlignment(
-                    Pos.CENTER
-            );
-
-            profileCard.setPadding(
-                    new Insets(
-                            25
-                    )
-            );
-
-            profileCard.setStyle(
-                    "-fx-background-color:#0D1512;" +
-                    "-fx-border-color:#26382B;" +
-                    "-fx-border-radius:14;" +
-                    "-fx-background-radius:14;"
-            );
-
-
-            // =================================================
-            // IMAGE
-            // =================================================
-
-            StackPane imageContainer =
-                    createProfileImage(
-                            farmer.getImageBase64()
-                    );
-
-
-            profileCard.getChildren()
-                    .add(
-                            imageContainer
-                    );
-
-
-            // =================================================
-            // FARMER NAME
-            // =================================================
-
-            String farmerName =
-                    safeValue(
-                            farmer.getName()
-                    );
-
-
-            Label name =
-                    new Label(
-                            farmerName
-                    );
-
-            name.setTextFill(
-                    Color.WHITE
-            );
-
-            name.setFont(
-                    javafx.scene.text.Font.font(
-                            "Arial",
-                            javafx.scene.text.FontWeight.BOLD,
-                            23
-             ) );
-
-
-            name.setWrapText(
-                    true
-            );
-
-
-            Label farmerRole =
-                    new Label(
-                            "Farmer / Farm Owner"
-                    );
-
-            farmerRole.setTextFill(
-                    Color.web(
-                            "#68D34A"
-                    )
-            );
-
-            farmerRole.setFont(
-                    javafx.scene.text.Font.font(
-                            "Arial",
-                            13
-                    )
-            );
-
-
-            profileCard.getChildren()
-                    .addAll(
-                            name,
-                            farmerRole
-                    );
-
-
-            // =================================================
-            // PRODUCT CARD
-            // =================================================
-
-            VBox productCard =
-                    createInfoCard(
-                            "🌾 Product Information"
-                    );
-
-
-            productCard.getChildren()
-                    .add(
-                            createField(
-                                    "Product",
-                                    productName
-                            )
-                    );
-
-
-            // =================================================
-            // PERSONAL INFORMATION
-            // =================================================
-
-            VBox personalCard =
-                    createInfoCard(
-                            "👤 Personal Information"
-                    );
-
-
-            personalCard.getChildren()
-                    .addAll(
-
-                            createField(
-                                    "📞 Phone",
-                                    farmer.getPhone()
-                            ),
-
-                            createField(
-                                    "✉ Email",
-                                    farmer.getEmail()
-                            ),
-
-                            createField(
-                                    "🏠 Address",
-                                    farmer.getAddress()
-                            ),
-
-                            createField(
-                                    "📍 Village",
-                                    farmer.getVillage()
-                            ),
-
-                            createField(
-                                    "📍 District",
-                                    farmer.getDistrict()
-                            ),
-
-                            createField(
-                                    "📍 State",
-                                    farmer.getState()
-                            )
-                    );
-
-
-            // =================================================
-            // FARM INFORMATION
-            // =================================================
-
-            VBox farmCard =
-                    createInfoCard(
-                            "🌱 Farm Information"
-                    );
-
-
-            farmCard.getChildren()
-                    .addAll(
-
-                            createField(
-                                    "Farm Name",
-                                    farmer.getFarmName()
-                            ),
-
-                            createField(
-                                    "Farm Area",
-                                    farmer.getFarmArea()
-                            ),
-
-                            createField(
-                                    "Farming Type",
-                                    farmer.getFarmingType()
-                            ),
-
-                            createField(
-                                    "Primary Crops",
-                                    farmer.getPrimaryCrops()
-                            )
-                    );
-
-
-            // =================================================
-            // ADD EVERYTHING
-            // =================================================
-
-            main.getChildren()
-                    .addAll(
-                            profileCard,
-                            productCard,
-                            personalCard,
-                            farmCard
-                    );
-
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-            main.getChildren()
-                    .add(
-                            createError(
-                                    "Unable to load farmer details.\n\n"
-                                    + e.getMessage()
-                            )
-                    );
+        private final int farmerId;
+        private final String productName;
+
+        public FarmerDetailsPage(
+                        int farmerId,
+                        String productName) {
+
+                this.farmerId = farmerId;
+                this.productName = productName;
         }
 
+        // =========================================================
+        // SHOW PAGE
+        // =========================================================
 
-        return main;
-    }
+        public void show() {
 
+                Stage stage = new Stage();
 
-    // =========================================================
-    // PROFILE IMAGE
-    // =========================================================
+                stage.initModality(
+                                Modality.APPLICATION_MODAL);
 
-    private StackPane createProfileImage(
-            String imageBase64) {
+                stage.setTitle(
+                                "Farmer Details");
 
-        StackPane container =
-                new StackPane();
+                stage.setWidth(
+                                600);
 
-        container.setPrefSize(
-                150,
-                150
-        );
+                stage.setHeight(
+                                700);
 
-        container.setMinSize(
-                150,
-                150
-        );
+                BorderPane root = new BorderPane();
 
-        container.setMaxSize(
-                150,
-                150
-        );
+                root.setStyle(
+                                "-fx-background-color:#080C0D;");
 
-        container.setStyle(
-                "-fx-background-color:#1B2520;" +
-                "-fx-background-radius:100;"
-        );
+                // =====================================================
+                // TITLE
+                // =====================================================
 
+                Label title = new Label(
+                                "Farmer Details");
 
-        // =====================================================
-        // NO IMAGE
-        // =====================================================
+                title.setStyle(
+                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-font-size:27px;" +
+                                                "-fx-font-weight:bold;");
 
-        if (imageBase64 == null ||
-                imageBase64.trim().isEmpty()) {
+                title.setPadding(
+                                new Insets(
+                                                25,
+                                                30,
+                                                15,
+                                                30));
 
-            Label placeholder =
-                    new Label(
-                            "👨‍🌾"
-                    );
+                root.setTop(
+                                title);
 
-            placeholder.setStyle(
-                    "-fx-font-size:60px;"
-            );
+                // =====================================================
+                // DETAILS
+                // =====================================================
 
-            container.getChildren()
-                    .add(
-                            placeholder
-                    );
+                VBox details = createDetails();
 
-            return container;
+                ScrollPane scroll = new ScrollPane(
+                                details);
+
+                scroll.setFitToWidth(
+                                true);
+
+                scroll.setHbarPolicy(
+                                ScrollPane.ScrollBarPolicy.NEVER);
+
+                scroll.setVbarPolicy(
+                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+                scroll.setStyle(
+                                "-fx-background-color:#080C0D;" +
+                                                "-fx-background:#080C0D;" +
+                                                "-fx-control-inner-background:#080C0D;");
+
+                root.setCenter(
+                                scroll);
+
+                // =====================================================
+                // SCENE
+                // =====================================================
+
+                Scene scene = new Scene(
+                                root);
+
+                stage.setScene(
+                                scene);
+
+                stage.showAndWait();
         }
 
+        // =========================================================
+        // CREATE DETAILS
+        // =========================================================
 
-        try {
+        private VBox createDetails() {
 
-            // =================================================
-            // DECODE BASE64
-            // =================================================
+                VBox main = new VBox(
+                                18);
 
-            byte[] imageBytes =
-                    Base64.getDecoder()
-                            .decode(
-                                    imageBase64
-                            );
+                main.setPadding(
+                                new Insets(
+                                                10,
+                                                25,
+                                                30,
+                                                25));
 
+                try {
 
-            Image image =
-                    new Image(
-                            new ByteArrayInputStream(
-                                    imageBytes
-                            )
-                    );
+                        // =================================================
+                        // FIREBASE
+                        // =================================================
 
+                        Firestore db = FirebaseConfig.getFirestore();
 
-            if (image.isError()) {
+                        var document = db.collection("farmers")
+                                        .document(
+                                                        String.valueOf(
+                                                                        farmerId))
+                                        .get()
+                                        .get();
 
-                throw new Exception(
-                        "Invalid profile image"
-                );
-            }
+                        if (!document.exists()) {
 
+                                return createError(
+                                                "Farmer details not found.\n\n"
+                                                                + "Farmer ID: "
+                                                                + farmerId);
+                        }
 
-            // =================================================
-            // IMAGE VIEW
-            // =================================================
+                        FarmerProfile farmer = document.toObject(
+                                        FarmerProfile.class);
 
-            ImageView imageView =
-                    new ImageView(
-                            image
-                    );
+                        if (farmer == null) {
 
+                                return createError(
+                                                "Farmer profile could not be loaded.");
+                        }
 
-            imageView.setFitWidth(
-                    150
-            );
+                        // =================================================
+                        // PROFILE HEADER
+                        // =================================================
 
-            imageView.setFitHeight(
-                    150
-            );
+                        VBox profileCard = new VBox(
+                                        12);
 
-            imageView.setPreserveRatio(
-                    false
-            );
+                        profileCard.setAlignment(
+                                        Pos.CENTER);
 
+                        profileCard.setPadding(
+                                        new Insets(
+                                                        25));
 
-            // =================================================
-            // CIRCLE CLIP
-            // =================================================
+                        profileCard.setStyle(
+                                        "-fx-background-color:#0D1512;" +
+                                                        "-fx-border-color:#26382B;" +
+                                                        "-fx-border-radius:14;" +
+                                                        "-fx-background-radius:14;");
 
-            Circle clip =
-                    new Circle(
-                            75,
-                            75,
-                            75
-                    );
+                        // =================================================
+                        // IMAGE
+                        // =================================================
 
+                        StackPane imageContainer = createProfileImage(
+                                        farmer.getImageBase64());
 
-            imageView.setClip(
-                    clip
-            );
+                        profileCard.getChildren()
+                                        .add(
+                                                        imageContainer);
 
+                        // =================================================
+                        // FARMER NAME
+                        // =================================================
 
-            container.getChildren()
-                    .add(
-                            imageView
-                    );
+                        String farmerName = safeValue(
+                                        farmer.getName());
 
+                        Label name = new Label(
+                                        farmerName);
 
-        } catch (Exception e) {
+                        name.setTextFill(
+                                        Color.WHITE);
 
-            e.printStackTrace();
+                        name.setFont(
+                                        javafx.scene.text.Font.font(
+                                                        "Arial",
+                                                        javafx.scene.text.FontWeight.BOLD,
+                                                        23));
 
+                        name.setWrapText(
+                                        true);
 
-            Label placeholder =
-                    new Label(
-                            "👨‍🌾"
-                    );
+                        Label farmerRole = new Label(
+                                        "Farmer / Farm Owner");
 
-            placeholder.setStyle(
-                    "-fx-font-size:60px;"
-            );
+                        farmerRole.setTextFill(
+                                        Color.web(
+                                                        "#68D34A"));
 
+                        farmerRole.setFont(
+                                        javafx.scene.text.Font.font(
+                                                        "Arial",
+                                                        13));
 
-            container.getChildren()
-                    .add(
-                            placeholder
-                    );
+                        profileCard.getChildren()
+                                        .addAll(
+                                                        name,
+                                                        farmerRole);
+
+                        // =================================================
+                        // PRODUCT CARD
+                        // =================================================
+
+                        VBox productCard = createInfoCard(
+                                        "🌾 Product Information");
+
+                        productCard.getChildren()
+                                        .add(
+                                                        createField(
+                                                                        "Product",
+                                                                        productName));
+
+                        // =================================================
+                        // PERSONAL INFORMATION
+                        // =================================================
+
+                        VBox personalCard = createInfoCard(
+                                        "👤 Personal Information");
+
+                        personalCard.getChildren()
+                                        .addAll(
+
+                                                        createField(
+                                                                        "📞 Phone",
+                                                                        farmer.getPhone()),
+
+                                                        createField(
+                                                                        "✉ Email",
+                                                                        farmer.getEmail()),
+
+                                                        createField(
+                                                                        "🏠 Address",
+                                                                        farmer.getAddress()),
+
+                                                        createField(
+                                                                        "📍 Village",
+                                                                        farmer.getVillage()),
+
+                                                        createField(
+                                                                        "📍 District",
+                                                                        farmer.getDistrict()),
+
+                                                        createField(
+                                                                        "📍 State",
+                                                                        farmer.getState()));
+
+                        // =================================================
+                        // FARM INFORMATION
+                        // =================================================
+
+                        VBox farmCard = createInfoCard(
+                                        "🌱 Farm Information");
+
+                        farmCard.getChildren()
+                                        .addAll(
+
+                                                        createField(
+                                                                        "Farm Name",
+                                                                        farmer.getFarmName()),
+
+                                                        createField(
+                                                                        "Farm Area",
+                                                                        farmer.getFarmArea()),
+
+                                                        createField(
+                                                                        "Farming Type",
+                                                                        farmer.getFarmingType()),
+
+                                                        createField(
+                                                                        "Primary Crops",
+                                                                        farmer.getPrimaryCrops()));
+
+                        // =================================================
+                        // ADD EVERYTHING
+                        // =================================================
+
+                        main.getChildren()
+                                        .addAll(
+                                                        profileCard,
+                                                        productCard,
+                                                        personalCard,
+                                                        farmCard);
+
+                } catch (Exception e) {
+
+                        e.printStackTrace();
+
+                        main.getChildren()
+                                        .add(
+                                                        createError(
+                                                                        "Unable to load farmer details.\n\n"
+                                                                                        + e.getMessage()));
+                }
+
+                return main;
         }
 
+        // =========================================================
+        // PROFILE IMAGE
+        // =========================================================
 
-        return container;
-    }
+        private StackPane createProfileImage(
+                        String imageBase64) {
 
+                StackPane container = new StackPane();
 
-    // =========================================================
-    // INFORMATION CARD
-    // =========================================================
+                container.setPrefSize(
+                                150,
+                                150);
 
-    private VBox createInfoCard(
-            String titleText) {
+                container.setMinSize(
+                                150,
+                                150);
 
-        VBox card =
-                new VBox(
-                        12
-                );
+                container.setMaxSize(
+                                150,
+                                150);
 
-        card.setPadding(
-                new Insets(
-                        20
-                )
-        );
+                container.setStyle(
+                                "-fx-background-color:#1B2520;" +
+                                                "-fx-background-radius:100;");
 
-        card.setStyle(
-                "-fx-background-color:#0D1512;" +
-                "-fx-border-color:#26382B;" +
-                "-fx-border-radius:14;" +
-                "-fx-background-radius:14;"
-        );
+                // =====================================================
+                // NO IMAGE
+                // =====================================================
 
+                if (imageBase64 == null ||
+                                imageBase64.trim().isEmpty()) {
 
-        Label title =
-                new Label(
-                        titleText
-                );
+                        Label placeholder = new Label(
+                                        "👨‍🌾");
 
-        title.setTextFill(
-                Color.web(
-                        "#68D34A"
-                )
-        );
+                        placeholder.setStyle(
+                                        "-fx-font-size:60px;");
 
-        title.setFont(
-                javafx.scene.text.Font.font(
-                        "Arial",
-                        javafx.scene.text.FontWeight.BOLD,
-                        17
-                )
-        );
+                        container.getChildren()
+                                        .add(
+                                                        placeholder);
 
+                        return container;
+                }
 
-        card.getChildren()
-                .add(
-                        title
-                );
+                try {
 
+                        // =================================================
+                        // DECODE BASE64
+                        // =================================================
 
-        return card;
-    }
+                        byte[] imageBytes = Base64.getDecoder()
+                                        .decode(
+                                                        imageBase64);
 
+                        Image image = new Image(
+                                        new ByteArrayInputStream(
+                                                        imageBytes));
 
-    // =========================================================
-    // FIELD
-    // =========================================================
+                        if (image.isError()) {
 
-    private HBox createField(
-            String title,
-            String value) {
+                                throw new Exception(
+                                                "Invalid profile image");
+                        }
 
-        HBox row =
-                new HBox(
-                        12
-                );
+                        // =================================================
+                        // IMAGE VIEW
+                        // =================================================
 
-        row.setAlignment(
-                Pos.TOP_LEFT
-        );
+                        ImageView imageView = new ImageView(
+                                        image);
 
-        row.setPadding(
-                new Insets(
-                        8,
-                        5,
-                        8,
-                        5
-                )
-        );
+                        imageView.setFitWidth(
+                                        150);
 
+                        imageView.setFitHeight(
+                                        150);
 
-        Label titleLabel =
-                new Label(
-                        title
-                );
+                        imageView.setPreserveRatio(
+                                        false);
 
-        titleLabel.setPrefWidth(
-                130
-        );
+                        // =================================================
+                        // CIRCLE CLIP
+                        // =================================================
 
-        titleLabel.setMinWidth(
-                130
-        );
+                        Circle clip = new Circle(
+                                        75,
+                                        75,
+                                        75);
 
-        titleLabel.setTextFill(
-                Color.web(
-                        "#A9B7AC"
-                )
-        );
+                        imageView.setClip(
+                                        clip);
 
-        titleLabel.setFont(
-                javafx.scene.text.Font.font(
-                        "Arial",
-                        javafx.scene.text.FontWeight.BOLD,
-                        13
-                )
-        );
+                        container.getChildren()
+                                        .add(
+                                                        imageView);
 
+                } catch (Exception e) {
 
-        Label valueLabel =
-                new Label(
-                        safeValue(value)
-                );
+                        e.printStackTrace();
 
-        valueLabel.setTextFill(
-                Color.WHITE
-        );
+                        Label placeholder = new Label(
+                                        "👨‍🌾");
 
-        valueLabel.setFont(
-                javafx.scene.text.Font.font(
-                        "Arial",
-                        14
-                )
-        );
+                        placeholder.setStyle(
+                                        "-fx-font-size:60px;");
 
+                        container.getChildren()
+                                        .add(
+                                                        placeholder);
+                }
 
-        valueLabel.setWrapText(
-                true
-        );
-
-
-        HBox.setHgrow(
-                valueLabel,
-                Priority.ALWAYS
-        );
-
-
-        row.getChildren()
-                .addAll(
-                        titleLabel,
-                        valueLabel
-                );
-
-
-        return row;
-    }
-
-
-    // =========================================================
-    // ERROR
-    // =========================================================
-
-    private VBox createError(
-            String message) {
-
-        VBox box =
-                new VBox();
-
-        box.setPadding(
-                new Insets(
-                        25
-                )
-        );
-
-        box.setAlignment(
-                Pos.CENTER
-        );
-
-        box.setStyle(
-                "-fx-background-color:#0D1512;" +
-                "-fx-border-color:#26382B;" +
-                "-fx-border-radius:14;" +
-                "-fx-background-radius:14;"
-        );
-
-
-        Label error =
-                new Label(
-                        message
-                );
-
-        error.setTextFill(
-                Color.web(
-                        "#FF6B6B"
-                )
-        );
-
-        error.setFont(
-                javafx.scene.text.Font.font(
-                        "Arial",
-                        14
-                )
-        );
-
-        error.setWrapText(
-                true
-        );
-
-
-        box.getChildren()
-                .add(
-                        error
-                );
-
-
-        return box;
-    }
-
-
-    // =========================================================
-    // SAFE VALUE
-    // =========================================================
-
-    private String safeValue(
-            String value) {
-
-        if (value == null ||
-                value.trim().isEmpty()) {
-
-            return "Not provided";
+                return container;
         }
 
-        return value;
-    }
+        // =========================================================
+        // INFORMATION CARD
+        // =========================================================
+
+        private VBox createInfoCard(
+                        String titleText) {
+
+                VBox card = new VBox(
+                                12);
+
+                card.setPadding(
+                                new Insets(
+                                                20));
+
+                card.setStyle(
+                                "-fx-background-color:#0D1512;" +
+                                                "-fx-border-color:#26382B;" +
+                                                "-fx-border-radius:14;" +
+                                                "-fx-background-radius:14;");
+
+                Label title = new Label(
+                                titleText);
+
+                title.setTextFill(
+                                Color.web(
+                                                "#68D34A"));
+
+                title.setFont(
+                                javafx.scene.text.Font.font(
+                                                "Arial",
+                                                javafx.scene.text.FontWeight.BOLD,
+                                                17));
+
+                card.getChildren()
+                                .add(
+                                                title);
+
+                return card;
+        }
+
+        // =========================================================
+        // FIELD
+        // =========================================================
+
+        private HBox createField(
+                        String title,
+                        String value) {
+
+                HBox row = new HBox(
+                                12);
+
+                row.setAlignment(
+                                Pos.TOP_LEFT);
+
+                row.setPadding(
+                                new Insets(
+                                                8,
+                                                5,
+                                                8,
+                                                5));
+
+                Label titleLabel = new Label(
+                                title);
+
+                titleLabel.setPrefWidth(
+                                130);
+
+                titleLabel.setMinWidth(
+                                130);
+
+                titleLabel.setTextFill(
+                                Color.web(
+                                                "#A9B7AC"));
+
+                titleLabel.setFont(
+                                javafx.scene.text.Font.font(
+                                                "Arial",
+                                                javafx.scene.text.FontWeight.BOLD,
+                                                13));
+
+                Label valueLabel = new Label(
+                                safeValue(value));
+
+                valueLabel.setTextFill(
+                                Color.WHITE);
+
+                valueLabel.setFont(
+                                javafx.scene.text.Font.font(
+                                                "Arial",
+                                                14));
+
+                valueLabel.setWrapText(
+                                true);
+
+                HBox.setHgrow(
+                                valueLabel,
+                                Priority.ALWAYS);
+
+                row.getChildren()
+                                .addAll(
+                                                titleLabel,
+                                                valueLabel);
+
+                return row;
+        }
+
+        // =========================================================
+        // ERROR
+        // =========================================================
+
+        private VBox createError(
+                        String message) {
+
+                VBox box = new VBox();
+
+                box.setPadding(
+                                new Insets(
+                                                25));
+
+                box.setAlignment(
+                                Pos.CENTER);
+
+                box.setStyle(
+                                "-fx-background-color:#0D1512;" +
+                                                "-fx-border-color:#26382B;" +
+                                                "-fx-border-radius:14;" +
+                                                "-fx-background-radius:14;");
+
+                Label error = new Label(
+                                message);
+
+                error.setTextFill(
+                                Color.web(
+                                                "#FF6B6B"));
+
+                error.setFont(
+                                javafx.scene.text.Font.font(
+                                                "Arial",
+                                                14));
+
+                error.setWrapText(
+                                true);
+
+                box.getChildren()
+                                .add(
+                                                error);
+
+                return box;
+        }
+
+        // =========================================================
+        // SAFE VALUE
+        // =========================================================
+
+        private String safeValue(
+                        String value) {
+
+                if (value == null ||
+                                value.trim().isEmpty()) {
+
+                        return "Not provided";
+                }
+
+                return value;
+        }
 }

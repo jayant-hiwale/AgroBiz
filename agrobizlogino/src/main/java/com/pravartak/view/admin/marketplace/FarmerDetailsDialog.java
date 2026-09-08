@@ -14,265 +14,215 @@ import javafx.stage.Stage;
 
 public class FarmerDetailsDialog {
 
-    private final FarmerProfile farmer;
+        private final FarmerProfile farmer;
 
-    public FarmerDetailsDialog(
-            FarmerProfile farmer) {
+        public FarmerDetailsDialog(
+                        FarmerProfile farmer) {
 
-        this.farmer = farmer;
-    }
+                this.farmer = farmer;
+        }
 
-    public void show() {
+        public void show() {
 
-        Stage stage =
-                new Stage();
+                Stage stage = new Stage();
 
-        stage.initModality(
-                Modality.APPLICATION_MODAL
-        );
+                stage.initModality(
+                                Modality.APPLICATION_MODAL);
 
-        stage.setTitle(
-                "Farmer Details"
-        );
+                stage.setTitle(
+                                "Farmer Details");
 
-        VBox root =
-                new VBox(15);
+                VBox root = new VBox(15);
 
-        root.setPadding(
-                new Insets(25)
-        );
+                root.setPadding(
+                                new Insets(25));
 
-        root.setPrefWidth(
-                420
-        );
+                root.setPrefWidth(
+                                420);
 
-        root.setStyle(
-                "-fx-background-color:#080C0D;"
-        );
+                root.setStyle(
+                                "-fx-background-color:#080C0D;");
 
-        // =================================================
-        // TITLE
-        // =================================================
+                // =================================================
+                // TITLE
+                // =================================================
 
-        Label title =
-                new Label(
-                        "Farmer Details"
-                );
+                Label title = new Label(
+                                "Farmer Details");
 
-        title.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-font-size:24px;" +
-                "-fx-font-weight:bold;"
-        );
+                title.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:24px;" +
+                                                "-fx-font-weight:bold;");
 
-        // =================================================
-        // FARMER NAME
-        // =================================================
+                // =================================================
+                // FARMER NAME
+                // =================================================
 
-        String name =
-                getString(
-                        "getFullName",
-                        "getName"
-                );
+                String name = getString(
+                                "getFullName",
+                                "getName");
 
-        Label nameLabel =
-                createValue(
-                        "Name",
-                        name
-                );
+                Label nameLabel = createValue(
+                                "Name",
+                                name);
 
-        // =================================================
-        // EMAIL
-        // =================================================
+                // =================================================
+                // EMAIL
+                // =================================================
 
-        String email =
-                getString(
-                        "getEmail"
-                );
+                String email = getString(
+                                "getEmail");
 
-        Label emailLabel =
-                createValue(
-                        "Email",
-                        email
-                );
+                Label emailLabel = createValue(
+                                "Email",
+                                email);
 
-        // =================================================
-        // PHONE
-        // =================================================
+                // =================================================
+                // PHONE
+                // =================================================
 
-        String phone =
-                getString(
-                        "getPhone",
-                        "getPhoneNumber",
-                        "getMobile"
-                );
+                String phone = getString(
+                                "getPhone",
+                                "getPhoneNumber",
+                                "getMobile");
 
-        Label phoneLabel =
-                createValue(
-                        "Phone",
-                        phone
-                );
+                Label phoneLabel = createValue(
+                                "Phone",
+                                phone);
 
-        // =================================================
-        // LOCATION
-        // =================================================
+                // =================================================
+                // LOCATION
+                // =================================================
 
-        String location =
-                getString(
-                        "getLocation",
-                        "getAddress"
-                );
+                String location = getString(
+                                "getLocation",
+                                "getAddress");
 
-        Label locationLabel =
-                createValue(
-                        "Location",
-                        location
-                );
+                Label locationLabel = createValue(
+                                "Location",
+                                location);
 
-        // =================================================
-        // FARMER ID
-        // =================================================
+                // =================================================
+                // FARMER ID
+                // =================================================
 
-        Label farmerIdLabel =
-                createValue(
-                        "Farmer ID",
-                        String.valueOf(
-                                farmer.getFarmerId()
-                        )
-                );
+                Label farmerIdLabel = createValue(
+                                "Farmer ID",
+                                String.valueOf(
+                                                farmer.getFarmerId()));
 
-        // =================================================
-        // CLOSE
-        // =================================================
+                // =================================================
+                // CLOSE
+                // =================================================
 
-        Button close =
-                new Button(
-                        "Close"
-                );
+                Button close = new Button(
+                                "Close");
 
-        close.setPrefWidth(
-                100
-        );
+                close.setPrefWidth(
+                                100);
 
-        close.setStyle(
-                "-fx-background-color:#245D35;" +
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-background-radius:5;" +
-                "-fx-padding:8 15;" +
-                "-fx-cursor:hand;"
-        );
+                close.setStyle(
+                                "-fx-background-color:#245D35;" +
+                                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-background-radius:5;" +
+                                                "-fx-padding:8 15;" +
+                                                "-fx-cursor:hand;");
 
-        close.setOnAction(
-                e -> stage.close()
-        );
+                close.setOnAction(
+                                e -> stage.close());
 
-        HBox buttonBox =
-                new HBox(
-                        close
-                );
+                HBox buttonBox = new HBox(
+                                close);
 
-        buttonBox.setAlignment(
-                Pos.CENTER_RIGHT
-        );
+                buttonBox.setAlignment(
+                                Pos.CENTER_RIGHT);
 
-        root.getChildren().addAll(
-                title,
-                nameLabel,
-                emailLabel,
-                phoneLabel,
-                locationLabel,
-                farmerIdLabel,
-                buttonBox
-        );
+                root.getChildren().addAll(
+                                title,
+                                nameLabel,
+                                emailLabel,
+                                phoneLabel,
+                                locationLabel,
+                                farmerIdLabel,
+                                buttonBox);
 
-        Scene scene =
-                new Scene(
-                        root
-                );
+                Scene scene = new Scene(
+                                root);
 
-        stage.setScene(
-                scene
-        );
+                stage.setScene(
+                                scene);
 
-        stage.showAndWait();
-    }
+                stage.showAndWait();
+        }
 
-    // =====================================================
-    // CREATE VALUE
-    // =====================================================
+        // =====================================================
+        // CREATE VALUE
+        // =====================================================
 
-    private Label createValue(
-            String label,
-            String value) {
+        private Label createValue(
+                        String label,
+                        String value) {
 
-        Label result =
-                new Label(
-                        label + ": " + safe(value)
-                );
+                Label result = new Label(
+                                label + ": " + safe(value));
 
-        result.setWrapText(
-                true
-        );
+                result.setWrapText(
+                                true);
 
-        result.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-font-size:14px;"
-        );
+                result.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:14px;");
 
-        return result;
-    }
+                return result;
+        }
 
-    // =====================================================
-    // GET STRING
-    // =====================================================
+        // =====================================================
+        // GET STRING
+        // =====================================================
 
-    private String getString(
-            String... methodNames) {
+        private String getString(
+                        String... methodNames) {
 
-        for (String methodName :
-                methodNames) {
+                for (String methodName : methodNames) {
 
-            try {
+                        try {
 
-                var method =
-                        farmer.getClass()
-                                .getMethod(
-                                        methodName
-                                );
+                                var method = farmer.getClass()
+                                                .getMethod(
+                                                                methodName);
 
-                Object value =
-                        method.invoke(
-                                farmer
-                        );
+                                Object value = method.invoke(
+                                                farmer);
 
-                if (value != null &&
-                        !value.toString()
-                                .trim()
-                                .isEmpty()) {
+                                if (value != null &&
+                                                !value.toString()
+                                                                .trim()
+                                                                .isEmpty()) {
 
-                    return value.toString();
+                                        return value.toString();
+                                }
+
+                        } catch (Exception ignored) {
+                        }
                 }
 
-            } catch (Exception ignored) {
-            }
+                return "Not provided";
         }
 
-        return "Not provided";
-    }
+        // =====================================================
+        // SAFE
+        // =====================================================
 
-    // =====================================================
-    // SAFE
-    // =====================================================
+        private String safe(
+                        String value) {
 
-    private String safe(
-            String value) {
+                if (value == null ||
+                                value.trim().isEmpty()) {
 
-        if (value == null ||
-                value.trim().isEmpty()) {
+                        return "Not provided";
+                }
 
-            return "Not provided";
+                return value;
         }
-
-        return value;
-    }
 }

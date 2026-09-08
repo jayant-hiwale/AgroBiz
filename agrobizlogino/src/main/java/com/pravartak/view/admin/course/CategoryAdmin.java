@@ -1,6 +1,5 @@
 package com.pravartak.view.admin.course;
 
-
 import com.pravartak.controller.admincontroller.CategoryController;
 import com.pravartak.model.admin.Category;
 import com.pravartak.view.admin.AdminPage;
@@ -550,7 +549,7 @@ public class CategoryAdmin {
         // =========================================================
         // SAFE
         // =========================================================
- 
+
         private String safe(String value) {
 
                 return value == null

@@ -38,11 +38,9 @@ public class WatchlistManager {
             return;
         }
 
-        watchlist.removeIf(p ->
-                p.getProductName() != null &&
+        watchlist.removeIf(p -> p.getProductName() != null &&
                 p.getProductName().equals(product.getProductName()) &&
-                p.getFarmerId() == product.getFarmerId()
-        );
+                p.getFarmerId() == product.getFarmerId());
     }
 
     // =====================================================
@@ -55,11 +53,9 @@ public class WatchlistManager {
             return false;
         }
 
-        return watchlist.stream().anyMatch(p ->
-                p.getProductName() != null &&
+        return watchlist.stream().anyMatch(p -> p.getProductName() != null &&
                 p.getProductName().equals(product.getProductName()) &&
-                p.getFarmerId() == product.getFarmerId()
-        );
+                p.getFarmerId() == product.getFarmerId());
     }
 
     // =====================================================

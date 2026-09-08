@@ -15,361 +15,317 @@ import java.util.Map;
 
 public class ChatController {
 
-    private final Firestore db;
+        private final Firestore db;
 
-    // =========================================================
-    // CONSTRUCTOR
-    // =========================================================
+        // =========================================================
+        // CONSTRUCTOR
+        // =========================================================
 
-    public ChatController() {
+        public ChatController() {
 
-        db = FirebaseConfig.getFirestore();
+                db = FirebaseConfig.getFirestore();
 
-        if (db == null) {
+                if (db == null) {
 
-            throw new IllegalStateException(
-                    "Firestore could not be initialized."
-            );
-        }
-    }
-
-    // =========================================================
-    // CREATE CHAT ID
-    // =========================================================
-
-    public String createChatId(
-            String buyerUid,
-            int farmerId) {
-
-        return buyerUid
-                + "_"
-                + farmerId;
-    }
-
-    // =========================================================
-    // SEND MESSAGE
-    // =========================================================
-
-    public boolean sendMessage(
-            String buyerUid,
-            String buyerName,
-            int farmerId,
-            String farmerName,
-            String senderId,
-            String senderType,
-            String message) {
-
-        try {
-
-            if (buyerUid == null ||
-                    buyerUid.trim().isEmpty()) {
-
-                return false;
-            }
-
-            if (message == null ||
-                    message.trim().isEmpty()) {
-
-                return false;
-            }
-
-            String chatId =
-                    createChatId(
-                            buyerUid,
-                            farmerId
-                    );
-
-            String messageId =
-                    "MSG"
-                            + System.currentTimeMillis();
-
-            ChatMessage chatMessage =
-                    new ChatMessage(
-                            messageId,
-                            senderId,
-                            senderType,
-                            message.trim(),
-                            Timestamp.now()
-                    );
-
-            // =================================================
-            // SAVE MESSAGE
-            // =================================================
-
-            db.collection("chats")
-                    .document(chatId)
-                    .collection("messages")
-                    .document(messageId)
-                    .set(chatMessage.toMap())
-                    .get();
-
-            // =================================================
-            // UPDATE CHAT INFORMATION
-            // =================================================
-
-            Map<String, Object> chatData =
-        new java.util.HashMap<>();
-
-chatData.put(
-        "buyerUid",
-        buyerUid
-);
-
-chatData.put(
-        "buyerName",
-        buyerName
-);
-
-chatData.put(
-        "farmerId",
-        farmerId
-);
-
-chatData.put(
-        "farmerName",
-        farmerName
-);
-
-chatData.put(
-        "lastMessage",
-        message.trim()
-);
-
-chatData.put(
-        "updatedAt",
-        Timestamp.now()
-);
-
-db.collection("chats")
-        .document(chatId)
-        .set(
-                chatData,
-                com.google.cloud.firestore.SetOptions.merge()
-        )
-        .get();
-
-            return true;
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-            return false;
-        }
-    }
-
-    // =========================================================
-    // GET MESSAGES
-    // =========================================================
-
-    public List<ChatMessage> getMessages(
-            String buyerUid,
-            int farmerId) {
-
-        List<ChatMessage> messages =
-                new ArrayList<>();
-
-        try {
-
-            String chatId =
-                    createChatId(
-                            buyerUid,
-                            farmerId
-                    );
-
-            QuerySnapshot snapshot =
-                    db.collection("chats")
-                            .document(chatId)
-                            .collection("messages")
-                            .get()
-                            .get();
-
-            for (DocumentSnapshot document :
-                    snapshot.getDocuments()) {
-
-                ChatMessage message =
-                        document.toObject(
-                                ChatMessage.class
-                        );
-
-                if (message != null) {
-
-                    messages.add(
-                            message
-                    );
+                        throw new IllegalStateException(
+                                        "Firestore could not be initialized.");
                 }
-            }
+        }
 
-            // Newest message last
-            messages.sort(
-                    (a, b) -> {
+        // =========================================================
+        // CREATE CHAT ID
+        // =========================================================
 
-                        if (a.getTimestamp() == null) {
-                            return -1;
+        public String createChatId(
+                        String buyerUid,
+                        int farmerId) {
+
+                return buyerUid
+                                + "_"
+                                + farmerId;
+        }
+
+        // =========================================================
+        // SEND MESSAGE
+        // =========================================================
+
+        public boolean sendMessage(
+                        String buyerUid,
+                        String buyerName,
+                        int farmerId,
+                        String farmerName,
+                        String senderId,
+                        String senderType,
+                        String message) {
+
+                try {
+
+                        if (buyerUid == null ||
+                                        buyerUid.trim().isEmpty()) {
+
+                                return false;
                         }
 
-                        if (b.getTimestamp() == null) {
-                            return 1;
+                        if (message == null ||
+                                        message.trim().isEmpty()) {
+
+                                return false;
                         }
 
-                        return a.getTimestamp()
-                                .compareTo(
-                                        b.getTimestamp()
-                                );
-                    }
-            );
+                        String chatId = createChatId(
+                                        buyerUid,
+                                        farmerId);
 
-        } catch (Exception e) {
+                        String messageId = "MSG"
+                                        + System.currentTimeMillis();
 
-            e.printStackTrace();
-        }
+                        ChatMessage chatMessage = new ChatMessage(
+                                        messageId,
+                                        senderId,
+                                        senderType,
+                                        message.trim(),
+                                        Timestamp.now());
 
-        return messages;
-    }
-    // =========================================================
-// GET FARMER CHATS
-// =========================================================
+                        // =================================================
+                        // SAVE MESSAGE
+                        // =================================================
 
-public List<java.util.Map<String, Object>> getFarmerChats(
-        int farmerId) {
+                        db.collection("chats")
+                                        .document(chatId)
+                                        .collection("messages")
+                                        .document(messageId)
+                                        .set(chatMessage.toMap())
+                                        .get();
 
-    List<java.util.Map<String, Object>> chats =
-            new ArrayList<>();
+                        // =================================================
+                        // UPDATE CHAT INFORMATION
+                        // =================================================
 
-    try {
+                        Map<String, Object> chatData = new java.util.HashMap<>();
 
-        QuerySnapshot snapshot =
-                db.collection("chats")
-                        .whereEqualTo(
-                                "farmerId",
-                                farmerId
-                        )
-                        .get()
-                        .get();
+                        chatData.put(
+                                        "buyerUid",
+                                        buyerUid);
 
-        for (DocumentSnapshot document :
-                snapshot.getDocuments()) {
+                        chatData.put(
+                                        "buyerName",
+                                        buyerName);
 
-            java.util.Map<String, Object> data =
-                    document.getData();
+                        chatData.put(
+                                        "farmerId",
+                                        farmerId);
 
-            if (data != null) {
+                        chatData.put(
+                                        "farmerName",
+                                        farmerName);
 
-                data.put(
-                        "chatId",
-                        document.getId()
-                );
+                        chatData.put(
+                                        "lastMessage",
+                                        message.trim());
 
-                chats.add(data);
-            }
-        }
+                        chatData.put(
+                                        "updatedAt",
+                                        Timestamp.now());
 
-        // Newest chats first
-        chats.sort(
-                (a, b) -> {
+                        db.collection("chats")
+                                        .document(chatId)
+                                        .set(
+                                                        chatData,
+                                                        com.google.cloud.firestore.SetOptions.merge())
+                                        .get();
 
-                    Object timeA =
-                            a.get("updatedAt");
+                        return true;
 
-                    Object timeB =
-                            b.get("updatedAt");
+                } catch (Exception e) {
 
-                    if (!(timeA instanceof Timestamp)) {
-                        return 1;
-                    }
+                        e.printStackTrace();
 
-                    if (!(timeB instanceof Timestamp)) {
-                        return -1;
-                    }
-
-                    return ((Timestamp) timeB)
-                            .compareTo(
-                                    (Timestamp) timeA
-                            );
+                        return false;
                 }
-        );
-
-    } catch (Exception e) {
-
-        e.printStackTrace();
-    }
-
-    return chats;
-}
-// =========================================================
-// GET BUYER CHATS
-// =========================================================
-
-public List<Map<String, Object>> getBuyerChats(
-        String buyerUid) {
-
-    List<Map<String, Object>> chats =
-            new ArrayList<>();
-
-    try {
-
-        if (buyerUid == null ||
-                buyerUid.trim().isEmpty()) {
-
-            return chats;
         }
 
-        QuerySnapshot snapshot =
-                db.collection("chats")
-                        .whereEqualTo(
-                                "buyerUid",
-                                buyerUid
-                        )
-                        .get()
-                        .get();
+        // =========================================================
+        // GET MESSAGES
+        // =========================================================
 
-        for (DocumentSnapshot document :
-                snapshot.getDocuments()) {
+        public List<ChatMessage> getMessages(
+                        String buyerUid,
+                        int farmerId) {
 
-            Map<String, Object> data =
-                    document.getData();
+                List<ChatMessage> messages = new ArrayList<>();
 
-            if (data != null) {
+                try {
 
-                data.put(
-                        "chatId",
-                        document.getId()
-                );
+                        String chatId = createChatId(
+                                        buyerUid,
+                                        farmerId);
 
-                chats.add(data);
-            }
-        }
+                        QuerySnapshot snapshot = db.collection("chats")
+                                        .document(chatId)
+                                        .collection("messages")
+                                        .get()
+                                        .get();
 
-        // Newest chats first
-        chats.sort(
-                (a, b) -> {
+                        for (DocumentSnapshot document : snapshot.getDocuments()) {
 
-                    Object timeA =
-                            a.get("updatedAt");
+                                ChatMessage message = document.toObject(
+                                                ChatMessage.class);
 
-                    Object timeB =
-                            b.get("updatedAt");
+                                if (message != null) {
 
-                    if (!(timeA instanceof Timestamp)) {
-                        return 1;
-                    }
+                                        messages.add(
+                                                        message);
+                                }
+                        }
 
-                    if (!(timeB instanceof Timestamp)) {
-                        return -1;
-                    }
+                        // Newest message last
+                        messages.sort(
+                                        (a, b) -> {
 
-                    return ((Timestamp) timeB)
-                            .compareTo(
-                                    (Timestamp) timeA
-                            );
+                                                if (a.getTimestamp() == null) {
+                                                        return -1;
+                                                }
+
+                                                if (b.getTimestamp() == null) {
+                                                        return 1;
+                                                }
+
+                                                return a.getTimestamp()
+                                                                .compareTo(
+                                                                                b.getTimestamp());
+                                        });
+
+                } catch (Exception e) {
+
+                        e.printStackTrace();
                 }
-        );
 
-    } catch (Exception e) {
+                return messages;
+        }
+        // =========================================================
+        // GET FARMER CHATS
+        // =========================================================
 
-        e.printStackTrace();
-    }
+        public List<java.util.Map<String, Object>> getFarmerChats(
+                        int farmerId) {
 
-    return chats;
-}
+                List<java.util.Map<String, Object>> chats = new ArrayList<>();
+
+                try {
+
+                        QuerySnapshot snapshot = db.collection("chats")
+                                        .whereEqualTo(
+                                                        "farmerId",
+                                                        farmerId)
+                                        .get()
+                                        .get();
+
+                        for (DocumentSnapshot document : snapshot.getDocuments()) {
+
+                                java.util.Map<String, Object> data = document.getData();
+
+                                if (data != null) {
+
+                                        data.put(
+                                                        "chatId",
+                                                        document.getId());
+
+                                        chats.add(data);
+                                }
+                        }
+
+                        // Newest chats first
+                        chats.sort(
+                                        (a, b) -> {
+
+                                                Object timeA = a.get("updatedAt");
+
+                                                Object timeB = b.get("updatedAt");
+
+                                                if (!(timeA instanceof Timestamp)) {
+                                                        return 1;
+                                                }
+
+                                                if (!(timeB instanceof Timestamp)) {
+                                                        return -1;
+                                                }
+
+                                                return ((Timestamp) timeB)
+                                                                .compareTo(
+                                                                                (Timestamp) timeA);
+                                        });
+
+                } catch (Exception e) {
+
+                        e.printStackTrace();
+                }
+
+                return chats;
+        }
+        // =========================================================
+        // GET BUYER CHATS
+        // =========================================================
+
+        public List<Map<String, Object>> getBuyerChats(
+                        String buyerUid) {
+
+                List<Map<String, Object>> chats = new ArrayList<>();
+
+                try {
+
+                        if (buyerUid == null ||
+                                        buyerUid.trim().isEmpty()) {
+
+                                return chats;
+                        }
+
+                        QuerySnapshot snapshot = db.collection("chats")
+                                        .whereEqualTo(
+                                                        "buyerUid",
+                                                        buyerUid)
+                                        .get()
+                                        .get();
+
+                        for (DocumentSnapshot document : snapshot.getDocuments()) {
+
+                                Map<String, Object> data = document.getData();
+
+                                if (data != null) {
+
+                                        data.put(
+                                                        "chatId",
+                                                        document.getId());
+
+                                        chats.add(data);
+                                }
+                        }
+
+                        // Newest chats first
+                        chats.sort(
+                                        (a, b) -> {
+
+                                                Object timeA = a.get("updatedAt");
+
+                                                Object timeB = b.get("updatedAt");
+
+                                                if (!(timeA instanceof Timestamp)) {
+                                                        return 1;
+                                                }
+
+                                                if (!(timeB instanceof Timestamp)) {
+                                                        return -1;
+                                                }
+
+                                                return ((Timestamp) timeB)
+                                                                .compareTo(
+                                                                                (Timestamp) timeA);
+                                        });
+
+                } catch (Exception e) {
+
+                        e.printStackTrace();
+                }
+
+                return chats;
+        }
 }

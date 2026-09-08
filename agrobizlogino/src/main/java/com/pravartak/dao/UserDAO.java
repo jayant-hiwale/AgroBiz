@@ -1,3 +1,142 @@
+// package com.pravartak.dao;
+
+// import com.google.cloud.firestore.DocumentSnapshot;
+// import com.google.cloud.firestore.Firestore;
+// import com.pravartak.config.FirebaseConfig;
+// import com.pravartak.model.UserModel;
+
+// public class UserDAO {
+
+//         private final Firestore db;
+
+//         public UserDAO() {
+
+//                 db = FirebaseConfig.getFirestore();
+//         }
+
+//         // =====================================================
+//         // SAVE USER
+//         // =====================================================
+
+//         public boolean saveUser(UserModel user) {
+
+//                 try {
+
+//                         db.collection("users")
+//                                         .document(
+//                                                         user.getUid())
+//                                         .set(
+//                                                         user.toMap())
+//                                         .get();
+
+//                         System.out.println(
+//                                         "User saved to Firestore.");
+
+//                         System.out.println(
+//                                         "Farmer ID saved = "
+//                                                         + user.getFarmerId());
+
+//                         return true;
+
+//                 } catch (Exception e) {
+
+//                         e.printStackTrace();
+
+//                         return false;
+//                 }
+//         }
+
+//         // =====================================================
+//         // GET USER BY FIREBASE UID
+//         // =====================================================
+
+//         public UserModel getUserByUid(
+//                         String uid) {
+
+//                 try {
+
+//                         DocumentSnapshot document = db.collection("users")
+//                                         .document(uid)
+//                                         .get()
+//                                         .get();
+
+//                         if (!document.exists()) {
+
+//                                 System.out.println(
+//                                                 "User document not found.");
+
+//                                 return null;
+//                         }
+
+//                         // =================================================
+//                         // READ USER DATA
+//                         // =================================================
+
+//                         String fullName = document.getString(
+//                                         "fullName");
+
+//                         String email = document.getString(
+//                                         "email");
+
+//                         String role = document.getString(
+//                                         "role");
+
+//                         // =================================================
+//                         // READ FARMER ID
+//                         // =================================================
+
+//                         Long farmerIdLong = document.getLong(
+//                                         "farmerId");
+
+//                         int farmerId = 0;
+
+//                         if (farmerIdLong != null) {
+
+//                                 farmerId = farmerIdLong.intValue();
+//                         }
+
+//                         System.out.println(
+//                                         "User found:");
+
+//                         System.out.println(
+//                                         "UID = "
+//                                                         + uid);
+
+//                         System.out.println(
+//                                         "Name = "
+//                                                         + fullName);
+
+//                         System.out.println(
+//                                         "Email = "
+//                                                         + email);
+
+//                         System.out.println(
+//                                         "Role = "
+//                                                         + role);
+
+//                         System.out.println(
+//                                         "Farmer ID = "
+//                                                         + farmerId);
+
+//                         // =================================================
+//                         // RETURN USER
+//                         // =================================================
+
+//                         return new UserModel(
+//                                         uid,
+//                                         fullName,
+//                                         email,
+//                                         role,
+//                                         farmerId);
+
+//                 } catch (Exception e) {
+
+//                         e.printStackTrace();
+
+//                         return null;
+//                 }
+//         }
+// }
 package com.pravartak.dao;
 
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -10,152 +149,73 @@ public class UserDAO {
     private final Firestore db;
 
     public UserDAO() {
-
-        db =
-                FirebaseConfig.getFirestore();
+        db = FirebaseConfig.getFirestore();
     }
 
-    // =====================================================
-    // SAVE USER
-    // =====================================================
-
+    // Save user data in Firestore
     public boolean saveUser(UserModel user) {
 
         try {
-
             db.collection("users")
-                    .document(
-                            user.getUid()
-                    )
-                    .set(
-                            user.toMap()
-                    )
+                    .document(user.getUid())
+                    .set(user.toMap())
                     .get();
 
-            System.out.println(
-                    "User saved to Firestore."
-            );
-
-            System.out.println(
-                    "Farmer ID saved = "
-                    + user.getFarmerId()
-            );
+            System.out.println("User saved to Firestore.");
+            System.out.println("Farmer ID saved = " + user.getFarmerId());
 
             return true;
 
         } catch (Exception e) {
-
             e.printStackTrace();
-
             return false;
         }
     }
 
-    // =====================================================
-    // GET USER BY FIREBASE UID
-    // =====================================================
-
-    public UserModel getUserByUid(
-            String uid) {
+    // Get user data using Firebase UID
+    public UserModel getUserByUid(String uid) {
 
         try {
-
-            DocumentSnapshot document =
-                    db.collection("users")
-                            .document(uid)
-                            .get()
-                            .get();
+            DocumentSnapshot document = db.collection("users")
+                    .document(uid)
+                    .get()
+                    .get();
 
             if (!document.exists()) {
-
-                System.out.println(
-                        "User document not found."
-                );
-
+                System.out.println("User document not found.");
                 return null;
             }
 
-            // =================================================
-            // READ USER DATA
-            // =================================================
+            // Read user data
+            String fullName = document.getString("fullName");
+            String email = document.getString("email");
+            String role = document.getString("role");
 
-            String fullName =
-                    document.getString(
-                            "fullName"
-                    );
-
-            String email =
-                    document.getString(
-                            "email"
-                    );
-
-            String role =
-                    document.getString(
-                            "role"
-                    );
-
-            // =================================================
-            // READ FARMER ID
-            // =================================================
-
-            Long farmerIdLong =
-                    document.getLong(
-                            "farmerId"
-                    );
-
+            // Read farmer ID
+            Long farmerIdLong = document.getLong("farmerId");
             int farmerId = 0;
 
             if (farmerIdLong != null) {
-
-                farmerId =
-                        farmerIdLong.intValue();
+                farmerId = farmerIdLong.intValue();
             }
 
-            System.out.println(
-                    "User found:"
-            );
+            System.out.println("User found:");
+            System.out.println("UID = " + uid);
+            System.out.println("Name = " + fullName);
+            System.out.println("Email = " + email);
+            System.out.println("Role = " + role);
+            System.out.println("Farmer ID = " + farmerId);
 
-            System.out.println(
-                    "UID = "
-                    + uid
-            );
-
-            System.out.println(
-                    "Name = "
-                    + fullName
-            );
-
-            System.out.println(
-                    "Email = "
-                    + email
-            );
-
-            System.out.println(
-                    "Role = "
-                    + role
-            );
-
-            System.out.println(
-                    "Farmer ID = "
-                    + farmerId
-            );
-
-            // =================================================
-            // RETURN USER
-            // =================================================
-
+            // Create UserModel from Firestore data
             return new UserModel(
                     uid,
                     fullName,
                     email,
                     role,
-                    farmerId
-            );
+                    farmerId);
 
         } catch (Exception e) {
-
             e.printStackTrace();
-
             return null;
         }
     }
