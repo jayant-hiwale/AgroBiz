@@ -168,8 +168,8 @@ public class LearningPage {
         // LEARNING SUMMARY
         // =====================================================
 
-        HBox summary =
-                createLearningSummary();
+        // HBox summary =
+        //         createLearningSummary();
 
 
         // =====================================================
@@ -228,7 +228,6 @@ public class LearningPage {
                 .getChildren()
                 .addAll(
                         header,
-                        summary,
                         sectionHeader,
                         courseContainer
                 );
@@ -454,63 +453,63 @@ public class LearningPage {
     // LEARNING SUMMARY
     // =========================================================
 
-    private HBox createLearningSummary() {
+//     private HBox createLearningSummary() {
 
-        HBox summary =
-                new HBox(15);
+//         HBox summary =
+//                 new HBox(15);
 
-        summary.setAlignment(
-                Pos.CENTER_LEFT
-        );
+//         summary.setAlignment(
+//                 Pos.CENTER_LEFT
+//         );
 
 
         // =====================================================
         // COURSES CARD
         // =====================================================
 
-        VBox coursesBox =
-                createSummaryCard(
-                        "📚",
-                        "My Courses",
-                        "Courses added from Explorer"
-                );
+        // VBox coursesBox =
+        //         createSummaryCard(
+        //                 "📚",
+        //                 "My Courses",
+        //                 "Courses added from Explorer"
+        //         );
 
 
         // =====================================================
         // LEARNING CARD
         // =====================================================
 
-        VBox learningBox =
-                createSummaryCard(
-                        "🌱",
-                        "Keep Growing",
-                        "Build your farming knowledge"
-                );
+        // VBox learningBox =
+        //         createSummaryCard(
+        //                 "🌱",
+        //                 "Keep Growing",
+        //                 "Build your farming knowledge"
+        //         );
 
 
         // =====================================================
         // EXPLORE CARD
         // =====================================================
 
-        VBox exploreBox =
-                createSummaryCard(
-                        "🔎",
-                        "Discover More",
-                        "Find new farming courses"
-                );
+//         VBox exploreBox =
+//                 createSummaryCard(
+//                         "🔎",
+//                         "Discover More",
+//                         "Find new farming courses"
+//                 );
 
 
-        summary
-                .getChildren()
-                .addAll(
-                        coursesBox,
-                        learningBox,
-                        exploreBox
-                );
+//         summary
+//                 .getChildren()
+//                 .addAll(
+//                         coursesBox,
+//                         learningBox,
+//                         exploreBox
+//                 );
 
 
-        return summary;
-    }
+//         return summary;
+//     }
 
 
     // =========================================================

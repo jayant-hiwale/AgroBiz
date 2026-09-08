@@ -2121,7 +2121,7 @@ public class BuyerProfilePage {
         );
 
         profileCard.setStyle(
-                "-fx-background-color: #007d00;" +
+                "-fx-background-color: #0B2613;" +
                 "-fx-background-radius: 15;"
         );
 
@@ -2754,7 +2754,7 @@ public class BuyerProfilePage {
         );
 
         card.setStyle(
-                "-fx-background-color: #007d00;" +
+                "-fx-background-color: #0B2613;" +
                 "-fx-background-radius: 15;"
         );
 

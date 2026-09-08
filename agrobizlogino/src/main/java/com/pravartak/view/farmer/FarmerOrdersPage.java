@@ -114,9 +114,9 @@ public class FarmerOrdersPage {
         scroll.setFitToHeight(false);
 
         scroll.setStyle(
-                "-fx-background:#0D1117;" +
-                "-fx-background-color:#0D1117;" +
-                "-fx-control-inner-background:#0D1117;" +
+                "-fx-background:#050B0A;" +
+                "-fx-background-color:#050B0A;" +
+                "-fx-control-inner-background:#050B0A;" +
                 "-fx-border-color:transparent;"
         );
 

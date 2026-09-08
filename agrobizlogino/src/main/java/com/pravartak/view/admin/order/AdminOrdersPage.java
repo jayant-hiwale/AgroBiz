@@ -861,9 +861,9 @@ String farmer =
                 e -> showOrderDetails(order)
         );
 
-        actions.getChildren().add(
-                detailsButton
-        );
+        // actions.getChildren().add(
+        //         detailsButton
+        // );
 
         // Admin can change status
         if (order.getOrderStatus() != null

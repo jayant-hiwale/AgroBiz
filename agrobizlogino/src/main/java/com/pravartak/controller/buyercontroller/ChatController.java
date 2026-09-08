@@ -296,4 +296,80 @@ public List<java.util.Map<String, Object>> getFarmerChats(
 
     return chats;
 }
+// =========================================================
+// GET BUYER CHATS
+// =========================================================
+
+public List<Map<String, Object>> getBuyerChats(
+        String buyerUid) {
+
+    List<Map<String, Object>> chats =
+            new ArrayList<>();
+
+    try {
+
+        if (buyerUid == null ||
+                buyerUid.trim().isEmpty()) {
+
+            return chats;
+        }
+
+        QuerySnapshot snapshot =
+                db.collection("chats")
+                        .whereEqualTo(
+                                "buyerUid",
+                                buyerUid
+                        )
+                        .get()
+                        .get();
+
+        for (DocumentSnapshot document :
+                snapshot.getDocuments()) {
+
+            Map<String, Object> data =
+                    document.getData();
+
+            if (data != null) {
+
+                data.put(
+                        "chatId",
+                        document.getId()
+                );
+
+                chats.add(data);
+            }
+        }
+
+        // Newest chats first
+        chats.sort(
+                (a, b) -> {
+
+                    Object timeA =
+                            a.get("updatedAt");
+
+                    Object timeB =
+                            b.get("updatedAt");
+
+                    if (!(timeA instanceof Timestamp)) {
+                        return 1;
+                    }
+
+                    if (!(timeB instanceof Timestamp)) {
+                        return -1;
+                    }
+
+                    return ((Timestamp) timeB)
+                            .compareTo(
+                                    (Timestamp) timeA
+                            );
+                }
+        );
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
+
+    return chats;
+}
 }
