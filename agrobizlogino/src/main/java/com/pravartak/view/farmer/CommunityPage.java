@@ -1129,11 +1129,7 @@ if (selectedImage != null) {
         }
     }
 
-    // =====================================================
-// UPLOAD IMAGE TO CLOUDINARY
-// =====================================================
-
-private String uploadImageToCloudinary(File imageFile)
+    private String uploadImageToCloudinary(File imageFile)
         throws Exception {
 
     if (imageFile == null || !imageFile.exists()) {
@@ -1151,7 +1147,11 @@ private String uploadImageToCloudinary(File imageFile)
                     imageFile,
                     ObjectUtils.asMap(
                             "folder",
-                            "agrobiz/community"
+                            "agrobiz/community",
+                            "quality",
+                            "auto",
+                            "fetch_format",
+                            "auto"
                     )
             );
 
@@ -1332,54 +1332,41 @@ private String uploadImageToCloudinary(File imageFile)
         // IMAGE
         // =================================================
 
-        VBox imageBox =
-                new VBox();
+        VBox imageBox = new VBox();
 
-        String imageUrl =
-                post.getImageUrl();
+        imageBox.setAlignment(Pos.CENTER);
+        imageBox.setFillWidth(true);
 
+        String imageUrl = post.getImageUrl();
 
-        if (imageUrl != null
-                && !imageUrl.trim().isEmpty()) {
+        if (imageUrl != null && !imageUrl.trim().isEmpty()) {
 
-            try {
+        try {
 
-                Image image =
-                        new Image(
-                                imageUrl,
-                                250,
-                                120,
-                                true,
-                                true
-                        );
-
-
-                ImageView imageView =
-                        new ImageView(
-                                image
-                        );
-
-                imageView.setPreserveRatio(
-                        true
+                Image image = new Image(
+                        imageUrl.trim(),
+                        false
                 );
 
-                imageView.setFitWidth(
-                        700
-                );
+                ImageView imageView = new ImageView(image);
 
+                // Keep original proportions
+                imageView.setPreserveRatio(true);
 
-                imageBox
-                        .getChildren()
-                        .add(
-                                imageView
-                        );
+                // Perfect size for the 800px community card
+                imageView.setFitWidth(750);
+                imageView.setFitHeight(450);
 
-            } catch (Exception ex) {
+                // Smooth scaling
+                imageView.setSmooth(true);
+
+                imageBox.getChildren().add(imageView);
+
+        } catch (Exception ex) {
 
                 ex.printStackTrace();
-            }
         }
-
+        }
 
         // =================================================
         // SEPARATOR

@@ -674,16 +674,11 @@ public String generateFarmingPlan(
     validateApiKey();
 
     if (farmingType == null || farmingType.isBlank()) {
-
-        throw new IOException(
-                "Farming type is required.");
+        throw new IOException("Farming type is required.");
     }
 
-    if (farmerDetails == null ||
-            farmerDetails.isEmpty()) {
-
-        throw new IOException(
-                "Farmer information is required.");
+    if (farmerDetails == null || farmerDetails.isEmpty()) {
+        throw new IOException("Farmer information is required.");
     }
 
     // =========================================================
@@ -699,7 +694,7 @@ public String generateFarmingPlan(
             + "IMPORTANT: Your response must ONLY contain information "
             + "related to the selected farming activity. "
 
-            + "Do not discuss unrelated topics. "
+            + "Do not discuss unrelated farming activities. "
 
             + "Create a practical plan using the farmer's actual "
             + "information provided in the user message. "
@@ -726,10 +721,19 @@ public String generateFarmingPlan(
 
             + "Give practical step-by-step guidance. "
 
-            + "Do not show internal reasoning or thinking process. "
+            // IMPORTANT
+            + "Do NOT show internal reasoning, chain of thought, "
+            + "analysis, thinking process, or hidden reasoning. "
 
-            + "Do not write things such as thinking process, "
-            + "analysis, chain of thought, or internal reasoning. "
+            + "Do NOT use <think> or </think> tags. "
+
+            + "Do NOT use Markdown bold markers such as **. "
+
+            + "Do NOT use Markdown headings with #. "
+
+            + "Do NOT use Markdown tables. "
+
+            + "Use simple numbered sections and bullet points. "
 
             + "Give only the final farming plan.";
 
@@ -764,122 +768,71 @@ public String generateFarmingPlan(
     // =========================================================
 
     farmerInformation.append(
-            """
+        """
 
-            Create the farming plan using the following structure:
+        Create a concise but useful farming plan using this structure:
 
-            1. FARMING PLAN SUMMARY
+        1. FARMING PLAN SUMMARY
+        Give a short overview.
 
-            Give a short overview of the proposed farming activity.
+        2. FARMER REQUIREMENTS
+        Summarize area, capacity, budget, water, electricity,
+        infrastructure, labour and experience.
 
-            2. FARMER REQUIREMENTS
+        3. FARM SETUP REQUIREMENTS
+        List the important infrastructure, equipment and materials.
 
-            Summarize:
-            - available area
-            - planned capacity
-            - budget
-            - water
-            - electricity
-            - infrastructure
-            - labour
-            - experience
-            - other important information
+        4. STEP-BY-STEP FARMING PROCESS
+        Give the main steps from setup to production and harvesting.
 
-            3. FARM SETUP REQUIREMENTS
+        5. INPUTS AND MANAGEMENT
+        Explain important inputs and daily/weekly management.
 
-            Explain the infrastructure, equipment, materials,
-            housing, growing area, shed, pond, beds, tanks,
-            or other requirements appropriate for this farming type.
+        6. WATER, RESOURCES AND LABOUR
+        Explain water, resources and approximate labour needs.
 
-            4. STEP-BY-STEP FARMING PROCESS
+        7. PRODUCTION TIMELINE
+        Give the major stages and approximate timeline.
 
-            Explain the complete process from starting the farm
-            through production and harvesting/marketing.
+        8. COST ESTIMATE
+        Give:
+        - Initial setup cost
+        - Recurring cost
+        - Total estimated budget
 
-            5. INPUT REQUIREMENTS
+        Costs are estimates and vary by location and market.
 
-            Explain the important inputs required for this
-            particular farming activity.
+        9. EXPECTED PRODUCTION AND MARKETING
+        Give realistic production/output estimates where possible
+        and explain practical selling methods.
+        Never guarantee production, profit or price.
 
-            6. DAILY AND WEEKLY MANAGEMENT
+        10. MAJOR RISKS AND PRECAUTIONS
+        List important risks and how to reduce them.
 
-            Give practical management activities.
+        11. FIRST 30 DAYS ACTION PLAN
+        Give a concise practical checklist.
 
-            7. LABOUR REQUIREMENT
+        12. FINAL RECOMMENDATION
+        Give a short conclusion based on the farmer's resources.
 
-            Explain the approximate labour requirement based on
-            the farmer's planned scale.
+        IMPORTANT OUTPUT RULES:
 
-            8. WATER AND RESOURCE MANAGEMENT
+        - Give ONLY the final farming plan.
+        - Do NOT show reasoning.
+        - Do NOT show <think> or </think>.
+        - Do NOT use ** symbols.
+        - Do NOT use # Markdown headings.
+        - Do NOT use Markdown tables.
+        - Use numbered sections.
+        - Use short bullet points beginning with "-".
+        - Keep the answer concise enough to fit the output limit.
+        - Do not discuss unrelated farming activities.
+        - Do not guarantee profit, production or yield.
+        - Costs must be estimates.
 
-            Explain water and other important resource requirements.
-
-            9. PRODUCTION TIMELINE
-
-            Explain the major stages and approximate timeline.
-
-            10. ESTIMATED INITIAL SETUP COST
-
-            Provide an estimated breakdown such as:
-
-            Item | Estimated Cost
-
-            Use reasonable estimates and clearly mention that
-            actual prices vary by location and market.
-
-            11. ESTIMATED RECURRING COST
-
-            Separate recurring expenses such as inputs,
-            feed, labour, electricity, maintenance, etc.,
-            according to the farming type.
-
-            12. ESTIMATED TOTAL BUDGET
-
-            Summarize the approximate initial and recurring costs.
-
-            13. EXPECTED PRODUCTION / OUTPUT
-
-            Give realistic estimates where possible.
-            Never guarantee production.
-
-            14. MARKETING PLAN
-
-            Explain practical ways the farmer can sell the
-            produced farm output.
-
-            15. MAJOR RISKS
-
-            List the important risks specific to this
-            farming activity.
-
-            16. RISK MANAGEMENT
-
-            Explain how the farmer can reduce or manage each risk.
-
-            17. IMPORTANT PRECAUTIONS
-
-            Give important farming precautions.
-
-            18. FIRST 30 DAYS ACTION PLAN
-
-            Give a practical checklist of what the farmer should
-            do during the first 30 days.
-
-            19. FINAL RECOMMENDATION
-
-            Give a short practical conclusion based on the
-            farmer's available resources and selected farming type.
-
-            IMPORTANT:
-
-            Do not provide information about another type of farming.
-
-            For example, if the selected farming type is Poultry,
-            do not provide goat, dairy, mushroom, fish, pearl,
-            or unrelated crop farming information.
-
-            Keep the plan practical and easy to understand.
-            """);
+        """
+);
 
     // =========================================================
     // ESCAPE JSON
@@ -897,26 +850,71 @@ public String generateFarmingPlan(
     // =========================================================
 
     String json =
-            "{"
-            + "\"model\":\"" + MODEL + "\","
-            + "\"messages\":["
-            + "{"
-            + "\"role\":\"system\","
-            + "\"content\":\""
-            + escapedSystem
-            + "\""
-            + "},"
-            + "{"
-            + "\"role\":\"user\","
-            + "\"content\":\""
-            + escapedFarmerInformation
-            + "\""
-            + "}"
-            + "]"
-            + "}";
+        "{"
+        + "\"model\":\"" + MODEL + "\","
+        + "\"reasoning_format\":\"hidden\","
+        + "\"reasoning_effort\":\"none\","
+        + "\"max_completion_tokens\":950,"
+        + "\"messages\":["
+        + "{"
+        + "\"role\":\"system\","
+        + "\"content\":\""
+        + escapedSystem
+        + "\""
+        + "},"
+        + "{"
+        + "\"role\":\"user\","
+        + "\"content\":\""
+        + escapedFarmerInformation
+        + "\""
+        + "}"
+        + "]"
+        + "}";
 
-    return sendRequest(json);
-    }
+//return sendRequest(json);
+
+    // =========================================================
+    // GET FINAL PLAN
+    // =========================================================
+
+    String response = sendRequest(json);
+
+if (response == null) {
+    return "";
+}
+
+response = response.trim();
+
+response = response.replaceAll(
+        "(?is)<think>.*?</think>",
+        ""
+);
+
+int unfinishedThink = response.indexOf("<think>");
+
+if (unfinishedThink != -1) {
+    response = response.substring(0, unfinishedThink);
+}
+
+response = response.replace("**", "");
+
+response = response.replaceAll(
+        "(?m)^\\s*\\*\\s+",
+        "- "
+);
+
+response = response.replaceAll(
+        "(?m)^\\s*#+\\s*",
+        ""
+);
+
+response = response.replaceAll(
+        "\\n{3,}",
+        "\n\n"
+);
+
+return response.trim();
+}
 
         // =========================================================
         // BUYER AI QUESTION

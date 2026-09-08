@@ -1115,7 +1115,7 @@ revenueValue.setText(
         );
 
         userPieChart.setLegendVisible(true);
-        userPieChart.setLabelsVisible(true);
+        userPieChart.setLabelsVisible(false);
         userPieChart.setAnimated(false);
 
         userPieChart.setStyle(

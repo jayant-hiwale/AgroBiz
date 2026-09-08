@@ -171,6 +171,8 @@ public class NavBar {
         Button aiadvisor =
                 navButton("AI Advisor");
 
+        Button aboutUs = navButton("About Us");
+
         // =====================================================
         // HOME
         // =====================================================
@@ -469,6 +471,7 @@ LoginPage.mainStage.setScene(
 
 //     LoginPage.mainStage.show();
 // });
+
 
         // =====================================================
         // CENTER NAVIGATION
