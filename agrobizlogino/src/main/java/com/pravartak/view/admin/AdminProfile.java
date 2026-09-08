@@ -38,7 +38,7 @@ public class AdminProfile {
 
         btnHome.setOnAction(e -> {
             AdminPage dashBoard = new AdminPage();
-            LoginPage.mainStage.setScene(dashBoard.getAdminPage());
+            LoginPage.mainStage.setScene(dashBoard.getAdminPage("Admin User"));
         });
 
         navLinks.getChildren().addAll(btnHome, btnMarket, btnWatchlist, btnAiAdvisor);

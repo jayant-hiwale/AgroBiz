@@ -1,536 +1,670 @@
 package com.pravartak.view.farmer;
 
-import java.io.File;
+
+import com.pravartak.view.farmer.common.Footer;
+import com.pravartak.view.farmer.common.NavBar;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.FileChooser;
+import java.io.File;
 
 public class AIAdvisorPage {
+        // private static final AIService aiService =
+        // new AIService();
 
-        private static final Color BG = Color.rgb(3, 18, 14);
-        private static final Color CARD = Color.rgb(7, 39, 30);
-        private static final Color DARK_GREEN = Color.rgb(10, 55, 40);
-        private static final Color GREEN = Color.rgb(45, 190, 75);
-        private static final Color LIGHT_GREEN = Color.rgb(20, 65, 45);
-        private static final Color DARK_TEXT = Color.rgb(236, 240, 225);
-        private static final Color GREY = Color.rgb(150, 175, 160);
-        private static final Color BORDER = Color.rgb(88, 243, 186);
+    // =========================================================
+    // AGROBIZ DARK THEME
+    // =========================================================
 
-        private static File selectedImage;
-        private static ImageView imageView;
+    private static final String BACKGROUND = "#080c0d";
 
-        public static Scene getAIAdvisorScene() {
+    private static final String CARD = "#101817";
 
-                BorderPane root = new BorderPane();
+    private static final String CARD_LIGHT = "#14201d";
 
-                root.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                BG,
-                                                                CornerRadii.EMPTY,
-                                                                Insets.EMPTY)));
+    private static final String GREEN = "#4CAF50";
 
-                root.setTop(createTopBar());
-                root.setCenter(createContent());
+    private static final String GREEN_DARK = "#2E7D32";
 
-                return new Scene(root, 1368, 768);
-        }
+    private static final String GREEN_LIGHT = "#A5D6A7";
 
-        private static HBox createTopBar() {
+    private static final String TEXT = "#F1F5F2";
 
-                HBox topBar = new HBox();
+    private static final String SECONDARY_TEXT = "#A8B5AD";
 
-                topBar.setPrefHeight(82);
-                topBar.setPadding(new Insets(18, 30, 18, 30));
-                topBar.setAlignment(Pos.CENTER_LEFT);
+    private static final String BORDER = "#263A32";
 
-                topBar.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                CARD,
-                                                                CornerRadii.EMPTY,
-                                                                Insets.EMPTY)));
 
-                topBar.setBorder(
-                                new Border(
-                                                new BorderStroke(
-                                                                BORDER,
-                                                                BorderStrokeStyle.SOLID,
-                                                                CornerRadii.EMPTY,
-                                                                new BorderWidths(0, 0, 1, 0))));
+    // =========================================================
+    // MAIN SCENE
+    // =========================================================
 
-                Label title = new Label("AI Farming Advisor");
+    public static Scene getAIAdvisorScene() {
 
-                title.setTextFill(DARK_TEXT);
-                title.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                24));
+        BorderPane root =
+                new BorderPane();
 
-                Label subtitle = new Label(
-                                "Get smart recommendations for your farm");
 
-                subtitle.setTextFill(GREY);
-                subtitle.setFont(
-                                Font.font(
-                                                "Arial",
-                                                13));
+        // Main background
 
-                VBox titleBox = new VBox(3);
-                titleBox.getChildren().addAll(title, subtitle);
-
-                topBar.getChildren().add(titleBox);
+        root.setStyle(
+                "-fx-background-color: " +
+                        BACKGROUND +
+                        ";"
+        );
 
-                return topBar;
-        }
 
-        private static VBox createContent() {
+        // =====================================================
+        // TOP NAVBAR
+        // =====================================================
 
-                VBox content = new VBox(18);
+        root.setTop(
+                new NavBar()
+                        .createNavbar("AI Advisor ")
+        );
 
-                content.setPadding(
-                                new Insets(25, 30, 30, 30));
 
-                VBox headerCard = new VBox(7);
+        // =====================================================
+        // BOTTOM FOOTER
+        // =====================================================
 
-                headerCard.setPadding(new Insets(22));
+        root.setBottom(
+                new Footer()
+                        .createFooter()
+        );
 
-                headerCard.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                DARK_GREEN,
-                                                                new CornerRadii(16),
-                                                                Insets.EMPTY)));
 
-                Label heading = new Label(
-                                "🌱 Your Personal AI Farming Advisor");
+        // =====================================================
+        // CENTER CONTENT
+        // =====================================================
 
-                heading.setTextFill(Color.WHITE);
-                heading.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                24));
+        root.setCenter(
+                createAIContent()
+        );
 
-                Label description = new Label(
-                                "Ask questions about crops, irrigation, soil, fertilizers, diseases and farming decisions.");
 
-                description.setTextFill(
-                                Color.rgb(220, 235, 220));
+        return new Scene(
+                root,
+                1368,
+                768
+        );
+    }
 
-                description.setFont(
-                                Font.font(
-                                                "Arial",
-                                                14));
 
-                description.setWrapText(true);
+    // =========================================================
+    // MAIN CONTENT
+    // =========================================================
 
-                headerCard.getChildren().addAll(
-                                heading,
-                                description);
+    private static VBox createAIContent() {
 
-                VBox questionCard = new VBox(12);
+        VBox main =
+                new VBox(20);
 
-                questionCard.setPadding(new Insets(22));
+        main.setPadding(
+                new Insets(
+                        30,
+                        100,
+                        30,
+                        100
+                )
+        );
 
-                questionCard.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                CARD,
-                                                                new CornerRadii(14),
-                                                                Insets.EMPTY)));
+        main.setAlignment(
+                Pos.TOP_CENTER
+        );
 
-                questionCard.setBorder(
-                                new Border(
-                                                new BorderStroke(
-                                                                BORDER,
-                                                                BorderStrokeStyle.SOLID,
-                                                                new CornerRadii(14),
-                                                                new BorderWidths(1))));
 
-                Label questionTitle = new Label(
-                                "Ask your farming question");
+        // =====================================================
+        // PAGE INTRODUCTION
+        // =====================================================
 
-                questionTitle.setTextFill(DARK_TEXT);
+        VBox intro =
+                new VBox(6);
 
-                questionTitle.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                18));
+        intro.setMaxWidth(900);
 
-                TextArea questionBox = new TextArea();
+        intro.setAlignment(
+                Pos.CENTER_LEFT
+        );
 
-                questionBox.setPromptText(
-                                "Example: Which fertilizer should I use for wheat?");
 
-                questionBox.setPrefHeight(110);
-                questionBox.setWrapText(true);
-                questionBox.setFont(
-                                Font.font(
-                                                "Arial",
-                                                15));
+        Label title =
+                new Label(
+                        "🌱 AI Farming Advisor"
+                );
 
-                questionBox.setStyle(
-                                "-fx-control-inner-background: #07271e;" +
-                                                "-fx-text-fill: #e1f0e4;" +
-                                                "-fx-prompt-text-fill: #96afa0;" +
-                                                "-fx-border-color: #124331;" +
-                                                "-fx-border-radius: 10;" +
-                                                "-fx-background-radius: 10;");
+        title.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        26
+                )
+        );
 
-                HBox imageArea = createImageArea();
+        title.setTextFill(
+                Color.web(GREEN_LIGHT)
+        );
 
-                HBox buttons = new HBox(12);
 
-                buttons.setAlignment(Pos.CENTER_LEFT);
+        Label subtitle =
+                new Label(
+                        "Get simple and smart guidance for your farming needs."
+                );
 
-                Button attachButton = new Button(
-                                "📎 Attach Image");
+        subtitle.setFont(
+                Font.font(
+                        "Arial",
+                        14
+                )
+        );
 
-                styleAttachButton(attachButton);
+        subtitle.setTextFill(
+                Color.web(SECONDARY_TEXT)
+        );
 
-                Button removeButton = new Button(
-                                "Remove Image");
 
-                styleRemoveButton(removeButton);
-                removeButton.setVisible(false);
+        intro.getChildren().addAll(
+                title,
+                subtitle
+        );
 
-                attachButton.setOnAction(event -> {
 
-                        FileChooser chooser = new FileChooser();
+        // =====================================================
+        // QUESTION CARD
+        // =====================================================
 
-                        chooser.setTitle("Select Farm Image");
+        VBox questionCard =
+                new VBox(14);
 
-                        chooser.getExtensionFilters().add(
-                                        new FileChooser.ExtensionFilter(
-                                                        "Image Files",
-                                                        "*.png",
-                                                        "*.jpg",
-                                                        "*.jpeg"));
+        questionCard.setMaxWidth(900);
 
-                        File file = chooser.showOpenDialog(null);
+        questionCard.setPadding(
+                new Insets(22)
+        );
 
-                        if (file != null) {
+        questionCard.setStyle(
+                "-fx-background-color: " +
+                        CARD +
+                        ";" +
 
-                                selectedImage = file;
+                "-fx-background-radius: 14;" +
 
-                                imageView.setImage(
-                                                new Image(
-                                                                file.toURI().toString()));
+                "-fx-border-color: " +
+                        BORDER +
+                        ";" +
 
-                                imageView.setFitWidth(150);
-                                imageView.setFitHeight(100);
-                                imageView.setPreserveRatio(true);
+                "-fx-border-radius: 14;" +
 
-                                imageArea.setVisible(true);
-                                removeButton.setVisible(true);
-                        }
-                });
+                "-fx-border-width: 1;"
+        );
 
-                removeButton.setOnAction(event -> {
 
-                        selectedImage = null;
+        Label questionTitle =
+                new Label(
+                        "Ask your farming question"
+                );
 
-                        imageView.setImage(null);
+        questionTitle.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        18
+                )
+        );
 
-                        imageArea.setVisible(false);
-                        removeButton.setVisible(false);
-                });
+        questionTitle.setTextFill(
+                Color.web(TEXT)
+        );
 
-                Region spacer = new Region();
 
-                HBox.setHgrow(
-                                spacer,
-                                Priority.ALWAYS);
+        Label questionHint =
+                new Label(
+                        "Ask about crops, soil, irrigation, fertilizers, pests or farming practices."
+                );
 
-                Button askButton = new Button(
-                                "Ask AI  ✦");
+        questionHint.setFont(
+                Font.font(
+                        "Arial",
+                        13
+                )
+        );
 
-                styleAskButton(askButton);
+        questionHint.setTextFill(
+                Color.web(SECONDARY_TEXT)
+        );
 
-                askButton.setOnAction(event -> {
 
-                        String question = questionBox.getText().trim();
+        // =====================================================
+        // QUESTION TEXT AREA
+        // =====================================================
 
-                        if (question.isEmpty()) {
+        TextArea questionBox =
+                new TextArea();
 
-                                questionBox.setPromptText(
-                                                "Please enter your farming question.");
+        questionBox.setPromptText(
+                "Example: Which fertilizer is suitable for wheat?"
+        );
 
-                                return;
-                        }
+        questionBox.setWrapText(true);
 
-                        if (selectedImage != null) {
+        questionBox.setPrefHeight(105);
 
-                                System.out.println(
-                                                "Question: " + question);
+        questionBox.setFont(
+                Font.font(
+                        "Arial",
+                        14
+                )
+        );
 
-                                System.out.println(
-                                                "Image: "
-                                                                + selectedImage.getAbsolutePath());
+        questionBox.setStyle(
 
-                        } else {
+                "-fx-control-inner-background: #0B1210;" +
 
-                                System.out.println(
-                                                "Question: " + question);
+                "-fx-text-fill: #F1F5F2;" +
 
-                                System.out.println(
-                                                "No image attached.");
-                        }
+                "-fx-prompt-text-fill: #718078;" +
 
-                        questionBox.clear();
-                });
+                "-fx-border-color: #263A32;" +
 
-                buttons.getChildren().addAll(
-                                attachButton,
-                                removeButton,
-                                spacer,
-                                askButton);
+                "-fx-border-radius: 10;" +
 
-                questionCard.getChildren().addAll(
-                                questionTitle,
-                                questionBox,
-                                imageArea,
-                                buttons);
+                "-fx-background-radius: 10;" +
 
-                Label quickTitle = new Label(
-                                "Quick Farming Questions");
+                "-fx-focus-color: #4CAF50;" +
 
-                quickTitle.setTextFill(DARK_TEXT);
+                "-fx-faint-focus-color: transparent;"
+        );
 
-                quickTitle.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                18));
 
-                HBox quickQuestions = new HBox(12);
+        // =====================================================
+        // BUTTON AREA
+        // =====================================================
 
-                quickQuestions.getChildren().addAll(
-                                createQuestionButton(
-                                                "🌾 Crop Recommendation",
-                                                questionBox),
-                                createQuestionButton(
-                                                "💧 Irrigation Advice",
-                                                questionBox),
-                                createQuestionButton(
-                                                "🌱 Soil Health",
-                                                questionBox),
-                                createQuestionButton(
-                                                "🐛 Disease Detection",
-                                                questionBox));
+        HBox buttonBox =
+                new HBox(10);
 
-                content.getChildren().addAll(
-                                headerCard,
-                                questionCard,
-                                quickTitle,
-                                quickQuestions);
+        buttonBox.setAlignment(
+                Pos.CENTER_RIGHT
+        );
 
-                return content;
-        }
 
-        private static HBox createImageArea() {
+        // Clear button
 
-                HBox area = new HBox();
+        Button clearButton =
+                new Button(
+                        "Clear"
+                );
 
-                area.setPrefHeight(110);
-                area.setPadding(new Insets(5));
-                area.setAlignment(Pos.CENTER_LEFT);
-                area.setSpacing(12);
-                area.setVisible(false);
+        clearButton.setPrefSize(
+                90,
+                40
+        );
 
-                imageView = new ImageView();
+        clearButton.setStyle(
 
-                imageView.setFitWidth(150);
-                imageView.setFitHeight(100);
-                imageView.setPreserveRatio(true);
+                "-fx-background-color: #1A2421;" +
 
-                Label imageText = new Label(
-                                "Attached farm image");
+                "-fx-text-fill: #B7C3BC;" +
 
-                imageText.setTextFill(GREY);
+                "-fx-font-weight: bold;" +
 
-                imageText.setFont(
-                                Font.font(
-                                                "Arial",
-                                                13));
+                "-fx-background-radius: 20;" +
 
-                area.getChildren().addAll(
-                                imageView,
-                                imageText);
+                "-fx-border-color: #34473F;" +
 
-                return area;
-        }
+                "-fx-border-radius: 20;"
+        );
 
-        private static Button createQuestionButton(
-                        String text,
-                        TextArea questionBox) {
 
-                Button button = new Button(text);
+        // Ask AI button
 
-                button.setPrefHeight(48);
+        Button askButton =
+                new Button(
+                        "Ask AI  ✦"
+                );
 
-                button.setMaxWidth(
-                                Double.MAX_VALUE);
+        askButton.setPrefSize(
+                120,
+                40
+        );
 
-                HBox.setHgrow(
-                                button,
-                                Priority.ALWAYS);
+        askButton.setStyle(
 
-                button.setTextFill(
-                                DARK_TEXT);
+                "-fx-background-color: " +
+                        GREEN_DARK +
+                        ";" +
 
-                button.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                13));
+                "-fx-text-fill: white;" +
 
-                button.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                LIGHT_GREEN,
-                                                                new CornerRadii(12),
-                                                                Insets.EMPTY)));
+                "-fx-font-weight: bold;" +
 
-                button.setBorder(
-                                new Border(
-                                                new BorderStroke(
-                                                                BORDER,
-                                                                BorderStrokeStyle.SOLID,
-                                                                new CornerRadii(12),
-                                                                new BorderWidths(1))));
+                "-fx-font-size: 14;" +
 
-                button.setOnAction(event -> {
+                "-fx-background-radius: 20;"
+        );
+        
 
-                        if (text.contains("Crop")) {
 
-                                questionBox.setText(
-                                                "Which crop is most suitable for my farm?");
+        // =====================================================
+        // RESPONSE TITLE
+        // =====================================================
 
-                        } else if (text.contains("Irrigation")) {
+        Label responseTitle =
+                new Label(
+                        "AI Response"
+                );
 
-                                questionBox.setText(
-                                                "What irrigation method should I use for my crop?");
+        responseTitle.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        18
+                )
+        );
 
-                        } else if (text.contains("Soil")) {
+        responseTitle.setTextFill(
+                Color.web(TEXT)
+        );
 
-                                questionBox.setText(
-                                                "How can I improve the health of my soil?");
 
-                        } else {
+        // =====================================================
+        // RESPONSE BOX
+        // =====================================================
 
-                                questionBox.setText(
-                                                "What disease is affecting my crop and how can I treat it?");
-                        }
-                });
+        TextArea responseBox =
+                new TextArea();
 
-                return button;
-        }
+        responseBox.setEditable(
+                false
+        );
 
-        private static void styleAskButton(Button button) {
+        responseBox.setWrapText(
+                true
+        );
 
-                button.setPrefSize(
-                                145,
-                                48);
+        responseBox.setPrefHeight(
+                170
+        );
 
-                button.setTextFill(
-                                Color.WHITE);
+        responseBox.setPromptText(
+                "Your AI farming advice will appear here..."
+        );
 
-                button.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                14));
+        responseBox.setFont(
+                Font.font(
+                        "Arial",
+                        14
+                )
+        );
 
-                button.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                GREEN,
-                                                                new CornerRadii(25),
-                                                                Insets.EMPTY)));
-        }
+        responseBox.setStyle(
 
-        private static void styleAttachButton(Button button) {
+                "-fx-control-inner-background: #14201D;" +
 
-                button.setPrefHeight(42);
+                "-fx-text-fill: #E8F5E9;" +
 
-                button.setTextFill(
-                                DARK_TEXT);
+                "-fx-prompt-text-fill: #718078;" +
 
-                button.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                13));
+                "-fx-border-color: #263A32;" +
 
-                button.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                LIGHT_GREEN,
-                                                                new CornerRadii(20),
-                                                                Insets.EMPTY)));
+                "-fx-border-radius: 10;" +
 
-                button.setBorder(
-                                new Border(
-                                                new BorderStroke(
-                                                                BORDER,
-                                                                BorderStrokeStyle.SOLID,
-                                                                new CornerRadii(20),
-                                                                new BorderWidths(1))));
-        }
+                "-fx-background-radius: 10;"
+        );
 
-        private static void styleRemoveButton(Button button) {
 
-                button.setPrefHeight(42);
+        // =====================================================
+        // ASK AI ACTION
+        // =====================================================
 
-                button.setTextFill(
-                                Color.rgb(230, 120, 120));
+        askButton.setOnAction(event -> {
 
-                button.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                13));
+    String question =
+            questionBox.getText().trim();
 
-                button.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                Color.rgb(55, 25, 25),
-                                                                new CornerRadii(20),
-                                                                Insets.EMPTY)));
 
-                button.setBorder(
-                                new Border(
-                                                new BorderStroke(
-                                                                Color.rgb(100, 50, 50),
-                                                                BorderStrokeStyle.SOLID,
-                                                                new CornerRadii(20),
-                                                                new BorderWidths(1))));
-        }
+    if (question.isEmpty()) {
+
+        responseBox.setText(
+                "Please enter a farming question first."
+        );
+
+        return;
+    }
+
+
+    responseBox.setText(
+            "AI is thinking... 🌱"
+    );
+
+
+//     String answer =
+//             aiService.askAI(question);
+
+
+//     responseBox.setText(
+//             answer
+//     );
+});
+
+
+        // =====================================================
+        // CLEAR ACTION
+        // =====================================================
+
+        clearButton.setOnAction(event -> {
+
+            questionBox.clear();
+
+            responseBox.clear();
+        });
+
+
+        buttonBox.getChildren().addAll(
+                clearButton,
+                askButton
+        );
+
+
+        // =====================================================
+        // ADD QUESTION CARD CONTENT
+        // =====================================================
+
+        questionCard.getChildren().addAll(
+
+                questionTitle,
+
+                questionHint,
+
+                questionBox,
+
+                buttonBox,
+
+                responseTitle,
+
+                responseBox
+        );
+
+
+        // =====================================================
+        // QUICK QUESTIONS
+        // =====================================================
+
+        Label quickTitle =
+                new Label(
+                        "Quick Questions"
+                );
+
+        quickTitle.setMaxWidth(
+                900
+        );
+
+        quickTitle.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        16
+                )
+        );
+
+        quickTitle.setTextFill(
+                Color.web(TEXT)
+        );
+
+
+        HBox quickQuestions =
+                new HBox(10);
+
+        quickQuestions.setMaxWidth(
+                900
+        );
+
+        quickQuestions.setAlignment(
+                Pos.CENTER_LEFT
+        );
+
+
+        Button cropButton =
+                createQuickButton(
+                        "🌾 Crop Advice",
+                        questionBox
+                );
+
+
+        Button soilButton =
+                createQuickButton(
+                        "🌱 Soil Health",
+                        questionBox
+                );
+
+
+        Button irrigationButton =
+                createQuickButton(
+                        "💧 Irrigation",
+                        questionBox
+                );
+
+
+        Button fertilizerButton =
+                createQuickButton(
+                        "🌿 Fertilizer",
+                        questionBox
+                );
+
+
+        quickQuestions.getChildren().addAll(
+
+                cropButton,
+
+                soilButton,
+
+                irrigationButton,
+
+                fertilizerButton
+        );
+
+
+        // =====================================================
+        // MAIN CONTENT
+        // =====================================================
+
+        main.getChildren().addAll(
+
+                intro,
+
+                questionCard,
+
+                quickTitle,
+
+                quickQuestions
+        );
+
+
+        return main;
+    }
+
+
+    // =========================================================
+    // QUICK QUESTION BUTTON
+    // =========================================================
+
+    private static Button createQuickButton(
+            String text,
+            TextArea questionBox) {
+
+
+        Button button =
+                new Button(text);
+
+
+        button.setPrefHeight(
+                38
+        );
+
+
+        button.setStyle(
+
+                "-fx-background-color: #14201D;" +
+
+                "-fx-text-fill: #A5D6A7;" +
+
+                "-fx-font-weight: bold;" +
+
+                "-fx-font-size: 12;" +
+
+                "-fx-background-radius: 20;" +
+
+                "-fx-border-color: #2C4238;" +
+
+                "-fx-border-radius: 20;"
+        );
+
+
+        button.setOnAction(event -> {
+
+
+            if (text.contains("Crop")) {
+
+                questionBox.setText(
+                        "Which crop is suitable for my farm?"
+                );
+
+
+            } else if (text.contains("Soil")) {
+
+                questionBox.setText(
+                        "How can I improve my soil health?"
+                );
+
+
+            } else if (text.contains("Irrigation")) {
+
+                questionBox.setText(
+                        "Which irrigation method is suitable for my crop?"
+                );
+
+
+            } else {
+
+                questionBox.setText(
+                        "Which fertilizer should I use for my crop?"
+                );
+            }
+        });
+
+
+        return button;
+    }
 }
+

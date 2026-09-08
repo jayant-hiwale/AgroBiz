@@ -1,35 +1,35 @@
-package com.pravartak.view.admin.course;
+// package com.pravartak.view.admin.course;
 
-import javafx.geometry.Insets;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+// import javafx.geometry.Insets;
+// import javafx.scene.control.Label;
+// import javafx.scene.layout.VBox;
 
-public class AnalyticsTab {
+// public class AnalyticsTab {
         
-     public static VBox getAnalyticsPage() {
+//      public static VBox getAnalyticsPage() {
 
-        VBox root = new VBox(15);
+//         VBox root = new VBox(15);
 
-        root.setPadding(new Insets(10, 0, 0, 0));
+//         root.setPadding(new Insets(10, 0, 0, 0));
 
-        Label title = new Label("Learning Analytics");
+//         Label title = new Label("Learning Analytics");
 
-        title.setStyle(
-        "-fx-text-fill:#EEEEEE;" +
-        "-fx-font-size:22px;" +
-        "-fx-font-weight:bold;");
+//         title.setStyle(
+//         "-fx-text-fill:#EEEEEE;" +
+//         "-fx-font-size:22px;" +
+//         "-fx-font-weight:bold;");
 
-        Label subtitle = new Label(
-        "Analyze course performance and learner engagement.");
+//         Label subtitle = new Label(
+//         "Analyze course performance and learner engagement.");
 
-        subtitle.setStyle(
-        "-fx-text-fill:#AAAAAA;" +
-        "-fx-font-size:10px;");
+//         subtitle.setStyle(
+//         "-fx-text-fill:#AAAAAA;" +
+//         "-fx-font-size:10px;");
 
-        root.getChildren().addAll(
-        title,
-        subtitle);
+//         root.getChildren().addAll(
+//         title,
+//         subtitle);
 
-        return root;
-        }
-}
+//         return root;
+//         }
+// }

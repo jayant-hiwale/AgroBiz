@@ -11,6 +11,41 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
+    
+<dependencies>
+    <dependency>
+        <groupId>com.cloudinary</groupId>
+        <artifactId>cloudinary-http5</artifactId>
+        <version>2.3.2</version>
+    </dependency>
 
+      <dependency>
+        <groupId>com.google.firebase</groupId>
+        <artifactId>firebase-admin</artifactId>
+        <version>9.7.0</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.json</groupId>
+        <artifactId>json</artifactId>
+        <version>20250517</version>
+        <scope>compile</scope>
+    </dependency>
+        
+    <dependency>
+    <groupId>org.openjfx</groupId>
+    <artifactId>javafx-web</artifactId>
+    <version>17.0.12</version>
+    </dependency>
+
+    <dependency>
+    <groupId>io.github.cdimascio</groupId>
+    <artifactId>dotenv-java</artifactId>
+    <version>3.2.0</version>
+    </dependency>
+
+</dependencies>
 </project>
