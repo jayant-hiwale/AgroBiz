@@ -4950,9 +4950,9 @@ public class FarmerDashboard {
                         ComboBox<String> box) {
 
                 box.setStyle(
-                                "-fx-background-color:#0F2116;" +
-                                                "-fx-text-fill:#EEEEEE;" +
-                                                "-fx-border-color:#294734;" +
+                                "-fx-background-color: #0F2116;" +
+                                                "-fx-text-fill: #EEEEEE;" +
+                                                "-fx-border-color: #294734;" +
                                                 "-fx-border-radius:6;" +
                                                 "-fx-background-radius:6;");
         }
@@ -4990,7 +4990,7 @@ public class FarmerDashboard {
                                 new Insets(15));
 
                 card.setStyle(
-                                "-fx-background-color:#15331F;" +
+                                "-fx-background-color: #15331F;" +
                                                 "-fx-background-radius:10;" +
                                                 "-fx-border-color:#294734;" +
                                                 "-fx-border-radius:10;");
@@ -5010,7 +5010,7 @@ public class FarmerDashboard {
                                                 scheme.getCategory());
 
                 category.setStyle(
-                                "-fx-text-fill:#7ED957;" +
+                                "-fx-text-fill: #7ED957;" +
                                                 "-fx-font-size:11px;");
 
                 Label information = new Label(

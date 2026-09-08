@@ -1227,7 +1227,8 @@ public class FarmerModulesPage {
 
                         javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView();
 
-                        imageView.setFitWidth(1200);
+                        imageView.setFitWidth(800);
+                        imageView.setFitHeight(500);
 
                         imageView.setPreserveRatio(true);
 

@@ -105,11 +105,7 @@ public class SplashScreen {
         private StackPane cropsIcon;
         private StackPane fishIcon;
 
-        // =========================================================
-        // MAIN PUBLIC METHOD
-        //
-        // DO NOT CHANGE THIS METHOD SIGNATURE.
-        // EXISTING CALLS WILL CONTINUE TO WORK.
+   
         // =========================================================
 
         public Scene getSplashScene(Runnable onComplete) {
