@@ -325,7 +325,7 @@ reviewController =
                 statsGrid,
                 separator,
                 firstChartRow,
-                // secondChartRow,
+     
                 statusBox
         );
 

@@ -1,3 +1,5 @@
+
+
 package com.pravartak.view.login;
 
 import com.pravartak.controller.authentication_contr.AuthController;
@@ -280,7 +282,8 @@ public class LoginPage extends Application {
                 // SMALL GREEN ICON
                 // =====================================================
 
-                Label loginIcon = new Label("🚜");
+        Label loginIcon =
+                new Label("●");
 
                 loginIcon.setAlignment(
                                 Pos.CENTER);
@@ -332,8 +335,10 @@ public class LoginPage extends Application {
                 // WELCOME TITLE
                 // =====================================================
 
-                Label welcomeTitle = new Label(
-                                "Welcome to AgroBiz");
+        Label welcomeTitle =
+                new Label(
+                        "Welcome Back"
+                );
 
                 welcomeTitle.setTextFill(
                                 Color.WHITE);
@@ -1170,9 +1175,9 @@ public class LoginPage extends Application {
                 mainStage.setTitle(
                                 "Agro Biz - Login");
 
-                mainStage.setWidth(1550);
+                mainStage.setWidth(1368);
 
-                mainStage.setHeight(839);
+                mainStage.setHeight(768);
 
                 // =====================================================
                 // SPLASH SCREEN
