@@ -1,6 +1,7 @@
 package com.pravartak.view.buyer;
 
-import com.pravartak.controller.buyercontroller.Controller;
+import com.pravartak.controller.buyer.AiController;
+
 import com.pravartak.view.buyer.common.buyerTop;
 import com.pravartak.view.farmer.common.Footer;
 
@@ -20,10 +21,10 @@ import javafx.scene.layout.VBox;
 
 public class Ai {
 
-    private final Controller controller;
+        private final AiController controller;
 
     public Ai() {
-        this.controller = new Controller();
+        this.controller = new AiController();
     }
 
     public Scene gatAiScene() {

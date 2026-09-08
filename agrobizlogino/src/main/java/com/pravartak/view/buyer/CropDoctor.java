@@ -1,6 +1,6 @@
 package com.pravartak.view.buyer;
 
-import com.pravartak.controller.buyercontroller.Controller;
+import com.pravartak.controller.buyer.CropDoctorController;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,9 +17,9 @@ import javafx.scene.layout.VBox;
 
 public class CropDoctor {
 
-    private final Controller controller;
+        private final CropDoctorController controller;
 
-    public CropDoctor(Controller controller) {
+        public CropDoctor(CropDoctorController controller) {
         this.controller = controller;
     }
 
