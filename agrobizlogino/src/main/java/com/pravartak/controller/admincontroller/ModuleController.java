@@ -10,18 +10,18 @@ public class ModuleController {
 
     private final ModuleDAO moduleDAO;
 
-    // =========================================================
+    // ========================================================
     // CONSTRUCTOR
-    // =========================================================
+    // ========================================================
 
     public ModuleController() {
 
         moduleDAO = new ModuleDAO();
     }
 
-    // =========================================================
+    
     // ADD MODULE - WITHOUT IMAGE
-    // =========================================================
+    
 
     public boolean addModule(
             int courseId,
@@ -34,7 +34,7 @@ public class ModuleController {
                 description);
     }
 
-    // =========================================================
+    
     // ADD MODULE - WITH IMAGE
     //
     // Image is selected by admin as a File.
@@ -49,7 +49,7 @@ public class ModuleController {
     // image URL
     //   ↓
     // Firestore
-    // =========================================================
+    
 
     public boolean addModule(
             int courseId,
@@ -64,9 +64,9 @@ public class ModuleController {
                 imageFile);
     }
 
-    // =========================================================
+    
     // GET MODULES
-    // =========================================================
+    
 
     public List<Module> getModulesByCourse(
             int courseId) {
@@ -75,9 +75,9 @@ public class ModuleController {
                 courseId);
     }
 
-    // =========================================================
+    
     // GET SINGLE MODULE
-    // =========================================================
+    
 
     public Module getModule(
             int courseId,
@@ -88,9 +88,9 @@ public class ModuleController {
                 moduleId);
     }
 
-    // =========================================================
+    
     // DELETE MODULE
-    // =========================================================
+    
 
     public boolean deleteModule(
             int courseId,
@@ -101,9 +101,9 @@ public class ModuleController {
                 moduleId);
     }
 
-    // =========================================================
+    
     // UPDATE MODULE - WITHOUT IMAGE
-    // =========================================================
+    
 
     public boolean updateModule(
             int courseId,
@@ -120,12 +120,12 @@ public class ModuleController {
                 published);
     }
 
-    // =========================================================
+    
     // UPDATE MODULE - WITH IMAGE
     //
     // Image is selected by admin as a File.
     //
-    // =========================================================
+    
 
     public boolean updateModule(
             int courseId,
@@ -144,9 +144,9 @@ public class ModuleController {
                 imageFile);
     }
 
-    // =========================================================
+    
     // COUNT MODULES
-    // =========================================================
+    
 
     public int getModuleCount(
             int courseId) {

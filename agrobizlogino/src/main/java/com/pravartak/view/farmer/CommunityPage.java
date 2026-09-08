@@ -92,54 +92,47 @@ public class CommunityPage {
 
         private File selectedImage;
 
-private int farmerId;
-private String firebaseUid;
+        private int farmerId;
+        private String firebaseUid;
 
-private String farmerName = "Farmer";
+        private String farmerName = "Farmer";
 
-private Firestore db;
+        private Firestore db;
 
-private FarmerProfileController profileController;
-private UserDAO userDAO;
-
+        private FarmerProfileController profileController;
+        private UserDAO userDAO;
 
         // =====================================================
         // CONSTRUCTOR
         // =====================================================
 
-   public CommunityPage(int farmerId, String firebaseUid) {
+        public CommunityPage(int farmerId, String firebaseUid) {
 
-    this.farmerId = farmerId;
-    this.firebaseUid = firebaseUid;
+                this.farmerId = farmerId;
+                this.firebaseUid = firebaseUid;
 
-    // Get existing Firebase Firestore
-    this.db = FirebaseConfig.getFirestore();
+                // Get existing Firebase Firestore
+                this.db = FirebaseConfig.getFirestore();
 
-    if (this.db == null) {
-        throw new IllegalStateException(
-                "Firestore is not initialized."
-        );
-    }
+                if (this.db == null) {
+                        throw new IllegalStateException(
+                                        "Firestore is not initialized.");
+                }
 
-    // Controllers / DAO
-    this.profileController =
-            new FarmerProfileController();
+                // Controllers / DAO
+                this.profileController = new FarmerProfileController();
 
-    this.userDAO =
-            new UserDAO();
+                this.userDAO = new UserDAO();
 
-    // Load actual farmer name
-    loadFarmerName();
+                // Load actual farmer name
+                loadFarmerName();
 
-    // Community DAO
-    CommunityDAO dao =
-            new CommunityDAO(this.db);
+                // Community DAO
+                CommunityDAO dao = new CommunityDAO(this.db);
 
-    // Community Controller
-    this.controller =
-            new CommunityController(dao);
-}
-
+                // Community Controller
+                this.controller = new CommunityController(dao);
+        }
 
         // =====================================================
         // COMMUNITY SCENE
@@ -632,9 +625,6 @@ private UserDAO userDAO;
                          * logged-in farmer information.
                          */
 
-            
-
-
                         /*
                          * Firebase Storage image URL
                          *
@@ -662,13 +652,11 @@ private UserDAO userDAO;
                         // SAVE POST
                         // =================================================
 
-           controller.createPost(
-        String.valueOf(farmerId),
-        farmerName,
-        content,
-        imageUrl
-);
-
+                        controller.createPost(
+                                        String.valueOf(farmerId),
+                                        farmerName,
+                                        content,
+                                        imageUrl);
 
                         // =================================================
                         // CLEAR TEXT
@@ -1036,20 +1024,15 @@ private UserDAO userDAO;
 
                         try {
 
-                Image image =
-                        new Image(
-                                imageUrl,
-                                250,
-                                120,
-                                true,
-                                true
-                        );
+                                Image image = new Image(
+                                                imageUrl,
+                                                250,
+                                                120,
+                                                true,
+                                                true);
 
-
-                ImageView imageView =
-                        new ImageView(
-                                image
-                        );
+                                ImageView imageView = new ImageView(
+                                                image);
 
                                 imageView.setPreserveRatio(
                                                 true);
@@ -1220,43 +1203,40 @@ private UserDAO userDAO;
                 alert.setContentText(
                                 message);
 
-        alert.showAndWait();
-    }
-    private void loadFarmerName() {
-
-    farmerName = "Farmer";
-
-    try {
-
-        FarmerProfile profile =
-                profileController.getProfile(farmerId);
-
-        if (profile != null
-                && profile.getName() != null
-                && !profile.getName().trim().isEmpty()) {
-
-            farmerName =
-                    profile.getName().trim();
-
-            return;
+                alert.showAndWait();
         }
 
-        UserModel user =
-                userDAO.getUserByUid(firebaseUid);
+        private void loadFarmerName() {
 
-        if (user != null
-                && user.getFullName() != null
-                && !user.getFullName().trim().isEmpty()) {
+                farmerName = "Farmer";
 
-            farmerName =
-                    user.getFullName().trim();
+                try {
+
+                        FarmerProfile profile = profileController.getProfile(farmerId);
+
+                        if (profile != null
+                                        && profile.getName() != null
+                                        && !profile.getName().trim().isEmpty()) {
+
+                                farmerName = profile.getName().trim();
+
+                                return;
+                        }
+
+                        UserModel user = userDAO.getUserByUid(firebaseUid);
+
+                        if (user != null
+                                        && user.getFullName() != null
+                                        && !user.getFullName().trim().isEmpty()) {
+
+                                farmerName = user.getFullName().trim();
+                        }
+
+                } catch (Exception e) {
+
+                        e.printStackTrace();
+
+                        farmerName = "Farmer";
+                }
         }
-
-    } catch (Exception e) {
-
-        e.printStackTrace();
-
-        farmerName = "Farmer";
-    }
-}
 }

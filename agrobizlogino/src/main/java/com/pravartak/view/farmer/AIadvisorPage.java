@@ -35,9 +35,7 @@ import javafx.stage.FileChooser;
 
 public class AIAdvisorPage {
 
-        // ============================================================
         // EXISTING COLORS - NOT CHANGED
-        // ============================================================
 
         private static final Color BG = Color.rgb(3, 18, 14);
 
@@ -55,21 +53,15 @@ public class AIAdvisorPage {
 
         private static final Color BORDER = Color.rgb(88, 243, 186);
 
-        // ============================================================
         // IMAGE
-        // ============================================================
 
         private static File selectedImage;
 
-        // ============================================================
         // GROQ SERVICE
-        // ============================================================
 
         private static final GroqService groqService = new GroqService();
 
-        // ============================================================
         // CHAT COMPONENTS
-        // ============================================================
 
         private static VBox chatContainer;
 
@@ -85,9 +77,7 @@ public class AIAdvisorPage {
 
         private static Label attachmentLabel;
 
-        // ============================================================
         // CREATE SCENE
-        // ============================================================
 
         public static Scene getAIAdvisorScene() {
 
@@ -116,9 +106,7 @@ public class AIAdvisorPage {
                                 768);
         }
 
-        // ============================================================
         // MAIN CONTENT
-        // ============================================================
 
         private static VBox createContent() {
 
@@ -131,9 +119,7 @@ public class AIAdvisorPage {
                                                 20,
                                                 30));
 
-                // ========================================================
                 // HEADER
-                // ========================================================
 
                 VBox header = new VBox(5);
 
@@ -170,9 +156,7 @@ public class AIAdvisorPage {
                                 heading,
                                 description);
 
-                // ========================================================
                 // CHAT CONTAINER
-                // ========================================================
 
                 chatContainer = new VBox(18);
 
@@ -197,9 +181,7 @@ public class AIAdvisorPage {
                 // Welcome message
                 addWelcomeMessage();
 
-                // ========================================================
                 // SCROLL PANE
-                // ========================================================
 
                 chatScrollPane = new ScrollPane(
                                 chatContainer);
@@ -222,9 +204,7 @@ public class AIAdvisorPage {
                                 chatScrollPane,
                                 Priority.ALWAYS);
 
-                // ========================================================
                 // INPUT AREA
-                // ========================================================
 
                 VBox inputArea = createInputArea();
 
@@ -236,9 +216,7 @@ public class AIAdvisorPage {
                 return content;
         }
 
-        // ============================================================
         // WELCOME MESSAGE
-        // ============================================================
 
         private static void addWelcomeMessage() {
 
@@ -287,17 +265,13 @@ public class AIAdvisorPage {
                                 message);
         }
 
-        // ============================================================
         // INPUT AREA
-        // ============================================================
 
         private static VBox createInputArea() {
 
                 VBox inputArea = new VBox(8);
 
-                // ========================================================
                 // ATTACHMENT AREA
-                // ========================================================
 
                 attachmentArea = new HBox(8);
 
@@ -334,9 +308,7 @@ public class AIAdvisorPage {
                                 attachmentLabel,
                                 removeButton);
 
-                // ========================================================
                 // CHAT INPUT BAR
-                // ========================================================
 
                 HBox inputBar = new HBox(10);
 
@@ -365,12 +337,10 @@ public class AIAdvisorPage {
                                                                 new CornerRadii(25),
                                                                 new BorderWidths(1))));
 
-                // ========================================================
                 // ATTACH BUTTON
-                // ========================================================
 
                 attachButton = new Button(
-                                "📎");
+                                "+");
 
                 styleAttachButton(
                                 attachButton);
@@ -378,9 +348,7 @@ public class AIAdvisorPage {
                 attachButton.setOnAction(
                                 event -> chooseImage());
 
-                // ========================================================
                 // TEXT FIELD
-                // ========================================================
 
                 questionField = new TextField();
 
@@ -404,9 +372,7 @@ public class AIAdvisorPage {
                                 questionField,
                                 Priority.ALWAYS);
 
-                // ========================================================
                 // SEND BUTTON
-                // ========================================================
 
                 sendButton = new Button(
                                 "➤");
@@ -433,9 +399,7 @@ public class AIAdvisorPage {
                 return inputArea;
         }
 
-        // ============================================================
         // CHOOSE IMAGE
-        // ============================================================
 
         private static void chooseImage() {
 
@@ -471,9 +435,7 @@ public class AIAdvisorPage {
                                 true);
         }
 
-        // ============================================================
         // REMOVE IMAGE
-        // ============================================================
 
         private static void removeSelectedImage() {
 
@@ -486,9 +448,7 @@ public class AIAdvisorPage {
                                 false);
         }
 
-        // ============================================================
         // SEND QUESTION
-        // ============================================================
 
         private static void sendQuestion() {
 
@@ -529,9 +489,7 @@ public class AIAdvisorPage {
 
                 scrollToBottom();
 
-                // ========================================================
                 // GROQ TASK
-                // ========================================================
 
                 Task<String> task = new Task<String>() {
 
@@ -555,9 +513,7 @@ public class AIAdvisorPage {
                         }
                 };
 
-                // ========================================================
                 // SUCCESS
-                // ========================================================
 
                 task.setOnSucceeded(
                                 event -> {
@@ -596,9 +552,7 @@ public class AIAdvisorPage {
                                                         });
                                 });
 
-                // ========================================================
                 // ERROR
-                // ========================================================
 
                 task.setOnFailed(
                                 event -> {
@@ -645,9 +599,7 @@ public class AIAdvisorPage {
                 thread.start();
         }
 
-        // ============================================================
         // USER MESSAGE
-        // ============================================================
 
         private static void addUserMessage(
                         String question,
@@ -766,9 +718,7 @@ public class AIAdvisorPage {
                 scrollToBottom();
         }
 
-        // ============================================================
         // AI MESSAGE
-        // ============================================================
 
         private static void addAIMessage(
                         String response) {
@@ -850,9 +800,7 @@ public class AIAdvisorPage {
                 scrollToBottom();
         }
 
-        // ============================================================
         // THINKING MESSAGE
-        // ============================================================
 
         private static VBox createThinkingMessage() {
 
@@ -901,9 +849,7 @@ public class AIAdvisorPage {
                 return message;
         }
 
-        // ============================================================
         // SCROLL TO BOTTOM
-        // ============================================================
 
         private static void scrollToBottom() {
 
@@ -918,9 +864,7 @@ public class AIAdvisorPage {
                                 });
         }
 
-        // ============================================================
         // ERROR MESSAGE
-        // ============================================================
 
         private static String getErrorMessage(
                         Throwable error) {
@@ -941,73 +885,120 @@ public class AIAdvisorPage {
                 return message;
         }
 
-        // ============================================================
         // ATTACH BUTTON STYLE
-        // ============================================================
 
-        private static void styleAttachButton(
-                        Button button) {
+        // 
+        private static void styleAttachButton(Button button) {
 
-                button.setPrefSize(
-                                42,
-                                42);
+        button.setPrefSize(
+                        46,
+                        46);
 
-                button.setTextFill(
-                                DARK_TEXT);
+        button.setMinSize(
+                        46,
+                        46);
 
-                button.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                18));
+        button.setMaxSize(
+                        46,
+                        46);
 
-                button.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                LIGHT_GREEN,
-                                                                new CornerRadii(20),
-                                                                Insets.EMPTY)));
+        button.setTextFill(
+                        DARK_TEXT);
 
-                button.setBorder(
-                                new Border(
-                                                new BorderStroke(
-                                                                BORDER,
-                                                                BorderStrokeStyle.SOLID,
-                                                                new CornerRadii(20),
-                                                                new BorderWidths(1))));
-        }
+        button.setFont(
+                        Font.font(
+                                        "Arial",
+                                        FontWeight.BOLD,
+                                        25));
 
-        // ============================================================
+        button.setAlignment(
+                        Pos.CENTER);
+
+        button.setPadding(
+                        Insets.EMPTY);
+
+        button.setBackground(
+                        new Background(
+                                        new BackgroundFill(
+                                                        LIGHT_GREEN,
+                                                        new CornerRadii(23),
+                                                        Insets.EMPTY)));
+
+        button.setBorder(
+                        new Border(
+                                        new BorderStroke(
+                                                        BORDER,
+                                                        BorderStrokeStyle.SOLID,
+                                                        new CornerRadii(23),
+                                                        new BorderWidths(1))));
+}
+
         // SEND BUTTON STYLE
-        // ============================================================
 
-        private static void styleSendButton(
-                        Button button) {
+        // private static void styleSendButton(
+        //                 Button button) {
 
-                button.setPrefSize(
-                                44,
-                                44);
+        //         button.setPrefSize(
+        //                         44,
+        //                         44);
 
-                button.setTextFill(
-                                Color.WHITE);
+        //         button.setTextFill(
+        //                         Color.WHITE);
 
-                button.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                20));
+        //         button.setFont(
+        //                         Font.font(
+        //                                         "Arial",
+        //                                         FontWeight.BOLD,
+        //                                         20));
 
-                button.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                GREEN,
-                                                                new CornerRadii(22),
-                                                                Insets.EMPTY)));
-        }
+        //         button.setBackground(
+        //                         new Background(
+        //                                         new BackgroundFill(
+        //                                                         GREEN,
+        //                                                         new CornerRadii(22),
+        //                                                         Insets.EMPTY)));
+        // }
+        private static void styleSendButton(Button button) {
 
-        // ============================================================
+        button.setPrefSize(
+                        46,
+                        46);
+
+        button.setMinSize(
+                        46,
+                        46);
+
+        button.setMaxSize(
+                        46,
+                        46);
+
+        button.setTextFill(
+                        Color.WHITE);
+
+        button.setFont(
+                        Font.font(
+                                        "Arial",
+                                        FontWeight.BOLD,
+                                        25));
+
+        button.setAlignment(
+                        Pos.CENTER);
+
+        button.setPadding(
+                        Insets.EMPTY);
+
+        button.setBackground(
+                        new Background(
+                                        new BackgroundFill(
+                                                        GREEN,
+                                                        new CornerRadii(23),
+                                                        Insets.EMPTY)));
+
+        button.setBorder(
+                        Border.EMPTY);
+}
+
         // REMOVE BUTTON STYLE
-        // ============================================================
 
         private static void styleRemoveButton(
                         Button button) {

@@ -59,11 +59,10 @@ public class ReviewController {
             // Verify that the order exists
             // -------------------------------------------------
 
-            DocumentSnapshot orderDoc =
-                    db.collection("orders")
-                            .document(orderId)
-                            .get()
-                            .get();
+            DocumentSnapshot orderDoc = db.collection("orders")
+                    .document(orderId)
+                    .get()
+                    .get();
 
             if (!orderDoc.exists()) {
                 return false;
@@ -95,35 +94,34 @@ public class ReviewController {
             // Verify product belongs to this order
             // -------------------------------------------------
 
-           boolean productFound = false;
-String productName = "Product";
+            boolean productFound = false;
+            String productName = "Product";
 
-if (order.getItems() != null) {
+            if (order.getItems() != null) {
 
-    for (Map<String, Object> item : order.getItems()) {
+                for (Map<String, Object> item : order.getItems()) {
 
-        Object productIdObject = item.get("productId");
+                    Object productIdObject = item.get("productId");
 
-        if (productIdObject instanceof Number) {
+                    if (productIdObject instanceof Number) {
 
-            int itemProductId =
-                    ((Number) productIdObject).intValue();
+                        int itemProductId = ((Number) productIdObject).intValue();
 
-            if (itemProductId == productId) {
+                        if (itemProductId == productId) {
 
-                productFound = true;
+                            productFound = true;
 
-                Object nameObject = item.get("productName");
+                            Object nameObject = item.get("productName");
 
-                if (nameObject != null) {
-                    productName = String.valueOf(nameObject);
+                            if (nameObject != null) {
+                                productName = String.valueOf(nameObject);
+                            }
+
+                            break;
+                        }
+                    }
                 }
-
-                break;
             }
-        }
-    }
-}
 
             if (!productFound) {
                 return false;
@@ -137,28 +135,26 @@ if (order.getItems() != null) {
                 return false;
             }
 
-            String reviewId =
-                    "REV" + System.currentTimeMillis();
+            String reviewId = "REV" + System.currentTimeMillis();
 
+            if (order.getItems() != null) {
+                for (Map<String, Object> item : order.getItems()) {
 
-if (order.getItems() != null) {
-    for (Map<String, Object> item : order.getItems()) {
+                    Object itemProductId = item.get("productId");
 
-        Object itemProductId = item.get("productId");
+                    if (itemProductId instanceof Number
+                            && ((Number) itemProductId).intValue() == productId) {
 
-        if (itemProductId instanceof Number
-                && ((Number) itemProductId).intValue() == productId) {
+                        Object name = item.get("productName");
 
-            Object name = item.get("productName");
+                        if (name != null) {
+                            productName = String.valueOf(name);
+                        }
 
-            if (name != null) {
-                productName = String.valueOf(name);
+                        break;
+                    }
+                }
             }
-
-            break;
-        }
-    }
-} 
 
             Review review = new Review(
                     reviewId,
@@ -170,8 +166,7 @@ if (order.getItems() != null) {
                     buyerName,
                     rating,
                     comment,
-                    com.google.cloud.Timestamp.now()
-            );
+                    com.google.cloud.Timestamp.now());
 
             db.collection("reviews")
                     .document(reviewId)
@@ -199,20 +194,16 @@ if (order.getItems() != null) {
 
         try {
 
-            QuerySnapshot snapshot =
-                    db.collection("reviews")
-                            .whereEqualTo("productId", productId)
-                            .get()
-                            .get();
+            QuerySnapshot snapshot = db.collection("reviews")
+                    .whereEqualTo("productId", productId)
+                    .get()
+                    .get();
 
             for (DocumentSnapshot doc : snapshot.getDocuments()) {
 
-                String existingBuyerUid =
-                        doc.getString("buyerUid");
+                String existingBuyerUid = doc.getString("buyerUid");
 
-                String existingOrderId =
-                        doc.getString("orderId");
-                    
+                String existingOrderId = doc.getString("orderId");
 
                 if (buyerUid.equals(existingBuyerUid)
                         && orderId.equals(existingOrderId)) {
@@ -241,16 +232,14 @@ if (order.getItems() != null) {
 
         try {
 
-            QuerySnapshot snapshot =
-                    db.collection("reviews")
-                            .whereEqualTo("productId", productId)
-                            .get()
-                            .get();
+            QuerySnapshot snapshot = db.collection("reviews")
+                    .whereEqualTo("productId", productId)
+                    .get()
+                    .get();
 
             for (DocumentSnapshot doc : snapshot.getDocuments()) {
 
-                Review review =
-                        doc.toObject(Review.class);
+                Review review = doc.toObject(Review.class);
 
                 if (review != null) {
                     reviews.add(review);
@@ -262,10 +251,7 @@ if (order.getItems() != null) {
                     Comparator.comparing(
                             Review::getCreatedAt,
                             Comparator.nullsLast(
-                                    Comparator.reverseOrder()
-                            )
-                    )
-            );
+                                    Comparator.reverseOrder())));
 
         } catch (Exception e) {
 
@@ -281,8 +267,7 @@ if (order.getItems() != null) {
 
     public double getAverageRating(int productId) {
 
-        List<Review> reviews =
-                getProductReviews(productId);
+        List<Review> reviews = getProductReviews(productId);
 
         if (reviews.isEmpty()) {
             return 0.0;
@@ -306,90 +291,78 @@ if (order.getItems() != null) {
         return getProductReviews(productId).size();
     }
     // =========================================================
-// GET FARMER REVIEWS
-// =========================================================
+    // GET FARMER REVIEWS
+    // =========================================================
 
-public List<Review> getFarmerReviews(int farmerId) {
+    public List<Review> getFarmerReviews(int farmerId) {
 
-    List<Review> reviews = new ArrayList<>();
+        List<Review> reviews = new ArrayList<>();
 
-    try {
+        try {
 
-        QuerySnapshot snapshot =
-                db.collection("reviews")
-                        .whereEqualTo("farmerId", farmerId)
-                        .get()
-                        .get();
+            QuerySnapshot snapshot = db.collection("reviews")
+                    .whereEqualTo("farmerId", farmerId)
+                    .get()
+                    .get();
 
-        for (DocumentSnapshot doc :
-                snapshot.getDocuments()) {
+            for (DocumentSnapshot doc : snapshot.getDocuments()) {
 
-            Review review =
-                    doc.toObject(Review.class);
+                Review review = doc.toObject(Review.class);
 
-            if (review != null) {
-                reviews.add(review);
+                if (review != null) {
+                    reviews.add(review);
+                }
             }
+
+            // Newest reviews first
+            reviews.sort(
+                    Comparator.comparing(
+                            Review::getCreatedAt,
+                            Comparator.nullsLast(
+                                    Comparator.reverseOrder())));
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
         }
 
-        // Newest reviews first
-        reviews.sort(
-                Comparator.comparing(
-                        Review::getCreatedAt,
-                        Comparator.nullsLast(
-                                Comparator.reverseOrder()
-                        )
-                )
-        );
-
-    } catch (Exception e) {
-
-        e.printStackTrace();
+        return reviews;
     }
+    // =========================================================
+    // GET ALL REVIEWS - ADMIN
+    // =========================================================
 
-    return reviews;
-}
-// =========================================================
-// GET ALL REVIEWS - ADMIN
-// =========================================================
+    public List<Review> getAllReviews() {
 
-public List<Review> getAllReviews() {
+        List<Review> reviews = new ArrayList<>();
 
-    List<Review> reviews = new ArrayList<>();
+        try {
 
-    try {
+            QuerySnapshot snapshot = db.collection("reviews")
+                    .get()
+                    .get();
 
-        QuerySnapshot snapshot =
-                db.collection("reviews")
-                        .get()
-                        .get();
+            for (DocumentSnapshot doc : snapshot.getDocuments()) {
 
-        for (DocumentSnapshot doc :
-                snapshot.getDocuments()) {
+                Review review = doc.toObject(Review.class);
 
-            Review review =
-                    doc.toObject(Review.class);
-
-            if (review != null) {
-                reviews.add(review);
+                if (review != null) {
+                    reviews.add(review);
+                }
             }
+
+            // Newest reviews first
+            reviews.sort(
+                    Comparator.comparing(
+                            Review::getCreatedAt,
+                            Comparator.nullsLast(
+                                    Comparator.reverseOrder())));
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
         }
 
-        // Newest reviews first
-        reviews.sort(
-                Comparator.comparing(
-                        Review::getCreatedAt,
-                        Comparator.nullsLast(
-                                Comparator.reverseOrder()
-                        )
-                )
-        );
-
-    } catch (Exception e) {
-
-        e.printStackTrace();
+        return reviews;
     }
-
-    return reviews;
-}
 }

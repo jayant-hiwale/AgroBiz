@@ -8,24 +8,24 @@ import com.pravartak.model.admin.Lesson;
 
 public class LessonController {
 
-    // =========================================================
+    
     // DAO
-    // =========================================================
+    
 
     private final LessonDAO lessonDAO;
 
-    // =========================================================
+    
     // CONSTRUCTOR
-    // =========================================================
+    
 
     public LessonController() {
 
         lessonDAO = new LessonDAO();
     }
 
-    // =========================================================
+    
     // ADD LESSON
-    // =========================================================
+    
 
     public boolean addLesson(
             int courseId,
@@ -44,9 +44,9 @@ public class LessonController {
                 contentBlocks);
     }
 
-    // =========================================================
+    
     // GET LESSONS BY MODULE
-    // =========================================================
+    
 
     public List<Lesson> getLessonsByModule(
             int courseId,
@@ -57,9 +57,9 @@ public class LessonController {
                 moduleId);
     }
 
-    // =========================================================
+    
     // GET LESSON
-    // =========================================================
+    
 
     public Lesson getLesson(
             int courseId,
@@ -72,13 +72,8 @@ public class LessonController {
                 lessonId);
     }
 
-    // =========================================================
     // UPDATE LESSON
-    // =========================================================
-
-    // =========================================================
-    // UPDATE LESSON
-    // =========================================================
+    
 
     public boolean updateLesson(
             int lessonId,
@@ -116,9 +111,9 @@ public class LessonController {
                 contentBlocks);
     }
 
-    // =========================================================
+    
     // DELETE LESSON
-    // =========================================================
+    
 
     public boolean deleteLesson(
             int courseId,
@@ -131,9 +126,9 @@ public class LessonController {
                 lessonId);
     }
 
-    // =========================================================
+    
     // COUNT
-    // =========================================================
+    
 
     public int getLessonCount(
             int courseId,

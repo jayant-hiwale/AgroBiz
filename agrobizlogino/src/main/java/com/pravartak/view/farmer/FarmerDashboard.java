@@ -48,17 +48,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 
-
-/**
- * Farmer Dashboard
- *
- * AI Farming Advisor has been moved to:
- *
- *     PlanGenerator.java
- *
- * FarmerDashboard only opens PlanGenerator when
- * "AI Farming Advisor" is clicked.
- */
 public class FarmerDashboard {
 
     // =========================================================
@@ -99,29 +88,22 @@ public class FarmerDashboard {
     // COLORS
     // =========================================================
 
-    private final Color DARK_GREEN =
-            Color.web("#050B0A");
+    private final Color DARK_GREEN = Color.web("#050B0A");
 
-    private static final Color GREEN =
-            Color.web("#7ED957");
+    private static final Color GREEN = Color.web("#7ED957");
 
-    private final Color LIGHT_GREEN =
-            Color.web("#B8D8B8");
+    private final Color LIGHT_GREEN = Color.web("#B8D8B8");
+    private final Color GREEN2 = Color.web("#006400");
 
-    private final Color CREAM =
-            Color.web("#0B1F14");
+    private final Color CREAM = Color.web("#0B1F14");
 
-    private final Color DARK_TEXT =
-            Color.web("#F3F8F3");
+    private final Color DARK_TEXT = Color.web("#F3F8F3");
 
-    private final Color GREY =
-            Color.web("#A9B8AC");
+    private final Color GREY = Color.web("#A9B8AC");
 
-    private final Color CARD_BACKGROUND =
-            Color.web("#15331F");
+    private final Color CARD_BACKGROUND = Color.web("#15331F");
 
-    private final Color BORDER_COLOR =
-            Color.web("#294734");
+    private final Color BORDER_COLOR = Color.web("#294734");
 
     // =========================================================
     // SIDEBAR BUTTONS
@@ -150,22 +132,7 @@ public class FarmerDashboard {
     // PLAN GENERATOR
     // =========================================================
 
-    /*
-     * IMPORTANT:
-     *
-     * AI code is NOT inside FarmerDashboard anymore.
-     *
-     * PlanGenerator.java contains:
-     * - AI Advisor UI
-     * - Farming type selection
-     * - Farming questions
-     * - Groq API
-     * - Farming plan generation
-     *
-     * FarmerDashboard only creates this object.
-     */
     private final PlanGenerator planGenerator;
-
 
     // =========================================================
     // CONSTRUCTOR
@@ -192,26 +159,11 @@ public class FarmerDashboard {
 
         this.firebaseUid = firebaseUid;
 
-        this.profileController =
-                new FarmerProfileController();
+        this.profileController = new FarmerProfileController();
 
-        this.userDAO =
-                new UserDAO();
+        this.userDAO = new UserDAO();
 
-        /*
-         * AI PAGE
-         *
-         * The old:
-         *
-         * GroqService
-         * farmingPlanAnswers
-         * farming questions
-         * createAIAdvisorPage()
-         *
-         * are no longer here.
-         */
-        this.planGenerator =
-                new PlanGenerator();
+        this.planGenerator = new PlanGenerator();
 
         System.out.println(
                 "Farmer ID = " + this.farmerId);
@@ -219,7 +171,6 @@ public class FarmerDashboard {
         System.out.println(
                 "Firebase UID = " + this.firebaseUid);
     }
-
 
     // =========================================================
     // GET FARMER ID
@@ -230,7 +181,6 @@ public class FarmerDashboard {
         return farmerId;
     }
 
-
     // =========================================================
     // GET FIREBASE UID
     // =========================================================
@@ -239,7 +189,6 @@ public class FarmerDashboard {
 
         return firebaseUid;
     }
-
 
     // =========================================================
     // DASHBOARD SCENE
@@ -254,8 +203,7 @@ public class FarmerDashboard {
                 768);
 
         // LEFT SIDEBAR
-        VBox sidebar =
-                createSidebar();
+        VBox sidebar = createSidebar();
 
         root.setLeft(sidebar);
 
@@ -269,40 +217,35 @@ public class FarmerDashboard {
                 768);
     }
     // =========================================================
-// OPEN AI ADVISOR FROM HOMEPAGE
-// =========================================================
+    // OPEN AI ADVISOR FROM HOMEPAGE
+    // =========================================================
 
-public Scene getAIAdvisorScene() {
+    public Scene getAIAdvisorScene() {
 
-    root = new BorderPane();
+        root = new BorderPane();
 
-    root.setPrefSize(
-            1368,
-            768
-    );
+        root.setPrefSize(
+                1368,
+                768);
 
-    // Create the normal dashboard sidebar
-    VBox sidebar = createSidebar();
+        // Create the normal dashboard sidebar
+        VBox sidebar = createSidebar();
 
-    root.setLeft(sidebar);
+        root.setLeft(sidebar);
 
-    // Select AI Advisor in sidebar
-    setSelectedMenuButton(
-            aiAdvisorButton
-    );
+        // Select AI Advisor in sidebar
+        setSelectedMenuButton(
+                aiAdvisorButton);
 
-    // Open AI Advisor page
-  root.setCenter(
-        planGenerator.getPage()
-);
+        // Open AI Advisor page
+        root.setCenter(
+                planGenerator.getPage());
 
-    return new Scene(
-            root,
-            1368,
-            768
-    );
-}
-
+        return new Scene(
+                root,
+                1368,
+                768);
+    }
 
     // =========================================================
     // SIDEBAR
@@ -310,8 +253,7 @@ public Scene getAIAdvisorScene() {
 
     private VBox createSidebar() {
 
-        VBox sidebar =
-                new VBox();
+        VBox sidebar = new VBox();
 
         sidebar.setPrefWidth(300);
 
@@ -339,8 +281,7 @@ public Scene getAIAdvisorScene() {
         // LOGO
         // =====================================================
 
-        Label logo =
-                new Label("🌱  Agro Biz");
+        Label logo = new Label("🌱  Agro Biz");
 
         logo.setTextFill(
                 Color.WHITE);
@@ -358,13 +299,11 @@ public Scene getAIAdvisorScene() {
                 .add(
                         createSpace(30));
 
-
         // =====================================================
         // MENU TITLE
         // =====================================================
 
-        Label menu =
-                new Label("FARMER MENU");
+        Label menu = new Label("FARMER MENU");
 
         menu.setTextFill(
                 Color.rgb(
@@ -388,141 +327,113 @@ public Scene getAIAdvisorScene() {
         sidebar.getChildren()
                 .add(menu);
 
-
         // =====================================================
         // HOME
         // =====================================================
 
-        homepageButton =
-                createMenuButton(
-                        "⌂",
-                        "Home");
+        homepageButton = createMenuButton(
+                "⌂",
+                "Home");
 
         homepageButton.setOnAction(
                 event -> {
 
-                    HomePageFarmer homePageFarmer =
-                            new HomePageFarmer(
-                                    farmerId,
-                                    firebaseUid);
+                    HomePageFarmer homePageFarmer = new HomePageFarmer(
+                            farmerId,
+                            firebaseUid);
 
                     LoginPage.mainStage.setScene(
                             homePageFarmer
                                     .getHomePageFarmer());
                 });
 
-
         // =====================================================
         // DASHBOARD
         // =====================================================
 
-        dashboardButton =
-                createMenuButton(
-                        "⌂",
-                        "Dashboard");
+        dashboardButton = createMenuButton(
+                "⌂",
+                "Dashboard");
 
         dashboardButton.setOnAction(
-                event ->
-                        showPage("dashboard"));
-
+                event -> showPage("dashboard"));
 
         // =====================================================
         // PROFILE
         // =====================================================
 
-        profileButton =
-                createMenuButton(
-                        "♟",
-                        "Profile");
+        profileButton = createMenuButton(
+                "♟",
+                "Profile");
 
         profileButton.setOnAction(
-                event ->
-                        showPage("profile"));
-
+                event -> showPage("profile"));
 
         // =====================================================
         // AI FARMING ADVISOR
         // =====================================================
 
-        aiAdvisorButton =
-                createMenuButton(
-                        "✦",
-                        "AI Farming Advisor");
+        aiAdvisorButton = createMenuButton(
+                "✦",
+                "AI Plan Generator");
 
         aiAdvisorButton.setOnAction(
-                event ->
-                        showPage("ai"));
-
+                event -> showPage("ai"));
 
         // =====================================================
         // INVESTMENT
         // =====================================================
 
-        investmentButton =
-                createMenuButton(
-                        "₹",
-                        "Investment Calculator");
+        investmentButton = createMenuButton(
+                "₹",
+                "Investment Calculator");
 
         investmentButton.setOnAction(
-                event ->
-                        showPage("investment"));
-
+                event -> showPage("investment"));
 
         // =====================================================
         // SCHEMES
         // =====================================================
 
-        schemesButton =
-                createMenuButton(
-                        "◇",
-                        "Schemes & Subsidies");
+        schemesButton = createMenuButton(
+                "◇",
+                "Schemes & Subsidies");
 
         schemesButton.setOnAction(
-                event ->
-                        showPage("schemes"));
-
+                event -> showPage("schemes"));
 
         // =====================================================
         // ORDER REQUESTS
         // =====================================================
 
-        orderRequestsButton =
-                createMenuButton(
-                        "📦",
-                        "Order Requests");
+        orderRequestsButton = createMenuButton(
+                "📦",
+                "Order Requests");
 
         orderRequestsButton.setOnAction(
-                event ->
-                        showPage("orderRequests"));
-
+                event -> showPage("orderRequests"));
 
         // =====================================================
         // MY ORDERS
         // =====================================================
 
-        myOrdersButton =
-                createMenuButton(
-                        "📋",
-                        "My Orders");
+        myOrdersButton = createMenuButton(
+                "📋",
+                "My Orders");
 
         myOrdersButton.setOnAction(
-                event ->
-                        showPage("myOrders"));
-
+                event -> showPage("myOrders"));
 
         // =====================================================
         // CUSTOMER REVIEWS
         // =====================================================
 
-        reviewsButton =
-                createMenuButton(
-                        "⭐",
-                        "Customer Reviews");
+        reviewsButton = createMenuButton(
+                "⭐",
+                "Customer Reviews");
 
         reviewsButton.setOnAction(
-                event ->
-                        showPage("reviews"));
-
+                event -> showPage("reviews"));
 
         // =====================================================
         // ADD BUTTONS
@@ -542,20 +453,15 @@ public Scene getAIAdvisorScene() {
 
                 schemesButton,
 
-                
-
                 myOrdersButton,
 
-                reviewsButton
-        );
-
+                reviewsButton);
 
         // =====================================================
         // SPACER
         // =====================================================
 
-        Region spacer =
-                new Region();
+        Region spacer = new Region();
 
         VBox.setVgrow(
                 spacer,
@@ -564,14 +470,12 @@ public Scene getAIAdvisorScene() {
         sidebar.getChildren()
                 .add(spacer);
 
-
         // =====================================================
         // LOGOUT
         // =====================================================
 
-        Button logout =
-                new Button(
-                        "⇥   Logout");
+        Button logout = new Button(
+                "⇥   Logout");
 
         logout.setMaxWidth(
                 Double.MAX_VALUE);
@@ -588,19 +492,18 @@ public Scene getAIAdvisorScene() {
 
         logout.setStyle(
                 "-fx-background-color:transparent;" +
-                "-fx-text-fill:#E57373;" +
-                "-fx-font-size:14px;" +
-                "-fx-font-weight:bold;" +
-                "-fx-background-radius:6;" +
-                "-fx-cursor:hand;");
+                        "-fx-text-fill:#E57373;" +
+                        "-fx-font-size:14px;" +
+                        "-fx-font-weight:bold;" +
+                        "-fx-background-radius:6;" +
+                        "-fx-cursor:hand;");
 
         logout.setOnAction(
                 e -> {
 
                     try {
 
-                        LoginPage loginPage =
-                                new LoginPage();
+                        LoginPage loginPage = new LoginPage();
 
                         loginPage.start(
                                 LoginPage.mainStage);
@@ -611,32 +514,29 @@ public Scene getAIAdvisorScene() {
                     }
                 });
 
-
         logout.setOnMouseEntered(
                 event -> {
 
                     logout.setStyle(
                             "-fx-background-color:#4A2525;" +
-                            "-fx-text-fill:#E57373;" +
-                            "-fx-font-size:14px;" +
-                            "-fx-font-weight:bold;" +
-                            "-fx-background-radius:6;" +
-                            "-fx-cursor:hand;");
+                                    "-fx-text-fill:#E57373;" +
+                                    "-fx-font-size:14px;" +
+                                    "-fx-font-weight:bold;" +
+                                    "-fx-background-radius:6;" +
+                                    "-fx-cursor:hand;");
                 });
-
 
         logout.setOnMouseExited(
                 event -> {
 
                     logout.setStyle(
                             "-fx-background-color:transparent;" +
-                            "-fx-text-fill:#E57373;" +
-                            "-fx-font-size:14px;" +
-                            "-fx-font-weight:bold;" +
-                            "-fx-background-radius:6;" +
-                            "-fx-cursor:hand;");
+                                    "-fx-text-fill:#E57373;" +
+                                    "-fx-font-size:14px;" +
+                                    "-fx-font-weight:bold;" +
+                                    "-fx-background-radius:6;" +
+                                    "-fx-cursor:hand;");
                 });
-
 
         /*
          * Keep the same behavior as your uploaded code.
@@ -646,7 +546,6 @@ public Scene getAIAdvisorScene() {
          * sidebar.getChildren().add(logout);
          */
 
-
         // Dashboard selected by default
 
         setSelectedMenuButton(
@@ -654,7 +553,6 @@ public Scene getAIAdvisorScene() {
 
         return sidebar;
     }
-
 
     // =========================================================
     // MENU BUTTON
@@ -664,9 +562,8 @@ public Scene getAIAdvisorScene() {
             String icon,
             String text) {
 
-        Button button =
-                new Button(
-                        icon + "    " + text);
+        Button button = new Button(
+                icon + "    " + text);
 
         button.setPrefHeight(55);
 
@@ -707,7 +604,6 @@ public Scene getAIAdvisorScene() {
         return button;
     }
 
-
     // =========================================================
     // SELECTED MENU BUTTON
     // =========================================================
@@ -736,7 +632,6 @@ public Scene getAIAdvisorScene() {
                 reviewsButton
         };
 
-
         for (Button button : buttons) {
 
             if (button == null) {
@@ -759,11 +654,9 @@ public Scene getAIAdvisorScene() {
                     Background.EMPTY);
         }
 
-
         if (selectedButton == null) {
             return;
         }
-
 
         selectedButton.setTextFill(
                 Color.WHITE);
@@ -774,15 +667,14 @@ public Scene getAIAdvisorScene() {
                         FontWeight.BOLD,
                         14));
 
-
         selectedButton.setBackground(
                 new Background(
                         new BackgroundFill(
-                                GREEN,
+                                GREEN2,
                                 new CornerRadii(10),
                                 Insets.EMPTY)));
+        selectedButton.setStyle("-fx-backgroung-color: #006400");
     }
-
 
     // =========================================================
     // PAGE NAVIGATION
@@ -807,7 +699,6 @@ public Scene getAIAdvisorScene() {
 
                 break;
 
-
             // =================================================
             // PROFILE
             // =================================================
@@ -822,7 +713,6 @@ public Scene getAIAdvisorScene() {
 
                 break;
 
-
             // =================================================
             // EDIT PROFILE
             // =================================================
@@ -836,7 +726,6 @@ public Scene getAIAdvisorScene() {
                         createProfilePage());
 
                 break;
-
 
             // =================================================
             // AI FARMING ADVISOR
@@ -866,7 +755,6 @@ public Scene getAIAdvisorScene() {
 
                 break;
 
-
             // =================================================
             // INVESTMENT
             // =================================================
@@ -881,7 +769,6 @@ public Scene getAIAdvisorScene() {
 
                 break;
 
-
             // =================================================
             // SCHEMES
             // =================================================
@@ -895,7 +782,6 @@ public Scene getAIAdvisorScene() {
                         createSavedSchemesSection());
 
                 break;
-
 
             // =================================================
             // ORDER REQUESTS
@@ -913,7 +799,6 @@ public Scene getAIAdvisorScene() {
 
                 break;
 
-
             // =================================================
             // REVIEWS
             // =================================================
@@ -929,7 +814,6 @@ public Scene getAIAdvisorScene() {
                                 .getReviewsPage());
 
                 break;
-
 
             // =================================================
             // MY ORDERS
@@ -947,7 +831,6 @@ public Scene getAIAdvisorScene() {
 
                 break;
 
-
             // =================================================
             // HOMEPAGE
             // =================================================
@@ -957,17 +840,15 @@ public Scene getAIAdvisorScene() {
                 setSelectedMenuButton(
                         homepageButton);
 
-                HomePageFarmer homePageFarmer =
-                        new HomePageFarmer(
-                                farmerId,
-                                firebaseUid);
+                HomePageFarmer homePageFarmer = new HomePageFarmer(
+                        farmerId,
+                        firebaseUid);
 
                 LoginPage.mainStage.setScene(
                         homePageFarmer
                                 .getHomePageFarmer());
 
                 break;
-
 
             // =================================================
             // DEFAULT
@@ -985,15 +866,13 @@ public Scene getAIAdvisorScene() {
         }
     }
 
-
     // =========================================================
     // DASHBOARD PAGE
     // =========================================================
 
     private VBox createDashboardPage() {
 
-        VBox main =
-                new VBox();
+        VBox main = new VBox();
 
         main.setBackground(
                 new Background(
@@ -1002,15 +881,11 @@ public Scene getAIAdvisorScene() {
                                 CornerRadii.EMPTY,
                                 Insets.EMPTY)));
 
+        HBox topBar = createTopBar(
+                "Farmer Dashboard",
+                "Manage your farm and make smarter decisions.");
 
-        HBox topBar =
-                createTopBar(
-                        "Farmer Dashboard",
-                        "Manage your farm and make smarter decisions.");
-
-
-        VBox content =
-                createDashboardContent();
+        VBox content = createDashboardContent();
 
         content.setBackground(
                 new Background(
@@ -1019,10 +894,8 @@ public Scene getAIAdvisorScene() {
                                 CornerRadii.EMPTY,
                                 Insets.EMPTY)));
 
-
-        ScrollPane scroll =
-                new ScrollPane(
-                        content);
+        ScrollPane scroll = new ScrollPane(
+                content);
 
         scroll.setFitToWidth(true);
 
@@ -1031,9 +904,9 @@ public Scene getAIAdvisorScene() {
 
         scroll.setStyle(
                 "-fx-background-color:transparent;" +
-                "-fx-border-color:transparent;" +
-                "-fx-focus-color:transparent;" +
-                "-fx-faint-focus-color:transparent;");
+                        "-fx-border-color:transparent;" +
+                        "-fx-focus-color:transparent;" +
+                        "-fx-faint-focus-color:transparent;");
 
         scroll.setFocusTraversable(
                 false);
@@ -1042,7 +915,6 @@ public Scene getAIAdvisorScene() {
                 scroll,
                 Priority.ALWAYS);
 
-
         main.getChildren().addAll(
                 topBar,
                 scroll);
@@ -1050,74 +922,64 @@ public Scene getAIAdvisorScene() {
         return main;
     }
 
-
     // =========================================================
     // DASHBOARD CONTENT
     // =========================================================
 
-//     private VBox createDashboardContent() {
+    // private VBox createDashboardContent() {
 
-//        FarmerDashboardHome dashboardHome =
-//         new FarmerDashboardHome(
-//                 farmerId,
-//                 farmerName
-//         );
+    // FarmerDashboardHome dashboardHome =
+    // new FarmerDashboardHome(
+    // farmerId,
+    // farmerName
+    // );
 
-//         return dashboardHome.getDashboardHome();
-//     }
-private VBox createDashboardContent() {
+    // return dashboardHome.getDashboardHome();
+    // }
+    private VBox createDashboardContent() {
 
-    String farmerName = "Farmer";
+        String farmerName = "Farmer";
 
-    try {
+        try {
 
-        // Get name from saved farmer profile
-        FarmerProfile profile =
-                profileController.getProfile(
-                        farmerId
-                );
+            // Get name from saved farmer profile
+            FarmerProfile profile = profileController.getProfile(
+                    farmerId);
 
-        if (profile != null &&
-                profile.getName() != null &&
-                !profile.getName().trim().isEmpty()) {
+            if (profile != null &&
+                    profile.getName() != null &&
+                    !profile.getName().trim().isEmpty()) {
 
-            farmerName =
-                    profile.getName().trim();
+                farmerName = profile.getName().trim();
 
-        } else {
+            } else {
 
-            // If profile name is not available,
-            // get name from Firebase user
-            UserModel user =
-                    userDAO.getUserByUid(
-                            firebaseUid
-                    );
+                // If profile name is not available,
+                // get name from Firebase user
+                UserModel user = userDAO.getUserByUid(
+                        firebaseUid);
 
-            if (user != null &&
-                    user.getFullName() != null &&
-                    !user.getFullName().trim().isEmpty()) {
+                if (user != null &&
+                        user.getFullName() != null &&
+                        !user.getFullName().trim().isEmpty()) {
 
-                farmerName =
-                        user.getFullName().trim();
+                    farmerName = user.getFullName().trim();
+                }
             }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            farmerName = "Farmer";
         }
 
-    } catch (Exception e) {
+        FarmerDashboardHome home = new FarmerDashboardHome(
+                farmerId,
+                farmerName);
 
-        e.printStackTrace();
-
-        farmerName = "Farmer";
+        return home.getDashboardHome();
     }
-
-    FarmerDashboardHome home =
-            new FarmerDashboardHome(
-                    farmerId,
-                    farmerName
-            );
-
-    return home.getDashboardHome();
-}
-
 
     // =========================================================
     // TOP BAR
@@ -1127,8 +989,7 @@ private VBox createDashboardContent() {
             String titleText,
             String subtitleText) {
 
-        HBox bar =
-                new HBox();
+        HBox bar = new HBox();
 
         bar.setPrefHeight(100);
 
@@ -1149,16 +1010,12 @@ private VBox createDashboardContent() {
                                 CornerRadii.EMPTY,
                                 Insets.EMPTY)));
 
-
-        VBox titleBox =
-                new VBox();
+        VBox titleBox = new VBox();
 
         titleBox.setSpacing(3);
 
-
-        Label title =
-                new Label(
-                        titleText);
+        Label title = new Label(
+                titleText);
 
         title.setTextFill(
                 DARK_TEXT);
@@ -1169,10 +1026,8 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         28));
 
-
-        Label subtitle =
-                new Label(
-                        subtitleText);
+        Label subtitle = new Label(
+                subtitleText);
 
         subtitle.setTextFill(
                 GREY);
@@ -1182,12 +1037,10 @@ private VBox createDashboardContent() {
                         "Arial",
                         15));
 
-
         titleBox.getChildren()
                 .addAll(
                         title,
                         subtitle);
-
 
         bar.getChildren()
                 .addAll(
@@ -1197,2159 +1050,1468 @@ private VBox createDashboardContent() {
         return bar;
     }
 
-
     // =========================================================
     // PROFILE VIEW
     // =========================================================
 
+    private VBox createProfileView() {
 
-    
-        private VBox createProfileView() {
+        VBox main = new VBox();
 
-                VBox main = new VBox();
+        main.setBackground(new Background(
+                new BackgroundFill(DARK_GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        HBox topBar = createTopBar(
+                "Farmer Profile",
+                "View your personal and farming information.");
 
-                main.setBackground(new Background(
-                                new BackgroundFill(DARK_GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-                HBox topBar = createTopBar(
-                                "Farmer Profile",
-                                "View your personal and farming information.");
+        VBox content = new VBox();
 
-                VBox content = new VBox();
+        content.setPadding(
+                new Insets(
+                        30,
+                        35,
+                        35,
+                        35));
 
-                content.setPadding(
-                                new Insets(
-                                                30,
-                                                35,
-                                                35,
-                                                35));
+        content.setSpacing(22);
 
-                content.setSpacing(22);
+        content.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Color.web("#050b0a"),
+                                CornerRadii.EMPTY,
+                                Insets.EMPTY)));
 
-                content.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                Color.web("#050b0a"),
-                                                                CornerRadii.EMPTY,
-                                                                Insets.EMPTY)));
+        // =====================================================
+        // GET PROFILE
+        // =====================================================
 
-                // =====================================================
-                // GET PROFILE
-                // =====================================================
+        FarmerProfile profile = null;
 
-                FarmerProfile profile = null;
+        try {
 
-                try {
+            profile = profileController.getProfile(
+                    farmerId);
 
-                        profile = profileController.getProfile(
-                                        farmerId);
+        } catch (Exception e) {
 
-                } catch (Exception e) {
-
-                        e.printStackTrace();
-                }
-
-                // =====================================================
-                // GET FIREBASE USER
-                // =====================================================
-
-                UserModel firebaseUser = null;
-
-                try {
-
-                        firebaseUser = userDAO.getUserByUid(
-                                        firebaseUid);
-
-                } catch (Exception e) {
-
-                        e.printStackTrace();
-                }
-
-                // =====================================================
-                // NAME
-                // =====================================================
-
-                String farmerName = "";
-
-                if (profile != null &&
-                                profile.getName() != null &&
-                                !profile.getName().trim().isEmpty()) {
-
-                        farmerName = profile.getName().trim();
-
-                } else if (firebaseUser != null &&
-                                firebaseUser.getFullName() != null &&
-                                !firebaseUser.getFullName().trim().isEmpty()) {
-
-                        farmerName = firebaseUser.getFullName().trim();
-
-                } else {
-
-                        farmerName = "Farmer";
-                }
-
-                // =====================================================
-                // EMAIL
-                // =====================================================
-
-                String farmerEmail = "";
-
-                if (profile != null &&
-                                profile.getEmail() != null &&
-                                !profile.getEmail().trim().isEmpty()) {
-
-                        farmerEmail = profile.getEmail().trim();
-
-                } else if (firebaseUser != null &&
-                                firebaseUser.getEmail() != null &&
-                                !firebaseUser.getEmail().trim().isEmpty()) {
-
-                        farmerEmail = firebaseUser.getEmail().trim();
-
-                } else {
-
-                        farmerEmail = "Not provided";
-                }
-
-                // =====================================================
-                // PROFILE HEADER
-                // =====================================================
-
-                HBox profileHeader = new HBox();
-
-                profileHeader.setPrefHeight(
-                                135);
-
-                profileHeader.setPadding(
-                                new Insets(22));
-
-                profileHeader.setSpacing(
-                                18);
-
-                profileHeader.setAlignment(
-                                Pos.CENTER_LEFT);
-
-                profileHeader.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                Color.DARKGREEN,
-                                                                new CornerRadii(15),
-                                                                Insets.EMPTY)));
-
-                // =====================================================
-                // PROFILE IMAGE
-                // =====================================================
-
-                StackPane profileImage = new StackPane();
-
-                profileImage.setPrefSize(
-                                90,
-                                90);
-
-                profileImage.setMinSize(
-                                90,
-                                90);
-
-                profileImage.setMaxSize(
-                                90,
-                                90);
-
-                profileImage.setStyle(
-                                "-fx-background-color:#1B2420;" +
-                                                "-fx-background-radius:50;");
-
-                if (profile != null &&
-                                profile.getImageBase64() != null &&
-                                !profile.getImageBase64()
-                                                .trim()
-                                                .isEmpty()) {
-
-                        try {
-
-                                byte[] bytes = Base64.getDecoder()
-                                                .decode(
-                                                                profile.getImageBase64());
-
-                                Image image = new Image(
-                                                new java.io.ByteArrayInputStream(
-                                                                bytes));
-
-                                ImageView imageView = new ImageView(
-                                                image);
-
-                                imageView.setFitWidth(90);
-                                imageView.setFitHeight(90);
-                                imageView.setPreserveRatio(false);
-
-                                Circle clip = new Circle(
-                                                45,
-                                                45,
-                                                45);
-
-                                imageView.setClip(
-                                                clip);
-
-                                profileImage
-                                                .getChildren()
-                                                .add(
-                                                                imageView);
-
-                        } catch (Exception e) {
-
-                                addDefaultProfileIcon(
-                                                profileImage,
-                                                farmerName);
-                        }
-
-                } else {
-
-                        addDefaultProfileIcon(
-                                        profileImage,
-                                        farmerName);
-                }
-
-                // =====================================================
-                // PROFILE TEXT
-                // =====================================================
-
-                VBox profileText = new VBox(
-                                5);
-
-                Label nameLabel = new Label(
-                                farmerName);
-
-                nameLabel.setTextFill(
-                                DARK_TEXT);
-
-                nameLabel.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                21));
-
-                Label roleLabel = new Label(
-                                "Farm Owner");
-
-                roleLabel.setTextFill(
-                                LIGHT_GREEN);
-
-                roleLabel.setFont(
-                                Font.font(
-                                                "Arial",
-                                                13));
-
-                Label descriptionLabel = new Label(
-                                "Your profile information is visible to buyers.");
-
-                descriptionLabel.setTextFill(
-                                GREY);
-
-                descriptionLabel.setFont(
-                                Font.font(
-                                                "Arial",
-                                                12));
-
-                profileText
-                                .getChildren()
-                                .addAll(
-                                                nameLabel,
-                                                roleLabel,
-                                                descriptionLabel);
-
-                // =====================================================
-                // SPACER
-                // =====================================================
-
-                Region profileSpacer = new Region();
-
-                HBox.setHgrow(
-                                profileSpacer,
-                                Priority.ALWAYS);
-
-                // =====================================================
-                // EDIT BUTTON
-                // =====================================================
-
-                Button edit = new Button(
-                                "✎  Edit Profile");
-
-                edit.setPrefHeight(
-                                42);
-
-                edit.setPrefWidth(
-                                130);
-
-                edit.setTextFill(
-                                Color.DARKGREEN);
-
-                edit.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                12));
-
-                edit.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                GREEN,
-                                                                new CornerRadii(7),
-                                                                Insets.EMPTY)));
-
-                edit.setCursor(
-                                Cursor.HAND);
-
-                edit.setOnAction(
-                                e -> {
-
-                                        root.setCenter(
-                                                        createProfileCard());
-                                });
-
-                profileHeader
-                                .getChildren()
-                                .addAll(
-                                                profileImage,
-                                                profileText,
-                                                profileSpacer,
-                                                edit);
-
-                // =====================================================
-                // PERSONAL CARD
-                // =====================================================
-
-                VBox personalCard = createProfileViewCard(
-                                "♙  Personal Information");
-
-                GridPane personalGrid = new GridPane();
-
-                personalGrid.setHgap(20);
-                personalGrid.setVgap(15);
-
-                personalGrid.add(
-                                createProfileViewField(
-                                                "Full Name",
-                                                farmerName),
-                                0,
-                                0);
-
-                personalGrid.add(
-                                createProfileViewField(
-                                                "Email Address",
-                                                farmerEmail),
-                                1,
-                                0);
-
-                personalGrid.add(
-                                createProfileViewField(
-                                                "Phone Number",
-                                                getProfileValue(
-                                                                profile == null
-                                                                                ? null
-                                                                                : profile.getPhone())),
-                                0,
-                                1);
-
-                personalGrid.add(
-                                createProfileViewField(
-                                                "Address",
-                                                getProfileValue(
-                                                                profile == null
-                                                                                ? null
-                                                                                : profile.getAddress())),
-                                1,
-                                1);
-
-                personalGrid.add(
-                                createProfileViewField(
-                                                "Village",
-                                                getProfileValue(
-                                                                profile == null
-                                                                                ? null
-                                                                                : profile.getVillage())),
-                                0,
-                                2);
-
-                personalGrid.add(
-                                createProfileViewField(
-                                                "District",
-                                                getProfileValue(
-                                                                profile == null
-                                                                                ? null
-                                                                                : profile.getDistrict())),
-                                1,
-                                2);
-
-                personalGrid.add(
-                                createProfileViewField(
-                                                "State",
-                                                getProfileValue(
-                                                                profile == null
-                                                                                ? null
-                                                                                : profile.getState())),
-                                0,
-                                3);
-
-                personalCard
-                                .getChildren()
-                                .add(
-                                                personalGrid);
-
-                // =====================================================
-                // FARM CARD
-                // =====================================================
-
-                VBox farmCard = createProfileViewCard(
-                                "♧  Farm Information");
-
-                GridPane farmGrid = new GridPane();
-
-                farmGrid.setHgap(20);
-                farmGrid.setVgap(15);
-
-                farmGrid.add(
-                                createProfileViewField(
-                                                "Farm Name",
-                                                getProfileValue(
-                                                                profile == null
-                                                                                ? null
-                                                                                : profile.getFarmName())),
-                                0,
-                                0);
-
-                farmGrid.add(
-                                createProfileViewField(
-                                                "Farm Area",
-                                                getProfileValue(
-                                                                profile == null
-                                                                                ? null
-                                                                                : profile.getFarmArea())),
-                                1,
-                                0);
-
-                farmGrid.add(
-                                createProfileViewField(
-                                                "Farming Type",
-                                                getProfileValue(
-                                                                profile == null
-                                                                                ? null
-                                                                                : profile.getFarmingType())),
-                                0,
-                                1);
-
-                farmGrid.add(
-                                createProfileViewField(
-                                                "Primary Crops",
-                                                getProfileValue(
-                                                                profile == null
-                                                                                ? null
-                                                                                : profile.getPrimaryCrops())),
-                                1,
-                                1);
-
-                farmCard
-                                .getChildren()
-                                .add(
-                                                farmGrid);
-
-                // =====================================================
-                // FARMER ID / UID CARD
-                // =====================================================
-
-                VBox accountCard = createProfileViewCard(
-                                "🔐  Account Information");
-
-                GridPane accountGrid = new GridPane();
-
-                accountGrid.setHgap(20);
-                accountGrid.setVgap(15);
-
-                accountGrid.add(
-                                createProfileViewField(
-                                                "Farmer ID",
-                                                String.valueOf(
-                                                                farmerId)),
-                                0,
-                                0);
-
-                accountGrid.add(
-                                createProfileViewField(
-                                                "Firebase UID",
-                                                firebaseUid),
-                                1,
-                                0);
-
-                accountCard
-                                .getChildren()
-                                .add(
-                                                accountGrid);
-
-                // =====================================================
-                // COLUMN WIDTH
-                // =====================================================
-
-                columnConstraintsHelper(
-                                personalGrid);
-
-                columnConstraintsHelper(
-                                farmGrid);
-
-                columnConstraintsHelper(
-                                accountGrid);
-
-                // =====================================================
-                // ADD CONTENT
-                // =====================================================
-
-                content.getChildren()
-                                .addAll(
-                                                profileHeader,
-                                                personalCard,
-                                                farmCard,
-                                                accountCard);
-
-                // =====================================================
-                // SCROLL
-                // =====================================================
-
-                ScrollPane scroll = new ScrollPane(
-                                content);
-
-                scroll.setFitToWidth(
-                                true);
-
-                scroll.setHbarPolicy(
-                                ScrollPane.ScrollBarPolicy.NEVER);
-
-                scroll.setVbarPolicy(
-                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
-
-                scroll.setStyle(
-                                "-fx-background-color:#050b0a;" +
-                                                "-fx-background:#050b0a;" +
-                                                "-fx-control-inner-background:#050b0a;");
-
-                VBox.setVgrow(
-                                scroll,
-                                Priority.ALWAYS);
-
-                main.getChildren()
-                                .addAll(
-                                                topBar,
-                                                scroll);
-
-                return main;
+            e.printStackTrace();
         }
 
-        private void addDefaultProfileIcon(
-                        StackPane container,
-                        String farmerName) {
+        // =====================================================
+        // GET FIREBASE USER
+        // =====================================================
 
-                String initial = "F";
+        UserModel firebaseUser = null;
 
-                if (farmerName != null &&
-                                !farmerName.trim().isEmpty()) {
+        try {
 
-                        initial = farmerName
-                                        .trim()
-                                        .substring(0, 1)
-                                        .toUpperCase();
-                }
+            firebaseUser = userDAO.getUserByUid(
+                    firebaseUid);
 
-                Label icon = new Label(
-                                initial);
+        } catch (Exception e) {
 
-                icon.setPrefSize(
-                                90,
-                                90);
-
-                icon.setAlignment(
-                                Pos.CENTER);
-
-                icon.setTextFill(
-                                Color.WHITE);
-
-                icon.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                28));
-
-                icon.setBackground(
-                                new Background(
-                                                new BackgroundFill(
-                                                                DARK_GREEN,
-                                                                new CornerRadii(50),
-                                                                Insets.EMPTY)));
-
-                container
-                                .getChildren()
-                                .add(
-                                                icon);
+            e.printStackTrace();
         }
 
-        private VBox createProfileViewCard(
-                        String titleText) {
+        // =====================================================
+        // NAME
+        // =====================================================
 
-                VBox card = new VBox(
-                                18);
+        String farmerName = "";
 
-                card.setPadding(
-                                new Insets(
-                                                22));
+        if (profile != null &&
+                profile.getName() != null &&
+                !profile.getName().trim().isEmpty()) {
 
-                card.setMaxWidth(
-                                Double.MAX_VALUE);
+            farmerName = profile.getName().trim();
 
-                card.setStyle(
-                                "-fx-background-color:#0D1213;" +
-                                                "-fx-background-radius:15;" +
-                                                "-fx-border-color:#26382B;" +
-                                                "-fx-border-radius:15;" +
-                                                "-fx-border-width:1;");
+        } else if (firebaseUser != null &&
+                firebaseUser.getFullName() != null &&
+                !firebaseUser.getFullName().trim().isEmpty()) {
 
-                Label title = new Label(
-                                titleText);
+            farmerName = firebaseUser.getFullName().trim();
 
-                title.setTextFill(
-                                Color.WHITE);
+        } else {
 
-                title.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                18));
-
-                card.getChildren()
-                                .add(
-                                                title);
-
-                return card;
+            farmerName = "Farmer";
         }
 
-        private VBox createProfileViewField(
-                        String title,
-                        String value) {
+        // =====================================================
+        // EMAIL
+        // =====================================================
 
-                VBox box = new VBox(
-                                6);
+        String farmerEmail = "";
 
-                Label titleLabel = new Label(
-                                title);
+        if (profile != null &&
+                profile.getEmail() != null &&
+                !profile.getEmail().trim().isEmpty()) {
 
-                titleLabel.setTextFill(
-                                Color.web("#A9B7AC"));
+            farmerEmail = profile.getEmail().trim();
 
-                titleLabel.setFont(
-                                Font.font(
-                                                "Arial",
-                                                FontWeight.BOLD,
-                                                11));
+        } else if (firebaseUser != null &&
+                firebaseUser.getEmail() != null &&
+                !firebaseUser.getEmail().trim().isEmpty()) {
 
-                Label valueLabel = new Label(
-                                getProfileValue(value));
+            farmerEmail = firebaseUser.getEmail().trim();
 
-                valueLabel.setTextFill(
-                                Color.WHITE);
+        } else {
 
-                valueLabel.setFont(
-                                Font.font(
-                                                "Arial",
-                                                14));
-
-                valueLabel.setWrapText(
-                                true);
-
-                valueLabel.setMaxWidth(
-                                Double.MAX_VALUE);
-
-                box.setPadding(
-                                new Insets(
-                                                12));
-
-                box.setStyle(
-                                "-fx-background-color:#050B0A;" +
-                                                "-fx-background-radius:7;" +
-                                                "-fx-border-color:#303839;" +
-                                                "-fx-border-radius:7;");
-
-                box.getChildren()
-                                .addAll(
-                                                titleLabel,
-                                                valueLabel);
-
-                GridPane.setHgrow(
-                                box,
-                                Priority.ALWAYS);
-
-                return box;
+            farmerEmail = "Not provided";
         }
 
-        private String getProfileValue(
-                        String value) {
+        // =====================================================
+        // PROFILE HEADER
+        // =====================================================
 
-                if (value == null ||
-                                value.trim().isEmpty()) {
+        HBox profileHeader = new HBox();
 
-                        return "Not provided";
-                }
+        profileHeader.setPrefHeight(
+                135);
 
-                return value.trim();
+        profileHeader.setPadding(
+                new Insets(22));
+
+        profileHeader.setSpacing(
+                18);
+
+        profileHeader.setAlignment(
+                Pos.CENTER_LEFT);
+
+        profileHeader.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Color.DARKGREEN,
+                                new CornerRadii(15),
+                                Insets.EMPTY)));
+
+        // =====================================================
+        // PROFILE IMAGE
+        // =====================================================
+
+        StackPane profileImage = new StackPane();
+
+        profileImage.setPrefSize(
+                90,
+                90);
+
+        profileImage.setMinSize(
+                90,
+                90);
+
+        profileImage.setMaxSize(
+                90,
+                90);
+
+        profileImage.setStyle(
+                "-fx-background-color:#1B2420;" +
+                        "-fx-background-radius:50;");
+
+        if (profile != null &&
+                profile.getImageBase64() != null &&
+                !profile.getImageBase64()
+                        .trim()
+                        .isEmpty()) {
+
+            try {
+
+                byte[] bytes = Base64.getDecoder()
+                        .decode(
+                                profile.getImageBase64());
+
+                Image image = new Image(
+                        new java.io.ByteArrayInputStream(
+                                bytes));
+
+                ImageView imageView = new ImageView(
+                        image);
+
+                imageView.setFitWidth(90);
+                imageView.setFitHeight(90);
+                imageView.setPreserveRatio(false);
+
+                Circle clip = new Circle(
+                        45,
+                        45,
+                        45);
+
+                imageView.setClip(
+                        clip);
+
+                profileImage
+                        .getChildren()
+                        .add(
+                                imageView);
+
+            } catch (Exception e) {
+
+                addDefaultProfileIcon(
+                        profileImage,
+                        farmerName);
+            }
+
+        } else {
+
+            addDefaultProfileIcon(
+                    profileImage,
+                    farmerName);
         }
 
-        // DASHBOARD PAGE
-        // private VBox createDashboardPage() {
+        // =====================================================
+        // PROFILE TEXT
+        // =====================================================
 
-        //         VBox main = new VBox();
+        VBox profileText = new VBox(
+                5);
 
-        //         // Use the same dark background as the dashboard content
-        //         main.setBackground(
-        //                         new Background(
-        //                                         new BackgroundFill(
-        //                                                         DARK_GREEN,
-        //                                                         CornerRadii.EMPTY,
-        //                                                         Insets.EMPTY)));
+        Label nameLabel = new Label(
+                farmerName);
 
-        //         HBox topBar = createTopBar(
-        //                         "Farmer Dashboard",
-        //                         "Manage your farm and make smarter decisions.");
+        nameLabel.setTextFill(
+                DARK_TEXT);
 
-        //         VBox content = createDashboardContent();
+        nameLabel.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        21));
 
-        //         content.setBackground(
-        //                         new Background(
-        //                                         new BackgroundFill(
-        //                                                         DARK_GREEN,
-        //                                                         CornerRadii.EMPTY,
-        //                                                         Insets.EMPTY)));
+        Label roleLabel = new Label(
+                "Farm Owner");
 
-        //         ScrollPane scroll = new ScrollPane(content);
+        roleLabel.setTextFill(
+                LIGHT_GREEN);
 
-        //         scroll.setFitToWidth(true);
-        //         scroll.setHbarPolicy(
-        //                         ScrollPane.ScrollBarPolicy.NEVER);
+        roleLabel.setFont(
+                Font.font(
+                        "Arial",
+                        13));
 
-        //         // Remove ScrollPane border
-        //         scroll.setStyle(
-        //                         "-fx-background-color: transparent;" +
-        //                                         "-fx-border-color: transparent;" +
-        //                                         "-fx-focus-color: transparent;" +
-        //                                         "-fx-faint-focus-color: transparent;");
+        Label descriptionLabel = new Label(
+                "Your profile information is visible to buyers.");
 
-        //         scroll.setFocusTraversable(false);
+        descriptionLabel.setTextFill(
+                GREY);
 
-        //         VBox.setVgrow(
-        //                         scroll,
-        //                         Priority.ALWAYS);
+        descriptionLabel.setFont(
+                Font.font(
+                        "Arial",
+                        12));
 
-        //         main.getChildren().addAll(
-        //                         topBar,
-        //                         scroll);
+        profileText
+                .getChildren()
+                .addAll(
+                        nameLabel,
+                        roleLabel,
+                        descriptionLabel);
 
-        //         return main;
-        // }
+        // =====================================================
+        // SPACER
+        // =====================================================
 
-        // // // // TOP BAR
-        // private HBox createTopBar(String titleText, String subtitleText) {
-        //         HBox bar = new HBox();
-        //         bar.setPrefHeight(100);
-        //         bar.setPadding(new Insets(18, 35, 18, 35));
-        //         bar.setAlignment(Pos.CENTER_LEFT);
-        //         bar.setBackground(new Background(new BackgroundFill(DARK_GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        Region profileSpacer = new Region();
 
-        //         VBox titleBox = new VBox();
-        //         titleBox.setSpacing(3);
+        HBox.setHgrow(
+                profileSpacer,
+                Priority.ALWAYS);
 
-        //         Label title = new Label(titleText);
-        //         title.setTextFill(DARK_TEXT);
-        //         title.setFont(Font.font("Arial", FontWeight.BOLD, 28));
+        // =====================================================
+        // EDIT BUTTON
+        // =====================================================
 
-        //         Label subtitle = new Label(subtitleText);
-        //         subtitle.setTextFill(GREY);
-        //         subtitle.setFont(Font.font("Arial", 15));
+        Button edit = new Button(
+                "✎  Edit Profile");
 
-        //         titleBox.getChildren().addAll(title, subtitle);
+        edit.setPrefHeight(
+                42);
 
-        //         bar.getChildren().addAll(titleBox, createWidthSpace(25));
-        //         return bar;
-        // }
+        edit.setPrefWidth(
+                130);
 
-        // // DASHBOARD CONTENT
-        // // ============================================================
-        // // DASHBOARD CONTENT
-        // // ============================================================
+        edit.setTextFill(
+                Color.DARKGREEN);
 
-        // private VBox createDashboardContent() {
+        edit.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        12));
 
-        //         FarmerDashboardHome home = new FarmerDashboardHome(
-        //                         farmerId);
+        edit.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                GREEN,
+                                new CornerRadii(7),
+                                Insets.EMPTY)));
 
-        //         return home.getDashboardHome();
-        // }
+        edit.setCursor(
+                Cursor.HAND);
 
-        // ============================================================
-        // WELCOME CARD
-        // ============================================================
+        edit.setOnAction(
+                e -> {
 
-        private void loadFirebaseUserData() {
+                    root.setCenter(
+                            createProfileCard());
+                });
 
-                try {
+        profileHeader
+                .getChildren()
+                .addAll(
+                        profileImage,
+                        profileText,
+                        profileSpacer,
+                        edit);
 
-                        UserModel user = userDAO.getUserByUid(
-                                        firebaseUid);
+        // =====================================================
+        // PERSONAL CARD
+        // =====================================================
 
-                        if (user == null) {
+        VBox personalCard = createProfileViewCard(
+                "♙  Personal Information");
 
-                                System.out.println(
-                                                "Firebase user not found for UID = "
-                                                                + firebaseUid);
+        GridPane personalGrid = new GridPane();
 
-                                return;
-                        }
+        personalGrid.setHgap(20);
+        personalGrid.setVgap(15);
 
-                        // =================================================
-                        // NAME FROM FIREBASE
-                        // =================================================
+        personalGrid.add(
+                createProfileViewField(
+                        "Full Name",
+                        farmerName),
+                0,
+                0);
 
-                        if (user.getFullName() != null &&
-                                        !user.getFullName().trim().isEmpty()) {
+        personalGrid.add(
+                createProfileViewField(
+                        "Email Address",
+                        farmerEmail),
+                1,
+                0);
 
-                                nameField.setText(
-                                                user.getFullName().trim());
-                        }
+        personalGrid.add(
+                createProfileViewField(
+                        "Phone Number",
+                        getProfileValue(
+                                profile == null
+                                        ? null
+                                        : profile.getPhone())),
+                0,
+                1);
 
-                        // =================================================
-                        // EMAIL FROM FIREBASE
-                        // =================================================
+        personalGrid.add(
+                createProfileViewField(
+                        "Address",
+                        getProfileValue(
+                                profile == null
+                                        ? null
+                                        : profile.getAddress())),
+                1,
+                1);
 
-                        if (user.getEmail() != null &&
-                                        !user.getEmail().trim().isEmpty()) {
+        personalGrid.add(
+                createProfileViewField(
+                        "Village",
+                        getProfileValue(
+                                profile == null
+                                        ? null
+                                        : profile.getVillage())),
+                0,
+                2);
 
-                                emailField.setText(
-                                                user.getEmail().trim());
-                        }
+        personalGrid.add(
+                createProfileViewField(
+                        "District",
+                        getProfileValue(
+                                profile == null
+                                        ? null
+                                        : profile.getDistrict())),
+                1,
+                2);
 
-                        System.out.println(
-                                        "Firebase name loaded = "
-                                                        + user.getFullName());
+        personalGrid.add(
+                createProfileViewField(
+                        "State",
+                        getProfileValue(
+                                profile == null
+                                        ? null
+                                        : profile.getState())),
+                0,
+                3);
 
-                        System.out.println(
-                                        "Firebase email loaded = "
-                                                        + user.getEmail());
+        personalCard
+                .getChildren()
+                .add(
+                        personalGrid);
 
-                } catch (Exception e) {
+        // =====================================================
+        // FARM CARD
+        // =====================================================
 
-                        e.printStackTrace();
+        VBox farmCard = createProfileViewCard(
+                "♧  Farm Information");
 
-                        System.out.println(
-                                        "Unable to load Firebase user information.");
-                }
+        GridPane farmGrid = new GridPane();
+
+        farmGrid.setHgap(20);
+        farmGrid.setVgap(15);
+
+        farmGrid.add(
+                createProfileViewField(
+                        "Farm Name",
+                        getProfileValue(
+                                profile == null
+                                        ? null
+                                        : profile.getFarmName())),
+                0,
+                0);
+
+        farmGrid.add(
+                createProfileViewField(
+                        "Farm Area",
+                        getProfileValue(
+                                profile == null
+                                        ? null
+                                        : profile.getFarmArea())),
+                1,
+                0);
+
+        farmGrid.add(
+                createProfileViewField(
+                        "Farming Type",
+                        getProfileValue(
+                                profile == null
+                                        ? null
+                                        : profile.getFarmingType())),
+                0,
+                1);
+
+        farmGrid.add(
+                createProfileViewField(
+                        "Primary Crops",
+                        getProfileValue(
+                                profile == null
+                                        ? null
+                                        : profile.getPrimaryCrops())),
+                1,
+                1);
+
+        farmCard
+                .getChildren()
+                .add(
+                        farmGrid);
+
+        // =====================================================
+        // FARMER ID / UID CARD
+        // =====================================================
+
+        VBox accountCard = createProfileViewCard(
+                "🔐  Account Information");
+
+        GridPane accountGrid = new GridPane();
+
+        accountGrid.setHgap(20);
+        accountGrid.setVgap(15);
+
+        accountGrid.add(
+                createProfileViewField(
+                        "Farmer ID",
+                        String.valueOf(
+                                farmerId)),
+                0,
+                0);
+
+        accountGrid.add(
+                createProfileViewField(
+                        "Firebase UID",
+                        firebaseUid),
+                1,
+                0);
+
+        // accountCard
+        //         .getChildren()
+        //         .add(
+        //                 accountGrid);
+
+        // =====================================================
+        // COLUMN WIDTH
+        // =====================================================
+
+        columnConstraintsHelper(
+                personalGrid);
+
+        columnConstraintsHelper(
+                farmGrid);
+
+        columnConstraintsHelper(
+                accountGrid);
+
+        // =====================================================
+        // ADD CONTENT
+        // =====================================================
+
+        content.getChildren()
+                .addAll(
+                        profileHeader,
+                        personalCard,
+                        farmCard
+                        );
+
+        // =====================================================
+        // SCROLL
+        // =====================================================
+
+        ScrollPane scroll = new ScrollPane(
+                content);
+
+        scroll.setFitToWidth(
+                true);
+
+        scroll.setHbarPolicy(
+                ScrollPane.ScrollBarPolicy.NEVER);
+
+        scroll.setVbarPolicy(
+                ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+        scroll.setStyle(
+                "-fx-background-color:#050b0a;" +
+                        "-fx-background:#050b0a;" +
+                        "-fx-control-inner-background:#050b0a;");
+
+        VBox.setVgrow(
+                scroll,
+                Priority.ALWAYS);
+
+        main.getChildren()
+                .addAll(
+                        topBar,
+                        scroll);
+
+        return main;
+    }
+
+    private void addDefaultProfileIcon(
+            StackPane container,
+            String farmerName) {
+
+        String initial = "F";
+
+        if (farmerName != null &&
+                !farmerName.trim().isEmpty()) {
+
+            initial = farmerName
+                    .trim()
+                    .substring(0, 1)
+                    .toUpperCase();
         }
 
-        private VBox createProfileCard() {
+        Label icon = new Label(
+                initial);
+
+        icon.setPrefSize(
+                90,
+                90);
+
+        icon.setAlignment(
+                Pos.CENTER);
+
+        icon.setTextFill(
+                Color.WHITE);
 
-                VBox card = createCard();
+        icon.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        28));
+
+        icon.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                DARK_GREEN,
+                                new CornerRadii(50),
+                                Insets.EMPTY)));
+
+        container
+                .getChildren()
+                .add(
+                        icon);
+    }
+
+    private VBox createProfileViewCard(
+            String titleText) {
+
+        VBox card = new VBox(
+                18);
 
-                // =====================================================
-                // CARD TITLE
-                // =====================================================
+        card.setPadding(
+                new Insets(
+                        22));
 
-                Label cardTitle = new Label(
-                                "👨‍🌾 Personal & Farm Profile");
+        card.setMaxWidth(
+                Double.MAX_VALUE);
 
-                cardTitle.setStyle(
-                                "-fx-text-fill:#68D34A;" +
-                                                "-fx-font-size:21px;" +
-                                                "-fx-font-weight:bold;");
+        card.setStyle(
+                "-fx-background-color:#0D1213;" +
+                        "-fx-background-radius:15;" +
+                        "-fx-border-color:#26382B;" +
+                        "-fx-border-radius:15;" +
+                        "-fx-border-width:1;");
 
-                Label cardSubtitle = new Label(
-                                "Your information is saved using your unique farmer ID.");
+        Label title = new Label(
+                titleText);
 
-                cardSubtitle.setStyle(
-                                "-fx-text-fill:#888888;" +
-                                                "-fx-font-size:13px;");
+        title.setTextFill(
+                Color.WHITE);
 
-                // =====================================================
-                // PROFILE IMAGE
-                // =====================================================
+        title.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        18));
 
-                profileImageContainer = new StackPane();
+        card.getChildren()
+                .add(
+                        title);
 
-                profileImageContainer.setPrefSize(
-                                150,
-                                150);
+        return card;
+    }
 
-                profileImageContainer.setMinSize(
-                                150,
-                                150);
+    private VBox createProfileViewField(
+            String title,
+            String value) {
 
-                profileImageContainer.setMaxSize(
-                                150,
-                                150);
+        VBox box = new VBox(
+                6);
 
-                profileImageContainer.setStyle(
-                                "-fx-background-color:#1B2425;" +
-                                                "-fx-background-radius:100;");
+        Label titleLabel = new Label(
+                title);
 
-                showDefaultProfileImage();
+        titleLabel.setTextFill(
+                Color.web("#A9B7AC"));
 
-                Button changeImage = new Button(
-                                "📷 Change Profile Image");
+        titleLabel.setFont(
+                Font.font(
+                        "Arial",
+                        FontWeight.BOLD,
+                        11));
 
-                changeImage.setStyle(
-                                "-fx-background-color:transparent;" +
-                                                "-fx-text-fill:#68D34A;" +
-                                                "-fx-border-color:#68D34A;" +
-                                                "-fx-border-radius:6;" +
-                                                "-fx-background-radius:6;" +
-                                                "-fx-padding:8 12;" +
-                                                "-fx-cursor:hand;");
+        Label valueLabel = new Label(
+                getProfileValue(value));
 
-                changeImage.setOnAction(
-                                e -> chooseProfileImage());
+        valueLabel.setTextFill(
+                Color.WHITE);
 
-                VBox imageBox = new VBox(
-                                12,
-                                profileImageContainer,
-                                changeImage);
+        valueLabel.setFont(
+                Font.font(
+                        "Arial",
+                        14));
 
-                imageBox.setAlignment(
-                                Pos.CENTER);
+        valueLabel.setWrapText(
+                true);
 
-                // =====================================================
-                // FORM
-                // =====================================================
+        valueLabel.setMaxWidth(
+                Double.MAX_VALUE);
 
-                GridPane form = new GridPane();
+        box.setPadding(
+                new Insets(
+                        12));
 
-                form.setHgap(
-                                20);
+        box.setStyle(
+                "-fx-background-color:#050B0A;" +
+                        "-fx-background-radius:7;" +
+                        "-fx-border-color:#303839;" +
+                        "-fx-border-radius:7;");
 
-                form.setVgap(
-                                15);
+        box.getChildren()
+                .addAll(
+                        titleLabel,
+                        valueLabel);
 
-                form.setPadding(
-                                new Insets(
-                                                10,
-                                                0,
-                                                10,
-                                                0));
+        GridPane.setHgrow(
+                box,
+                Priority.ALWAYS);
 
-                form.setMaxWidth(
-                                Double.MAX_VALUE);
-
-                // =====================================================
-                // CREATE FIELDS
-                // =====================================================
-
-                nameField = createTextField(
-                                "Enter your full name");
-
-                emailField = createTextField(
-                                "Enter your email");
-
-                phoneField = createTextField(
-                                "Enter phone number");
-
-                addressField = createTextField(
-                                "Enter complete address");
-
-                villageField = createTextField(
-                                "Enter village");
-
-                districtField = createTextField(
-                                "Enter district");
-
-                stateField = createTextField(
-                                "Enter state");
-
-                farmNameField = createTextField(
-                                "Enter farm name");
-
-                farmAreaField = createTextField(
-                                "Example: 5 acres");
-
-                farmingTypeBox = new ComboBox<>();
-
-                farmingTypeBox.getItems().addAll(
-                                "Organic",
-                                "Conventional",
-                                "Mixed Farming",
-                                "Natural Farming",
-                                "Other");
-
-                farmingTypeBox.setPromptText(
-                                "Select farming type");
-
-                farmingTypeBox.setMaxWidth(
-                                Double.MAX_VALUE);
-
-                styleComboBox(
-                                farmingTypeBox);
-
-                primaryCropsField = createTextField(
-                                "Example: Wheat, Onion, Tomato");
-
-                loadExistingProfile();
-                loadFirebaseUserData();
-                // =====================================================
-                // ADD FIELDS
-                // =====================================================
-
-                addField(
-                                form,
-                                "Full Name",
-                                nameField,
-                                0,
-                                0);
-
-                addField(
-                                form,
-                                "Email",
-                                emailField,
-                                1,
-                                0);
-
-                addField(
-                                form,
-                                "Phone",
-                                phoneField,
-                                0,
-                                1);
-
-                addField(
-                                form,
-                                "Address",
-                                addressField,
-                                1,
-                                1);
-
-                addField(
-                                form,
-                                "Village",
-                                villageField,
-                                0,
-                                2);
-
-                addField(
-                                form,
-                                "District",
-                                districtField,
-                                1,
-                                2);
-
-                addField(
-                                form,
-                                "State",
-                                stateField,
-                                0,
-                                3);
-
-                addField(
-                                form,
-                                "Farm Name",
-                                farmNameField,
-                                1,
-                                3);
-
-                addField(
-                                form,
-                                "Farm Area",
-                                farmAreaField,
-                                0,
-                                4);
-
-                addField(
-                                form,
-                                "Farming Type",
-                                farmingTypeBox,
-                                1,
-                                4);
-
-                addField(
-                                form,
-                                "Primary Crops",
-                                primaryCropsField,
-                                0,
-                                5);
-
-                // =====================================================
-                // SAVE BUTTON
-                // =====================================================
-
-                Button saveButton = new Button(
-                                "✓ Save Profile");
-
-                saveButton.setPrefHeight(
-                                42);
-
-                saveButton.setPrefWidth(
-                                180);
-
-                saveButton.setStyle(
-                                "-fx-background-color:#68D34A;" +
-                                                "-fx-text-fill:#080C0D;" +
-                                                "-fx-font-size:14px;" +
-                                                "-fx-font-weight:bold;" +
-                                                "-fx-background-radius:7;" +
-                                                "-fx-cursor:hand;");
-
-                saveButton.setOnAction(
-                                e -> saveProfile());
-
-                // =====================================================
-                // FORM LAYOUT
-                // =====================================================
-
-                HBox mainProfile = new HBox(
-                                35,
-                                imageBox,
-                                form);
-
-                mainProfile.setAlignment(
-                                Pos.TOP_CENTER);
-
-                HBox.setHgrow(
-                                form,
-                                Priority.ALWAYS);
-
-                card.getChildren()
-                                .addAll(
-                                                cardTitle,
-                                                cardSubtitle,
-                                                mainProfile,
-                                                saveButton);
-
-                return card;
+        return box;
+    }
+
+    private String getProfileValue(
+            String value) {
+
+        if (value == null ||
+                value.trim().isEmpty()) {
+
+            return "Not provided";
         }
 
-        // =========================================================
-        // LOAD EXISTING PROFILE
-        // =========================================================
+        return value.trim();
+    }
 
-        // =========================================================
-        // LOAD EXISTING FARMER PROFILE
-        // =========================================================
+    // ============================================================
+    // WELCOME CARD
+    // ============================================================
 
-        private void loadExistingProfile() {
+    private void loadFirebaseUserData() {
 
-                try {
+        try {
 
-                        FarmerProfile profile = profileController.getProfile(
-                                        farmerId);
+            UserModel user = userDAO.getUserByUid(
+                    firebaseUid);
 
-                        if (profile == null) {
+            if (user == null) {
 
-                                System.out.println(
-                                                "No farmer profile found for Farmer ID = "
-                                                                + farmerId);
+                System.out.println(
+                        "Firebase user not found for UID = "
+                                + firebaseUid);
 
-                                return;
-                        }
+                return;
+            }
 
-                        System.out.println(
-                                        "Farmer profile loaded.");
+            // =================================================
+            // NAME FROM FIREBASE
+            // =================================================
 
-                        System.out.println(
-                                        "Farmer ID = "
-                                                        + farmerId);
+            if (user.getFullName() != null &&
+                    !user.getFullName().trim().isEmpty()) {
 
-                        System.out.println(
-                                        "Firebase UID = "
-                                                        + firebaseUid);
+                nameField.setText(
+                        user.getFullName().trim());
+            }
 
-                        // =================================================
-                        // DO NOT USE PROFILE NAME/EMAIL HERE
-                        // =================================================
-                        //
-                        // Name and Email must come from Firebase.
-                        // loadFirebaseUserData() is called after this method.
-                        // =================================================
+            // =================================================
+            // EMAIL FROM FIREBASE
+            // =================================================
 
-                        phoneField.setText(
-                                        safeEmpty(
-                                                        profile.getPhone()));
+            if (user.getEmail() != null &&
+                    !user.getEmail().trim().isEmpty()) {
 
-                        addressField.setText(
-                                        safeEmpty(
-                                                        profile.getAddress()));
+                emailField.setText(
+                        user.getEmail().trim());
+            }
 
-                        villageField.setText(
-                                        safeEmpty(
-                                                        profile.getVillage()));
+            System.out.println(
+                    "Firebase name loaded = "
+                            + user.getFullName());
 
-                        districtField.setText(
-                                        safeEmpty(
-                                                        profile.getDistrict()));
+            System.out.println(
+                    "Firebase email loaded = "
+                            + user.getEmail());
 
-                        stateField.setText(
-                                        safeEmpty(
-                                                        profile.getState()));
+        } catch (Exception e) {
 
-                        farmNameField.setText(
-                                        safeEmpty(
-                                                        profile.getFarmName()));
+            e.printStackTrace();
 
-                        farmAreaField.setText(
-                                        safeEmpty(
-                                                        profile.getFarmArea()));
+            System.out.println(
+                    "Unable to load Firebase user information.");
+        }
+    }
 
-                        // =================================================
-                        // FARMING TYPE
-                        // =================================================
+    private VBox createProfileCard() {
 
-                        if (profile.getFarmingType() != null
-                                        && !profile.getFarmingType()
-                                                        .trim()
-                                                        .isEmpty()) {
+        VBox card = createCard();
 
-                                farmingTypeBox.setValue(
-                                                profile.getFarmingType().trim());
-                        }
+        // =====================================================
+        // CARD TITLE
+        // =====================================================
 
-                        // =================================================
-                        // PRIMARY CROPS
-                        // =================================================
+        Label cardTitle = new Label(
+                "👨‍🌾 Personal & Farm Profile");
 
-                        primaryCropsField.setText(
-                                        safeEmpty(
-                                                        profile.getPrimaryCrops()));
+        cardTitle.setStyle(
+                "-fx-text-fill:#68D34A;" +
+                        "-fx-font-size:21px;" +
+                        "-fx-font-weight:bold;");
 
-                        // =================================================
-                        // PROFILE IMAGE
-                        // =================================================
+        Label cardSubtitle = new Label(
+                "Your information is saved using your unique farmer ID.");
 
-                        imageBase64 = profile.getImageBase64();
+        cardSubtitle.setStyle(
+                "-fx-text-fill:#888888;" +
+                        "-fx-font-size:13px;");
 
-                        if (imageBase64 != null
-                                        && !imageBase64.trim().isEmpty()) {
+        // =====================================================
+        // PROFILE IMAGE
+        // =====================================================
 
-                                showProfileImage(
-                                                imageBase64);
-                        }
+        profileImageContainer = new StackPane();
 
-                } catch (Exception e) {
+        profileImageContainer.setPrefSize(
+                150,
+                150);
 
-                        System.err.println(
-                                        "Unable to load farmer profile.");
+        profileImageContainer.setMinSize(
+                150,
+                150);
 
-                        e.printStackTrace();
-                }
+        profileImageContainer.setMaxSize(
+                150,
+                150);
+
+        profileImageContainer.setStyle(
+                "-fx-background-color:#1B2425;" +
+                        "-fx-background-radius:100;");
+
+        showDefaultProfileImage();
+
+        Button changeImage = new Button(
+                "📷 Change Profile Image");
+
+        changeImage.setStyle(
+                "-fx-background-color:transparent;" +
+                        "-fx-text-fill:#68D34A;" +
+                        "-fx-border-color:#68D34A;" +
+                        "-fx-border-radius:6;" +
+                        "-fx-background-radius:6;" +
+                        "-fx-padding:8 12;" +
+                        "-fx-cursor:hand;");
+
+        changeImage.setOnAction(
+                e -> chooseProfileImage());
+
+        VBox imageBox = new VBox(
+                12,
+                profileImageContainer,
+                changeImage);
+
+        imageBox.setAlignment(
+                Pos.CENTER);
+
+        // =====================================================
+        // FORM
+        // =====================================================
+
+        GridPane form = new GridPane();
+
+        form.setHgap(
+                20);
+
+        form.setVgap(
+                15);
+
+        form.setPadding(
+                new Insets(
+                        10,
+                        0,
+                        10,
+                        0));
+
+        form.setMaxWidth(
+                Double.MAX_VALUE);
+
+        // =====================================================
+        // CREATE FIELDS
+        // =====================================================
+
+        nameField = createTextField(
+                "Enter your full name");
+
+        emailField = createTextField(
+                "Enter your email");
+
+        phoneField = createTextField(
+                "Enter phone number");
+
+        addressField = createTextField(
+                "Enter complete address");
+
+        villageField = createTextField(
+                "Enter village");
+
+        districtField = createTextField(
+                "Enter district");
+
+        stateField = createTextField(
+                "Enter state");
+
+        farmNameField = createTextField(
+                "Enter farm name");
+
+        farmAreaField = createTextField(
+                "Example: 5 acres");
+
+        farmingTypeBox = new ComboBox<>();
+
+        farmingTypeBox.getItems().addAll(
+                "Organic",
+                "Conventional",
+                "Mixed Farming",
+                "Natural Farming",
+                "Other");
+
+        farmingTypeBox.setPromptText(
+                "Select farming type");
+
+        farmingTypeBox.setMaxWidth(
+                Double.MAX_VALUE);
+
+        styleComboBox(
+                farmingTypeBox);
+
+        primaryCropsField = createTextField(
+                "Example: Wheat, Onion, Tomato");
+
+        loadExistingProfile();
+        loadFirebaseUserData();
+        // =====================================================
+        // ADD FIELDS
+        // =====================================================
+
+        addField(
+                form,
+                "Full Name",
+                nameField,
+                0,
+                0);
+
+        addField(
+                form,
+                "Email",
+                emailField,
+                1,
+                0);
+
+        addField(
+                form,
+                "Phone",
+                phoneField,
+                0,
+                1);
+
+        addField(
+                form,
+                "Address",
+                addressField,
+                1,
+                1);
+
+        addField(
+                form,
+                "Village",
+                villageField,
+                0,
+                2);
+
+        addField(
+                form,
+                "District",
+                districtField,
+                1,
+                2);
+
+        addField(
+                form,
+                "State",
+                stateField,
+                0,
+                3);
+
+        addField(
+                form,
+                "Farm Name",
+                farmNameField,
+                1,
+                3);
+
+        addField(
+                form,
+                "Farm Area",
+                farmAreaField,
+                0,
+                4);
+
+        addField(
+                form,
+                "Farming Type",
+                farmingTypeBox,
+                1,
+                4);
+
+        addField(
+                form,
+                "Primary Crops",
+                primaryCropsField,
+                0,
+                5);
+
+        // =====================================================
+        // SAVE BUTTON
+        // =====================================================
+
+        Button saveButton = new Button(
+                "✓ Save Profile");
+
+        saveButton.setPrefHeight(
+                42);
+
+        saveButton.setPrefWidth(
+                180);
+
+        saveButton.setStyle(
+                "-fx-background-color:#68D34A;" +
+                        "-fx-text-fill:#080C0D;" +
+                        "-fx-font-size:14px;" +
+                        "-fx-font-weight:bold;" +
+                        "-fx-background-radius:7;" +
+                        "-fx-cursor:hand;");
+
+        saveButton.setOnAction(
+                e -> saveProfile());
+
+        // =====================================================
+        // FORM LAYOUT
+        // =====================================================
+
+        HBox mainProfile = new HBox(
+                35,
+                imageBox,
+                form);
+
+        mainProfile.setAlignment(
+                Pos.TOP_CENTER);
+
+        HBox.setHgrow(
+                form,
+                Priority.ALWAYS);
+
+        card.getChildren()
+                .addAll(
+                        cardTitle,
+                        cardSubtitle,
+                        mainProfile,
+                        saveButton);
+
+        return card;
+    }
+
+    // =========================================================
+    // LOAD EXISTING PROFILE
+    // =========================================================
+
+    // =========================================================
+    // LOAD EXISTING FARMER PROFILE
+    // =========================================================
+
+    private void loadExistingProfile() {
+
+        try {
+
+            FarmerProfile profile = profileController.getProfile(
+                    farmerId);
+
+            if (profile == null) {
+
+                System.out.println(
+                        "No farmer profile found for Farmer ID = "
+                                + farmerId);
+
+                return;
+            }
+
+            System.out.println(
+                    "Farmer profile loaded.");
+
+            System.out.println(
+                    "Farmer ID = "
+                            + farmerId);
+
+            System.out.println(
+                    "Firebase UID = "
+                            + firebaseUid);
+
+            // =================================================
+            // DO NOT USE PROFILE NAME/EMAIL HERE
+            // =================================================
+            //
+            // Name and Email must come from Firebase.
+            // loadFirebaseUserData() is called after this method.
+            // =================================================
+
+            phoneField.setText(
+                    safeEmpty(
+                            profile.getPhone()));
+
+            addressField.setText(
+                    safeEmpty(
+                            profile.getAddress()));
+
+            villageField.setText(
+                    safeEmpty(
+                            profile.getVillage()));
+
+            districtField.setText(
+                    safeEmpty(
+                            profile.getDistrict()));
+
+            stateField.setText(
+                    safeEmpty(
+                            profile.getState()));
+
+            farmNameField.setText(
+                    safeEmpty(
+                            profile.getFarmName()));
+
+            farmAreaField.setText(
+                    safeEmpty(
+                            profile.getFarmArea()));
+
+            // =================================================
+            // FARMING TYPE
+            // =================================================
+
+            if (profile.getFarmingType() != null
+                    && !profile.getFarmingType()
+                            .trim()
+                            .isEmpty()) {
+
+                farmingTypeBox.setValue(
+                        profile.getFarmingType().trim());
+            }
+
+            // =================================================
+            // PRIMARY CROPS
+            // =================================================
+
+            primaryCropsField.setText(
+                    safeEmpty(
+                            profile.getPrimaryCrops()));
+
+            // =================================================
+            // PROFILE IMAGE
+            // =================================================
+
+            imageBase64 = profile.getImageBase64();
+
+            if (imageBase64 != null
+                    && !imageBase64.trim().isEmpty()) {
+
+                showProfileImage(
+                        imageBase64);
+            }
+
+        } catch (Exception e) {
+
+            System.err.println(
+                    "Unable to load farmer profile.");
+
+            e.printStackTrace();
+        }
+    }
+
+    private String safeEmpty(
+            String value) {
+
+        if (value == null) {
+            return "";
         }
 
-        private String safeEmpty(
-                        String value) {
+        return value;
+    }
 
-                if (value == null) {
-                        return "";
-                }
+    // =========================================================
+    // SAVE PROFILE
+    // =========================================================
 
-                return value;
+    private void saveProfile() {
+
+        String name = nameField.getText().trim();
+
+        String email = emailField.getText().trim();
+
+        String phone = phoneField.getText().trim();
+
+        String address = addressField.getText().trim();
+
+        String village = villageField.getText().trim();
+
+        String district = districtField.getText().trim();
+
+        String state = stateField.getText().trim();
+
+        String farmName = farmNameField.getText().trim();
+
+        String farmArea = farmAreaField.getText().trim();
+
+        String farmingType = farmingTypeBox.getValue();
+
+        String primaryCrops = primaryCropsField.getText().trim();
+
+        // =====================================================
+        // VALIDATION
+        // =====================================================
+
+        if (name.isEmpty()) {
+
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "Please enter your name.");
+
+            return;
         }
 
-        // =========================================================
-        // SAVE PROFILE
-        // =========================================================
+        if (email.isEmpty()) {
 
-        private void saveProfile() {
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "Please enter your email.");
 
-                String name = nameField.getText().trim();
-
-                String email = emailField.getText().trim();
-
-                String phone = phoneField.getText().trim();
-
-                String address = addressField.getText().trim();
-
-                String village = villageField.getText().trim();
-
-                String district = districtField.getText().trim();
-
-                String state = stateField.getText().trim();
-
-                String farmName = farmNameField.getText().trim();
-
-                String farmArea = farmAreaField.getText().trim();
-
-                String farmingType = farmingTypeBox.getValue();
-
-                String primaryCrops = primaryCropsField.getText().trim();
-
-                // =====================================================
-                // VALIDATION
-                // =====================================================
-
-                if (name.isEmpty()) {
-
-                        showAlert(
-                                        Alert.AlertType.WARNING,
-                                        "Please enter your name.");
-
-                        return;
-                }
-
-                if (email.isEmpty()) {
-
-                        showAlert(
-                                        Alert.AlertType.WARNING,
-                                        "Please enter your email.");
-
-                        return;
-                }
-
-                if (phone.isEmpty()) {
-
-                        showAlert(
-                                        Alert.AlertType.WARNING,
-                                        "Please enter your phone number.");
-
-                        return;
-                }
-
-                // =====================================================
-                // CREATE PROFILE
-                // =====================================================
-
-                FarmerProfile profile = new FarmerProfile();
-
-                profile.setFarmerId(
-                                farmerId);
-
-                profile.setUid(
-                                firebaseUid);
-
-                profile.setName(
-                                name);
-
-                profile.setEmail(
-                                email);
-
-                profile.setPhone(
-                                phone);
-
-                profile.setAddress(
-                                address);
-
-                profile.setVillage(
-                                village);
-
-                profile.setDistrict(
-                                district);
-
-                profile.setState(
-                                state);
-
-                profile.setFarmName(
-                                farmName);
-
-                profile.setFarmArea(
-                                farmArea);
-
-                profile.setFarmingType(
-                                farmingType);
-
-                profile.setPrimaryCrops(
-                                primaryCrops);
-
-                profile.setImageBase64(
-                                imageBase64);
-
-                // =====================================================
-                // SAVE FIREBASE
-                // =====================================================
-
-                boolean saved = profileController.saveProfile(
-                                profile);
-
-                if (saved) {
-
-                        System.out.println(
-                                        "Profile saved for farmer ID = "
-                                                        + farmerId);
-
-                        showAlert(
-                                        Alert.AlertType.INFORMATION,
-                                        "Profile saved successfully!");
-
-                        // =================================================
-                        // GO BACK TO READ-ONLY PROFILE
-                        // =================================================
-
-                        root.setCenter(
-                                        createProfileView());
-
-                } else {
-
-                        showAlert(
-                                        Alert.AlertType.ERROR,
-                                        "Profile could not be saved.\n"
-                                                        + "Please check Firebase.");
-                }
+            return;
         }
 
-        // =========================================================
-        // CHOOSE PROFILE IMAGE
-        // =========================================================
+        if (phone.isEmpty()) {
 
-        private void chooseProfileImage() {
+            showAlert(
+                    Alert.AlertType.WARNING,
+                    "Please enter your phone number.");
 
-                FileChooser chooser = new FileChooser();
-
-                chooser.setTitle(
-                                "Select Farmer Profile Image");
-
-                chooser.getExtensionFilters()
-                                .add(
-                                                new FileChooser.ExtensionFilter(
-                                                                "Image Files",
-                                                                "*.png",
-                                                                "*.jpg",
-                                                                "*.jpeg",
-                                                                "*.webp"));
-
-                File file = chooser.showOpenDialog(
-                                LoginPage.mainStage);
-
-                if (file == null) {
-                        return;
-                }
-
-                try {
-
-                        FileInputStream input = new FileInputStream(
-                                        file);
-
-                        ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-                        byte[] buffer = new byte[8192];
-
-                        int bytesRead;
-
-                        while ((bytesRead = input.read(buffer)) != -1) {
-
-                                output.write(
-                                                buffer,
-                                                0,
-                                                bytesRead);
-                        }
-
-                        input.close();
-
-                        byte[] imageBytes = output.toByteArray();
-
-                        imageBase64 = Base64.getEncoder()
-                                        .encodeToString(
-                                                        imageBytes);
-
-                        showProfileImage(
-                                        imageBase64);
-
-                        System.out.println(
-                                        "Profile image selected.");
-
-                } catch (Exception e) {
-
-                        e.printStackTrace();
-
-                        showAlert(
-                                        Alert.AlertType.ERROR,
-                                        "Unable to load profile image.");
-                }
+            return;
         }
 
-        // =========================================================
-        // SHOW PROFILE IMAGE
-        // =========================================================
+        // =====================================================
+        // CREATE PROFILE
+        // =====================================================
 
-        private void showProfileImage(
-                        String base64) {
+        FarmerProfile profile = new FarmerProfile();
 
-                if (base64 == null ||
-                                base64.trim().isEmpty()) {
+        profile.setFarmerId(
+                farmerId);
 
-                        showDefaultProfileImage();
+        profile.setUid(
+                firebaseUid);
 
-                        return;
-                }
+        profile.setName(
+                name);
 
-                try {
+        profile.setEmail(
+                email);
 
-                        byte[] bytes = Base64.getDecoder()
-                                        .decode(
-                                                        base64);
+        profile.setPhone(
+                phone);
 
-                        Image image = new Image(
-                                        new java.io.ByteArrayInputStream(
-                                                        bytes));
+        profile.setAddress(
+                address);
 
-                        if (image.isError()) {
+        profile.setVillage(
+                village);
 
-                                throw new Exception(
-                                                "Invalid image");
-                        }
+        profile.setDistrict(
+                district);
 
-                        ImageView imageView = new ImageView(
-                                        image);
+        profile.setState(
+                state);
 
-                        imageView.setFitWidth(
-                                        150);
+        profile.setFarmName(
+                farmName);
 
-                        imageView.setFitHeight(
-                                        150);
+        profile.setFarmArea(
+                farmArea);
 
-                        imageView.setPreserveRatio(
-                                        false);
+        profile.setFarmingType(
+                farmingType);
 
-                        Circle clip = new Circle(
-                                        75,
-                                        75,
-                                        75);
+        profile.setPrimaryCrops(
+                primaryCrops);
 
-                        imageView.setClip(
-                                        clip);
+        profile.setImageBase64(
+                imageBase64);
 
-                        profileImageContainer
-                                        .getChildren()
-                                        .clear();
+        // =====================================================
+        // SAVE FIREBASE
+        // =====================================================
 
-                        profileImageContainer
-                                        .getChildren()
-                                        .add(
-                                                        imageView);
+        boolean saved = profileController.saveProfile(
+                profile);
 
-                } catch (Exception e) {
+        if (saved) {
 
-                        e.printStackTrace();
+            System.out.println(
+                    "Profile saved for farmer ID = "
+                            + farmerId);
 
-                        showDefaultProfileImage();
-                }
+            showAlert(
+                    Alert.AlertType.INFORMATION,
+                    "Profile saved successfully!");
+
+            // =================================================
+            // GO BACK TO READ-ONLY PROFILE
+            // =================================================
+
+            root.setCenter(
+                    createProfileView());
+
+        } else {
+
+            showAlert(
+                    Alert.AlertType.ERROR,
+                    "Profile could not be saved.\n"
+                            + "Please check Firebase.");
+        }
+    }
+
+    // =========================================================
+    // CHOOSE PROFILE IMAGE
+    // =========================================================
+
+    private void chooseProfileImage() {
+
+        FileChooser chooser = new FileChooser();
+
+        chooser.setTitle(
+                "Select Farmer Profile Image");
+
+        chooser.getExtensionFilters()
+                .add(
+                        new FileChooser.ExtensionFilter(
+                                "Image Files",
+                                "*.png",
+                                "*.jpg",
+                                "*.jpeg",
+                                "*.webp"));
+
+        File file = chooser.showOpenDialog(
+                LoginPage.mainStage);
+
+        if (file == null) {
+            return;
         }
 
-        // =========================================================
-        // DEFAULT IMAGE
-        // =========================================================
+        try {
 
-        private void showDefaultProfileImage() {
+            FileInputStream input = new FileInputStream(
+                    file);
 
-                profileImageContainer
-                                .getChildren()
-                                .clear();
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-                Label icon = new Label(
-                                "👨‍🌾");
+            byte[] buffer = new byte[8192];
 
-                icon.setStyle(
-                                "-fx-font-size:60px;");
+            int bytesRead;
 
-                profileImageContainer
-                                .getChildren()
-                                .add(
-                                                icon);
+            while ((bytesRead = input.read(buffer)) != -1) {
+
+                output.write(
+                        buffer,
+                        0,
+                        bytesRead);
+            }
+
+            input.close();
+
+            byte[] imageBytes = output.toByteArray();
+
+            imageBase64 = Base64.getEncoder()
+                    .encodeToString(
+                            imageBytes);
+
+            showProfileImage(
+                    imageBase64);
+
+            System.out.println(
+                    "Profile image selected.");
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            showAlert(
+                    Alert.AlertType.ERROR,
+                    "Unable to load profile image.");
         }
-//     private VBox createProfileView() {
+    }
 
-//         VBox main =
-//                 new VBox();
+    // =========================================================
+    // SHOW PROFILE IMAGE
+    // =========================================================
 
-//         main.setBackground(
-//                 new Background(
-//                         new BackgroundFill(
-//                                 DARK_GREEN,
-//                                 CornerRadii.EMPTY,
-//                                 Insets.EMPTY)));
+    private void showProfileImage(
+            String base64) {
 
+        if (base64 == null ||
+                base64.trim().isEmpty()) {
 
-//         HBox topBar =
-//                 createTopBar(
-//                         "Farmer Profile",
-//                         "View your personal and farming information.");
+            showDefaultProfileImage();
 
+            return;
+        }
 
-//         VBox content =
-//                 new VBox(22);
+        try {
 
-//         content.setPadding(
-//                 new Insets(
-//                         30,
-//                         35,
-//                         35,
-//                         35));
+            byte[] bytes = Base64.getDecoder()
+                    .decode(
+                            base64);
 
-//         content.setBackground(
-//                 new Background(
-//                         new BackgroundFill(
-//                                 Color.web("#0B1F14"),
-//                                 CornerRadii.EMPTY,
-//                                 Insets.EMPTY)));
+            Image image = new Image(
+                    new java.io.ByteArrayInputStream(
+                            bytes));
 
+            if (image.isError()) {
 
-//         FarmerProfile profile =
-//                 null;
+                throw new Exception(
+                        "Invalid image");
+            }
 
-//         try {
+            ImageView imageView = new ImageView(
+                    image);
 
-//             profile =
-//                     profileController
-//                             .getProfile(farmerId);
+            imageView.setFitWidth(
+                    150);
 
-//         } catch (Exception e) {
+            imageView.setFitHeight(
+                    150);
 
-//             e.printStackTrace();
-//         }
+            imageView.setPreserveRatio(
+                    false);
 
+            Circle clip = new Circle(
+                    75,
+                    75,
+                    75);
 
-//         UserModel firebaseUser =
-//                 null;
+            imageView.setClip(
+                    clip);
 
-//         try {
+            profileImageContainer
+                    .getChildren()
+                    .clear();
 
-//             firebaseUser =
-//                     userDAO.getUserByUid(
-//                             firebaseUid);
+            profileImageContainer
+                    .getChildren()
+                    .add(
+                            imageView);
 
-//         } catch (Exception e) {
+        } catch (Exception e) {
 
-//             e.printStackTrace();
-//         }
+            e.printStackTrace();
 
+            showDefaultProfileImage();
+        }
+    }
 
-//         // =====================================================
-//         // NAME
-//         // =====================================================
+    // =========================================================
+    // DEFAULT IMAGE
+    // =========================================================
 
-//         String farmerName =
-//                 "Farmer";
+    private void showDefaultProfileImage() {
 
-//         if (profile != null &&
-//                 profile.getName() != null &&
-//                 !profile.getName()
-//                         .trim()
-//                         .isEmpty()) {
+        profileImageContainer
+                .getChildren()
+                .clear();
 
-//             farmerName =
-//                     profile.getName().trim();
+        Label icon = new Label(
+                "👨‍🌾");
 
-//         } else if (firebaseUser != null &&
-//                 firebaseUser.getFullName() != null &&
-//                 !firebaseUser.getFullName()
-//                         .trim()
-//                         .isEmpty()) {
+        icon.setStyle(
+                "-fx-font-size:60px;");
 
-//             farmerName =
-//                     firebaseUser.getFullName().trim();
-//         }
+        profileImageContainer
+                .getChildren()
+                .add(
+                        icon);
+    }
 
-
-//         // =====================================================
-//         // EMAIL
-//         // =====================================================
-
-//         String farmerEmail =
-//                 "Not provided";
-
-//         if (profile != null &&
-//                 profile.getEmail() != null &&
-//                 !profile.getEmail()
-//                         .trim()
-//                         .isEmpty()) {
-
-//             farmerEmail =
-//                     profile.getEmail().trim();
-
-//         } else if (firebaseUser != null &&
-//                 firebaseUser.getEmail() != null &&
-//                 !firebaseUser.getEmail()
-//                         .trim()
-//                         .isEmpty()) {
-
-//             farmerEmail =
-//                     firebaseUser.getEmail().trim();
-//         }
-
-
-//         // =====================================================
-//         // PROFILE HEADER
-//         // =====================================================
-
-//         HBox profileHeader =
-//                 new HBox(20);
-
-//         profileHeader.setAlignment(
-//                 Pos.CENTER_LEFT);
-
-
-//         StackPane avatar =
-//                 new StackPane();
-
-//         avatar.setPrefSize(
-//                 100,
-//                 100);
-
-//         avatar.setStyle(
-//                 "-fx-background-color:#193522;" +
-//                 "-fx-background-radius:100;");
-
-
-//         Label avatarIcon =
-//                 new Label("👨‍🌾");
-
-//         avatarIcon.setStyle(
-//                 "-fx-font-size:45px;");
-
-//         avatar.getChildren()
-//                 .add(avatarIcon);
-
-
-//         VBox farmerInfo =
-//                 new VBox(5);
-
-
-//         Label name =
-//                 new Label(
-//                         farmerName);
-
-//         name.setTextFill(
-//                 Color.WHITE);
-
-//         name.setFont(
-//                 Font.font(
-//                         "Arial",
-//                         FontWeight.BOLD,
-//                         24));
-
-
-//         Label email =
-//                 new Label(
-//                         farmerEmail);
-
-//         email.setTextFill(
-//                 GREY);
-
-//         email.setFont(
-//                 Font.font(
-//                         "Arial",
-//                         14));
-
-
-//         Label id =
-//                 new Label(
-//                         "Farmer ID: " +
-//                         farmerId);
-
-//         id.setTextFill(
-//                 LIGHT_GREEN);
-
-//         id.setFont(
-//                 Font.font(
-//                         "Arial",
-//                         12));
-
-
-//         farmerInfo.getChildren()
-//                 .addAll(
-//                         name,
-//                         email,
-//                         id);
-
-
-//         profileHeader.getChildren()
-//                 .addAll(
-//                         avatar,
-//                         farmerInfo);
-
-
-//         // =====================================================
-//         // PERSONAL INFORMATION
-//         // =====================================================
-
-//         VBox personalCard =
-//                 createProfileViewCard(
-//                         "👤  Personal Information");
-
-
-//         GridPane personalGrid =
-//                 new GridPane();
-
-//         personalGrid.setHgap(20);
-
-//         personalGrid.setVgap(15);
-
-
-//         personalGrid.add(
-//                 createProfileViewField(
-//                         "Name",
-//                         profile == null
-//                                 ? farmerName
-//                                 : profile.getName()),
-//                 0,
-//                 0);
-
-
-//         personalGrid.add(
-//                 createProfileViewField(
-//                         "Email",
-//                         profile == null
-//                                 ? farmerEmail
-//                                 : profile.getEmail()),
-//                 1,
-//                 0);
-
-
-//         personalGrid.add(
-//                 createProfileViewField(
-//                         "Phone",
-//                         profile == null
-//                                 ? null
-//                                 : profile.getPhone()),
-//                 0,
-//                 1);
-
-
-//         personalGrid.add(
-//                 createProfileViewField(
-//                         "Address",
-//                         profile == null
-//                                 ? null
-//                                 : profile.getAddress()),
-//                 1,
-//                 1);
-
-
-//         personalGrid.add(
-//                 createProfileViewField(
-//                         "Village",
-//                         profile == null
-//                                 ? null
-//                                 : profile.getVillage()),
-//                 0,
-//                 2);
-
-
-//         personalGrid.add(
-//                 createProfileViewField(
-//                         "District",
-//                         profile == null
-//                                 ? null
-//                                 : profile.getDistrict()),
-//                 1,
-//                 2);
-
-
-//         personalGrid.add(
-//                 createProfileViewField(
-//                         "State",
-//                         profile == null
-//                                 ? null
-//                                 : profile.getState()),
-//                 0,
-//                 3);
-
-
-//         personalCard.getChildren()
-//                 .add(personalGrid);
-
-
-//         // =====================================================
-//         // FARM INFORMATION
-//         // =====================================================
-
-//         VBox farmCard =
-//                 createProfileViewCard(
-//                         "🌾  Farm Information");
-
-
-//         GridPane farmGrid =
-//                 new GridPane();
-
-//         farmGrid.setHgap(20);
-
-//         farmGrid.setVgap(15);
-
-
-//         farmGrid.add(
-//                 createProfileViewField(
-//                         "Farm Name",
-//                         profile == null
-//                                 ? null
-//                                 : profile.getFarmName()),
-//                 0,
-//                 0);
-
-
-//         farmGrid.add(
-//                 createProfileViewField(
-//                         "Farm Area",
-//                         profile == null
-//                                 ? null
-//                                 : profile.getFarmArea()),
-//                 1,
-//                 0);
-
-
-//         farmGrid.add(
-//                 createProfileViewField(
-//                         "Farming Type",
-//                         profile == null
-//                                 ? null
-//                                 : profile.getFarmingType()),
-//                 0,
-//                 1);
-
-
-//         farmGrid.add(
-//                 createProfileViewField(
-//                         "Primary Crops",
-//                         profile == null
-//                                 ? null
-//                                 : profile.getPrimaryCrops()),
-//                 1,
-//                 1);
-
-
-//         farmCard.getChildren()
-//                 .add(farmGrid);
-
-
-//         // =====================================================
-//         // ACCOUNT INFORMATION
-//         // =====================================================
-
-//         VBox accountCard =
-//                 createProfileViewCard(
-//                         "🔐  Account Information");
-
-
-//         GridPane accountGrid =
-//                 new GridPane();
-
-//         accountGrid.setHgap(20);
-
-//         accountGrid.setVgap(15);
-
-
-//         accountGrid.add(
-//                 createProfileViewField(
-//                         "Farmer ID",
-//                         String.valueOf(
-//                                 farmerId)),
-//                 0,
-//                 0);
-
-
-//         accountGrid.add(
-//                 createProfileViewField(
-//                         "Firebase UID",
-//                         firebaseUid),
-//                 1,
-//                 0);
-
-
-//         accountCard.getChildren()
-//                 .add(accountGrid);
-
-
-//         // =====================================================
-//         // EDIT BUTTON
-//         // =====================================================
-
-//         Button editButton =
-//                 new Button(
-//                         "✎  Edit Profile");
-
-//         editButton.setPrefWidth(
-//                 180);
-
-//         editButton.setPrefHeight(
-//                 42);
-
-//         editButton.setCursor(
-//                 Cursor.HAND);
-
-//         editButton.setStyle(
-//                 "-fx-background-color:#7ED957;" +
-//                 "-fx-text-fill:#102A18;" +
-//                 "-fx-font-size:14px;" +
-//                 "-fx-font-weight:bold;" +
-//                 "-fx-background-radius:7;");
-
-//         editButton.setOnAction(
-//                 e ->
-//                         showPage(
-//                                 "editProfile"));
-
-
-//         content.getChildren()
-//                 .addAll(
-//                         profileHeader,
-//                         personalCard,
-//                         farmCard,
-//                         accountCard,
-//                         editButton);
-
-
-//         ScrollPane scroll =
-//                 new ScrollPane(
-//                         content);
-
-//         scroll.setFitToWidth(true);
-
-//         scroll.setHbarPolicy(
-//                 ScrollPane.ScrollBarPolicy.NEVER);
-
-//         scroll.setStyle(
-//                 "-fx-background-color:#0B1F14;" +
-//                 "-fx-control-inner-background:#0B1F14;");
-
-//         VBox.setVgrow(
-//                 scroll,
-//                 Priority.ALWAYS);
-
-
-//         main.getChildren()
-//                 .addAll(
-//                         topBar,
-//                         scroll);
-
-//         return main;
-//     }
-
-
-//     // =========================================================
-//     // PROFILE VIEW CARD
-//     // =========================================================
-
-//     private VBox createProfileViewCard(
-//             String titleText) {
-
-//         VBox card =
-//                 new VBox(18);
-
-//         card.setPadding(
-//                 new Insets(22));
-
-//         card.setMaxWidth(
-//                 Double.MAX_VALUE);
-
-//         card.setStyle(
-//                 "-fx-background-color:#12291A;" +
-//                 "-fx-background-radius:15;" +
-//                 "-fx-border-color:#294734;" +
-//                 "-fx-border-radius:15;" +
-//                 "-fx-border-width:1;");
-
-
-//         Label title =
-//                 new Label(
-//                         titleText);
-
-//         title.setTextFill(
-//                 Color.WHITE);
-
-//         title.setFont(
-//                 Font.font(
-//                         "Arial",
-//                         FontWeight.BOLD,
-//                         18));
-
-
-//         card.getChildren()
-//                 .add(title);
-
-//         return card;
-//     }
-
-
-//     // =========================================================
-//     // PROFILE VIEW FIELD
-//     // =========================================================
-
-//     private VBox createProfileViewField(
-//             String title,
-//             String value) {
-
-//         VBox box =
-//                 new VBox(6);
-
-
-//         Label titleLabel =
-//                 new Label(title);
-
-//         titleLabel.setTextFill(
-//                 Color.web("#A9B7AC"));
-
-//         titleLabel.setFont(
-//                 Font.font(
-//                         "Arial",
-//                         FontWeight.BOLD,
-//                         11));
-
-
-//         Label valueLabel =
-//                 new Label(
-//                         getProfileValue(value));
-
-//         valueLabel.setTextFill(
-//                 Color.WHITE);
-
-//         valueLabel.setFont(
-//                 Font.font(
-//                         "Arial",
-//                         14));
-
-//         valueLabel.setWrapText(
-//                 true);
-
-//         valueLabel.setMaxWidth(
-//                 Double.MAX_VALUE);
-
-
-//         box.setPadding(
-//                 new Insets(12));
-
-//         box.setStyle(
-//                 "-fx-background-color:#0F2116;" +
-//                 "-fx-background-radius:7;" +
-//                 "-fx-border-color:#294734;" +
-//                 "-fx-border-radius:7;");
-
-
-//         box.getChildren()
-//                 .addAll(
-//                         titleLabel,
-//                         valueLabel);
-
-
-//         GridPane.setHgrow(
-//                 box,
-//                 Priority.ALWAYS);
-
-//         return box;
-//     }
-
-
-//     // =========================================================
-//     // PROFILE VALUE
-//     // =========================================================
-
-//     private String getProfileValue(
-//             String value) {
-
-//         if (value == null ||
-//                 value.trim().isEmpty()) {
-
-//             return "Not provided";
-//         }
-
-//         return value.trim();
-//     }
-
-
-//     // =========================================================
-//     // EDIT PROFILE PAGE
-//     // =========================================================
+    // // =========================================================
+    // // EDIT PROFILE PAGE
+    // // =========================================================
 
     private VBox createProfilePage() {
 
-        VBox page =
-                new VBox();
+        VBox page = new VBox();
 
         page.setBackground(
                 new Background(
@@ -3358,15 +2520,11 @@ private VBox createDashboardContent() {
                                 CornerRadii.EMPTY,
                                 Insets.EMPTY)));
 
+        HBox topBar = createTopBar(
+                "Edit Farmer Profile",
+                "Update your personal and farming information.");
 
-        HBox topBar =
-                createTopBar(
-                        "Edit Farmer Profile",
-                        "Update your personal and farming information.");
-
-
-        VBox wrapper =
-                new VBox(20);
+        VBox wrapper = new VBox(20);
 
         wrapper.setPadding(
                 new Insets(
@@ -3382,18 +2540,13 @@ private VBox createDashboardContent() {
                                 CornerRadii.EMPTY,
                                 Insets.EMPTY)));
 
-
-        VBox card =
-                createProfileCard();
-
+        VBox card = createProfileCard();
 
         wrapper.getChildren()
                 .add(card);
 
-
-        ScrollPane scroll =
-                new ScrollPane(
-                        wrapper);
+        ScrollPane scroll = new ScrollPane(
+                wrapper);
 
         scroll.setFitToWidth(true);
 
@@ -3402,12 +2555,11 @@ private VBox createDashboardContent() {
 
         scroll.setStyle(
                 "-fx-background-color:#0B1F14;" +
-                "-fx-control-inner-background:#0B1F14;");
+                        "-fx-control-inner-background:#0B1F14;");
 
         VBox.setVgrow(
                 scroll,
                 Priority.ALWAYS);
-
 
         page.getChildren()
                 .addAll(
@@ -3417,843 +2569,13 @@ private VBox createDashboardContent() {
         return page;
     }
 
-
-//     // =========================================================
-//     // PROFILE CARD
-//     // =========================================================
-
-//     private VBox createProfileCard() {
-
-//         VBox card =
-//                 createCard();
-
-
-//         Label cardTitle =
-//                 new Label(
-//                         "👨‍🌾 Personal & Farm Profile");
-
-//         cardTitle.setStyle(
-//                 "-fx-text-fill:#7ED957;" +
-//                 "-fx-font-size:21px;" +
-//                 "-fx-font-weight:bold;");
-
-
-//         Label cardSubtitle =
-//                 new Label(
-//                         "Your information is saved using your unique farmer ID.");
-
-//         cardSubtitle.setStyle(
-//                 "-fx-text-fill:#888888;" +
-//                 "-fx-font-size:13px;");
-
-
-//         // =====================================================
-//         // PROFILE IMAGE
-//         // =====================================================
-
-//         profileImageContainer =
-//                 new StackPane();
-
-//         profileImageContainer.setPrefSize(
-//                 150,
-//                 150);
-
-//         profileImageContainer.setMinSize(
-//                 150,
-//                 150);
-
-//         profileImageContainer.setMaxSize(
-//                 150,
-//                 150);
-
-//         profileImageContainer.setStyle(
-//                 "-fx-background-color:#193522;" +
-//                 "-fx-background-radius:100;");
-
-
-//         showDefaultProfileImage();
-
-
-//         Button changeImage =
-//                 new Button(
-//                         "📷 Change Profile Image");
-
-//         changeImage.setStyle(
-//                 "-fx-background-color:transparent;" +
-//                 "-fx-text-fill:#7ED957;" +
-//                 "-fx-border-color:#7ED957;" +
-//                 "-fx-border-radius:6;" +
-//                 "-fx-background-radius:6;" +
-//                 "-fx-padding:8 12;" +
-//                 "-fx-cursor:hand;");
-
-
-//         changeImage.setOnAction(
-//                 e ->
-//                         chooseProfileImage());
-
-
-//         VBox imageBox =
-//                 new VBox(
-//                         12,
-//                         profileImageContainer,
-//                         changeImage);
-
-//         imageBox.setAlignment(
-//                 Pos.CENTER);
-
-
-//         // =====================================================
-//         // FORM
-//         // =====================================================
-
-//         GridPane form =
-//                 new GridPane();
-
-//         form.setHgap(20);
-
-//         form.setVgap(15);
-
-//         form.setPadding(
-//                 new Insets(
-//                         10,
-//                         0,
-//                         10,
-//                         0));
-
-//         form.setMaxWidth(
-//                 Double.MAX_VALUE);
-
-
-//         // =====================================================
-//         // CREATE FIELDS
-//         // =====================================================
-
-//         nameField =
-//                 createTextField(
-//                         "Enter your full name");
-
-//         emailField =
-//                 createTextField(
-//                         "Enter your email");
-
-//         phoneField =
-//                 createTextField(
-//                         "Enter phone number");
-
-//         addressField =
-//                 createTextField(
-//                         "Enter complete address");
-
-//         villageField =
-//                 createTextField(
-//                         "Enter village");
-
-//         districtField =
-//                 createTextField(
-//                         "Enter district");
-
-//         stateField =
-//                 createTextField(
-//                         "Enter state");
-
-//         farmNameField =
-//                 createTextField(
-//                         "Enter farm name");
-
-//         farmAreaField =
-//                 createTextField(
-//                         "Example: 5 acres");
-
-
-//         farmingTypeBox =
-//                 new ComboBox<>();
-
-//         farmingTypeBox.getItems()
-//                 .addAll(
-//                         "Organic",
-//                         "Conventional",
-//                         "Mixed Farming",
-//                         "Natural Farming",
-//                         "Other");
-
-//         farmingTypeBox.setPromptText(
-//                 "Select farming type");
-
-//         farmingTypeBox.setMaxWidth(
-//                 Double.MAX_VALUE);
-
-//         styleComboBox(
-//                 farmingTypeBox);
-
-
-//         primaryCropsField =
-//                 createTextField(
-//                         "Example: Wheat, Onion, Tomato");
-
-
-//         // =====================================================
-//         // LOAD EXISTING PROFILE
-//         // =====================================================
-
-//         loadExistingProfile();
-
-//         loadFirebaseUserData();
-
-
-//         // =====================================================
-//         // ADD FIELDS
-//         // =====================================================
-
-//         addField(
-//                 form,
-//                 "Full Name",
-//                 nameField,
-//                 0,
-//                 0);
-
-//         addField(
-//                 form,
-//                 "Email",
-//                 emailField,
-//                 1,
-//                 0);
-
-//         addField(
-//                 form,
-//                 "Phone",
-//                 phoneField,
-//                 0,
-//                 1);
-
-//         addField(
-//                 form,
-//                 "Address",
-//                 addressField,
-//                 1,
-//                 1);
-
-//         addField(
-//                 form,
-//                 "Village",
-//                 villageField,
-//                 0,
-//                 2);
-
-//         addField(
-//                 form,
-//                 "District",
-//                 districtField,
-//                 1,
-//                 2);
-
-//         addField(
-//                 form,
-//                 "State",
-//                 stateField,
-//                 0,
-//                 3);
-
-//         addField(
-//                 form,
-//                 "Farm Name",
-//                 farmNameField,
-//                 1,
-//                 3);
-
-//         addField(
-//                 form,
-//                 "Farm Area",
-//                 farmAreaField,
-//                 0,
-//                 4);
-
-//         addField(
-//                 form,
-//                 "Farming Type",
-//                 farmingTypeBox,
-//                 1,
-//                 4);
-
-//         addField(
-//                 form,
-//                 "Primary Crops",
-//                 primaryCropsField,
-//                 0,
-//                 5);
-
-
-//         // =====================================================
-//         // SAVE BUTTON
-//         // =====================================================
-
-//         Button saveButton =
-//                 new Button(
-//                         "✓ Save Profile");
-
-//         saveButton.setPrefHeight(
-//                 42);
-
-//         saveButton.setPrefWidth(
-//                 180);
-
-//         saveButton.setStyle(
-//                 "-fx-background-color:#7ED957;" +
-//                 "-fx-text-fill:#080C0D;" +
-//                 "-fx-font-size:14px;" +
-//                 "-fx-font-weight:bold;" +
-//                 "-fx-background-radius:7;" +
-//                 "-fx-cursor:hand;");
-
-
-//         saveButton.setOnAction(
-//                 e ->
-//                         saveProfile());
-
-
-//         // =====================================================
-//         // FORM LAYOUT
-//         // =====================================================
-
-//         HBox mainProfile =
-//                 new HBox(
-//                         35,
-//                         imageBox,
-//                         form);
-
-//         mainProfile.setAlignment(
-//                 Pos.TOP_CENTER);
-
-
-//         card.getChildren()
-//                 .addAll(
-//                         cardTitle,
-//                         cardSubtitle,
-//                         mainProfile,
-//                         saveButton);
-
-//         return card;
-//     }
-
-
-//     // =========================================================
-//     // LOAD EXISTING PROFILE
-//     // =========================================================
-
-//     private void loadExistingProfile() {
-
-//         try {
-
-//             FarmerProfile profile =
-//                     profileController
-//                             .getProfile(farmerId);
-
-//             if (profile == null) {
-//                 return;
-//             }
-
-
-//             nameField.setText(
-//                     safeEmpty(
-//                             profile.getName()));
-
-//             emailField.setText(
-//                     safeEmpty(
-//                             profile.getEmail()));
-
-//             phoneField.setText(
-//                     safeEmpty(
-//                             profile.getPhone()));
-
-//             addressField.setText(
-//                     safeEmpty(
-//                             profile.getAddress()));
-
-//             villageField.setText(
-//                     safeEmpty(
-//                             profile.getVillage()));
-
-//             districtField.setText(
-//                     safeEmpty(
-//                             profile.getDistrict()));
-
-//             stateField.setText(
-//                     safeEmpty(
-//                             profile.getState()));
-
-//             farmNameField.setText(
-//                     safeEmpty(
-//                             profile.getFarmName()));
-
-//             farmAreaField.setText(
-//                     safeEmpty(
-//                             profile.getFarmArea()));
-
-//             if (profile.getFarmingType() != null) {
-
-//                 farmingTypeBox.setValue(
-//                         profile.getFarmingType());
-//             }
-
-//             primaryCropsField.setText(
-//                     safeEmpty(
-//                             profile.getPrimaryCrops()));
-
-
-//             imageBase64 =
-//                     profile.getImageBase64();
-
-
-//             if (imageBase64 != null &&
-//                     !imageBase64.trim().isEmpty()) {
-
-//                 showProfileImage(
-//                         imageBase64);
-//             }
-
-//         } catch (Exception e) {
-
-//             System.err.println(
-//                     "Unable to load farmer profile.");
-
-//             e.printStackTrace();
-//         }
-//     }
-
-
-//     // =========================================================
-//     // LOAD FIREBASE USER
-//     // =========================================================
-
-//     private void loadFirebaseUserData() {
-
-//         try {
-
-//             UserModel user =
-//                     userDAO.getUserByUid(
-//                             firebaseUid);
-
-//             if (user == null) {
-
-//                 System.out.println(
-//                         "Firebase user not found for UID = "
-//                         + firebaseUid);
-
-//                 return;
-//             }
-
-
-//             if (user.getFullName() != null &&
-//                     !user.getFullName()
-//                             .trim()
-//                             .isEmpty()) {
-
-//                 nameField.setText(
-//                         user.getFullName()
-//                                 .trim());
-//             }
-
-
-//             if (user.getEmail() != null &&
-//                     !user.getEmail()
-//                             .trim()
-//                             .isEmpty()) {
-
-//                 emailField.setText(
-//                         user.getEmail()
-//                                 .trim());
-//             }
-
-//         } catch (Exception e) {
-
-//             e.printStackTrace();
-
-//             System.out.println(
-//                     "Unable to load Firebase user information.");
-//         }
-//     }
-
-
-//     // =========================================================
-//     // SAFE EMPTY
-//     // =========================================================
-
-//     private String safeEmpty(
-//             String value) {
-
-//         if (value == null) {
-//             return "";
-//         }
-
-//         return value;
-//     }
-
-
-//     // =========================================================
-//     // SAVE PROFILE
-//     // =========================================================
-
-//     private void saveProfile() {
-
-//         String name =
-//                 nameField.getText().trim();
-
-//         String email =
-//                 emailField.getText().trim();
-
-//         String phone =
-//                 phoneField.getText().trim();
-
-//         String address =
-//                 addressField.getText().trim();
-
-//         String village =
-//                 villageField.getText().trim();
-
-//         String district =
-//                 districtField.getText().trim();
-
-//         String state =
-//                 stateField.getText().trim();
-
-//         String farmName =
-//                 farmNameField.getText().trim();
-
-//         String farmArea =
-//                 farmAreaField.getText().trim();
-
-//         String farmingType =
-//                 farmingTypeBox.getValue();
-
-//         String primaryCrops =
-//                 primaryCropsField.getText().trim();
-
-
-//         // =====================================================
-//         // VALIDATION
-//         // =====================================================
-
-//         if (name.isEmpty()) {
-
-//             showAlert(
-//                     Alert.AlertType.WARNING,
-//                     "Please enter your name.");
-
-//             return;
-//         }
-
-
-//         if (email.isEmpty()) {
-
-//             showAlert(
-//                     Alert.AlertType.WARNING,
-//                     "Please enter your email.");
-
-//             return;
-//         }
-
-
-//         if (phone.isEmpty()) {
-
-//             showAlert(
-//                     Alert.AlertType.WARNING,
-//                     "Please enter your phone number.");
-
-//             return;
-//         }
-
-
-//         // =====================================================
-//         // CREATE PROFILE
-//         // =====================================================
-
-//         FarmerProfile profile =
-//                 new FarmerProfile();
-
-
-//         profile.setFarmerId(
-//                 farmerId);
-
-//         profile.setUid(
-//                 firebaseUid);
-
-//         profile.setName(
-//                 name);
-
-//         profile.setEmail(
-//                 email);
-
-//         profile.setPhone(
-//                 phone);
-
-//         profile.setAddress(
-//                 address);
-
-//         profile.setVillage(
-//                 village);
-
-//         profile.setDistrict(
-//                 district);
-
-//         profile.setState(
-//                 state);
-
-//         profile.setFarmName(
-//                 farmName);
-
-//         profile.setFarmArea(
-//                 farmArea);
-
-//         profile.setFarmingType(
-//                 farmingType);
-
-//         profile.setPrimaryCrops(
-//                 primaryCrops);
-
-//         profile.setImageBase64(
-//                 imageBase64);
-
-
-//         // =====================================================
-//         // SAVE FIREBASE
-//         // =====================================================
-
-//         boolean saved =
-//                 profileController
-//                         .saveProfile(profile);
-
-
-//         if (saved) {
-
-//             System.out.println(
-//                     "Profile saved for farmer ID = "
-//                     + farmerId);
-
-
-//             showAlert(
-//                     Alert.AlertType.INFORMATION,
-//                     "Profile saved successfully!");
-
-
-//             root.setCenter(
-//                     createProfileView());
-
-//         } else {
-
-//             showAlert(
-//                     Alert.AlertType.ERROR,
-//                     "Profile could not be saved.\n"
-//                     + "Please check Firebase.");
-//         }
-//     }
-
-
-//     // =========================================================
-//     // CHOOSE PROFILE IMAGE
-//     // =========================================================
-
-//     private void chooseProfileImage() {
-
-//         FileChooser chooser =
-//                 new FileChooser();
-
-//         chooser.setTitle(
-//                 "Select Farmer Profile Image");
-
-
-//         chooser.getExtensionFilters()
-//                 .add(
-//                         new FileChooser.ExtensionFilter(
-//                                 "Image Files",
-//                                 "*.png",
-//                                 "*.jpg",
-//                                 "*.jpeg",
-//                                 "*.webp"));
-
-
-//         File file =
-//                 chooser.showOpenDialog(
-//                         LoginPage.mainStage);
-
-
-//         if (file == null) {
-//             return;
-//         }
-
-
-//         try {
-
-//             FileInputStream input =
-//                     new FileInputStream(file);
-
-//             ByteArrayOutputStream output =
-//                     new ByteArrayOutputStream();
-
-
-//             byte[] buffer =
-//                     new byte[8192];
-
-//             int bytesRead;
-
-
-//             while (
-//                     (bytesRead =
-//                             input.read(buffer)) != -1) {
-
-//                 output.write(
-//                         buffer,
-//                         0,
-//                         bytesRead);
-//             }
-
-
-//             input.close();
-
-
-//             byte[] imageBytes =
-//                     output.toByteArray();
-
-
-//             imageBase64 =
-//                     Base64.getEncoder()
-//                             .encodeToString(
-//                                     imageBytes);
-
-
-//             showProfileImage(
-//                     imageBase64);
-
-
-//         } catch (Exception e) {
-
-//             e.printStackTrace();
-
-//             showAlert(
-//                     Alert.AlertType.ERROR,
-//                     "Unable to load profile image.");
-//         }
-//     }
-
-
-//     // =========================================================
-//     // SHOW PROFILE IMAGE
-//     // =========================================================
-
-//     private void showProfileImage(
-//             String base64) {
-
-//         if (base64 == null ||
-//                 base64.trim().isEmpty()) {
-
-//             showDefaultProfileImage();
-
-//             return;
-//         }
-
-
-//         try {
-
-//             byte[] bytes =
-//                     Base64.getDecoder()
-//                             .decode(base64);
-
-
-//             Image image =
-//                     new Image(
-//                             new java.io.ByteArrayInputStream(
-//                                     bytes));
-
-
-//             if (image.isError()) {
-
-//                 throw new Exception(
-//                         "Invalid image");
-//             }
-
-
-//             ImageView imageView =
-//                     new ImageView(image);
-
-
-//             imageView.setFitWidth(
-//                     150);
-
-//             imageView.setFitHeight(
-//                     150);
-
-//             imageView.setPreserveRatio(
-//                     false);
-
-
-//             Circle clip =
-//                     new Circle(
-//                             75,
-//                             75,
-//                             75);
-
-
-//             imageView.setClip(
-//                     clip);
-
-
-//             profileImageContainer
-//                     .getChildren()
-//                     .clear();
-
-
-//             profileImageContainer
-//                     .getChildren()
-//                     .add(
-//                             imageView);
-
-
-//         } catch (Exception e) {
-
-//             e.printStackTrace();
-
-//             showDefaultProfileImage();
-//         }
-//     }
-
-
-//     // =========================================================
-//     // DEFAULT PROFILE IMAGE
-//     // =========================================================
-
-//     private void showDefaultProfileImage() {
-
-//         if (profileImageContainer == null) {
-//             return;
-//         }
-
-
-//         profileImageContainer
-//                 .getChildren()
-//                 .clear();
-
-
-//         Label icon =
-//                 new Label(
-//                         "👨‍🌾");
-
-//         icon.setStyle(
-//                 "-fx-font-size:60px;");
-
-
-//         profileImageContainer
-//                 .getChildren()
-//                 .add(icon);
-//     }
-
-
     // =========================================================
     // INVESTMENT PAGE
     // =========================================================
 
     private VBox createInvestmentPage() {
 
-        VBox page =
-                new VBox();
+        VBox page = new VBox();
 
         page.setBackground(
                 new Background(
@@ -4262,15 +2584,11 @@ private VBox createDashboardContent() {
                                 CornerRadii.EMPTY,
                                 Insets.EMPTY)));
 
+        HBox topBar = createTopBar(
+                "Course Investment Planner",
+                "Plan your course investment month by month.");
 
-        HBox topBar =
-                createTopBar(
-                        "Course Investment Planner",
-                        "Plan your course investment month by month.");
-
-
-        VBox content =
-                new VBox(22);
+        VBox content = new VBox(22);
 
         content.setPadding(
                 new Insets(
@@ -4287,13 +2605,11 @@ private VBox createDashboardContent() {
                                 Insets.EMPTY)));
         content.setStyle("-fx-backgrounf-color:black;");
 
-
         // =====================================================
         // INPUT CARD
         // =====================================================
 
-        VBox inputCard =
-                createWhiteCard();
+        VBox inputCard = createWhiteCard();
 
         inputCard.setMaxWidth(
                 700);
@@ -4303,10 +2619,8 @@ private VBox createDashboardContent() {
 
         inputCard.setSpacing(12);
 
-
-        Label title =
-                new Label(
-                        "Course Investment Details");
+        Label title = new Label(
+                "Course Investment Details");
 
         title.setTextFill(
                 DARK_TEXT);
@@ -4317,10 +2631,8 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         22));
 
-
-        Label courseLabel =
-                new Label(
-                        "Select Course");
+        Label courseLabel = new Label(
+                "Select Course");
 
         courseLabel.setTextFill(
                 GREY);
@@ -4331,9 +2643,7 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         13));
 
-
-        ComboBox<String> courseBox =
-                new ComboBox<>();
+        ComboBox<String> courseBox = new ComboBox<>();
 
         courseBox.getItems()
                 .addAll(
@@ -4353,10 +2663,8 @@ private VBox createDashboardContent() {
         courseBox.setMaxWidth(
                 Double.MAX_VALUE);
 
-
-        Label durationLabel =
-                new Label(
-                        "Course Duration (Months)");
+        Label durationLabel = new Label(
+                "Course Duration (Months)");
 
         durationLabel.setTextFill(
                 GREY);
@@ -4367,9 +2675,7 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         13));
 
-
-        ComboBox<Integer> durationBox =
-                new ComboBox<>();
+        ComboBox<Integer> durationBox = new ComboBox<>();
 
         durationBox.getItems()
                 .addAll(
@@ -4387,10 +2693,8 @@ private VBox createDashboardContent() {
         durationBox.setMaxWidth(
                 Double.MAX_VALUE);
 
-
-        Label totalLabel =
-                new Label(
-                        "Total Investment");
+        Label totalLabel = new Label(
+                "Total Investment");
 
         totalLabel.setTextFill(
                 GREY);
@@ -4401,9 +2705,7 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         13));
 
-
-        TextField totalInvestmentField =
-                new TextField();
+        TextField totalInvestmentField = new TextField();
 
         totalInvestmentField.setPromptText(
                 "Example: 60000");
@@ -4418,16 +2720,14 @@ private VBox createDashboardContent() {
 
         totalInvestmentField.setStyle(
                 "-fx-background-color:#ffffff;" +
-                "-fx-background-radius:8;" +
-                "-fx-border-color:#263a2b;" +
-                "-fx-border-radius:8;" +
-                "-fx-padding:0 12;" +
-                "-fx-text-fill:#0F2116;");
+                        "-fx-background-radius:8;" +
+                        "-fx-border-color:#263a2b;" +
+                        "-fx-border-radius:8;" +
+                        "-fx-padding:0 12;" +
+                        "-fx-text-fill:#0F2116;");
 
-
-        Label initialLabel =
-                new Label(
-                        "Initial Investment");
+        Label initialLabel = new Label(
+                "Initial Investment");
 
         initialLabel.setTextFill(
                 GREY);
@@ -4438,9 +2738,7 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         13));
 
-
-        TextField initialInvestmentField =
-                new TextField();
+        TextField initialInvestmentField = new TextField();
 
         initialInvestmentField.setPromptText(
                 "Example: 10000");
@@ -4455,16 +2753,14 @@ private VBox createDashboardContent() {
 
         initialInvestmentField.setStyle(
                 "-fx-background-color:#ffffff;" +
-                "-fx-background-radius:8;" +
-                "-fx-border-color:#263a2b;" +
-                "-fx-border-radius:8;" +
-                "-fx-padding:0 12;" +
-                "-fx-text-fill:#0F2116;");
+                        "-fx-background-radius:8;" +
+                        "-fx-border-color:#263a2b;" +
+                        "-fx-border-radius:8;" +
+                        "-fx-padding:0 12;" +
+                        "-fx-text-fill:#0F2116;");
 
-
-        Button calculate =
-                createWishlistActionButton(
-                        "Calculate Investment Plan");
+        Button calculate = createWishlistActionButton(
+                "Calculate Investment Plan");
 
         calculate.setPrefHeight(
                 48);
@@ -4480,11 +2776,9 @@ private VBox createDashboardContent() {
 
         calculate.setStyle(
                 "-fx-background-color:#7ED957;" +
-                "-fx-text-fill:#102A18;");
+                        "-fx-text-fill:#102A18;");
 
-
-        Label errorLabel =
-                new Label();
+        Label errorLabel = new Label();
 
         errorLabel.setTextFill(
                 Color.web("#F08080"));
@@ -4493,7 +2787,6 @@ private VBox createDashboardContent() {
                 Font.font(
                         "Arial",
                         12));
-
 
         inputCard.getChildren()
                 .addAll(
@@ -4511,13 +2804,11 @@ private VBox createDashboardContent() {
                         calculate,
                         errorLabel);
 
-
         // =====================================================
         // SUMMARY CARD
         // =====================================================
 
-        VBox summaryCard =
-                createWhiteCard();
+        VBox summaryCard = createWhiteCard();
 
         summaryCard.setMaxWidth(
                 700);
@@ -4528,10 +2819,8 @@ private VBox createDashboardContent() {
         summaryCard.setSpacing(
                 12);
 
-
-        Label summaryTitle =
-                new Label(
-                        "Investment Summary");
+        Label summaryTitle = new Label(
+                "Investment Summary");
 
         summaryTitle.setTextFill(
                 DARK_TEXT);
@@ -4542,10 +2831,8 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         21));
 
-
-        Label selectedCourse =
-                new Label(
-                        "Course: Poultry Farming");
+        Label selectedCourse = new Label(
+                "Course: Poultry Farming");
 
         selectedCourse.setTextFill(
                 GREY);
@@ -4555,10 +2842,8 @@ private VBox createDashboardContent() {
                         "Arial",
                         13));
 
-
-        Label totalValue =
-                new Label(
-                        "Total Investment: ₹0");
+        Label totalValue = new Label(
+                "Total Investment: ₹0");
 
         totalValue.setTextFill(
                 DARK_TEXT);
@@ -4569,10 +2854,8 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         16));
 
-
-        Label initialValue =
-                new Label(
-                        "Initial Investment: ₹0");
+        Label initialValue = new Label(
+                "Initial Investment: ₹0");
 
         initialValue.setTextFill(
                 DARK_TEXT);
@@ -4583,10 +2866,8 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         16));
 
-
-        Label remainingValue =
-                new Label(
-                        "Remaining Investment: ₹0");
+        Label remainingValue = new Label(
+                "Remaining Investment: ₹0");
 
         remainingValue.setTextFill(
                 DARK_TEXT);
@@ -4597,10 +2878,8 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         16));
 
-
-        Label monthlyValue =
-                new Label(
-                        "Monthly Investment: ₹0");
+        Label monthlyValue = new Label(
+                "Monthly Investment: ₹0");
 
         monthlyValue.setTextFill(
                 GREEN);
@@ -4611,9 +2890,7 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         18));
 
-
-        ProgressBar progressBar =
-                new ProgressBar(0);
+        ProgressBar progressBar = new ProgressBar(0);
 
         progressBar.setPrefHeight(
                 18);
@@ -4623,12 +2900,10 @@ private VBox createDashboardContent() {
 
         progressBar.setStyle(
                 "-fx-accent:#68d34a;" +
-                "-fx-control-inner-background:#D6E3D8;");
+                        "-fx-control-inner-background:#D6E3D8;");
 
-
-        Label progressLabel =
-                new Label(
-                        "Investment Progress: 0%");
+        Label progressLabel = new Label(
+                "Investment Progress: 0%");
 
         progressLabel.setTextFill(
                 GREY);
@@ -4637,7 +2912,6 @@ private VBox createDashboardContent() {
                 Font.font(
                         "Arial",
                         12));
-
 
         summaryCard.getChildren()
                 .addAll(
@@ -4650,13 +2924,11 @@ private VBox createDashboardContent() {
                         progressBar,
                         progressLabel);
 
-
         // =====================================================
         // MONTHLY PLAN
         // =====================================================
 
-        VBox monthlyCard =
-                createWhiteCard();
+        VBox monthlyCard = createWhiteCard();
 
         monthlyCard.setMaxWidth(
                 700);
@@ -4667,10 +2939,8 @@ private VBox createDashboardContent() {
         monthlyCard.setSpacing(
                 12);
 
-
-        Label monthlyTitle =
-                new Label(
-                        "Month-wise Investment Plan");
+        Label monthlyTitle = new Label(
+                "Month-wise Investment Plan");
 
         monthlyTitle.setTextFill(
                 DARK_TEXT);
@@ -4681,14 +2951,10 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         21));
 
+        VBox monthlyList = new VBox(8);
 
-        VBox monthlyList =
-                new VBox(8);
-
-
-        Label monthlyInstruction =
-                new Label(
-                        "Calculate your plan to see the monthly investment.");
+        Label monthlyInstruction = new Label(
+                "Calculate your plan to see the monthly investment.");
 
         monthlyInstruction.setTextFill(
                 GREY);
@@ -4698,24 +2964,20 @@ private VBox createDashboardContent() {
                         "Arial",
                         13));
 
-
         monthlyList.getChildren()
                 .add(
                         monthlyInstruction);
-
 
         monthlyCard.getChildren()
                 .addAll(
                         monthlyTitle,
                         monthlyList);
 
-
         // =====================================================
         // SUGGESTION CARD
         // =====================================================
 
-        VBox suggestionCard =
-                new VBox(8);
+        VBox suggestionCard = new VBox(8);
 
         suggestionCard.setMaxWidth(
                 700);
@@ -4730,7 +2992,6 @@ private VBox createDashboardContent() {
                                 new CornerRadii(12),
                                 Insets.EMPTY)));
 
-
         suggestionCard.setBorder(
                 new Border(
                         new BorderStroke(
@@ -4739,10 +3000,8 @@ private VBox createDashboardContent() {
                                 new CornerRadii(12),
                                 new BorderWidths(1))));
 
-
-        Label suggestionTitle =
-                new Label(
-                        "💡 Investment Suggestion");
+        Label suggestionTitle = new Label(
+                "💡 Investment Suggestion");
 
         suggestionTitle.setTextFill(
                 GREEN);
@@ -4753,10 +3012,8 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         16));
 
-
-        Label suggestionText =
-                new Label(
-                        "Enter your investment details to receive a simple monthly investment suggestion.");
+        Label suggestionText = new Label(
+                "Enter your investment details to receive a simple monthly investment suggestion.");
 
         suggestionText.setTextFill(
                 Color.web("#B8CDBB"));
@@ -4769,12 +3026,10 @@ private VBox createDashboardContent() {
         suggestionText.setWrapText(
                 true);
 
-
         suggestionCard.getChildren()
                 .addAll(
                         suggestionTitle,
                         suggestionText);
-
 
         // =====================================================
         // CALCULATE
@@ -4785,26 +3040,19 @@ private VBox createDashboardContent() {
 
                     try {
 
-                        String selected =
-                                courseBox.getValue();
+                        String selected = courseBox.getValue();
 
-                        int months =
-                                durationBox.getValue();
+                        int months = durationBox.getValue();
 
+                        double totalInvestment = Double.parseDouble(
+                                totalInvestmentField
+                                        .getText()
+                                        .trim());
 
-                        double totalInvestment =
-                                Double.parseDouble(
-                                        totalInvestmentField
-                                                .getText()
-                                                .trim());
-
-
-                        double initialInvestment =
-                                Double.parseDouble(
-                                        initialInvestmentField
-                                                .getText()
-                                                .trim());
-
+                        double initialInvestment = Double.parseDouble(
+                                initialInvestmentField
+                                        .getText()
+                                        .trim());
 
                         if (totalInvestment <= 0) {
 
@@ -4814,7 +3062,6 @@ private VBox createDashboardContent() {
                             return;
                         }
 
-
                         if (initialInvestment < 0) {
 
                             errorLabel.setText(
@@ -4823,9 +3070,7 @@ private VBox createDashboardContent() {
                             return;
                         }
 
-
-                        if (initialInvestment >
-                                totalInvestment) {
+                        if (initialInvestment > totalInvestment) {
 
                             errorLabel.setText(
                                     "Initial investment cannot be greater than total investment.");
@@ -4833,76 +3078,54 @@ private VBox createDashboardContent() {
                             return;
                         }
 
-
-                        double remainingInvestment =
-                                totalInvestment -
+                        double remainingInvestment = totalInvestment -
                                 initialInvestment;
 
-
-                        double monthlyInvestment =
-                                remainingInvestment /
+                        double monthlyInvestment = remainingInvestment /
                                 months;
-
 
                         selectedCourse.setText(
                                 "Course: " + selected);
 
-
                         totalValue.setText(
                                 "Total Investment: ₹" +
-                                String.format(
-                                        "%,.0f",
-                                        totalInvestment));
-
+                                        String.format(
+                                                "%,.0f",
+                                                totalInvestment));
 
                         initialValue.setText(
                                 "Initial Investment: ₹" +
-                                String.format(
-                                        "%,.0f",
-                                        initialInvestment));
-
+                                        String.format(
+                                                "%,.0f",
+                                                initialInvestment));
 
                         remainingValue.setText(
                                 "Remaining Investment: ₹" +
-                                String.format(
-                                        "%,.0f",
-                                        remainingInvestment));
-
+                                        String.format(
+                                                "%,.0f",
+                                                remainingInvestment));
 
                         monthlyValue.setText(
                                 "Monthly Investment: ₹" +
-                                String.format(
-                                        "%,.2f",
-                                        monthlyInvestment));
-
+                                        String.format(
+                                                "%,.2f",
+                                                monthlyInvestment));
 
                         monthlyList.getChildren()
                                 .clear();
 
+                        for (int i = 1; i <= months; i++) {
 
-                        for (
-                                int i = 1;
-                                i <= months;
-                                i++) {
-
-                            double currentAmount =
-                                    monthlyInvestment;
-
+                            double currentAmount = monthlyInvestment;
 
                             if (i == months) {
 
-                                currentAmount =
-                                        remainingInvestment -
-                                        (
-                                                monthlyInvestment *
-                                                (months - 1)
-                                        );
+                                currentAmount = remainingInvestment -
+                                        (monthlyInvestment *
+                                                (months - 1));
                             }
 
-
-                            HBox monthRow =
-                                    new HBox();
-
+                            HBox monthRow = new HBox();
 
                             monthRow.setAlignment(
                                     Pos.CENTER_LEFT);
@@ -4914,7 +3137,6 @@ private VBox createDashboardContent() {
                                             12,
                                             15));
 
-
                             monthRow.setBackground(
                                     new Background(
                                             new BackgroundFill(
@@ -4922,10 +3144,8 @@ private VBox createDashboardContent() {
                                                     new CornerRadii(8),
                                                     Insets.EMPTY)));
 
-
-                            Label monthLabel =
-                                    new Label(
-                                            "Month " + i);
+                            Label monthLabel = new Label(
+                                    "Month " + i);
 
                             monthLabel.setTextFill(
                                     DARK_TEXT);
@@ -4936,18 +3156,14 @@ private VBox createDashboardContent() {
                                             FontWeight.BOLD,
                                             14));
 
-
-                            Region spacer =
-                                    new Region();
+                            Region spacer = new Region();
 
                             HBox.setHgrow(
                                     spacer,
                                     Priority.ALWAYS);
 
-
-                            Label amountLabel =
-                                    new Label(
-                                            "₹" +
+                            Label amountLabel = new Label(
+                                    "₹" +
                                             String.format(
                                                     "%,.2f",
                                                     currentAmount));
@@ -4961,87 +3177,70 @@ private VBox createDashboardContent() {
                                             FontWeight.BOLD,
                                             14));
 
-
                             monthRow.getChildren()
                                     .addAll(
                                             monthLabel,
                                             spacer,
                                             amountLabel);
 
-
                             monthlyList.getChildren()
                                     .add(monthRow);
                         }
 
-
                         progressBar.setProgress(
                                 initialInvestment /
-                                totalInvestment);
+                                        totalInvestment);
 
-
-                        int progress =
-                                (int)
-                                (
-                                    (
-                                        initialInvestment /
-                                        totalInvestment
-                                    ) * 100
-                                );
-
+                        int progress = (int) ((initialInvestment /
+                                totalInvestment) * 100);
 
                         progressLabel.setText(
                                 "Investment Progress: " +
-                                progress +
-                                "%");
-
+                                        progress +
+                                        "%");
 
                         suggestionText.setText(
                                 "For " +
-                                selected +
-                                ", your remaining investment is ₹" +
-                                String.format(
-                                        "%,.0f",
-                                        remainingInvestment) +
-                                ". You need approximately ₹" +
-                                String.format(
-                                        "%,.2f",
-                                        monthlyInvestment) +
-                                " per month for " +
-                                months +
-                                " months.");
-
+                                        selected +
+                                        ", your remaining investment is ₹" +
+                                        String.format(
+                                                "%,.0f",
+                                                remainingInvestment)
+                                        +
+                                        ". You need approximately ₹" +
+                                        String.format(
+                                                "%,.2f",
+                                                monthlyInvestment)
+                                        +
+                                        " per month for " +
+                                        months +
+                                        " months.");
 
                         errorLabel.setText("");
 
-
-                    } catch (
-                            NumberFormatException exception) {
+                    } catch (NumberFormatException exception) {
 
                         errorLabel.setText(
                                 "Please enter valid investment amounts.");
                     }
                 });
 
-
         // =====================================================
         // PAGE LAYOUT
         // =====================================================
 
-        VBox wrapper =
-                new VBox(
-                        20,
-                        inputCard,
-                        summaryCard,
-                        monthlyCard,
-                        suggestionCard);
+        VBox wrapper = new VBox(
+                20,
+                inputCard,
+                summaryCard,
+                monthlyCard,
+                suggestionCard);
 
         wrapper.setAlignment(
                 Pos.TOP_CENTER);
 
-
-        ScrollPane scroll =
-                new ScrollPane(
-                        wrapper);
+        ScrollPane scroll = new ScrollPane(
+                wrapper);
 
         scroll.setFitToWidth(
                 true);
@@ -5051,13 +3250,12 @@ private VBox createDashboardContent() {
 
         scroll.setStyle(
                 "-fx-background-color:#050B0A;" +
-                "-fx-background:#050B0A;" +
-                "-fx-control-inner-background:#050B0A;");
+                        "-fx-background:#050B0A;" +
+                        "-fx-control-inner-background:#050B0A;");
 
         VBox.setVgrow(
                 scroll,
                 Priority.ALWAYS);
-
 
         page.getChildren()
                 .addAll(
@@ -5067,61 +3265,51 @@ private VBox createDashboardContent() {
         return page;
     }
 
-
     // =========================================================
     // SAVED SCHEMES
     // =========================================================
 
     private VBox createSavedSchemesSection() {
 
-        VBox section =
-                new VBox(15);
+        VBox section = new VBox(15);
 
         section.setPadding(
                 new Insets(20));
 
         section.setStyle(
-                "-fx-background-color:#050B0A;" 
-               // "-fx-background-radius:12;" +
-               // "-fx-border-color:#294734;" +
-               // "-fx-border-radius:12;"
-               );
+                "-fx-background-color:#050B0A;"
+        // "-fx-background-radius:12;" +
+        // "-fx-border-color:#294734;" +
+        // "-fx-border-radius:12;"
+        );
 
-
-        Label title =
-                new Label(
-                        "♥ Saved Schemes");
+        Label title = new Label(
+                "♥ Saved Schemes");
 
         title.setStyle(
                 "-fx-text-fill:white;" +
-                "-fx-font-size:40px;" +
-                "-fx-font-weight:bold;");
+                        "-fx-font-size:40px;" +
+                        "-fx-font-weight:bold;");
 
-
-        List<Scheme> schemes =
-                SavedSchemesManager.getSchemes();
-
+        List<Scheme> schemes = SavedSchemesManager.getSchemes();
 
         section.getChildren()
                 .add(title);
 
-
         if (schemes.isEmpty()) {
 
-            Label empty =
-                    new Label(
-                            "You haven't liked any schemes yet.");
+            Label empty = new Label(
+                    "You haven't liked any schemes yet.");
 
             empty.setStyle(
                     "-fx-text-fill:#A9B8AC;" +
-                    "-fx-font-size:13px;");
+                            "-fx-font-size:13px;");
 
             section.getChildren()
                     .add(empty);
 
             return section;
         }
-
 
         for (Scheme scheme : schemes) {
 
@@ -5132,10 +3320,8 @@ private VBox createDashboardContent() {
                                     section));
         }
 
-
         return section;
     }
-
 
     // =========================================================
     // SAVED SCHEME CARD
@@ -5145,57 +3331,48 @@ private VBox createDashboardContent() {
             Scheme scheme,
             VBox section) {
 
-        VBox card =
-                new VBox(8);
+        VBox card = new VBox(8);
 
         card.setPadding(
                 new Insets(15));
 
         card.setStyle(
                 "-fx-background-color:#15331F;" +
-                "-fx-background-radius:10;" +
-                "-fx-border-color:#294734;" +
-                "-fx-border-radius:10;");
+                        "-fx-background-radius:10;" +
+                        "-fx-border-color:#294734;" +
+                        "-fx-border-radius:10;");
 
-
-        Label name =
-                new Label(
-                        scheme.getSchemeName());
+        Label name = new Label(
+                scheme.getSchemeName());
 
         name.setWrapText(
                 true);
 
         name.setStyle(
                 "-fx-text-fill:white;" +
-                "-fx-font-size:16px;" +
-                "-fx-font-weight:bold;");
+                        "-fx-font-size:16px;" +
+                        "-fx-font-weight:bold;");
 
-
-        Label category =
-                new Label(
-                        "Category: " +
+        Label category = new Label(
+                "Category: " +
                         scheme.getCategory());
 
         category.setStyle(
                 "-fx-text-fill:#7ED957;" +
-                "-fx-font-size:11px;");
+                        "-fx-font-size:11px;");
 
-
-        Label information =
-                new Label(
-                        scheme.getInformation());
+        Label information = new Label(
+                scheme.getInformation());
 
         information.setWrapText(
                 true);
 
         information.setStyle(
                 "-fx-text-fill:#A9B8AC;" +
-                "-fx-font-size:12px;");
+                        "-fx-font-size:12px;");
 
-
-        Button dislikeButton =
-                new Button(
-                        "♥  Dislike");
+        Button dislikeButton = new Button(
+                "♥  Dislike");
 
         dislikeButton.setPrefHeight(
                 32);
@@ -5205,10 +3382,9 @@ private VBox createDashboardContent() {
 
         dislikeButton.setStyle(
                 "-fx-background-color:#101d18;" +
-                "-fx-text-fill:#7ED957;" +
-                "-fx-background-radius:6;" +
-                "-fx-cursor:hand;");
-
+                        "-fx-text-fill:#7ED957;" +
+                        "-fx-background-radius:6;" +
+                        "-fx-cursor:hand;");
 
         dislikeButton.setOnAction(
                 e -> {
@@ -5220,7 +3396,6 @@ private VBox createDashboardContent() {
                             createSavedSchemesSection());
                 });
 
-
         card.getChildren()
                 .addAll(
                         name,
@@ -5230,7 +3405,6 @@ private VBox createDashboardContent() {
 
         return card;
     }
-
 
     // =========================================================
     // WISHLIST PAGE
@@ -5242,12 +3416,10 @@ private VBox createDashboardContent() {
                 "All");
     }
 
-
     private VBox createWishlistPage(
             String selectedTab) {
 
-        VBox page =
-                new VBox();
+        VBox page = new VBox();
 
         page.setBackground(
                 new Background(
@@ -5256,15 +3428,11 @@ private VBox createDashboardContent() {
                                 CornerRadii.EMPTY,
                                 Insets.EMPTY)));
 
+        HBox topBar = createTopBar(
+                "Wishlist",
+                "Your saved farming products and resources.");
 
-        HBox topBar =
-                createTopBar(
-                        "Wishlist",
-                        "Your saved farming products and resources.");
-
-
-        VBox content =
-                new VBox(22);
+        VBox content = new VBox(22);
 
         content.setPadding(
                 new Insets(
@@ -5280,13 +3448,10 @@ private VBox createDashboardContent() {
                                 CornerRadii.EMPTY,
                                 Insets.EMPTY)));
 
-
-        HBox tabs =
-                new HBox(35);
+        HBox tabs = new HBox(35);
 
         tabs.setAlignment(
                 Pos.CENTER_LEFT);
-
 
         tabs.getChildren()
                 .addAll(
@@ -5306,10 +3471,7 @@ private VBox createDashboardContent() {
                                 "Resources",
                                 selectedTab.equals("Resources")));
 
-
-        HBox cards =
-                new HBox(22);
-
+        HBox cards = new HBox(22);
 
         if (selectedTab.equals("All") ||
                 selectedTab.equals("Products")) {
@@ -5319,7 +3481,6 @@ private VBox createDashboardContent() {
                             createWishlistProductCard());
         }
 
-
         if (selectedTab.equals("All") ||
                 selectedTab.equals("Courses")) {
 
@@ -5328,10 +3489,8 @@ private VBox createDashboardContent() {
                             createWishlistCourseCard());
         }
 
-
         content.getChildren()
                 .add(tabs);
-
 
         if (selectedTab.equals("Resources")) {
 
@@ -5345,10 +3504,8 @@ private VBox createDashboardContent() {
                     .add(cards);
         }
 
-
-        ScrollPane scroll =
-                new ScrollPane(
-                        content);
+        ScrollPane scroll = new ScrollPane(
+                content);
 
         scroll.setFitToWidth(
                 true);
@@ -5364,13 +3521,11 @@ private VBox createDashboardContent() {
 
         scroll.setStyle(
                 "-fx-background-color:#0A1710;" +
-                "-fx-control-inner-background:#0A1710;");
-
+                        "-fx-control-inner-background:#0A1710;");
 
         VBox.setVgrow(
                 scroll,
                 Priority.ALWAYS);
-
 
         page.getChildren()
                 .addAll(
@@ -5380,7 +3535,6 @@ private VBox createDashboardContent() {
         return page;
     }
 
-
     // =========================================================
     // WISHLIST TAB
     // =========================================================
@@ -5389,8 +3543,7 @@ private VBox createDashboardContent() {
             String text,
             boolean selected) {
 
-        Button tab =
-                new Button(text);
+        Button tab = new Button(text);
 
         tab.setCursor(
                 Cursor.HAND);
@@ -5418,7 +3571,6 @@ private VBox createDashboardContent() {
         tab.setBackground(
                 Background.EMPTY);
 
-
         if (selected) {
 
             tab.setBorder(
@@ -5439,16 +3591,13 @@ private VBox createDashboardContent() {
                     Border.EMPTY);
         }
 
-
         tab.setOnAction(
-                event ->
-                        root.setCenter(
-                                createWishlistPage(
-                                        text)));
+                event -> root.setCenter(
+                        createWishlistPage(
+                                text)));
 
         return tab;
     }
-
 
     // =========================================================
     // WISHLIST PRODUCT CARD
@@ -5456,25 +3605,18 @@ private VBox createDashboardContent() {
 
     private VBox createWishlistProductCard() {
 
-        VBox card =
-                createWishlistCard();
+        VBox card = createWishlistCard();
 
-
-        StackPane productImage =
-                new StackPane();
+        StackPane productImage = new StackPane();
 
         productImage.setPrefSize(
                 240,
                 168);
 
+        ImageView imageView = createWishlistImage(
+                "/fertilizer.png");
 
-        ImageView imageView =
-                createWishlistImage(
-                        "/fertilizer.png");
-
-
-        Label heart =
-                new Label("♥");
+        Label heart = new Label("♥");
 
         heart.setTextFill(
                 Color.rgb(
@@ -5502,12 +3644,10 @@ private VBox createDashboardContent() {
                                 new CornerRadii(20),
                                 Insets.EMPTY)));
 
-
         productImage.getChildren()
                 .addAll(
                         imageView,
                         heart);
-
 
         StackPane.setAlignment(
                 heart,
@@ -5517,15 +3657,11 @@ private VBox createDashboardContent() {
                 heart,
                 new Insets(8));
 
+        Label type = createWishlistBadge(
+                "PRODUCT");
 
-        Label type =
-                createWishlistBadge(
-                        "PRODUCT");
-
-
-        Label price =
-                new Label(
-                        "₹1,500");
+        Label price = new Label(
+                "₹1,500");
 
         price.setTextFill(
                 GREEN);
@@ -5536,50 +3672,37 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         18));
 
-
-        Region priceSpace =
-                new Region();
+        Region priceSpace = new Region();
 
         HBox.setHgrow(
                 priceSpace,
                 Priority.ALWAYS);
 
-
-        HBox details =
-                new HBox(
-                        type,
-                        priceSpace,
-                        price);
+        HBox details = new HBox(
+                type,
+                priceSpace,
+                price);
 
         details.setAlignment(
                 Pos.CENTER_LEFT);
 
+        Label title = createWishlistTitle(
+                "Organic Fertilizer");
 
-        Label title =
-                createWishlistTitle(
-                        "Organic Fertilizer");
+        Label description = createWishlistDescription(
+                "Natural fertilizer suitable for improving soil health and crop growth.");
 
-
-        Label description =
-                createWishlistDescription(
-                        "Natural fertilizer suitable for improving soil health and crop growth.");
-
-
-        Button action =
-                createWishlistActionButton(
-                        "View Product");
-
+        Button action = createWishlistActionButton(
+                "View Product");
 
         action.setOnAction(
-                event ->
-                        root.setCenter(
-                                createWishlistDetailsPage(
-                                        "Product Details",
-                                        "Organic Fertilizer",
-                                        "₹1,500",
-                                        "/fertilizer.png",
-                                        "Natural fertilizer suitable for improving soil health and crop growth.")));
-
+                event -> root.setCenter(
+                        createWishlistDetailsPage(
+                                "Product Details",
+                                "Organic Fertilizer",
+                                "₹1,500",
+                                "/fertilizer.png",
+                                "Natural fertilizer suitable for improving soil health and crop growth.")));
 
         card.getChildren()
                 .addAll(
@@ -5592,32 +3715,24 @@ private VBox createDashboardContent() {
         return card;
     }
 
-
     // =========================================================
     // WISHLIST COURSE CARD
     // =========================================================
 
     private VBox createWishlistCourseCard() {
 
-        VBox card =
-                createWishlistCard();
+        VBox card = createWishlistCard();
 
-
-        StackPane courseImage =
-                new StackPane();
+        StackPane courseImage = new StackPane();
 
         courseImage.setPrefSize(
                 240,
                 168);
 
+        ImageView courseImageView = createWishlistImage(
+                "/irrigation.png");
 
-        ImageView courseImageView =
-                createWishlistImage(
-                        "/irrigation.png");
-
-
-        Label heart =
-                new Label("♥");
+        Label heart = new Label("♥");
 
         heart.setTextFill(
                 Color.rgb(
@@ -5645,12 +3760,10 @@ private VBox createDashboardContent() {
                                 new CornerRadii(20),
                                 Insets.EMPTY)));
 
-
         courseImage.getChildren()
                 .addAll(
                         courseImageView,
                         heart);
-
 
         StackPane.setAlignment(
                 heart,
@@ -5660,15 +3773,11 @@ private VBox createDashboardContent() {
                 heart,
                 new Insets(8));
 
+        Label type = createWishlistBadge(
+                "COURSE");
 
-        Label type =
-                createWishlistBadge(
-                        "COURSE");
-
-
-        Label price =
-                new Label(
-                        "Free");
+        Label price = new Label(
+                "Free");
 
         price.setTextFill(
                 GREEN);
@@ -5679,50 +3788,37 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         18));
 
-
-        Region priceSpace =
-                new Region();
+        Region priceSpace = new Region();
 
         HBox.setHgrow(
                 priceSpace,
                 Priority.ALWAYS);
 
-
-        HBox details =
-                new HBox(
-                        type,
-                        priceSpace,
-                        price);
+        HBox details = new HBox(
+                type,
+                priceSpace,
+                price);
 
         details.setAlignment(
                 Pos.CENTER_LEFT);
 
+        Label title = createWishlistTitle(
+                "Modern Irrigation\nTechniques");
 
-        Label title =
-                createWishlistTitle(
-                        "Modern Irrigation\nTechniques");
+        Label description = createWishlistDescription(
+                "Learn water-saving strategies and advanced drip irrigation systems...");
 
-
-        Label description =
-                createWishlistDescription(
-                        "Learn water-saving strategies and advanced drip irrigation systems...");
-
-
-        Button action =
-                createWishlistActionButton(
-                        "View Course");
-
+        Button action = createWishlistActionButton(
+                "View Course");
 
         action.setOnAction(
-                event ->
-                        root.setCenter(
-                                createWishlistDetailsPage(
-                                        "Course Details",
-                                        "Modern Irrigation Techniques",
-                                        "Free",
-                                        "/irrigation.png",
-                                        "Learn practical water-saving methods, drip irrigation basics, and ways to manage water efficiently.")));
-
+                event -> root.setCenter(
+                        createWishlistDetailsPage(
+                                "Course Details",
+                                "Modern Irrigation Techniques",
+                                "Free",
+                                "/irrigation.png",
+                                "Learn practical water-saving methods, drip irrigation basics, and ways to manage water efficiently.")));
 
         card.getChildren()
                 .addAll(
@@ -5735,15 +3831,13 @@ private VBox createDashboardContent() {
         return card;
     }
 
-
     // =========================================================
     // WISHLIST CARD
     // =========================================================
 
     private VBox createWishlistCard() {
 
-        VBox card =
-                new VBox(13);
+        VBox card = new VBox(13);
 
         card.setPrefWidth(
                 270);
@@ -5769,7 +3863,6 @@ private VBox createDashboardContent() {
         return card;
     }
 
-
     // =========================================================
     // WISHLIST IMAGE
     // =========================================================
@@ -5777,15 +3870,12 @@ private VBox createDashboardContent() {
     private ImageView createWishlistImage(
             String imagePath) {
 
-        URL imageUrl =
-                getClass()
-                        .getResource(imagePath);
-
+        URL imageUrl = getClass()
+                .getResource(imagePath);
 
         if (imageUrl == null) {
 
-            ImageView empty =
-                    new ImageView();
+            ImageView empty = new ImageView();
 
             empty.setFitWidth(
                     240);
@@ -5796,12 +3886,10 @@ private VBox createDashboardContent() {
             return empty;
         }
 
-
-        ImageView imageView =
-                new ImageView(
-                        new Image(
-                                imageUrl
-                                        .toExternalForm()));
+        ImageView imageView = new ImageView(
+                new Image(
+                        imageUrl
+                                .toExternalForm()));
 
         imageView.setFitWidth(
                 240);
@@ -5815,7 +3903,6 @@ private VBox createDashboardContent() {
         return imageView;
     }
 
-
     // =========================================================
     // WISHLIST BADGE
     // =========================================================
@@ -5823,8 +3910,7 @@ private VBox createDashboardContent() {
     private Label createWishlistBadge(
             String text) {
 
-        Label badge =
-                new Label(text);
+        Label badge = new Label(text);
 
         badge.setTextFill(
                 DARK_GREEN);
@@ -5855,7 +3941,6 @@ private VBox createDashboardContent() {
         return badge;
     }
 
-
     // =========================================================
     // WISHLIST TITLE
     // =========================================================
@@ -5863,8 +3948,7 @@ private VBox createDashboardContent() {
     private Label createWishlistTitle(
             String text) {
 
-        Label title =
-                new Label(text);
+        Label title = new Label(text);
 
         title.setTextFill(
                 DARK_TEXT);
@@ -5881,7 +3965,6 @@ private VBox createDashboardContent() {
         return title;
     }
 
-
     // =========================================================
     // WISHLIST DESCRIPTION
     // =========================================================
@@ -5889,8 +3972,7 @@ private VBox createDashboardContent() {
     private Label createWishlistDescription(
             String text) {
 
-        Label description =
-                new Label(text);
+        Label description = new Label(text);
 
         description.setTextFill(
                 GREY);
@@ -5909,7 +3991,6 @@ private VBox createDashboardContent() {
         return description;
     }
 
-
     // =========================================================
     // WISHLIST ACTION BUTTON
     // =========================================================
@@ -5917,8 +3998,7 @@ private VBox createDashboardContent() {
     private Button createWishlistActionButton(
             String text) {
 
-        Button button =
-                new Button(text);
+        Button button = new Button(text);
 
         button.setPrefHeight(
                 42);
@@ -5948,29 +4028,22 @@ private VBox createDashboardContent() {
         return button;
     }
 
-
     // =========================================================
     // EMPTY WISHLIST
     // =========================================================
 
     private VBox createEmptyWishlistMessage() {
 
-        VBox message =
-                createWishlistCard();
+        VBox message = createWishlistCard();
 
         message.setPrefWidth(
                 420);
 
+        Label title = createWishlistTitle(
+                "No saved resources yet");
 
-        Label title =
-                createWishlistTitle(
-                        "No saved resources yet");
-
-
-        Label text =
-                createWishlistDescription(
-                        "Resources you save in the future will appear here.");
-
+        Label text = createWishlistDescription(
+                "Resources you save in the future will appear here.");
 
         message.getChildren()
                 .addAll(
@@ -5979,7 +4052,6 @@ private VBox createDashboardContent() {
 
         return message;
     }
-
 
     // =========================================================
     // WISHLIST DETAILS
@@ -5992,8 +4064,7 @@ private VBox createDashboardContent() {
             String imagePath,
             String description) {
 
-        VBox page =
-                new VBox();
+        VBox page = new VBox();
 
         page.setBackground(
                 new Background(
@@ -6002,15 +4073,11 @@ private VBox createDashboardContent() {
                                 CornerRadii.EMPTY,
                                 Insets.EMPTY)));
 
+        HBox topBar = createTopBar(
+                pageTitle,
+                "Saved item from your wishlist.");
 
-        HBox topBar =
-                createTopBar(
-                        pageTitle,
-                        "Saved item from your wishlist.");
-
-
-        VBox content =
-                new VBox(22);
+        VBox content = new VBox(22);
 
         content.setPadding(
                 new Insets(
@@ -6019,10 +4086,8 @@ private VBox createDashboardContent() {
                         35,
                         35));
 
-
-        Button backButton =
-                new Button(
-                        "← Back to Wishlist");
+        Button backButton = new Button(
+                "← Back to Wishlist");
 
         backButton.setCursor(
                 Cursor.HAND);
@@ -6043,13 +4108,10 @@ private VBox createDashboardContent() {
                 Border.EMPTY);
 
         backButton.setOnAction(
-                event ->
-                        root.setCenter(
-                                createWishlistPage()));
+                event -> root.setCenter(
+                        createWishlistPage()));
 
-
-        HBox detailCard =
-                new HBox(28);
+        HBox detailCard = new HBox(28);
 
         detailCard.setPadding(
                 new Insets(25));
@@ -6069,10 +4131,8 @@ private VBox createDashboardContent() {
                                 new CornerRadii(14),
                                 new BorderWidths(1))));
 
-
-        ImageView image =
-                createWishlistImage(
-                        imagePath);
+        ImageView image = createWishlistImage(
+                imagePath);
 
         image.setFitWidth(
                 300);
@@ -6080,14 +4140,10 @@ private VBox createDashboardContent() {
         image.setFitHeight(
                 210);
 
+        VBox information = new VBox(15);
 
-        VBox information =
-                new VBox(15);
-
-
-        Label title =
-                createWishlistTitle(
-                        itemTitle);
+        Label title = createWishlistTitle(
+                itemTitle);
 
         title.setFont(
                 Font.font(
@@ -6095,9 +4151,7 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         27));
 
-
-        Label priceLabel =
-                new Label(price);
+        Label priceLabel = new Label(price);
 
         priceLabel.setTextFill(
                 GREEN);
@@ -6108,10 +4162,8 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         22));
 
-
-        Label descriptionLabel =
-                new Label(
-                        description);
+        Label descriptionLabel = new Label(
+                description);
 
         descriptionLabel.setTextFill(
                 GREY);
@@ -6127,14 +4179,11 @@ private VBox createDashboardContent() {
         descriptionLabel.setMaxWidth(
                 420);
 
-
-        Button saveButton =
-                createWishlistActionButton(
-                        "Saved to Wishlist ♥");
+        Button saveButton = createWishlistActionButton(
+                "Saved to Wishlist ♥");
 
         saveButton.setDisable(
                 true);
-
 
         information.getChildren()
                 .addAll(
@@ -6143,22 +4192,18 @@ private VBox createDashboardContent() {
                         descriptionLabel,
                         saveButton);
 
-
         detailCard.getChildren()
                 .addAll(
                         image,
                         information);
-
 
         content.getChildren()
                 .addAll(
                         backButton,
                         detailCard);
 
-
-        ScrollPane scroll =
-                new ScrollPane(
-                        content);
+        ScrollPane scroll = new ScrollPane(
+                content);
 
         scroll.setFitToWidth(
                 true);
@@ -6174,13 +4219,11 @@ private VBox createDashboardContent() {
 
         scroll.setStyle(
                 "-fx-background-color:#0B1F14;" +
-                "-fx-control-inner-background:#0B1F14;");
-
+                        "-fx-control-inner-background:#0B1F14;");
 
         VBox.setVgrow(
                 scroll,
                 Priority.ALWAYS);
-
 
         page.getChildren()
                 .addAll(
@@ -6190,7 +4233,6 @@ private VBox createDashboardContent() {
         return page;
     }
 
-
     // =========================================================
     // SIMPLE PAGE
     // =========================================================
@@ -6199,9 +4241,7 @@ private VBox createDashboardContent() {
             String titleText,
             String subtitleText) {
 
-        VBox page =
-                new VBox();
-
+        VBox page = new VBox();
 
         page.setBackground(
                 new Background(
@@ -6210,16 +4250,11 @@ private VBox createDashboardContent() {
                                 CornerRadii.EMPTY,
                                 Insets.EMPTY)));
 
+        HBox topBar = createTopBar(
+                titleText,
+                subtitleText);
 
-        HBox topBar =
-                createTopBar(
-                        titleText,
-                        subtitleText);
-
-
-        VBox content =
-                new VBox();
-
+        VBox content = new VBox();
 
         content.setBackground(
                 new Background(
@@ -6227,7 +4262,6 @@ private VBox createDashboardContent() {
                                 Color.web("#0B1F14"),
                                 CornerRadii.EMPTY,
                                 Insets.EMPTY)));
-
 
         content.setPadding(
                 new Insets(
@@ -6239,10 +4273,8 @@ private VBox createDashboardContent() {
         content.setSpacing(
                 20);
 
-
-        ScrollPane scroll =
-                new ScrollPane(
-                        content);
+        ScrollPane scroll = new ScrollPane(
+                content);
 
         scroll.setFitToWidth(
                 true);
@@ -6252,14 +4284,12 @@ private VBox createDashboardContent() {
 
         scroll.setStyle(
                 "-fx-background-color:#0B1F14;" +
-                "-fx-background:#0B1F14;" +
-                "-fx-control-inner-background:#0B1F14;");
-
+                        "-fx-background:#0B1F14;" +
+                        "-fx-control-inner-background:#0B1F14;");
 
         VBox.setVgrow(
                 scroll,
                 Priority.ALWAYS);
-
 
         page.getChildren()
                 .addAll(
@@ -6268,7 +4298,6 @@ private VBox createDashboardContent() {
 
         return page;
     }
-
 
     // =========================================================
     // FEATURE CARD
@@ -6279,25 +4308,20 @@ private VBox createDashboardContent() {
             String title,
             String description) {
 
-        VBox card =
-                createWhiteCard();
+        VBox card = createWhiteCard();
 
         HBox.setHgrow(
                 card,
                 Priority.ALWAYS);
 
-
-        Label iconLabel =
-                new Label(icon);
+        Label iconLabel = new Label(icon);
 
         iconLabel.setFont(
                 Font.font(
                         "Arial",
                         30));
 
-
-        Label titleLabel =
-                new Label(title);
+        Label titleLabel = new Label(title);
 
         titleLabel.setTextFill(
                 DARK_TEXT);
@@ -6308,9 +4332,7 @@ private VBox createDashboardContent() {
                         FontWeight.BOLD,
                         16));
 
-
-        Label descriptionLabel =
-                new Label(description);
+        Label descriptionLabel = new Label(description);
 
         descriptionLabel.setTextFill(
                 GREY);
@@ -6323,7 +4345,6 @@ private VBox createDashboardContent() {
                         "Arial",
                         12));
 
-
         card.getChildren()
                 .addAll(
                         iconLabel,
@@ -6333,15 +4354,13 @@ private VBox createDashboardContent() {
         return card;
     }
 
-
     // =========================================================
     // WHITE CARD
     // =========================================================
 
     private VBox createWhiteCard() {
 
-        VBox card =
-                new VBox();
+        VBox card = new VBox();
 
         card.setSpacing(
                 12);
@@ -6363,15 +4382,13 @@ private VBox createDashboardContent() {
         return card;
     }
 
-
     // =========================================================
     // CARD
     // =========================================================
 
     private VBox createCard() {
 
-        VBox card =
-                new VBox(15);
+        VBox card = new VBox(15);
 
         card.setPadding(
                 new Insets(22));
@@ -6381,13 +4398,12 @@ private VBox createDashboardContent() {
 
         card.setStyle(
                 "-fx-background-color:#12291A;" +
-                "-fx-border-color:#294734;" +
-                "-fx-border-radius:14;" +
-                "-fx-background-radius:14;");
+                        "-fx-border-color:#294734;" +
+                        "-fx-border-radius:14;" +
+                        "-fx-background-radius:14;");
 
         return card;
     }
-
 
     // =========================================================
     // ADD FIELD
@@ -6400,35 +4416,28 @@ private VBox createDashboardContent() {
             int column,
             int row) {
 
-        VBox box =
-                new VBox(6);
+        VBox box = new VBox(6);
 
-
-        Label label =
-                new Label(title);
+        Label label = new Label(title);
 
         label.setStyle(
                 "-fx-text-fill:#BBBBBB;" +
-                "-fx-font-size:13px;");
-
+                        "-fx-font-size:13px;");
 
         box.getChildren()
                 .addAll(
                         label,
                         field);
 
-
         grid.add(
                 box,
                 column,
                 row);
 
-
         GridPane.setHgrow(
                 box,
                 Priority.ALWAYS);
     }
-
 
     // =========================================================
     // TEXT FIELD
@@ -6437,8 +4446,7 @@ private VBox createDashboardContent() {
     private TextField createTextField(
             String prompt) {
 
-        TextField field =
-                new TextField();
+        TextField field = new TextField();
 
         field.setPromptText(
                 prompt);
@@ -6455,7 +4463,6 @@ private VBox createDashboardContent() {
         return field;
     }
 
-
     // =========================================================
     // TEXT FIELD STYLE
     // =========================================================
@@ -6465,16 +4472,15 @@ private VBox createDashboardContent() {
 
         field.setStyle(
                 "-fx-background-color:#0F2116;" +
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-prompt-text-fill:#777777;" +
-                "-fx-border-color:#294734;" +
-                "-fx-border-radius:6;" +
-                "-fx-background-radius:6;" +
-                "-fx-padding:8 10;" +
-                "-fx-focus-color:transparent;" +
-                "-fx-faint-focus-color:transparent;");
+                        "-fx-text-fill:#EEEEEE;" +
+                        "-fx-prompt-text-fill:#777777;" +
+                        "-fx-border-color:#294734;" +
+                        "-fx-border-radius:6;" +
+                        "-fx-background-radius:6;" +
+                        "-fx-padding:8 10;" +
+                        "-fx-focus-color:transparent;" +
+                        "-fx-faint-focus-color:transparent;");
     }
-
 
     // =========================================================
     // COMBO BOX STYLE
@@ -6485,14 +4491,13 @@ private VBox createDashboardContent() {
 
         box.setStyle(
                 "-fx-background-color:#0F2116;" +
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-border-color:#294734;" +
-                "-fx-border-radius:6;" +
-                "-fx-background-radius:6;" +
-                "-fx-focus-color:transparent;" +
-                "-fx-faint-focus-color:transparent;");
+                        "-fx-text-fill:#EEEEEE;" +
+                        "-fx-border-color:#294734;" +
+                        "-fx-border-radius:6;" +
+                        "-fx-background-radius:6;" +
+                        "-fx-focus-color:transparent;" +
+                        "-fx-faint-focus-color:transparent;");
     }
-
 
     // =========================================================
     // GRID COLUMN WIDTH
@@ -6501,12 +4506,9 @@ private VBox createDashboardContent() {
     private void columnConstraintsHelper(
             GridPane grid) {
 
-        ColumnConstraints column1 =
-                new ColumnConstraints();
+        ColumnConstraints column1 = new ColumnConstraints();
 
-        ColumnConstraints column2 =
-                new ColumnConstraints();
-
+        ColumnConstraints column2 = new ColumnConstraints();
 
         column1.setPercentWidth(
                 50);
@@ -6514,24 +4516,20 @@ private VBox createDashboardContent() {
         column2.setPercentWidth(
                 50);
 
-
         column1.setHgrow(
                 Priority.ALWAYS);
 
         column2.setHgrow(
                 Priority.ALWAYS);
 
-
         grid.getColumnConstraints()
                 .clear();
-
 
         grid.getColumnConstraints()
                 .addAll(
                         column1,
                         column2);
     }
-
 
     // =========================================================
     // VERTICAL SPACE
@@ -6540,8 +4538,7 @@ private VBox createDashboardContent() {
     private Region createSpace(
             double height) {
 
-        Region space =
-                new Region();
+        Region space = new Region();
 
         space.setMinHeight(
                 height);
@@ -6555,7 +4552,6 @@ private VBox createDashboardContent() {
         return space;
     }
 
-
     // =========================================================
     // HORIZONTAL SPACE
     // =========================================================
@@ -6563,8 +4559,7 @@ private VBox createDashboardContent() {
     private Region createWidthSpace(
             double width) {
 
-        Region space =
-                new Region();
+        Region space = new Region();
 
         space.setMinWidth(
                 width);
@@ -6578,24 +4573,6 @@ private VBox createDashboardContent() {
         return space;
     }
 
-
-    // =========================================================
-    // SAFE
-    // =========================================================
-
-    private String safe(
-            String value) {
-
-        if (value == null ||
-                value.trim().isEmpty()) {
-
-            return "Not provided";
-        }
-
-        return value;
-    }
-
-
     // =========================================================
     // ALERT
     // =========================================================
@@ -6604,8 +4581,7 @@ private VBox createDashboardContent() {
             Alert.AlertType type,
             String message) {
 
-        Alert alert =
-                new Alert(type);
+        Alert alert = new Alert(type);
 
         alert.setTitle(
                 "AgroBiz");

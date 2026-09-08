@@ -20,1170 +20,912 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
-
 public class ModulesPage {
 
-    private Scene modulesPageScene;
+        private Scene modulesPageScene;
 
-    private final String courseTitle;
+        private final String courseTitle;
 
-    private BorderPane mainBorderPane;
+        private BorderPane mainBorderPane;
 
-    public ModulesPage(String courseTitle) {
+        public ModulesPage(String courseTitle) {
 
-        this.courseTitle = courseTitle;
-    }
-
-
-    // =========================================================
-    // MAIN MODULE PAGE
-    // =========================================================
-
-    public Scene getModulesPageScene() {
-
-        mainBorderPane = new BorderPane();
-
-        mainBorderPane.setStyle(
-        "-fx-background-color: #080c0d;"
-);
-
-        // -----------------------------------------------------
-        // NAVBAR
-        // -----------------------------------------------------
-
-        mainBorderPane.setTop(
-                new NavBar().createNavbar("Learning")
-        );
-
-        // -----------------------------------------------------
-        // FOOTER
-        // -----------------------------------------------------
-
-        mainBorderPane.setBottom(
-                new Footer().createFooter()
-        );
-
-
-        // -----------------------------------------------------
-        // MAIN CONTENT
-        // -----------------------------------------------------
-
-        VBox mainContent = new VBox(20);
-
-        mainContent.setPadding(
-                new Insets(25, 40, 30, 40)
-        );
-
-
-        // =====================================================
-        // BACK BUTTON
-        // =====================================================
-
-        Button backButton = new Button(
-                "← Back to Learning"
-        );
-
-        backButton.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        13
-                )
-        );
-
-        backButton.setTextFill(
-                Color.web("#DCEBDD")
-        );
-
-        backButton.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-border-color: #4B7354;" +
-                "-fx-border-radius: 8;" +
-                "-fx-background-radius: 8;" +
-                "-fx-cursor: hand;"
-        );
-
-        backButton.setOnAction(e -> {
-
-    LearningPage learningPage =
-            new LearningPage();
-
-    ((Stage) mainBorderPane.getScene().getWindow()).setScene(
-            learningPage.get_learning_pageScene()
-    );
-});
-
-
-        // =====================================================
-        // COURSE HEADER
-        // =====================================================
-
-        VBox courseHeader = new VBox(8);
-
-        Label courseLabel = new Label(
-                "COURSE"
-        );
-
-        courseLabel.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        12
-                )
-        );
-
-        courseLabel.setTextFill(
-                Color.web("#78C47E")
-        );
-
-
-        Label courseName = new Label(
-                courseTitle
-        );
-
-        courseName.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        30
-                )
-        );
-
-        courseName.setTextFill(
-                Color.WHITE
-        );
-
-
-        Label courseDescription = new Label(
-                "Learn step by step through modules and lessons."
-        );
-
-        courseDescription.setFont(
-                Font.font(
-                        "Arial",
-                        14
-                )
-        );
-
-        courseDescription.setTextFill(
-                Color.web("#AFC4B2")
-        );
-
-
-        courseHeader.getChildren().addAll(
-                courseLabel,
-                courseName,
-                courseDescription
-        );
-
-
-        // =====================================================
-        // PROGRESS CARD
-        // =====================================================
-
-        VBox progressCard = createProgressCard();
-
-
-        // =====================================================
-        // MODULE TITLE
-        // =====================================================
-
-        Label moduleHeading = new Label(
-                "Course Modules"
-        );
-
-        moduleHeading.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        21
-                )
-        );
-
-        moduleHeading.setTextFill(
-                Color.WHITE
-        );
-
-
-        Label moduleSubHeading = new Label(
-                "Select a module to view its lessons."
-        );
-
-        moduleSubHeading.setFont(
-                Font.font(
-                        "Arial",
-                        13
-                )
-        );
-
-        moduleSubHeading.setTextFill(
-                Color.web("#9FB5A2")
-        );
-
-
-        // =====================================================
-        // MODULE CONTAINER
-        // =====================================================
-
-        VBox modulesContainer = new VBox(15);
-
-        modulesContainer.setPadding(
-                new Insets(5, 0, 20, 0)
-        );
-
-
-        // =====================================================
-        // MODULES
-        // =====================================================
-
-        VBox module1 = createModule(
-                1,
-                "Introduction to Poultry Farming",
-                "Learn the basic concepts and requirements of poultry farming.",
-                3,
-                3,
-                new String[]{
-                        "Introduction to Poultry Farming",
-                        "Types of Poultry Birds",
-                        "Basic Poultry Farm Requirements"
-                }
-        );
-
-
-        VBox module2 = createModule(
-                2,
-                "Poultry Farm Management",
-                "Understand housing, feeding and daily farm management.",
-                2,
-                4,
-                new String[]{
-                        "Poultry Housing Management",
-                        "Feeding Management",
-                        "Water Management",
-                        "Daily Farm Management"
-                }
-        );
-
-
-        VBox module3 = createModule(
-                3,
-                "Bird Health and Disease Management",
-                "Learn how to maintain bird health and prevent diseases.",
-                1,
-                4,
-                new String[]{
-                        "Common Poultry Diseases",
-                        "Disease Prevention",
-                        "Vaccination Management",
-                        "Farm Hygiene"
-                }
-        );
-
-
-        VBox module4 = createModule(
-                4,
-                "Poultry Production",
-                "Learn about production, monitoring and improving farm performance.",
-                0,
-                3,
-                new String[]{
-                        "Egg Production",
-                        "Broiler Production",
-                        "Production Monitoring"
-                }
-        );
-
-
-        VBox module5 = createModule(
-                5,
-                "Harvesting and Marketing",
-                "Understand harvesting, selling and poultry market management.",
-                0,
-                3,
-                new String[]{
-                        "Harvesting Management",
-                        "Poultry Market",
-                        "Selling and Profit Management"
-                }
-        );
-
-
-        modulesContainer.getChildren().addAll(
-                module1,
-                module2,
-                module3,
-                module4,
-                module5
-        );
-
-
-        // =====================================================
-        // ADD CONTENT
-        // =====================================================
-
-        mainContent.getChildren().addAll(
-                backButton,
-                courseHeader,
-                progressCard,
-                moduleHeading,
-                moduleSubHeading,
-                modulesContainer
-        );
-
-
-        // =====================================================
-        // SCROLL PANE
-        // =====================================================
-
-        ScrollPane scrollPane = new ScrollPane(
-                mainContent
-        );
-
-        scrollPane.setFitToWidth(true);
-
-        scrollPane.setHbarPolicy(
-                ScrollPane.ScrollBarPolicy.NEVER
-        );
-
-        scrollPane.setVbarPolicy(
-                ScrollPane.ScrollBarPolicy.AS_NEEDED
-        );
-
-        scrollPane.setStyle(
-        "-fx-background: #080c0d;" +
-        "-fx-background-color: #080c0d;"
-);
-
-
-        mainBorderPane.setCenter(
-                scrollPane
-        );
-
-
-        // =====================================================
-        // SCENE
-        // =====================================================
-
-        modulesPageScene = new Scene(
-                mainBorderPane,
-                1200,
-                750
-        );
-
-        return modulesPageScene;
-    }
-
-
-    // =========================================================
-    // PROGRESS CARD
-    // =========================================================
-
-    private VBox createProgressCard() {
-
-        VBox card = new VBox(10);
-
-        card.setPadding(
-                new Insets(16)
-        );
-
-        card.setStyle(
-                "-fx-background-color: #193522;" +
-                "-fx-background-radius: 14;" +
-                "-fx-border-color: #31583A;" +
-                "-fx-border-radius: 14;"
-        );
-
-
-        HBox progressHeader = new HBox();
-
-        progressHeader.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-
-        Label progressTitle = new Label(
-                "Your Course Progress"
-        );
-
-        progressTitle.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        14
-                )
-        );
-
-        progressTitle.setTextFill(
-                Color.WHITE
-        );
-
-
-        HBox.setHgrow(
-                progressTitle,
-                Priority.ALWAYS
-        );
-
-
-        Label percentage = new Label(
-                "40%"
-        );
-
-        percentage.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        14
-                )
-        );
-
-        percentage.setTextFill(
-                Color.web("#7ED184")
-        );
-
-
-        progressHeader.getChildren().addAll(
-                progressTitle,
-                percentage
-        );
-
-
-        ProgressBar progressBar =
-                new ProgressBar(0.40);
-
-        progressBar.setPrefHeight(9);
-
-        progressBar.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        progressBar.setStyle(
-                "-fx-accent: #55A95D;"
-        );
-
-
-        Label progressInfo = new Label(
-                "6 of 15 lessons completed"
-        );
-
-        progressInfo.setFont(
-                Font.font(
-                        "Arial",
-                        12
-                )
-        );
-
-        progressInfo.setTextFill(
-                Color.web("#AFC4B2")
-        );
-
-
-        card.getChildren().addAll(
-                progressHeader,
-                progressBar,
-                progressInfo
-        );
-
-        return card;
-    }
-
-
-    // =========================================================
-    // CREATE MODULE
-    // =========================================================
-
-    private VBox createModule(
-            int moduleNumber,
-            String moduleTitle,
-            String moduleDescription,
-            int completedLessons,
-            int totalLessons,
-            String[] lessons) {
-
-
-        VBox moduleBox = new VBox();
-
-
-        moduleBox.setStyle(
-                "-fx-background-color: #193522;" +
-                "-fx-background-radius: 15;" +
-                "-fx-border-color: #31583A;" +
-                "-fx-border-radius: 15;" +
-                "-fx-border-width: 1;"
-        );
-
-
-        // =====================================================
-        // MODULE HEADER
-        // =====================================================
-
-        HBox moduleHeader = new HBox(14);
-
-        moduleHeader.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        moduleHeader.setPadding(
-                new Insets(16)
-        );
-
-
-        // -----------------------------------------------------
-        // MODULE NUMBER CIRCLE
-        // -----------------------------------------------------
-
-        Circle circle = new Circle(
-                21
-        );
-
-        circle.setFill(
-                Color.web("#32683B")
-        );
-
-
-        Label number = new Label(
-                String.valueOf(moduleNumber)
-        );
-
-        number.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        14
-                )
-        );
-
-        number.setTextFill(
-                Color.WHITE
-        );
-
-        number.setAlignment(
-                Pos.CENTER
-        );
-
-        number.setMinWidth(42);
-
-        number.setMinHeight(42);
-
-
-        // -----------------------------------------------------
-        // MODULE INFORMATION
-        // -----------------------------------------------------
-
-        VBox moduleInfo = new VBox(5);
-
-
-        Label title = new Label(
-                "Module " + moduleNumber +
-                "  •  " + moduleTitle
-        );
-
-        title.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        17
-                )
-        );
-
-        title.setTextFill(
-                Color.WHITE
-        );
-
-
-        Label description = new Label(
-                moduleDescription
-        );
-
-        description.setFont(
-                Font.font(
-                        "Arial",
-                        12
-                )
-        );
-
-        description.setTextFill(
-                Color.web("#AFC4B2")
-        );
-
-        description.setWrapText(true);
-
-
-        Label lessonCount = new Label(
-                completedLessons +
-                " of " +
-                totalLessons +
-                " lessons completed"
-        );
-
-        lessonCount.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        11
-                )
-        );
-
-        lessonCount.setTextFill(
-                Color.web("#75C77D")
-        );
-
-
-        moduleInfo.getChildren().addAll(
-                title,
-                description,
-                lessonCount
-        );
-
-
-        HBox.setHgrow(
-                moduleInfo,
-                Priority.ALWAYS
-        );
-
-
-        // =====================================================
-        // SHOW MORE BUTTON
-        // =====================================================
-
-        Button showMoreButton = new Button(
-                "Show More  ▼"
-        );
-
-        showMoreButton.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        12
-                )
-        );
-
-        showMoreButton.setTextFill(
-                Color.web("#CFE4D2")
-        );
-
-        showMoreButton.setStyle(
-                "-fx-background-color: #285532;" +
-                "-fx-background-radius: 8;" +
-                "-fx-cursor: hand;"
-        );
-
-
-        moduleHeader.getChildren().addAll(
-                number,
-                moduleInfo,
-                showMoreButton
-        );
-
-
-        // =====================================================
-        // LESSON CONTAINER
-        // =====================================================
-
-        VBox lessonsContainer = new VBox(9);
-
-        lessonsContainer.setPadding(
-                new Insets(
-                        0,
-                        18,
-                        16,
-                        75
-                )
-        );
-
-
-        // Initially hidden
-        lessonsContainer.setVisible(false);
-
-        lessonsContainer.setManaged(false);
-
-
-        // =====================================================
-        // CREATE LESSONS
-        // =====================================================
-
-        for (int i = 0; i < lessons.length; i++) {
-
-            boolean completed =
-                    i < completedLessons;
-
-
-            HBox lesson =
-                    createLesson(
-                            i + 1,
-                            lessons[i],
-                            completed
-                    );
-
-
-            lessonsContainer.getChildren().add(
-                    lesson
-            );
+                this.courseTitle = courseTitle;
         }
 
+        
+        // MAIN MODULE PAGE
+        
 
-        // =====================================================
-        // SHOW MORE ACTION
-        // =====================================================
+        public Scene getModulesPageScene() {
 
-        showMoreButton.setOnAction(e -> {
+                mainBorderPane = new BorderPane();
 
-            boolean currentlyVisible =
-                    lessonsContainer.isVisible();
+                mainBorderPane.setStyle(
+                                "-fx-background-color: #080c0d;");
 
+                
+                // NAVBAR
+                
 
-            if (currentlyVisible) {
+                mainBorderPane.setTop(
+                                new NavBar().createNavbar("Learning"));
 
+                
+                // FOOTER
+                
+
+                mainBorderPane.setBottom(
+                                new Footer().createFooter());
+
+                
+                // MAIN CONTENT
+                
+
+                VBox mainContent = new VBox(20);
+
+                mainContent.setPadding(
+                                new Insets(25, 40, 30, 40));
+
+                
+                // BACK BUTTON
+                
+
+                Button backButton = new Button(
+                                "← Back to Learning");
+
+                backButton.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                13));
+
+                backButton.setTextFill(
+                                Color.web("#DCEBDD"));
+
+                backButton.setStyle(
+                                "-fx-background-color: transparent;" +
+                                                "-fx-border-color: #4B7354;" +
+                                                "-fx-border-radius: 8;" +
+                                                "-fx-background-radius: 8;" +
+                                                "-fx-cursor: hand;");
+
+                backButton.setOnAction(e -> {
+
+                        LearningPage learningPage = new LearningPage();
+
+                        ((Stage) mainBorderPane.getScene().getWindow()).setScene(
+                                        learningPage.get_learning_pageScene());
+                });
+
+                
+                // COURSE HEADER
+                
+
+                VBox courseHeader = new VBox(8);
+
+                Label courseLabel = new Label(
+                                "COURSE");
+
+                courseLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                12));
+
+                courseLabel.setTextFill(
+                                Color.web("#78C47E"));
+
+                Label courseName = new Label(
+                                courseTitle);
+
+                courseName.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                30));
+
+                courseName.setTextFill(
+                                Color.WHITE);
+
+                Label courseDescription = new Label(
+                                "Learn step by step through modules and lessons.");
+
+                courseDescription.setFont(
+                                Font.font(
+                                                "Arial",
+                                                14));
+
+                courseDescription.setTextFill(
+                                Color.web("#AFC4B2"));
+
+                courseHeader.getChildren().addAll(
+                                courseLabel,
+                                courseName,
+                                courseDescription);
+
+                
+                // PROGRESS CARD
+                
+
+                VBox progressCard = createProgressCard();
+
+                
+                // MODULE TITLE
+                
+
+                Label moduleHeading = new Label(
+                                "Course Modules");
+
+                moduleHeading.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                21));
+
+                moduleHeading.setTextFill(
+                                Color.WHITE);
+
+                Label moduleSubHeading = new Label(
+                                "Select a module to view its lessons.");
+
+                moduleSubHeading.setFont(
+                                Font.font(
+                                                "Arial",
+                                                13));
+
+                moduleSubHeading.setTextFill(
+                                Color.web("#9FB5A2"));
+
+                
+                // MODULE CONTAINER
+                
+
+                VBox modulesContainer = new VBox(15);
+
+                modulesContainer.setPadding(
+                                new Insets(5, 0, 20, 0));
+
+                
+                // MODULES
+                
+
+                VBox module1 = createModule(
+                                1,
+                                "Introduction to Poultry Farming",
+                                "Learn the basic concepts and requirements of poultry farming.",
+                                3,
+                                3,
+                                new String[] {
+                                                "Introduction to Poultry Farming",
+                                                "Types of Poultry Birds",
+                                                "Basic Poultry Farm Requirements"
+                                });
+
+                VBox module2 = createModule(
+                                2,
+                                "Poultry Farm Management",
+                                "Understand housing, feeding and daily farm management.",
+                                2,
+                                4,
+                                new String[] {
+                                                "Poultry Housing Management",
+                                                "Feeding Management",
+                                                "Water Management",
+                                                "Daily Farm Management"
+                                });
+
+                VBox module3 = createModule(
+                                3,
+                                "Bird Health and Disease Management",
+                                "Learn how to maintain bird health and prevent diseases.",
+                                1,
+                                4,
+                                new String[] {
+                                                "Common Poultry Diseases",
+                                                "Disease Prevention",
+                                                "Vaccination Management",
+                                                "Farm Hygiene"
+                                });
+
+                VBox module4 = createModule(
+                                4,
+                                "Poultry Production",
+                                "Learn about production, monitoring and improving farm performance.",
+                                0,
+                                3,
+                                new String[] {
+                                                "Egg Production",
+                                                "Broiler Production",
+                                                "Production Monitoring"
+                                });
+
+                VBox module5 = createModule(
+                                5,
+                                "Harvesting and Marketing",
+                                "Understand harvesting, selling and poultry market management.",
+                                0,
+                                3,
+                                new String[] {
+                                                "Harvesting Management",
+                                                "Poultry Market",
+                                                "Selling and Profit Management"
+                                });
+
+                modulesContainer.getChildren().addAll(
+                                module1,
+                                module2,
+                                module3,
+                                module4,
+                                module5);
+
+                
+                // ADD CONTENT
+                
+
+                mainContent.getChildren().addAll(
+                                backButton,
+                                courseHeader,
+                                progressCard,
+                                moduleHeading,
+                                moduleSubHeading,
+                                modulesContainer);
+
+                
+                // SCROLL PANE
+                
+
+                ScrollPane scrollPane = new ScrollPane(
+                                mainContent);
+
+                scrollPane.setFitToWidth(true);
+
+                scrollPane.setHbarPolicy(
+                                ScrollPane.ScrollBarPolicy.NEVER);
+
+                scrollPane.setVbarPolicy(
+                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+                scrollPane.setStyle(
+                                "-fx-background: #080c0d;" +
+                                                "-fx-background-color: #080c0d;");
+
+                mainBorderPane.setCenter(
+                                scrollPane);
+
+                
+                // SCENE
+                
+
+                modulesPageScene = new Scene(
+                                mainBorderPane,
+                                1200,
+                                750);
+
+                return modulesPageScene;
+        }
+
+        
+        // PROGRESS CARD
+        
+
+        private VBox createProgressCard() {
+
+                VBox card = new VBox(10);
+
+                card.setPadding(
+                                new Insets(16));
+
+                card.setStyle(
+                                "-fx-background-color: #193522;" +
+                                                "-fx-background-radius: 14;" +
+                                                "-fx-border-color: #31583A;" +
+                                                "-fx-border-radius: 14;");
+
+                HBox progressHeader = new HBox();
+
+                progressHeader.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                Label progressTitle = new Label(
+                                "Your Course Progress");
+
+                progressTitle.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                14));
+
+                progressTitle.setTextFill(
+                                Color.WHITE);
+
+                HBox.setHgrow(
+                                progressTitle,
+                                Priority.ALWAYS);
+
+                Label percentage = new Label(
+                                "40%");
+
+                percentage.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                14));
+
+                percentage.setTextFill(
+                                Color.web("#7ED184"));
+
+                progressHeader.getChildren().addAll(
+                                progressTitle,
+                                percentage);
+
+                ProgressBar progressBar = new ProgressBar(0.40);
+
+                progressBar.setPrefHeight(9);
+
+                progressBar.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                progressBar.setStyle(
+                                "-fx-accent: #55A95D;");
+
+                Label progressInfo = new Label(
+                                "6 of 15 lessons completed");
+
+                progressInfo.setFont(
+                                Font.font(
+                                                "Arial",
+                                                12));
+
+                progressInfo.setTextFill(
+                                Color.web("#AFC4B2"));
+
+                card.getChildren().addAll(
+                                progressHeader,
+                                progressBar,
+                                progressInfo);
+
+                return card;
+        }
+
+        
+        // CREATE MODULE
+        
+
+        private VBox createModule(
+                        int moduleNumber,
+                        String moduleTitle,
+                        String moduleDescription,
+                        int completedLessons,
+                        int totalLessons,
+                        String[] lessons) {
+
+                VBox moduleBox = new VBox();
+
+                moduleBox.setStyle(
+                                "-fx-background-color: #193522;" +
+                                                "-fx-background-radius: 15;" +
+                                                "-fx-border-color: #31583A;" +
+                                                "-fx-border-radius: 15;" +
+                                                "-fx-border-width: 1;");
+
+                
+                // MODULE HEADER
+                
+
+                HBox moduleHeader = new HBox(14);
+
+                moduleHeader.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                moduleHeader.setPadding(
+                                new Insets(16));
+
+                
+                // MODULE NUMBER CIRCLE
+                
+
+                Circle circle = new Circle(
+                                21);
+
+                circle.setFill(
+                                Color.web("#32683B"));
+
+                Label number = new Label(
+                                String.valueOf(moduleNumber));
+
+                number.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                14));
+
+                number.setTextFill(
+                                Color.WHITE);
+
+                number.setAlignment(
+                                Pos.CENTER);
+
+                number.setMinWidth(42);
+
+                number.setMinHeight(42);
+
+                
+                // MODULE INFORMATION
+                
+
+                VBox moduleInfo = new VBox(5);
+                moduleInfo.setMinWidth(0);
+
+                Label title = new Label(
+                "Module " + moduleNumber +
+                                "  •  " + moduleTitle);
+
+title.setFont(
+                Font.font(
+                                "Arial",
+                                FontWeight.BOLD,
+                                17));
+
+title.setTextFill(Color.WHITE);
+
+title.setWrapText(true);
+
+title.setMaxWidth(Double.MAX_VALUE);
+
+              Label description = new Label(
+                moduleDescription);
+
+description.setFont(
+                Font.font(
+                                "Arial",
+                                12));
+
+description.setTextFill(
+                Color.web("#AFC4B2"));
+
+description.setWrapText(true);
+
+description.setMaxWidth(Double.MAX_VALUE);
+
+                Label lessonCount = new Label(
+                                completedLessons +
+                                                " of " +
+                                                totalLessons +
+                                                " lessons completed");
+
+                lessonCount.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                11));
+
+                lessonCount.setTextFill(
+                                Color.web("#75C77D"));
+
+                moduleInfo.getChildren().addAll(
+                                title,
+                                description,
+                                lessonCount);
+
+                HBox.setHgrow(
+                                moduleInfo,
+                                Priority.ALWAYS);
+
+                
+                // SHOW MORE BUTTON
+                
+
+              Button showMoreButton = new Button(
+                "Show More  ▼");
+
+showMoreButton.setFont(
+                Font.font(
+                                "Arial",
+                                FontWeight.BOLD,
+                                12));
+
+showMoreButton.setTextFill(
+                Color.web("#CFE4D2"));
+
+showMoreButton.setPrefWidth(110);
+showMoreButton.setMinWidth(110);
+showMoreButton.setMaxWidth(110);
+
+showMoreButton.setPrefHeight(32);
+
+showMoreButton.setStyle(
+                "-fx-background-color: #285532;" +
+                                "-fx-background-radius: 8;" +
+                                "-fx-cursor: hand;");
+                moduleHeader.getChildren().addAll(
+                                number,
+                                moduleInfo,
+                                showMoreButton);
+
+                
+                // LESSON CONTAINER
+                
+
+                VBox lessonsContainer = new VBox(9);
+
+                lessonsContainer.setPadding(
+                                new Insets(
+                                                0,
+                                                18,
+                                                16,
+                                                75));
+
+                // Initially hidden
                 lessonsContainer.setVisible(false);
 
                 lessonsContainer.setManaged(false);
 
-                showMoreButton.setText(
-                        "Show More  ▼"
-                );
+                
+                // CREATE LESSONS
+                
 
-            } else {
+                for (int i = 0; i < lessons.length; i++) {
 
-                lessonsContainer.setVisible(true);
+                        boolean completed = i < completedLessons;
 
-                lessonsContainer.setManaged(true);
+                        HBox lesson = createLesson(
+                                        i + 1,
+                                        lessons[i],
+                                        completed);
 
-                showMoreButton.setText(
-                        "Show Less  ▲"
-                );
-            }
-        });
+                        lessonsContainer.getChildren().add(
+                                        lesson);
+                }
 
+                
+                // SHOW MORE ACTION
+                
 
-        moduleBox.getChildren().addAll(
-                moduleHeader,
-                lessonsContainer
-        );
+                showMoreButton.setOnAction(e -> {
 
+                        boolean currentlyVisible = lessonsContainer.isVisible();
 
-        return moduleBox;
-    }
+                        if (currentlyVisible) {
 
+                                lessonsContainer.setVisible(false);
 
-    // =========================================================
-    // CREATE LESSON
-    // =========================================================
+                                lessonsContainer.setManaged(false);
 
-    private HBox createLesson(
-            int lessonNumber,
-            String lessonTitle,
-            boolean completed) {
+                                showMoreButton.setText(
+                                                "Show More  ▼");
 
+                        } else {
 
-        HBox lessonBox = new HBox(12);
+                                lessonsContainer.setVisible(true);
 
-        lessonBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
+                                lessonsContainer.setManaged(true);
 
-        lessonBox.setPadding(
-                new Insets(11, 12, 11, 12)
-        );
+                                showMoreButton.setText(
+                                                "Show Less  ▲");
+                        }
+                });
 
+                moduleBox.getChildren().addAll(
+                                moduleHeader,
+                                lessonsContainer);
 
-        lessonBox.setStyle(
-                "-fx-background-color: #223F2A;" +
-                "-fx-background-radius: 10;" +
-                "-fx-border-color: #345A3C;" +
-                "-fx-border-radius: 10;"
-        );
-
-
-        // =====================================================
-        // LESSON STATUS CIRCLE
-        // =====================================================
-
-        Circle statusCircle =
-                new Circle(9);
-
-
-        if (completed) {
-
-            statusCircle.setFill(
-                    Color.web("#55B963")
-            );
-
-        } else {
-
-            statusCircle.setFill(
-                    Color.web("#536A58")
-            );
+                return moduleBox;
         }
 
+        
+        // CREATE LESSON
+        
 
-        // =====================================================
-        // LESSON NUMBER
-        // =====================================================
+        private HBox createLesson(
+                        int lessonNumber,
+                        String lessonTitle,
+                        boolean completed) {
 
-        Label number = new Label(
-                "Lesson " + lessonNumber
-        );
+                HBox lessonBox = new HBox(12);
 
-        number.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        11
-                )
-        );
+                lessonBox.setAlignment(
+                                Pos.CENTER_LEFT);
 
-        number.setTextFill(
-                Color.web("#82C989")
-        );
+                lessonBox.setPadding(
+                                new Insets(11, 12, 11, 12));
 
+                lessonBox.setStyle(
+                                "-fx-background-color: #223F2A;" +
+                                                "-fx-background-radius: 10;" +
+                                                "-fx-border-color: #345A3C;" +
+                                                "-fx-border-radius: 10;");
 
-        // =====================================================
-        // LESSON TITLE
-        // =====================================================
+                
+                // LESSON STATUS CIRCLE
+                
 
-        Label title = new Label(
-                lessonTitle
-        );
+                Circle statusCircle = new Circle(9);
 
-        title.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        13
-                )
-        );
+                if (completed) {
 
-        title.setTextFill(
-                Color.WHITE
-        );
+                        statusCircle.setFill(
+                                        Color.web("#55B963"));
 
-        title.setWrapText(true);
+                } else {
 
+                        statusCircle.setFill(
+                                        Color.web("#536A58"));
+                }
 
-        HBox.setHgrow(
-                title,
-                Priority.ALWAYS
-        );
+                
+                // LESSON NUMBER
+                
 
+                Label number = new Label(
+                                "Lesson " + lessonNumber);
 
-        // =====================================================
-        // STATUS
-        // =====================================================
+                number.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                11));
 
-        Label status = new Label();
+                number.setTextFill(
+                                Color.web("#82C989"));
 
-        if (completed) {
+                
+                // LESSON TITLE
+                
 
-            status.setText(
-                    "Completed"
-            );
+                Label title = new Label(
+                                lessonTitle);
 
-            status.setTextFill(
-                    Color.web("#79D181")
-            );
+                title.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                13));
 
-        } else {
+                title.setTextFill(
+                                Color.WHITE);
 
-            status.setText(
-                    "Start Lesson"
-            );
+                title.setWrapText(true);
 
-            status.setTextFill(
-                    Color.web("#AFC4B2")
-            );
+                HBox.setHgrow(
+                                title,
+                                Priority.ALWAYS);
 
+                
+                // STATUS
+                
 
+                Label status = new Label();
+
+                if (completed) {
+
+                        status.setText(
+                                        "Completed");
+
+                        status.setTextFill(
+                                        Color.web("#79D181"));
+
+                } else {
+
+                        status.setText(
+                                        "Start Lesson");
+
+                        status.setTextFill(
+                                        Color.web("#AFC4B2"));
+
+                }
+
+                status.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                11));
+
+                lessonBox.getChildren().addAll(
+                                statusCircle,
+                                number,
+                                title,
+                                status);
+
+                
+                // LESSON CLICK
+                
+
+                lessonBox.setOnMouseClicked(e -> {
+
+                        openLessonContent(
+                                        lessonNumber,
+                                        lessonTitle);
+
+                });
+
+                
+                // HOVER EFFECT
+                
+
+                lessonBox.setOnMouseEntered(e -> {
+
+                        lessonBox.setStyle(
+                                        "-fx-background-color: #2B5134;" +
+                                                        "-fx-background-radius: 10;" +
+                                                        "-fx-border-color: #63A86B;" +
+                                                        "-fx-border-radius: 10;" +
+                                                        "-fx-cursor: hand;");
+                });
+
+                lessonBox.setOnMouseExited(e -> {
+
+                        lessonBox.setStyle(
+                                        "-fx-background-color: #223F2A;" +
+                                                        "-fx-background-radius: 10;" +
+                                                        "-fx-border-color: #345A3C;" +
+                                                        "-fx-border-radius: 10;");
+                });
+
+                return lessonBox;
         }
 
-
-        status.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        11
-                )
-        );
-
-
-        lessonBox.getChildren().addAll(
-                statusCircle,
-                number,
-                title,
-                status
-        );
-
-
-        // =====================================================
-        // LESSON CLICK
-        // =====================================================
-
-        lessonBox.setOnMouseClicked(e -> {
-
-            openLessonContent(
-                    lessonNumber,
-                    lessonTitle
-            );
-
-        });
-
-
-        // =====================================================
-        // HOVER EFFECT
-        // =====================================================
-
-        lessonBox.setOnMouseEntered(e -> {
-
-            lessonBox.setStyle(
-                    "-fx-background-color: #2B5134;" +
-                    "-fx-background-radius: 10;" +
-                    "-fx-border-color: #63A86B;" +
-                    "-fx-border-radius: 10;" +
-                    "-fx-cursor: hand;"
-            );
-        });
-
-
-        lessonBox.setOnMouseExited(e -> {
-
-            lessonBox.setStyle(
-                    "-fx-background-color: #223F2A;" +
-                    "-fx-background-radius: 10;" +
-                    "-fx-border-color: #345A3C;" +
-                    "-fx-border-radius: 10;"
-            );
-        });
-
-
-        return lessonBox;
-    }
-
-
-    // =========================================================
-    // LESSON CONTENT
-    // =========================================================
-
-    private void openLessonContent(
-            int lessonNumber,
-            String lessonTitle) {
-
-
-        BorderPane lessonPane =
-                new BorderPane();
-
-
-       lessonPane.setStyle(
-        "-fx-background-color: #080c0d;"
-);
-
-
-        // =====================================================
-        // TOP
-        // =====================================================
-
-        VBox lessonTop =
-                new VBox(5);
-
-        lessonTop.setPadding(
-                new Insets(20, 35, 15, 35)
-        );
-
-
-        Label courseLabel =
-                new Label(
-                        courseTitle
-                );
-
-        courseLabel.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        12
-                )
-        );
-
-        courseLabel.setTextFill(
-                Color.web("#78C47E")
-        );
-
-
-        Label lessonHeading =
-                new Label(
-                        "Lesson " +
-                        lessonNumber +
-                        ": " +
-                        lessonTitle
-                );
-
-        lessonHeading.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        27
-                )
-        );
-
-        lessonHeading.setTextFill(
-                Color.WHITE
-        );
-
-
-        lessonTop.getChildren().addAll(
-                courseLabel,
-                lessonHeading
-        );
-
-
-        lessonPane.setTop(
-                lessonTop
-        );
-
-
-        // =====================================================
+        
         // LESSON CONTENT
-        // =====================================================
+        
 
-        VBox content =
-                new VBox(18);
+        private void openLessonContent(
+                        int lessonNumber,
+                        String lessonTitle) {
 
-        content.setPadding(
-                new Insets(
-                        25,
-                        50,
-                        35,
-                        50
-                )
-        );
+                BorderPane lessonPane = new BorderPane();
 
+                lessonPane.setStyle(
+                                "-fx-background-color: #080c0d;");
 
-        Label contentTitle =
-                new Label(
-                        lessonTitle
-                );
+                
+                // TOP
+                
 
-        contentTitle.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        22
-                )
-        );
+                VBox lessonTop = new VBox(5);
 
-        contentTitle.setTextFill(
-                Color.WHITE
-        );
+                lessonTop.setPadding(
+                                new Insets(20, 35, 15, 35));
 
+                Label courseLabel = new Label(
+                                courseTitle);
 
-        Label lessonText =
-                new Label(
-                        "Welcome to this lesson.\n\n" +
+                courseLabel.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                12));
 
-                        "This section will contain the complete "
-                        + "learning content for the selected lesson.\n\n"
+                courseLabel.setTextFill(
+                                Color.web("#78C47E"));
 
-                        + "You can later load the actual lesson "
-                        + "content from Firestore, including text, "
-                        + "images, videos and other learning material."
-                );
+                Label lessonHeading = new Label(
+                                "Lesson " +
+                                                lessonNumber +
+                                                ": " +
+                                                lessonTitle);
 
-        lessonText.setFont(
-                Font.font(
-                        "Arial",
-                        15
-                )
-        );
+                lessonHeading.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                27));
 
-        lessonText.setTextFill(
-                Color.web("#C7D8C9")
-        );
+                lessonHeading.setTextFill(
+                                Color.WHITE);
 
-        lessonText.setWrapText(true);
+                lessonTop.getChildren().addAll(
+                                courseLabel,
+                                lessonHeading);
 
-        lessonText.setLineSpacing(
-                5
-        );
+                lessonPane.setTop(
+                                lessonTop);
 
+                
+                // LESSON CONTENT
+                
 
-        Button backButton =
-                new Button(
-                        "← Back to Modules"
-                );
+                VBox content = new VBox(18);
 
-        backButton.setPrefHeight(38);
+                content.setPadding(
+                                new Insets(
+                                                25,
+                                                50,
+                                                35,
+                                                50));
 
-        backButton.setPrefWidth(170);
+                Label contentTitle = new Label(
+                                lessonTitle);
 
-        backButton.setFont(
-                Font.font(
-                        "Arial",
-                        FontWeight.BOLD,
-                        12
-                )
-        );
+                contentTitle.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                22));
 
-        backButton.setTextFill(
-                Color.WHITE
-        );
+                contentTitle.setTextFill(
+                                Color.WHITE);
 
-        backButton.setStyle(
-                "-fx-background-color: #32683B;" +
-                "-fx-background-radius: 9;" +
-                "-fx-cursor: hand;"
-        );
+                Label lessonText = new Label(
+                                "Welcome to this lesson.\n\n" +
 
+                                                "This section will contain the complete "
+                                                + "learning content for the selected lesson.\n\n"
 
-        backButton.setOnAction(e -> {
+                                                + "You can later load the actual lesson "
+                                                + "content from Firestore, including text, "
+                                                + "images, videos and other learning material.");
 
-    ModulesPage modulesPage =
-            new ModulesPage(courseTitle);
+                lessonText.setFont(
+                                Font.font(
+                                                "Arial",
+                                                15));
 
-    ((Stage) lessonPane.getScene().getWindow()).setScene(
-            modulesPage.getModulesPageScene()
-    );
+                lessonText.setTextFill(
+                                Color.web("#C7D8C9"));
 
-});
+                lessonText.setWrapText(true);
 
+                lessonText.setLineSpacing(
+                                5);
 
-        content.getChildren().addAll(
-                contentTitle,
-                lessonText,
-                backButton
-        );
+                Button backButton = new Button(
+                                "← Back to Modules");
 
+                backButton.setPrefHeight(38);
 
-        ScrollPane scrollPane =
-                new ScrollPane(content);
+                backButton.setPrefWidth(170);
 
-        scrollPane.setFitToWidth(true);
+                backButton.setFont(
+                                Font.font(
+                                                "Arial",
+                                                FontWeight.BOLD,
+                                                12));
 
-        scrollPane.setHbarPolicy(
-                ScrollPane.ScrollBarPolicy.NEVER
-        );
+                backButton.setTextFill(
+                                Color.WHITE);
 
-       scrollPane.setStyle(
-        "-fx-background: #080c0d;" +
-        "-fx-background-color: #080c0d;"
-);
+                backButton.setStyle(
+                                "-fx-background-color: #32683B;" +
+                                                "-fx-background-radius: 9;" +
+                                                "-fx-cursor: hand;");
 
+                backButton.setOnAction(e -> {
 
-        lessonPane.setCenter(
-                scrollPane
-        );
+                        ModulesPage modulesPage = new ModulesPage(courseTitle);
 
+                        ((Stage) lessonPane.getScene().getWindow()).setScene(
+                                        modulesPage.getModulesPageScene());
 
-        // =====================================================
-        // FOOTER
-        // =====================================================
+                });
 
-        lessonPane.setBottom(
-                new Footer().createFooter()
-        );
+                content.getChildren().addAll(
+                                contentTitle,
+                                lessonText,
+                                backButton);
 
+                ScrollPane scrollPane = new ScrollPane(content);
 
-        // =====================================================
-        // CHANGE ROOT
-        // =====================================================
+                scrollPane.setFitToWidth(true);
 
-        mainBorderPane.getScene().setRoot(
-                lessonPane
-        );
-    }
+                scrollPane.setHbarPolicy(
+                                ScrollPane.ScrollBarPolicy.NEVER);
+
+                scrollPane.setStyle(
+                                "-fx-background: #080c0d;" +
+                                                "-fx-background-color: #080c0d;");
+
+                lessonPane.setCenter(
+                                scrollPane);
+
+                // FOOTER
+                
+                lessonPane.setBottom(
+                                new Footer().createFooter());
+
+                // CHANGE ROOT
+                
+                mainBorderPane.getScene().setRoot(
+                                lessonPane);
+        }
 }

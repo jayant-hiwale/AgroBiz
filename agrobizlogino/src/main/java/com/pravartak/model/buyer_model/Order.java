@@ -207,8 +207,7 @@ public class Order {
 
     public Map<String, Object> toMap() {
 
-        Map<String, Object> map =
-                new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
 
         map.put("orderId", orderId);
 

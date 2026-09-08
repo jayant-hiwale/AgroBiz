@@ -11,101 +11,87 @@ import java.util.List;
 
 public class CommunityDAO {
 
-    private final Firestore db;
+        private final Firestore db;
 
-    public CommunityDAO(Firestore db) {
+        public CommunityDAO(Firestore db) {
 
-        if (db == null) {
-            throw new IllegalArgumentException(
-                    "Firestore instance cannot be null."
-            );
+                if (db == null) {
+                        throw new IllegalArgumentException(
+                                        "Firestore instance cannot be null.");
+                }
+
+                this.db = db;
         }
 
-        this.db = db;
-    }
+        // =====================================================
+        // CREATE POST
+        // =====================================================
 
-    // =====================================================
-    // CREATE POST
-    // =====================================================
+        public String createPost(
+                        CommunityPost post) throws Exception {
 
-    public String createPost(
-            CommunityPost post) throws Exception {
-
-        DocumentReference documentReference =
-                db.collection("communityPosts")
-                        .document();
-
-        post.setPostId(
-                documentReference.getId()
-        );
-
-        post.setTimestamp(
-                Timestamp.now()
-        );
-
-        documentReference
-                .set(post)
-                .get();
-
-        return documentReference.getId();
-    }
-
-    // =====================================================
-    // GET ALL POSTS
-    // =====================================================
-
-    public List<CommunityPost> getAllPosts()
-            throws Exception {
-
-        List<CommunityPost> posts =
-                new ArrayList<>();
-
-        ApiFuture<QuerySnapshot> future =
-                db.collection("communityPosts")
-                        .orderBy(
-                                "timestamp",
-                                Query.Direction.DESCENDING
-                        )
-                        .get();
-
-        QuerySnapshot snapshot =
-                future.get();
-
-        for (DocumentSnapshot document :
-                snapshot.getDocuments()) {
-
-            CommunityPost post =
-                    document.toObject(
-                            CommunityPost.class
-                    );
-
-            if (post != null) {
+                DocumentReference documentReference = db.collection("communityPosts")
+                                .document();
 
                 post.setPostId(
-                        document.getId()
-                );
+                                documentReference.getId());
 
-                posts.add(post);
-            }
+                post.setTimestamp(
+                                Timestamp.now());
+
+                documentReference
+                                .set(post)
+                                .get();
+
+                return documentReference.getId();
         }
 
-        return posts;
-    }
+        // =====================================================
+        // GET ALL POSTS
+        // =====================================================
 
-    // =====================================================
-    // LIKE POST
-    // =====================================================
+        public List<CommunityPost> getAllPosts()
+                        throws Exception {
 
-    public void likePost(
-            String postId) throws Exception {
+                List<CommunityPost> posts = new ArrayList<>();
 
-        DocumentReference reference =
-                db.collection("communityPosts")
-                        .document(postId);
+                ApiFuture<QuerySnapshot> future = db.collection("communityPosts")
+                                .orderBy(
+                                                "timestamp",
+                                                Query.Direction.DESCENDING)
+                                .get();
 
-        reference.update(
-                "likes",
-                FieldValue.increment(1)
-        ).get();
-    }
+                QuerySnapshot snapshot = future.get();
+
+                for (DocumentSnapshot document : snapshot.getDocuments()) {
+
+                        CommunityPost post = document.toObject(
+                                        CommunityPost.class);
+
+                        if (post != null) {
+
+                                post.setPostId(
+                                                document.getId());
+
+                                posts.add(post);
+                        }
+                }
+
+                return posts;
+        }
+
+        // =====================================================
+        // LIKE POST
+        // =====================================================
+
+        public void likePost(
+                        String postId) throws Exception {
+
+                DocumentReference reference = db.collection("communityPosts")
+                                .document(postId);
+
+                reference.update(
+                                "likes",
+                                FieldValue.increment(1)).get();
+        }
 }

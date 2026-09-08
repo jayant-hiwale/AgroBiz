@@ -75,7 +75,8 @@ public class AdminPage {
                                 "Reviews",
                                 "Manage Course",
                                 "Community",
-                                "Government Schemes");
+                                "Government Schemes",
+                                "About us");
                 lv.setStyle(
                                 "-fx-background-color:#0D1213;" +
                                                 "-fx-control-inner-background:#0D1213;" +
@@ -275,7 +276,6 @@ public class AdminPage {
                 // SEARCH
                 // =====================================================
 
-               
                 // =====================================================
                 // TOP BAR COMPONENTS
                 // =====================================================
@@ -454,18 +454,13 @@ public class AdminPage {
 
                                 break;
 
-                        // =================================================
-                        // SETTINGS
-                        // =================================================
+                   case "About us":
 
-                        // case "Settings":
+    AboutUs aboutUs = new AboutUs();
 
-                        // Text settings = createPageTitle(
-                        // "Settings");
+    bp.setCenter(aboutUs.getAboutUsPage());
 
-                        // bp.setCenter(settings);
-
-                        // break;
+    break;
 
                         // =================================================
                         // DEFAULT

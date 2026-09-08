@@ -23,17 +23,14 @@ public class CommunityController {
                 && (imageUrl == null || imageUrl.trim().isEmpty())) {
 
             throw new IllegalArgumentException(
-                    "Please write something or upload an image."
-            );
+                    "Please write something or upload an image.");
         }
 
-        CommunityPost post =
-                new CommunityPost(
-                        farmerId,
-                        farmerName,
-                        content == null ? "" : content.trim(),
-                        imageUrl
-                );
+        CommunityPost post = new CommunityPost(
+                farmerId,
+                farmerName,
+                content == null ? "" : content.trim(),
+                imageUrl);
 
         communityDAO.createPost(post);
     }
