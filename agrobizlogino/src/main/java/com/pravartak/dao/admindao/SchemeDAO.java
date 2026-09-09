@@ -1,303 +1,3 @@
-
-
-// package com.pravartak.dao.admin;
-
-// import java.util.ArrayList;
-// import java.util.List;
-// import java.util.UUID;
-
-// import com.pravartak.model.admin.Scheme;
-
-// public class SchemeDAO {
-
-//     // =========================================================
-//     // TEMPORARY IN-MEMORY DATABASE
-//     // =========================================================
-
-//     /*
-//      * static is important.
-//      *
-//      * Even if a new SchemeDAO / SchemeController is created,
-//      * all pages will use the same list while the application
-//      * is running.
-//      */
-//     private static final List<Scheme> schemes =
-//             new ArrayList<>();
-
-//     // =========================================================
-//     // OPTIONAL SAMPLE DATA
-//     // =========================================================
-
-//     static {
-
-//         /*
-//          * You can remove these later.
-//          *
-//          * They are only here so that the Scheme page
-//          * is not empty when the application starts.
-//          */
-
-//         Scheme scheme1 = new Scheme(
-//                 UUID.randomUUID().toString(),
-//                 "Sub-Mission on Agricultural Mechanization (SMAM)",
-//                 "Farmers\nFarmer groups\nRegistered agricultural organisations",
-//                 "Financial assistance for agricultural machinery "
-//                         + "and modern farm equipment.",
-//                 true);
-
-//         Scheme scheme2 = new Scheme(
-//                 UUID.randomUUID().toString(),
-//                 "Pradhan Mantri Krishi Sinchai Yojana",
-//                 "Farmers with agricultural land",
-//                 "Supports irrigation development and promotes "
-//                         + "efficient use of water in agriculture.",
-//                 true);
-
-//         schemes.add(scheme1);
-//         schemes.add(scheme2);
-//     }
-
-//     // =========================================================
-//     // ADD SCHEME
-//     // =========================================================
-
-//     public boolean addScheme(Scheme scheme) {
-
-//         try {
-
-//             if (scheme == null) {
-//                 return false;
-//             }
-
-//             // ---------------------------------------------
-//             // GENERATE ID IF MISSING
-//             // ---------------------------------------------
-
-//             if (scheme.getSchemeId() == null ||
-//                     scheme.getSchemeId().trim().isEmpty()) {
-
-//                 scheme.setSchemeId(
-//                         UUID.randomUUID().toString());
-//             }
-
-//             // ---------------------------------------------
-//             // CHECK DUPLICATE ID
-//             // ---------------------------------------------
-
-//             for (Scheme existing : schemes) {
-
-//                 if (existing.getSchemeId()
-//                         .equals(scheme.getSchemeId())) {
-
-//                     System.out.println(
-//                             "Scheme ID already exists.");
-
-//                     return false;
-//                 }
-//             }
-
-//             schemes.add(scheme);
-
-//             System.out.println(
-//                     "Scheme added successfully.");
-
-//             System.out.println(
-//                     "Total schemes: "
-//                             + schemes.size());
-
-//             return true;
-
-//         } catch (Exception e) {
-
-//             System.err.println(
-//                     "Error adding scheme: "
-//                             + e.getMessage());
-
-//             e.printStackTrace();
-
-//             return false;
-//         }
-//     }
-
-//     // =========================================================
-//     // GET ALL SCHEMES
-//     // =========================================================
-
-//     public List<Scheme> getAllSchemes() {
-
-//         /*
-//          * Return a new ArrayList so UI code cannot
-//          * accidentally destroy the original database list.
-//          */
-
-//         return new ArrayList<>(schemes);
-//     }
-
-//     // =========================================================
-//     // GET ONE SCHEME
-//     // =========================================================
-
-//     public Scheme getScheme(String schemeId) {
-
-//         if (schemeId == null ||
-//                 schemeId.trim().isEmpty()) {
-
-//             return null;
-//         }
-
-//         for (Scheme scheme : schemes) {
-
-//             if (schemeId.equals(
-//                     scheme.getSchemeId())) {
-
-//                 return scheme;
-//             }
-//         }
-
-//         return null;
-//     }
-
-//     // =========================================================
-//     // UPDATE SCHEME
-//     // =========================================================
-
-//     public boolean updateScheme(Scheme updatedScheme) {
-
-//         try {
-
-//             if (updatedScheme == null) {
-//                 return false;
-//             }
-
-//             String schemeId =
-//                     updatedScheme.getSchemeId();
-
-//             if (schemeId == null ||
-//                     schemeId.trim().isEmpty()) {
-
-//                 return false;
-//             }
-
-//             for (int i = 0;
-//                     i < schemes.size();
-//                     i++) {
-
-//                 Scheme existing =
-//                         schemes.get(i);
-
-//                 if (schemeId.equals(
-//                         existing.getSchemeId())) {
-
-//                     schemes.set(
-//                             i,
-//                             updatedScheme);
-
-//                     System.out.println(
-//                             "Scheme updated successfully: "
-//                                     + updatedScheme.getSchemeName());
-
-//                     return true;
-//                 }
-//             }
-
-//             System.out.println(
-//                     "Scheme not found for update.");
-
-//             return false;
-
-//         } catch (Exception e) {
-
-//             System.err.println(
-//                     "Error updating scheme: "
-//                             + e.getMessage());
-
-//             e.printStackTrace();
-
-//             return false;
-//         }
-//     }
-
-//     // =========================================================
-//     // DELETE SCHEME
-//     // =========================================================
-
-//     public boolean deleteScheme(String schemeId) {
-
-//         try {
-
-//             if (schemeId == null ||
-//                     schemeId.trim().isEmpty()) {
-
-//                 return false;
-//             }
-
-//             boolean removed =
-//                     schemes.removeIf(
-//                             scheme ->
-//                                     schemeId.equals(
-//                                             scheme.getSchemeId()));
-
-//             if (removed) {
-
-//                 System.out.println(
-//                         "Scheme deleted successfully.");
-
-//                 System.out.println(
-//                         "Remaining schemes: "
-//                                 + schemes.size());
-
-//             } else {
-
-//                 System.out.println(
-//                         "Scheme not found for delete.");
-//             }
-
-//             return removed;
-
-//         } catch (Exception e) {
-
-//             System.err.println(
-//                     "Error deleting scheme: "
-//                             + e.getMessage());
-
-//             e.printStackTrace();
-
-//             return false;
-//         }
-//     }
-
-//     // =========================================================
-//     // CHECK IF SCHEME EXISTS
-//     // =========================================================
-
-//     public boolean exists(
-//             String schemeId) {
-
-//         return getScheme(schemeId) != null;
-//     }
-
-//     // =========================================================
-//     // TOTAL SCHEMES
-//     // =========================================================
-
-//     public int getSchemeCount() {
-
-//         return schemes.size();
-//     }
-
-//     // =========================================================
-//     // CLEAR ALL
-//     // Mainly useful for testing
-//     // =========================================================
-
-//     public void clearAll() {
-
-//         schemes.clear();
-
-//         System.out.println(
-//                 "All temporary schemes cleared.");
-//     }
-// }
 package com.pravartak.dao.admindao;
 
 import java.util.ArrayList;
@@ -316,307 +16,290 @@ import com.pravartak.model.admin.Scheme;
 
 public class SchemeDAO {
 
-    // =========================================================
-    // FIRESTORE COLLECTION
-    // =========================================================
+        // =========================================================
+        // FIRESTORE COLLECTION
+        // =========================================================
 
-    private static final String COLLECTION =
-            "schemes";
+        private static final String COLLECTION = "schemes";
 
-    // =========================================================
-    // FIRESTORE
-    // =========================================================
+        // =========================================================
+        // FIRESTORE
+        // =========================================================
 
-    private Firestore getFirestore() {
+        private Firestore getFirestore() {
 
-        return FirebaseConfig.getFirestore();
-    }
-
-    // =========================================================
-    // ADD SCHEME
-    // =========================================================
-
-    public boolean addScheme(
-            Scheme scheme) {
-
-        try {
-
-            if (scheme == null) {
-
-                System.out.println(
-                        "Scheme is null.");
-
-                return false;
-            }
-
-            // -------------------------------------------------
-            // CREATE ID IF NEEDED
-            // -------------------------------------------------
-
-            String schemeId =
-                    scheme.getSchemeId();
-
-            if (schemeId == null ||
-                    schemeId.trim().isEmpty()) {
-
-                schemeId =
-                        UUID.randomUUID()
-                                .toString();
-
-                scheme.setSchemeId(
-                        schemeId);
-            }
-
-            // -------------------------------------------------
-            // FIRESTORE
-            // -------------------------------------------------
-
-            Firestore db =
-                    getFirestore();
-
-            DocumentReference document =
-                    db.collection(COLLECTION)
-                            .document(schemeId);
-
-            // -------------------------------------------------
-            // SAVE
-            // -------------------------------------------------
-
-            document
-                    .set(scheme)
-                    .get();
-
-            System.out.println(
-                    "Scheme saved successfully.");
-
-            System.out.println(
-                    "Scheme ID: " + schemeId);
-
-            return true;
-
-        } catch (Exception e) {
-
-            System.err.println(
-                    "Error adding scheme:");
-
-            e.printStackTrace();
-
-            return false;
+                return FirebaseConfig.getFirestore();
         }
-    }
 
-    // =========================================================
-    // GET ALL SCHEMES
-    // =========================================================
+        // =========================================================
+        // ADD SCHEME
+        // =========================================================
 
-    public List<Scheme> getAllSchemes() {
+        public boolean addScheme(
+                        Scheme scheme) {
 
-        List<Scheme> schemes =
-                new ArrayList<>();
+                try {
 
-        try {
+                        if (scheme == null) {
 
-            Firestore db =
-                    getFirestore();
+                                System.out.println(
+                                                "Scheme is null.");
 
-            ApiFuture<QuerySnapshot> future =
-                    db.collection(COLLECTION)
-                            .orderBy(
-                                    "schemeName",
-                                    Query.Direction.ASCENDING)
-                            .get();
+                                return false;
+                        }
 
-            QuerySnapshot snapshot =
-                    future.get();
+                        // -------------------------------------------------
+                        // CREATE ID IF NEEDED
+                        // -------------------------------------------------
 
-            for (DocumentSnapshot document :
-                    snapshot.getDocuments()) {
+                        String schemeId = scheme.getSchemeId();
 
-                Scheme scheme =
-                        document.toObject(
-                                Scheme.class);
+                        if (schemeId == null ||
+                                        schemeId.trim().isEmpty()) {
 
-                if (scheme == null) {
-                    continue;
+                                schemeId = UUID.randomUUID()
+                                                .toString();
+
+                                scheme.setSchemeId(
+                                                schemeId);
+                        }
+
+                        // -------------------------------------------------
+                        // FIRESTORE
+                        // -------------------------------------------------
+
+                        Firestore db = getFirestore();
+
+                        DocumentReference document = db.collection(COLLECTION)
+                                        .document(schemeId);
+
+                        // -------------------------------------------------
+                        // SAVE
+                        // -------------------------------------------------
+
+                        document
+                                        .set(scheme)
+                                        .get();
+
+                        System.out.println(
+                                        "Scheme saved successfully.");
+
+                        System.out.println(
+                                        "Scheme ID: " + schemeId);
+
+                        return true;
+
+                } catch (Exception e) {
+
+                        System.err.println(
+                                        "Error adding scheme:");
+
+                        e.printStackTrace();
+
+                        return false;
+                }
+        }
+
+        // =========================================================
+        // GET ALL SCHEMES
+        // =========================================================
+
+        public List<Scheme> getAllSchemes() {
+
+                List<Scheme> schemes = new ArrayList<>();
+
+                try {
+
+                        Firestore db = getFirestore();
+
+                        ApiFuture<QuerySnapshot> future = db.collection(COLLECTION)
+                                        .orderBy(
+                                                        "schemeName",
+                                                        Query.Direction.ASCENDING)
+                                        .get();
+
+                        QuerySnapshot snapshot = future.get();
+
+                        for (DocumentSnapshot document : snapshot.getDocuments()) {
+
+                                Scheme scheme = document.toObject(
+                                                Scheme.class);
+
+                                if (scheme == null) {
+                                        continue;
+                                }
+
+                                // -------------------------------------------------
+                                // SAFETY: USE FIRESTORE DOCUMENT ID
+                                // -------------------------------------------------
+
+                                if (scheme.getSchemeId() == null ||
+                                                scheme.getSchemeId()
+                                                                .trim()
+                                                                .isEmpty()) {
+
+                                        scheme.setSchemeId(
+                                                        document.getId());
+                                }
+
+                                schemes.add(scheme);
+                        }
+
+                        System.out.println(
+                                        "Schemes loaded: "
+                                                        + schemes.size());
+
+                } catch (Exception e) {
+
+                        System.err.println(
+                                        "Error loading schemes:");
+
+                        e.printStackTrace();
                 }
 
-                // -------------------------------------------------
-                // SAFETY: USE FIRESTORE DOCUMENT ID
-                // -------------------------------------------------
+                return schemes;
+        }
 
-                if (scheme.getSchemeId() == null ||
-                        scheme.getSchemeId()
-                                .trim()
-                                .isEmpty()) {
+        // =========================================================
+        // GET ONE SCHEME
+        // =========================================================
 
-                    scheme.setSchemeId(
-                            document.getId());
+        public Scheme getScheme(
+                        String schemeId) {
+
+                try {
+
+                        if (schemeId == null ||
+                                        schemeId.trim().isEmpty()) {
+
+                                return null;
+                        }
+
+                        Firestore db = getFirestore();
+
+                        DocumentSnapshot document = db.collection(COLLECTION)
+                                        .document(
+                                                        schemeId.trim())
+                                        .get()
+                                        .get();
+
+                        if (!document.exists()) {
+
+                                return null;
+                        }
+
+                        Scheme scheme = document.toObject(
+                                        Scheme.class);
+
+                        if (scheme != null) {
+
+                                if (scheme.getSchemeId() == null ||
+                                                scheme.getSchemeId()
+                                                                .trim()
+                                                                .isEmpty()) {
+
+                                        scheme.setSchemeId(
+                                                        document.getId());
+                                }
+                        }
+
+                        return scheme;
+
+                } catch (Exception e) {
+
+                        System.err.println(
+                                        "Error getting scheme:");
+
+                        e.printStackTrace();
+
+                        return null;
                 }
-
-                schemes.add(scheme);
-            }
-
-            System.out.println(
-                    "Schemes loaded: "
-                            + schemes.size());
-
-        } catch (Exception e) {
-
-            System.err.println(
-                    "Error loading schemes:");
-
-            e.printStackTrace();
         }
 
-        return schemes;
-    }
+        // =========================================================
+        // UPDATE SCHEME
+        // =========================================================
 
-    // =========================================================
-    // GET ONE SCHEME
-    // =========================================================
+        public boolean updateScheme(
+                        Scheme scheme) {
 
-    public Scheme getScheme(
-            String schemeId) {
+                try {
 
-        try {
+                        if (scheme == null) {
 
-            if (schemeId == null ||
-                    schemeId.trim().isEmpty()) {
+                                return false;
+                        }
 
-                return null;
-            }
+                        String schemeId = scheme.getSchemeId();
 
-            Firestore db =
-                    getFirestore();
+                        if (schemeId == null ||
+                                        schemeId.trim().isEmpty()) {
 
-            DocumentSnapshot document =
-                    db.collection(COLLECTION)
-                            .document(
-                                    schemeId.trim())
-                            .get()
-                            .get();
+                                return false;
+                        }
 
-            if (!document.exists()) {
+                        Firestore db = getFirestore();
 
-                return null;
-            }
+                        db.collection(COLLECTION)
+                                        .document(
+                                                        schemeId.trim())
+                                        .set(scheme)
+                                        .get();
 
-            Scheme scheme =
-                    document.toObject(
-                            Scheme.class);
+                        System.out.println(
+                                        "Scheme updated successfully: "
+                                                        + schemeId);
 
-            if (scheme != null) {
+                        return true;
 
-                if (scheme.getSchemeId() == null ||
-                        scheme.getSchemeId()
-                                .trim()
-                                .isEmpty()) {
+                } catch (Exception e) {
 
-                    scheme.setSchemeId(
-                            document.getId());
+                        System.err.println(
+                                        "Error updating scheme:");
+
+                        e.printStackTrace();
+
+                        return false;
                 }
-            }
-
-            return scheme;
-
-        } catch (Exception e) {
-
-            System.err.println(
-                    "Error getting scheme:");
-
-            e.printStackTrace();
-
-            return null;
         }
-    }
 
-    // =========================================================
-    // UPDATE SCHEME
-    // =========================================================
+        // =========================================================
+        // DELETE SCHEME
+        // =========================================================
 
-    public boolean updateScheme(
-            Scheme scheme) {
+        public boolean deleteScheme(
+                        String schemeId) {
 
-        try {
+                try {
 
-            if (scheme == null) {
+                        if (schemeId == null ||
+                                        schemeId.trim().isEmpty()) {
 
-                return false;
-            }
+                                return false;
+                        }
 
-            String schemeId =
-                    scheme.getSchemeId();
+                        Firestore db = getFirestore();
 
-            if (schemeId == null ||
-                    schemeId.trim().isEmpty()) {
+                        db.collection(COLLECTION)
+                                        .document(
+                                                        schemeId.trim())
+                                        .delete()
+                                        .get();
 
-                return false;
-            }
+                        System.out.println(
+                                        "Scheme deleted successfully: "
+                                                        + schemeId);
 
-            Firestore db =
-                    getFirestore();
+                        return true;
 
-            db.collection(COLLECTION)
-                    .document(
-                            schemeId.trim())
-                    .set(scheme)
-                    .get();
+                } catch (Exception e) {
 
-            System.out.println(
-                    "Scheme updated successfully: "
-                            + schemeId);
+                        System.err.println(
+                                        "Error deleting scheme:");
 
-            return true;
+                        e.printStackTrace();
 
-        } catch (Exception e) {
-
-            System.err.println(
-                    "Error updating scheme:");
-
-            e.printStackTrace();
-
-            return false;
+                        return false;
+                }
         }
-    }
-
-    // =========================================================
-    // DELETE SCHEME
-    // =========================================================
-
-    public boolean deleteScheme(
-            String schemeId) {
-
-        try {
-
-            if (schemeId == null ||
-                    schemeId.trim().isEmpty()) {
-
-                return false;
-            }
-
-            Firestore db =
-                    getFirestore();
-
-            db.collection(COLLECTION)
-                    .document(
-                            schemeId.trim())
-                    .delete()
-                    .get();
-
-            System.out.println(
-                    "Scheme deleted successfully: "
-                            + schemeId);
-
-            return true;
-
-        } catch (Exception e) {
-
-            System.err.println(
-                    "Error deleting scheme:");
-
-            e.printStackTrace();
-
-            return false;
-        }
-    }
 }

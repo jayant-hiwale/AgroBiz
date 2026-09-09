@@ -8,8 +8,7 @@ import com.pravartak.model.admin.Scheme;
 
 public class SavedSchemesManager {
 
-    private static final List<SavedScheme> savedSchemes =
-            new ArrayList<>();
+    private static final List<SavedScheme> savedSchemes = new ArrayList<>();
 
     // =========================================================
     // SAVED SCHEME
@@ -52,9 +51,7 @@ public class SavedSchemesManager {
             savedSchemes.add(
                     new SavedScheme(
                             scheme,
-                            Instant.now()
-                    )
-            );
+                            Instant.now()));
         }
     }
 
@@ -69,12 +66,9 @@ public class SavedSchemesManager {
         }
 
         savedSchemes.removeIf(
-                savedScheme ->
-                        sameScheme(
-                                savedScheme.getScheme(),
-                                scheme
-                        )
-        );
+                savedScheme -> sameScheme(
+                        savedScheme.getScheme(),
+                        scheme));
     }
 
     // =========================================================
@@ -106,14 +100,12 @@ public class SavedSchemesManager {
 
     public static List<Scheme> getSchemes() {
 
-        List<Scheme> schemes =
-                new ArrayList<>();
+        List<Scheme> schemes = new ArrayList<>();
 
         for (SavedScheme savedScheme : savedSchemes) {
 
             schemes.add(
-                    savedScheme.getScheme()
-            );
+                    savedScheme.getScheme());
         }
 
         return schemes;
@@ -126,8 +118,7 @@ public class SavedSchemesManager {
     public static List<SavedScheme> getSavedSchemes() {
 
         return new ArrayList<>(
-                savedSchemes
-        );
+                savedSchemes);
     }
 
     // =========================================================
@@ -152,41 +143,38 @@ public class SavedSchemesManager {
     // COMPARE SCHEMES
     // =========================================================
 
-   private static boolean sameScheme(
-        Scheme first,
-        Scheme second) {
+    private static boolean sameScheme(
+            Scheme first,
+            Scheme second) {
 
-    if (first == null || second == null) {
-        return false;
+        if (first == null || second == null) {
+            return false;
+        }
+
+        String firstId = first.getSchemeId();
+        String secondId = second.getSchemeId();
+
+        // Compare scheme IDs when available
+        if (firstId != null &&
+                !firstId.trim().isEmpty() &&
+                secondId != null &&
+                !secondId.trim().isEmpty()) {
+
+            return firstId.equals(secondId);
+        }
+
+        // Fallback: compare scheme names
+        String firstName = first.getSchemeName();
+
+        String secondName = second.getSchemeName();
+
+        if (firstName == null ||
+                secondName == null) {
+
+            return false;
+        }
+
+        return firstName.equalsIgnoreCase(
+                secondName);
     }
-
-    String firstId = first.getSchemeId();
-    String secondId = second.getSchemeId();
-
-    // Compare scheme IDs when available
-    if (firstId != null &&
-            !firstId.trim().isEmpty() &&
-            secondId != null &&
-            !secondId.trim().isEmpty()) {
-
-        return firstId.equals(secondId);
-    }
-
-    // Fallback: compare scheme names
-    String firstName =
-            first.getSchemeName();
-
-    String secondName =
-            second.getSchemeName();
-
-    if (firstName == null ||
-            secondName == null) {
-
-        return false;
-    }
-
-    return firstName.equalsIgnoreCase(
-            secondName
-    );
-}
 }

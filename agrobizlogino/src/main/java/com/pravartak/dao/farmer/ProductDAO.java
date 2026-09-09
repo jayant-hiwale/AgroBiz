@@ -9,349 +9,316 @@ import java.util.List;
 
 public class ProductDAO {
 
-    private final Firestore db;
+        private final Firestore db;
 
-    // =====================================================
-    // CONSTRUCTOR
-    // =====================================================
+        // =====================================================
+        // CONSTRUCTOR
+        // =====================================================
 
-    public ProductDAO(Firestore db) {
+        public ProductDAO(Firestore db) {
 
-        if (db == null) {
-            throw new IllegalArgumentException(
-                    "Firestore cannot be null."
-            );
-        }
-
-        this.db = db;
-    }
-
-    // =====================================================
-    // ADD PRODUCT
-    // =====================================================
-
-    public boolean addProduct(
-            Product product) {
-
-        try {
-
-            if (product == null) {
-                return false;
-            }
-
-            // -------------------------------------------------
-            // SET UPLOAD TIME
-            // -------------------------------------------------
-
-            if (product.getCreatedAt() == null) {
-
-                product.setCreatedAt(
-                        Timestamp.now()
-                );
-            }
-
-            // -------------------------------------------------
-            // SAVE PRODUCT
-            // -------------------------------------------------
-
-            db.collection("products")
-                    .document(
-                            String.valueOf(
-                                    product.getProductId()
-                            )
-                    )
-                    .set(product)
-                    .get();
-
-            return true;
-
-        } catch (Exception e) {
-
-            return false;
-        }
-    }
-
-    // =====================================================
-    // GET ALL PRODUCTS
-    // BUYER
-    // =====================================================
-
-    public List<Product> getAllProducts() {
-
-        List<Product> products =
-                new ArrayList<>();
-
-        try {
-
-            var snapshot =
-                    db.collection("products")
-                            .get()
-                            .get();
-
-            for (var document :
-                    snapshot.getDocuments()) {
-
-                Product product =
-                        document.toObject(
-                                Product.class
-                        );
-
-                if (product != null) {
-
-                    products.add(product);
+                if (db == null) {
+                        throw new IllegalArgumentException(
+                                        "Firestore cannot be null.");
                 }
-            }
 
-        } catch (Exception e) {
-
-            // Return products already loaded
+                this.db = db;
         }
 
-        return products;
-    }
+        // =====================================================
+        // ADD PRODUCT
+        // =====================================================
 
-    // =====================================================
-    // GET ONLY CURRENT FARMER PRODUCTS
-    // =====================================================
+        public boolean addProduct(
+                        Product product) {
 
-    public List<Product> getFarmerProducts(
-            int farmerId) {
+                try {
 
-        List<Product> products =
-                new ArrayList<>();
+                        if (product == null) {
+                                return false;
+                        }
 
-        try {
+                        // -------------------------------------------------
+                        // SET UPLOAD TIME
+                        // -------------------------------------------------
 
-            var snapshot =
-                    db.collection("products")
-                            .whereEqualTo(
-                                    "farmerId",
-                                    farmerId
-                            )
-                            .get()
-                            .get();
+                        if (product.getCreatedAt() == null) {
 
-            for (var document :
-                    snapshot.getDocuments()) {
+                                product.setCreatedAt(
+                                                Timestamp.now());
+                        }
 
-                Product product =
-                        document.toObject(
-                                Product.class
-                        );
+                        // -------------------------------------------------
+                        // SAVE PRODUCT
+                        // -------------------------------------------------
 
-                if (product != null) {
+                        db.collection("products")
+                                        .document(
+                                                        String.valueOf(
+                                                                        product.getProductId()))
+                                        .set(product)
+                                        .get();
 
-                    products.add(product);
+                        return true;
+
+                } catch (Exception e) {
+
+                        return false;
                 }
-            }
-
-        } catch (Exception e) {
-
-            // Return empty/loaded list
         }
 
-        return products;
-    }
+        // =====================================================
+        // GET ALL PRODUCTS
+        // BUYER
+        // =====================================================
 
-    // =====================================================
-    // GET SINGLE PRODUCT
-    // =====================================================
+        public List<Product> getAllProducts() {
 
-    public Product getProduct(
-            int productId) {
+                List<Product> products = new ArrayList<>();
 
-        try {
+                try {
 
-            var document =
-                    db.collection("products")
-                            .document(
-                                    String.valueOf(
-                                            productId
-                                    )
-                            )
-                            .get()
-                            .get();
+                        var snapshot = db.collection("products")
+                                        .get()
+                                        .get();
 
-            if (!document.exists()) {
+                        for (var document : snapshot.getDocuments()) {
 
-                return null;
-            }
+                                Product product = document.toObject(
+                                                Product.class);
 
-            return document.toObject(
-                    Product.class
-            );
+                                if (product != null) {
 
-        } catch (Exception e) {
+                                        products.add(product);
+                                }
+                        }
 
-            return null;
-        }
-    }
+                } catch (Exception e) {
 
-    // =====================================================
-    // SEARCH FARMER PRODUCTS
-    // =====================================================
+                        // Return products already loaded
+                }
 
-    public List<Product> searchFarmerProducts(
-            int farmerId,
-            String text) {
-
-        List<Product> products =
-                getFarmerProducts(
-                        farmerId
-                );
-
-        if (text == null ||
-                text.trim().isEmpty()) {
-
-            return products;
+                return products;
         }
 
-        String search =
-                text.trim().toLowerCase();
+        // =====================================================
+        // GET ONLY CURRENT FARMER PRODUCTS
+        // =====================================================
 
-        List<Product> result =
-                new ArrayList<>();
+        public List<Product> getFarmerProducts(
+                        int farmerId) {
 
-        for (Product product :
-                products) {
+                List<Product> products = new ArrayList<>();
 
-            boolean matches =
-                    false;
+                try {
 
-            if (product.getProductName() != null &&
-                    product.getProductName()
-                            .toLowerCase()
-                            .contains(search)) {
+                        var snapshot = db.collection("products")
+                                        .whereEqualTo(
+                                                        "farmerId",
+                                                        farmerId)
+                                        .get()
+                                        .get();
 
-                matches = true;
-            }
+                        for (var document : snapshot.getDocuments()) {
 
-            if (!matches &&
-                    product.getCategory() != null &&
-                    product.getCategory()
-                            .toLowerCase()
-                            .contains(search)) {
+                                Product product = document.toObject(
+                                                Product.class);
 
-                matches = true;
-            }
+                                if (product != null) {
 
-            if (!matches &&
-                    product.getDescription() != null &&
-                    product.getDescription()
-                            .toLowerCase()
-                            .contains(search)) {
+                                        products.add(product);
+                                }
+                        }
 
-                matches = true;
-            }
+                } catch (Exception e) {
 
-            if (!matches &&
-                    product.getLocation() != null &&
-                    product.getLocation()
-                            .toLowerCase()
-                            .contains(search)) {
+                        // Return empty/loaded list
+                }
 
-                matches = true;
-            }
-
-            if (matches) {
-
-                result.add(product);
-            }
+                return products;
         }
 
-        return result;
-    }
+        // =====================================================
+        // GET SINGLE PRODUCT
+        // =====================================================
 
-    // =====================================================
-    // DELETE
-    // =====================================================
+        public Product getProduct(
+                        int productId) {
 
-    public boolean deleteProduct(
-            int productId) {
+                try {
 
-        try {
+                        var document = db.collection("products")
+                                        .document(
+                                                        String.valueOf(
+                                                                        productId))
+                                        .get()
+                                        .get();
 
-            db.collection("products")
-                    .document(
-                            String.valueOf(
-                                    productId
-                            )
-                    )
-                    .delete()
-                    .get();
+                        if (!document.exists()) {
 
-            return true;
+                                return null;
+                        }
 
-        } catch (Exception e) {
+                        return document.toObject(
+                                        Product.class);
 
-            return false;
+                } catch (Exception e) {
+
+                        return null;
+                }
         }
-    }
 
-    // =====================================================
-    // UPDATE
-    // =====================================================
+        // =====================================================
+        // SEARCH FARMER PRODUCTS
+        // =====================================================
 
-    public boolean updateProduct(
-            Product product) {
+        public List<Product> searchFarmerProducts(
+                        int farmerId,
+                        String text) {
 
-        try {
+                List<Product> products = getFarmerProducts(
+                                farmerId);
 
-            if (product == null) {
-                return false;
-            }
+                if (text == null ||
+                                text.trim().isEmpty()) {
 
-            // -------------------------------------------------
-            // GET EXISTING PRODUCT
-            // -------------------------------------------------
+                        return products;
+                }
 
-            Product existingProduct =
-                    getProduct(
-                            product.getProductId()
-                    );
+                String search = text.trim().toLowerCase();
 
-            // -------------------------------------------------
-            // PRESERVE ORIGINAL UPLOAD TIME
-            // -------------------------------------------------
+                List<Product> result = new ArrayList<>();
 
-            if (product.getCreatedAt() == null &&
-                    existingProduct != null &&
-                    existingProduct.getCreatedAt() != null) {
+                for (Product product : products) {
 
-                product.setCreatedAt(
-                        existingProduct.getCreatedAt()
-                );
-            }
+                        boolean matches = false;
 
-            // -------------------------------------------------
-            // IF OLD PRODUCT DOES NOT HAVE TIMESTAMP
-            // -------------------------------------------------
+                        if (product.getProductName() != null &&
+                                        product.getProductName()
+                                                        .toLowerCase()
+                                                        .contains(search)) {
 
-            if (product.getCreatedAt() == null) {
+                                matches = true;
+                        }
 
-                product.setCreatedAt(
-                        Timestamp.now()
-                );
-            }
+                        if (!matches &&
+                                        product.getCategory() != null &&
+                                        product.getCategory()
+                                                        .toLowerCase()
+                                                        .contains(search)) {
 
-            // -------------------------------------------------
-            // UPDATE PRODUCT
-            // -------------------------------------------------
+                                matches = true;
+                        }
 
-            db.collection("products")
-                    .document(
-                            String.valueOf(
-                                    product.getProductId()
-                            )
-                    )
-                    .set(product)
-                    .get();
+                        if (!matches &&
+                                        product.getDescription() != null &&
+                                        product.getDescription()
+                                                        .toLowerCase()
+                                                        .contains(search)) {
 
-            return true;
+                                matches = true;
+                        }
 
-        } catch (Exception e) {
+                        if (!matches &&
+                                        product.getLocation() != null &&
+                                        product.getLocation()
+                                                        .toLowerCase()
+                                                        .contains(search)) {
 
-            return false;
+                                matches = true;
+                        }
+
+                        if (matches) {
+
+                                result.add(product);
+                        }
+                }
+
+                return result;
         }
-    }
+
+        // =====================================================
+        // DELETE
+        // =====================================================
+
+        public boolean deleteProduct(
+                        int productId) {
+
+                try {
+
+                        db.collection("products")
+                                        .document(
+                                                        String.valueOf(
+                                                                        productId))
+                                        .delete()
+                                        .get();
+
+                        return true;
+
+                } catch (Exception e) {
+
+                        return false;
+                }
+        }
+
+        // =====================================================
+        // UPDATE
+        // =====================================================
+
+        public boolean updateProduct(
+                        Product product) {
+
+                try {
+
+                        if (product == null) {
+                                return false;
+                        }
+
+                        // -------------------------------------------------
+                        // GET EXISTING PRODUCT
+                        // -------------------------------------------------
+
+                        Product existingProduct = getProduct(
+                                        product.getProductId());
+
+                        // -------------------------------------------------
+                        // PRESERVE ORIGINAL UPLOAD TIME
+                        // -------------------------------------------------
+
+                        if (product.getCreatedAt() == null &&
+                                        existingProduct != null &&
+                                        existingProduct.getCreatedAt() != null) {
+
+                                product.setCreatedAt(
+                                                existingProduct.getCreatedAt());
+                        }
+
+                        // -------------------------------------------------
+                        // IF OLD PRODUCT DOES NOT HAVE TIMESTAMP
+                        // -------------------------------------------------
+
+                        if (product.getCreatedAt() == null) {
+
+                                product.setCreatedAt(
+                                                Timestamp.now());
+                        }
+
+                        // -------------------------------------------------
+                        // UPDATE PRODUCT
+                        // -------------------------------------------------
+
+                        db.collection("products")
+                                        .document(
+                                                        String.valueOf(
+                                                                        product.getProductId()))
+                                        .set(product)
+                                        .get();
+
+                        return true;
+
+                } catch (Exception e) {
+
+                        return false;
+                }
+        }
 }

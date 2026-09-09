@@ -378,5 +378,4 @@ public class AdminLearning {
                                                 "-fx-cursor:hand;");
         }
 
-
 }

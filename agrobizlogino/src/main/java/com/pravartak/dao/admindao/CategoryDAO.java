@@ -265,7 +265,7 @@ public class CategoryDAO {
             if (!document.exists()) {
 
                 System.out.println(
-                        "Category not found: "+ categoryId);
+                        "Category not found: " + categoryId);
 
                 return false;
             }

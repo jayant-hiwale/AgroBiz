@@ -21,827 +21,696 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import com.pravartak.view.farmer.common.NavBar;
 import com.pravartak.view.farmer.FarmerChatsPage;
+
 public class NavBar {
 
-    // =========================================================
-    // LOGGED-IN FARMER INFORMATION
-    // =========================================================
+        // =========================================================
+        // LOGGED-IN FARMER INFORMATION
+        // =========================================================
 
-    private final int farmerId;
-    private final String firebaseUid;
+        private final int farmerId;
+        private final String firebaseUid;
 
-    // =========================================================
-    // CONSTRUCTOR WITH FARMER ID + FIREBASE UID
-    // =========================================================
+        // =========================================================
+        // CONSTRUCTOR WITH FARMER ID + FIREBASE UID
+        // =========================================================
 
-    public NavBar(
-            int farmerId,
-            String firebaseUid) {
+        public NavBar(
+                        int farmerId,
+                        String firebaseUid) {
 
-        this.farmerId = farmerId;
-        this.firebaseUid = firebaseUid;
+                this.farmerId = farmerId;
+                this.firebaseUid = firebaseUid;
 
-        System.out.println(
-                "NavBar Farmer ID = "
-                        + farmerId
-        );
+                System.out.println(
+                                "NavBar Farmer ID = "
+                                                + farmerId);
 
-        System.out.println(
-                "NavBar Firebase UID = "
-                        + firebaseUid
-        );
-    }
-
-    // =========================================================
-    // DEFAULT CONSTRUCTOR
-    //
-    // This is important because many of your existing pages
-    // use:
-    //
-    // new NavBar().createNavbar(...)
-    //
-    // Instead of setting farmerId = 0, we get the current
-    // logged-in farmer information from LoginPage.
-    // =========================================================
-
-    public NavBar() {
-
-        this.farmerId =
-                LoginPage.getLoggedInFarmerId();
-
-        this.firebaseUid =
-                LoginPage.getLoggedInFirebaseUid();
-
-        System.out.println(
-                "NavBar default constructor"
-        );
-
-        System.out.println(
-                "NavBar Farmer ID = "
-                        + this.farmerId
-        );
-
-        System.out.println(
-                "NavBar Firebase UID = "
-                        + this.firebaseUid
-        );
-    }
-
-    // =========================================================
-    // CREATE NAVBAR
-    // =========================================================
-
-    public HBox createNavbar(
-            String currentPage) {
-
-        HBox navbar =
-                new HBox();
-
-        navbar.setPadding(
-                new Insets(
-                        10,
-                        20,
-                        10,
-                        20
-                )
-        );
-
-        navbar.setAlignment(
-                Pos.CENTER
-        );
-
-        navbar.setStyle(
-                "-fx-background-color:#080c0d;" +
-                "-fx-border-color:#1b2021;" +
-                "-fx-border-width:0 0 1 0;"
-        );
-
-        // =====================================================
-        // LOGO
-        // =====================================================
-
-        Label logo =
-                new Label(
-                        "AgroBiz"
-                );
-
-        logo.setStyle(
-                "-fx-text-fill:#68d34a;" +
-                "-fx-font-size:24px;" +
-                "-fx-font-weight:bold;"
-        );
-
-        HBox left =
-                new HBox(
-                        logo
-                );
-
-        left.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        left.setPrefWidth(
-                300
-        );
-
-        // =====================================================
-        // NAVIGATION BUTTONS
-        // =====================================================
-
-        Button home =
-                navButton("Home");
-
-        Button explorer =
-                navButton("Explorer");
-
-        Button marketplace =
-                navButton("Marketplace");
-                Button chats =
-        navButton("💬 Chats");
-
-        Button community =
-                navButton("Community");
-
-        Button learning =
-                navButton("Learning");
-
-        Button schemes =
-                navButton("Schemes");
-
-        Button aiadvisor =
-                navButton("AI Advisor");
-
-        Button aboutUs = navButton("About Us");
-
-        // =====================================================
-        // HOME
-        // =====================================================
-
-        if ("Home".equals(currentPage)) {
-
-            home.setStyle(
-                    navButtonActive()
-            );
+                System.out.println(
+                                "NavBar Firebase UID = "
+                                                + firebaseUid);
         }
 
-        home.setOnAction(
-                e -> {
+        // =========================================================
+        // DEFAULT CONSTRUCTOR
+        //
+        // This is important because many of your existing pages
+        // use:
+        //
+        // new NavBar().createNavbar(...)
+        //
+        // Instead of setting farmerId = 0, we get the current
+        // logged-in farmer information from LoginPage.
+        // =========================================================
 
-                    System.out.println(
-                            "Home button clicked"
-                    );
+        public NavBar() {
 
-                    if (!checkFarmerId()) {
-                        return;
-                    }
+                this.farmerId = LoginPage.getLoggedInFarmerId();
 
-                    HomePageFarmer homePageFarmer =
-                            new HomePageFarmer(
-                                    farmerId,
-                                    firebaseUid
-                            );
+                this.firebaseUid = LoginPage.getLoggedInFirebaseUid();
 
-                    LoginPage.mainStage.setScene(
-                            homePageFarmer
-                                    .getHomePageFarmer()
-                    );
+                System.out.println(
+                                "NavBar default constructor");
+
+                System.out.println(
+                                "NavBar Farmer ID = "
+                                                + this.farmerId);
+
+                System.out.println(
+                                "NavBar Firebase UID = "
+                                                + this.firebaseUid);
+        }
+
+        // =========================================================
+        // CREATE NAVBAR
+        // =========================================================
+
+        public HBox createNavbar(
+                        String currentPage) {
+
+                HBox navbar = new HBox();
+
+                navbar.setPadding(
+                                new Insets(
+                                                10,
+                                                20,
+                                                10,
+                                                20));
+
+                navbar.setAlignment(
+                                Pos.CENTER);
+
+                navbar.setStyle(
+                                "-fx-background-color:#080c0d;" +
+                                                "-fx-border-color:#1b2021;" +
+                                                "-fx-border-width:0 0 1 0;");
+
+                // =====================================================
+                // LOGO
+                // =====================================================
+
+                Label logo = new Label(
+                                "AgroBiz");
+
+                logo.setStyle(
+                                "-fx-text-fill:#68d34a;" +
+                                                "-fx-font-size:24px;" +
+                                                "-fx-font-weight:bold;");
+
+                HBox left = new HBox(
+                                logo);
+
+                left.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                left.setPrefWidth(
+                                300);
+
+                // =====================================================
+                // NAVIGATION BUTTONS
+                // =====================================================
+
+                Button home = navButton("Home");
+
+                Button explorer = navButton("Explorer");
+
+                Button marketplace = navButton("Marketplace");
+                Button chats = navButton(" Chats");
+
+                Button community = navButton("Community");
+
+                Button learning = navButton("My Learning");
+
+                Button schemes = navButton("Schemes");
+
+                Button aiadvisor = navButton("AI Advisor");
+
+                // =====================================================
+                // HOME
+                // =====================================================
+
+                if ("Home".equals(currentPage)) {
+
+                        home.setStyle(
+                                        navButtonActive());
                 }
-        );
 
-        // =====================================================
-        // EXPLORER
-        // =====================================================
+                home.setOnAction(
+                                e -> {
 
-        if ("Explorer".equals(currentPage)) {
+                                        System.out.println(
+                                                        "Home button clicked");
 
-            explorer.setStyle(
-                    navButtonActive()
-            );
-        }
+                                        if (!checkFarmerId()) {
+                                                return;
+                                        }
 
-        explorer.setOnAction(
-                e -> {
+                                        HomePageFarmer homePageFarmer = new HomePageFarmer(
+                                                        farmerId,
+                                                        firebaseUid);
 
-                    System.out.println(
-                            "Explorer button clicked"
-                    );
+                                        LoginPage.mainStage.setScene(
+                                                        homePageFarmer
+                                                                        .getHomePageFarmer());
+                                });
 
-                    ExplorerPage explorerPage =
-                            new ExplorerPage();
+                // =====================================================
+                // EXPLORER
+                // =====================================================
 
-                    LoginPage.mainStage.setScene(
-                            explorerPage
-                                    .getExplorerPage()
-                    );
+                if ("Explorer".equals(currentPage)) {
+
+                        explorer.setStyle(
+                                        navButtonActive());
                 }
-        );
 
-        // =====================================================
-        // MARKETPLACE
-        // =====================================================
+                explorer.setOnAction(
+                                e -> {
 
-        if ("Marketplace".equals(currentPage)) {
+                                        System.out.println(
+                                                        "Explorer button clicked");
 
-            marketplace.setStyle(
-                    navButtonActive()
-            );
-        }
+                                        ExplorerPage explorerPage = new ExplorerPage();
 
-        marketplace.setOnAction(
-                e -> {
+                                        LoginPage.mainStage.setScene(
+                                                        explorerPage
+                                                                        .getExplorerPage());
+                                });
 
-                    System.out.println(
-                            "MarketButton Clicked"
-                    );
+                // =====================================================
+                // MARKETPLACE
+                // =====================================================
 
-                    System.out.println(
-                            "Farmer ID = "
-                                    + farmerId
-                    );
+                if ("Marketplace".equals(currentPage)) {
 
-                    System.out.println(
-                            "Firebase UID = "
-                                    + firebaseUid
-                    );
-
-                    // -----------------------------------------
-                    // CHECK FARMER ID
-                    // -----------------------------------------
-
-                    if (!checkFarmerId()) {
-                        return;
-                    }
-
-                    // -----------------------------------------
-                    // OPEN MARKETPLACE
-                    // -----------------------------------------
-
-                    MarketPlace marketPlace =
-                            new MarketPlace(
-                                    farmerId,
-                                    firebaseUid
-                            );
-
-                    LoginPage.mainStage.setScene(
-                            marketPlace
-                                    .getMarketPlaceScene()
-                    );
+                        marketplace.setStyle(
+                                        navButtonActive());
                 }
-        );
 
-        //chats button
-        if ("Chats".equals(currentPage)) {
+                marketplace.setOnAction(
+                                e -> {
 
-    chats.setStyle(
-            navButtonActive()
-    );
-}
-chats.setOnAction(e -> {
+                                        System.out.println(
+                                                        "MarketButton Clicked");
 
-    System.out.println(
-            "Farmer Chats clicked"
-    );
+                                        System.out.println(
+                                                        "Farmer ID = "
+                                                                        + farmerId);
 
-    if (!checkFarmerId()) {
-        return;
-    }
+                                        System.out.println(
+                                                        "Firebase UID = "
+                                                                        + firebaseUid);
 
-    FarmerChatsPage chatsPage =
-            new FarmerChatsPage(
-                    farmerId
-            );
+                                        // -----------------------------------------
+                                        // CHECK FARMER ID
+                                        // -----------------------------------------
 
-    BorderPane page =
-            chatsPage.getChatsPage();
+                                        if (!checkFarmerId()) {
+                                                return;
+                                        }
 
-    Scene scene =
-            new Scene(
-                    page,
-                    1400,
-                    850
-            );
+                                        // -----------------------------------------
+                                        // OPEN MARKETPLACE
+                                        // -----------------------------------------
 
-    LoginPage.mainStage.setScene(scene);
+                                        MarketPlace marketPlace = new MarketPlace(
+                                                        farmerId,
+                                                        firebaseUid);
 
-    LoginPage.mainStage.show();
-});
+                                        LoginPage.mainStage.setScene(
+                                                        marketPlace
+                                                                        .getMarketPlaceScene());
+                                });
 
-        // =====================================================
-        // COMMUNITY
-        // =====================================================
+                // chats button
+                if ("Chats".equals(currentPage)) {
 
-        if ("Community".equals(currentPage)) {
+                        chats.setStyle(
+                                        navButtonActive());
+                }
+                chats.setOnAction(e -> {
 
-            community.setStyle(
-                    navButtonActive()
-            );
-        }
+                        System.out.println(
+                                        "Farmer Chats clicked");
 
-        community.setOnAction(
-                e -> {
+                        if (!checkFarmerId()) {
+                                return;
+                        }
 
-                    System.out.println(
-                            "Community button clicked"
-                    );
+                        FarmerChatsPage chatsPage = new FarmerChatsPage(
+                                        farmerId);
 
-                    CommunityPage communityPage =
-        new CommunityPage(
-                farmerId,
-                firebaseUid
-        );
+                        BorderPane page = chatsPage.getChatsPage();
 
-LoginPage.mainStage.setScene(
-        communityPage
-                .getCommunityScene()
+                        Scene scene = new Scene(
+                                        page,
+                                        1400,
+                                        850);
+
+                        LoginPage.mainStage.setScene(scene);
+
+                        LoginPage.mainStage.show();
+                });
+
+                // =====================================================
+                // COMMUNITY
+                // =====================================================
+
+                if ("Community".equals(currentPage)) {
+
+                        community.setStyle(
+                                        navButtonActive());
+                }
+
+                community.setOnAction(
+                                e -> {
+
+                                        System.out.println(
+                                                        "Community button clicked");
+
+                                        CommunityPage communityPage = new CommunityPage(
+                                                        farmerId,
+                                                        firebaseUid);
+
+                                        LoginPage.mainStage.setScene(
+                                                        communityPage
+                                                                        .getCommunityScene());
+                                });
+
+                // =====================================================
+                // LEARNING
+                // =====================================================
+
+                if ("Learning".equals(currentPage)) {
+
+                        learning.setStyle(
+                                        navButtonActive());
+                }
+
+                learning.setOnAction(
+                                e -> {
+
+                                        System.out.println(
+                                                        "Learning button clicked");
+
+                                        LearningPage learningPage = new LearningPage();
+
+                                        LoginPage.mainStage.setScene(
+                                                        learningPage
+                                                                        .get_learning_pageScene());
+                                });
+
+                // =====================================================
+                // SCHEMES
+                // =====================================================
+
+                if ("Schemes".equals(currentPage)) {
+
+                        schemes.setStyle(
+                                        navButtonActive());
+                }
+
+                schemes.setOnAction(
+                                e -> {
+
+                                        System.out.println(
+                                                        "Schemes button clicked");
+
+                                        SchemesPage schemesPage = new SchemesPage();
+
+                                        LoginPage.mainStage.setScene(
+                                                        schemesPage
+                                                                        .getSchemesPage());
+                                });
+
+                // =====================================================
+                // AI ADVISOR
+                // =====================================================
+
+                if ("AI Advisor".equals(currentPage)) {
+
+                        aiadvisor.setStyle(
+                                        navButtonActive());
+                }
+
+                aiadvisor.setOnAction(
+                                e -> {
+
+                                        System.out.println(
+                                                        "AI Advisor button clicked");
+
+                                        AIAdvisorPage ai = new AIAdvisorPage();
+
+                                        LoginPage.mainStage.setScene(
+                                                        ai.getAIAdvisorScene());
+                                });
+
+                // Button reviews =
+                // navButton("⭐ Reviews");
+
+                // if ("Reviews".equals(currentPage)) {
+                // reviews.setStyle(navButtonActive());
+                // }
+
+                // reviews.setOnAction(e -> {
+
+                // if (!checkFarmerId()) {
+                // return;
+                // }
+
+                // BorderPane reviewPage =
+                // new FarmerReviewsPage(
+                // farmerId
+                // ).getReviewsPage();
+
+                // Scene scene =
+                // new Scene(
+                // reviewPage,
+                // 1400,
+                // 850
+                // );
+
+                // LoginPage.mainStage.setScene(
+                // scene
+                // );
+
+                // LoginPage.mainStage.show();
+                // });
+
+                // =====================================================
+                // CENTER NAVIGATION
+                // =====================================================
+
+                HBox center = new HBox(
+        35,
+        home,
+        explorer,
+        learning,
+        marketplace,
+        chats,
+        community,
+        schemes,
+        aiadvisor
 );
+
+                center.setAlignment(
+                                Pos.CENTER);
+                // notification button
+                Button orderRequests = navButton("🔔 ");
+
+                if ("Order Requests".equals(currentPage)) {
+
+                        orderRequests.setStyle(
+                                        navButtonActive());
                 }
-        );
+                orderRequests.setOnAction(e -> {
 
-        // =====================================================
-        // LEARNING
-        // =====================================================
+                        System.out.println(
+                                        "Order Requests clicked");
 
-        if ("Learning".equals(currentPage)) {
+                        if (!checkFarmerId()) {
+                                return;
+                        }
 
-            learning.setStyle(
-                    navButtonActive()
-            );
-        }
+                        FarmerOrderRequestsPage page = new FarmerOrderRequestsPage(
+                                        farmerId);
 
-        learning.setOnAction(
-                e -> {
+                        BorderPane orderPage = page.getOrderRequestsPage();
 
-                    System.out.println(
-                            "Learning button clicked"
-                    );
+                        Scene scene = new Scene(
+                                        orderPage,
+                                        1400,
+                                        850);
 
-                    LearningPage learningPage =
-                            new LearningPage();
+                        LoginPage.mainStage.setScene(scene);
+                        LoginPage.mainStage.show();
+                });
+                // =====================================================
+                // PROFILE BUTTON
+                // =====================================================
 
-                    LoginPage.mainStage.setScene(
-                            learningPage
-                                    .get_learning_pageScene()
-                    );
-                }
-        );
+                Button profile = new Button(
+                                "◎ Profile");
 
-        // =====================================================
-        // SCHEMES
-        // =====================================================
-
-        if ("Schemes".equals(currentPage)) {
-
-            schemes.setStyle(
-                    navButtonActive()
-            );
-        }
-
-        schemes.setOnAction(
-                e -> {
-
-                    System.out.println(
-                            "Schemes button clicked"
-                    );
-
-                    SchemesPage schemesPage =
-                            new SchemesPage();
-
-                    LoginPage.mainStage.setScene(
-                            schemesPage
-                                    .getSchemesPage()
-                    );
-                }
-        );
-
-        // =====================================================
-        // AI ADVISOR
-        // =====================================================
-
-        if ("AI Advisor".equals(currentPage)) {
-
-            aiadvisor.setStyle(
-                    navButtonActive()
-            );
-        }
-
-        aiadvisor.setOnAction(
-                e -> {
-
-                    System.out.println(
-                            "AI Advisor button clicked"
-                    );
-
-                    AIAdvisorPage ai =
-                            new AIAdvisorPage();
-
-                    LoginPage.mainStage.setScene(
-                            ai.getAIAdvisorScene()
-                    );
-                }
-        );
-
-//         Button reviews =
-//         navButton("⭐ Reviews");
-
-// if ("Reviews".equals(currentPage)) {
-//     reviews.setStyle(navButtonActive());
-// }
-
-// reviews.setOnAction(e -> {
-
-//     if (!checkFarmerId()) {
-//         return;
-//     }
-
-//     BorderPane reviewPage =
-//             new FarmerReviewsPage(
-//                     farmerId
-//             ).getReviewsPage();
-
-//     Scene scene =
-//             new Scene(
-//                     reviewPage,
-//                     1400,
-//                     850
-//             );
-
-//     LoginPage.mainStage.setScene(
-//             scene
-//     );
-
-//     LoginPage.mainStage.show();
-// });
-
-
-        // =====================================================
-        // CENTER NAVIGATION
-        // =====================================================
-
-        HBox center =
-                new HBox(
-                        35,
-                        home,
-                        explorer,
-                        marketplace,
-                        chats,
-                        community,
-                        learning,
-                        schemes,
-                        aiadvisor
-                );
-
-        center.setAlignment(
-                Pos.CENTER
-        );
-//notification button
-        Button orderRequests =
-        navButton("🔔 ");
-
-        if ("Order Requests".equals(currentPage)) {
-
-    orderRequests.setStyle(
-            navButtonActive()
-    );
-}
-orderRequests.setOnAction(e -> {
-
-    System.out.println(
-            "Order Requests clicked"
-    );
-
-    if (!checkFarmerId()) {
-        return;
-    }
-
-    FarmerOrderRequestsPage page =
-            new FarmerOrderRequestsPage(
-                    farmerId
-            );
-
-    BorderPane orderPage =
-            page.getOrderRequestsPage();
-
-    Scene scene =
-            new Scene(
-                    orderPage,
-                    1400,
-                    850
-            );
-
-    LoginPage.mainStage.setScene(scene);
-    LoginPage.mainStage.show();
-});
-        // =====================================================
-        // PROFILE BUTTON
-        // =====================================================
-
-        Button profile =
-                new Button(
-                        "◎ Profile"
-                );
-
-        if ("◎ Profile".equals(currentPage)) {
-
-            profile.setStyle(
-                    navButtonActive()
-            );
-
-        } else {
-
-            profile.setStyle(
-                    navButtonNormal()
-            );
-        }
-
-        // =====================================================
-        // PROFILE HOVER
-        // =====================================================
-
-        profile.setOnMouseEntered(
-                e -> {
-
-                    if (!"◎ Profile".equals(currentPage)) {
+                if ("◎ Profile".equals(currentPage)) {
 
                         profile.setStyle(
-                                navButtonHover()
-                        );
-                    }
-                }
-        );
+                                        navButtonActive());
 
-        profile.setOnMouseExited(
-                e -> {
-
-                    if (!"◎ Profile".equals(currentPage)) {
+                } else {
 
                         profile.setStyle(
-                                navButtonNormal()
-                        );
-                    }
+                                        navButtonNormal());
                 }
-        );
 
-        // =====================================================
-        // PROFILE CLICK
-        // =====================================================
+                // =====================================================
+                // PROFILE HOVER
+                // =====================================================
 
-        profile.setOnAction(
-                e -> {
+                profile.setOnMouseEntered(
+                                e -> {
 
-                    System.out.println(
-                            "Profile button clicked"
-                    );
+                                        if (!"◎ Profile".equals(currentPage)) {
 
-                    System.out.println(
-                            "Farmer ID = "
-                                    + farmerId
-                    );
+                                                profile.setStyle(
+                                                                navButtonHover());
+                                        }
+                                });
 
-                    System.out.println(
-                            "Firebase UID = "
-                                    + firebaseUid
-                    );
+                profile.setOnMouseExited(
+                                e -> {
 
-                    if (!checkFarmerId()) {
-                        return;
-                    }
+                                        if (!"◎ Profile".equals(currentPage)) {
 
-                    FarmerDashboard dashboard =
-                            new FarmerDashboard(
-                                    farmerId,
-                                    firebaseUid
-                            );
+                                                profile.setStyle(
+                                                                navButtonNormal());
+                                        }
+                                });
 
-                    LoginPage.mainStage.setScene(
-                            dashboard
-                                    .getDashboardScene()
-                    );
-                }
-        );
+                // =====================================================
+                // PROFILE CLICK
+                // =====================================================
 
-        // =====================================================
-        // RIGHT
-        // =====================================================
-// =====================================================
-// LOGOUT BUTTON
-// =====================================================
+                profile.setOnAction(
+                                e -> {
 
-Button logout =
-        navButton("Logout");
+                                        System.out.println(
+                                                        "Profile button clicked");
 
-// Normal logout style
-logout.setStyle(
-        "-fx-background-color:transparent;" +
-        "-fx-text-fill:#aaaaaa;" +
-        "-fx-font-size:13px;" +
-        "-fx-cursor:hand;" +
-        "-fx-padding:5 0 5 0;"
-);
+                                        System.out.println(
+                                                        "Farmer ID = "
+                                                                        + farmerId);
 
-// Logout hover
-logout.setOnMouseEntered(e -> {
+                                        System.out.println(
+                                                        "Firebase UID = "
+                                                                        + firebaseUid);
 
-    logout.setStyle(
-            "-fx-background-color:transparent;" +
-            "-fx-text-fill:#ff4d5a;" +
-            "-fx-font-size:13px;" +
-            "-fx-font-weight:bold;" +
-            "-fx-cursor:hand;" +
-            "-fx-padding:5 0 5 0;" +
-            "-fx-border-color:#ff4d5a;" +
-            "-fx-border-width:0 0 2 0;"
-    );
-});
+                                        if (!checkFarmerId()) {
+                                                return;
+                                        }
 
-logout.setOnMouseExited(e -> {
+                                        FarmerDashboard dashboard = new FarmerDashboard(
+                                                        farmerId,
+                                                        firebaseUid);
 
-    logout.setStyle(
-            "-fx-background-color:transparent;" +
-            "-fx-text-fill:#aaaaaa;" +
-            "-fx-font-size:13px;" +
-            "-fx-cursor:hand;" +
-            "-fx-padding:5 0 5 0;"
-    );
-});
+                                        LoginPage.mainStage.setScene(
+                                                        dashboard
+                                                                        .getDashboardScene());
+                                });
 
-// =====================================================
-// LOGOUT ACTION
-// =====================================================
+                // =====================================================
+                // LOGOUT BUTTON
+                // =====================================================
 
-logout.setOnAction(e -> {
+                Button logout = navButton("Logout");
 
-    System.out.println(
-            "Farmer logged out."
-    );
+                // Normal logout style
+                logout.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-text-fill:#aaaaaa;" +
+                                                "-fx-font-size:13px;" +
+                                                "-fx-cursor:hand;" +
+                                                "-fx-padding:5 0 5 0;");
 
-    try {
+                // Logout hover
+                logout.setOnMouseEntered(e -> {
 
-        LoginPage loginPage =
-                new LoginPage();
+                        logout.setStyle(
+                                        "-fx-background-color:transparent;" +
+                                                        "-fx-text-fill:#ff4d5a;" +
+                                                        "-fx-font-size:13px;" +
+                                                        "-fx-font-weight:bold;" +
+                                                        "-fx-cursor:hand;" +
+                                                        "-fx-padding:5 0 5 0;" +
+                                                        "-fx-border-color:#ff4d5a;" +
+                                                        "-fx-border-width:0 0 2 0;");
+                });
 
-        /*
-         * Start LoginPage again using the
-         * existing mainStage.
-         */
-        loginPage.start(
-                LoginPage.mainStage
-        );
+                logout.setOnMouseExited(e -> {
 
-    } catch (Exception ex) {
+                        logout.setStyle(
+                                        "-fx-background-color:transparent;" +
+                                                        "-fx-text-fill:#aaaaaa;" +
+                                                        "-fx-font-size:13px;" +
+                                                        "-fx-cursor:hand;" +
+                                                        "-fx-padding:5 0 5 0;");
+                });
 
-        ex.printStackTrace();
-    }
-});
+                // =====================================================
+                // LOGOUT ACTION
+                // =====================================================
 
-// =====================================================
-// RIGHT
-// =====================================================
+                logout.setOnAction(e -> {
 
-HBox right =
-        new HBox(
-                15,
-                orderRequests,
-                profile,
-                logout
-        );
+                        System.out.println(
+                                        "Farmer logged out.");
 
-right.setAlignment(
-        Pos.CENTER_RIGHT
-);
+                        try {
 
-right.setPrefWidth(
-        400
-);
-        // =====================================================
-        // ADD EVERYTHING
-        // =====================================================
+                                LoginPage loginPage = new LoginPage();
 
-        navbar.getChildren()
-                .addAll(
-                        left,
-                        center,
-                        right
-                );
+                                /*
+                                 * Start LoginPage again using the
+                                 * existing mainStage.
+                                 */
+                                loginPage.start(
+                                                LoginPage.mainStage);
 
-        return navbar;
-    }
+                        } catch (Exception ex) {
 
-    // =========================================================
-    // CHECK FARMER ID
-    // =========================================================
+                                ex.printStackTrace();
+                        }
+                });
 
-    private boolean checkFarmerId() {
+                // =====================================================
+                // RIGHT
+                // =====================================================
 
-        if (farmerId <= 0) {
+                HBox right = new HBox(
+                                15,
+                                orderRequests,
+                                profile,
+                                logout);
 
-            System.out.println(
-                    "ERROR: Farmer ID is missing."
-            );
+                right.setAlignment(
+                                Pos.CENTER_RIGHT);
 
-            System.out.println(
-                    "Firebase UID = "
-                            + firebaseUid
-            );
+                right.setPrefWidth(
+                                400);
+                // =====================================================
+                // ADD EVERYTHING
+                // =====================================================
 
-            return false;
+                navbar.getChildren()
+                                .addAll(
+                                                left,
+                                                center,
+                                                right);
+
+                return navbar;
         }
 
-        if (firebaseUid == null ||
-                firebaseUid.trim().isEmpty()) {
+        // =========================================================
+        // CHECK FARMER ID
+        // =========================================================
 
-            System.out.println(
-                    "WARNING: Firebase UID is missing."
-            );
+        private boolean checkFarmerId() {
 
-            // We don't stop Marketplace here because
-            // farmerId is the value required for products.
+                if (farmerId <= 0) {
+
+                        System.out.println(
+                                        "ERROR: Farmer ID is missing.");
+
+                        System.out.println(
+                                        "Firebase UID = "
+                                                        + firebaseUid);
+
+                        return false;
+                }
+
+                if (firebaseUid == null ||
+                                firebaseUid.trim().isEmpty()) {
+
+                        System.out.println(
+                                        "WARNING: Firebase UID is missing.");
+
+                        // We don't stop Marketplace here because
+                        // farmerId is the value required for products.
+                }
+
+                return true;
         }
 
-        return true;
-    }
+        // =========================================================
+        // NORMAL STYLE
+        // =========================================================
 
-    // =========================================================
-    // NORMAL STYLE
-    // =========================================================
+        private String navButtonNormal() {
 
-    private String navButtonNormal() {
+                return "-fx-background-color:transparent;" +
+                                "-fx-text-fill:#aaaaaa;" +
+                                "-fx-font-size:13px;" +
+                                "-fx-cursor:hand;" +
+                                "-fx-padding:5 0 5 0;";
+        }
 
-        return
-                "-fx-background-color:transparent;" +
-                "-fx-text-fill:#aaaaaa;" +
-                "-fx-font-size:13px;" +
-                "-fx-cursor:hand;" +
-                "-fx-padding:5 0 5 0;";
-    }
+        // =========================================================
+        // ACTIVE STYLE
+        // =========================================================
 
-    // =========================================================
-    // ACTIVE STYLE
-    // =========================================================
+        private String navButtonActive() {
 
-    private String navButtonActive() {
+                return "-fx-background-color:transparent;" +
+                                "-fx-text-fill:#68d34a;" +
+                                "-fx-font-size:13px;" +
+                                "-fx-font-weight:bold;" +
+                                "-fx-cursor:hand;" +
+                                "-fx-padding:5 0 5 0;" +
+                                "-fx-border-color:#68d34a;" +
+                                "-fx-border-width:0 0 2 0;";
+        }
 
-        return
-                "-fx-background-color:transparent;" +
-                "-fx-text-fill:#68d34a;" +
-                "-fx-font-size:13px;" +
-                "-fx-font-weight:bold;" +
-                "-fx-cursor:hand;" +
-                "-fx-padding:5 0 5 0;" +
-                "-fx-border-color:#68d34a;" +
-                "-fx-border-width:0 0 2 0;";
-    }
+        // =========================================================
+        // HOVER STYLE
+        // =========================================================
 
-    // =========================================================
-    // HOVER STYLE
-    // =========================================================
+        private String navButtonHover() {
 
-    private String navButtonHover() {
+                return "-fx-background-color:transparent;" +
+                                "-fx-text-fill:#68d34a;" +
+                                "-fx-font-size:13px;" +
+                                "-fx-font-weight:bold;" +
+                                "-fx-cursor:hand;" +
+                                "-fx-padding:5 0 5 0;" +
+                                "-fx-border-color:#68d34a;" +
+                                "-fx-border-width:0 0 2 0;";
+        }
 
-        return
-                "-fx-background-color:transparent;" +
-                "-fx-text-fill:#68d34a;" +
-                "-fx-font-size:13px;" +
-                "-fx-font-weight:bold;" +
-                "-fx-cursor:hand;" +
-                "-fx-padding:5 0 5 0;" +
-                "-fx-border-color:#68d34a;" +
-                "-fx-border-width:0 0 2 0;";
-    }
+        // =========================================================
+        // CREATE NAV BUTTON
+        // =========================================================
 
-    // =========================================================
-    // CREATE NAV BUTTON
-    // =========================================================
+        public Button navButton(
+                        String text) {
 
-    public Button navButton(
-            String text) {
+                Button button = new Button(
+                                text);
 
-        Button button =
-                new Button(
-                        text
-                );
+                String normal = navButtonNormal();
 
-        String normal =
-                navButtonNormal();
+                String hover = navButtonHover();
 
-        String hover =
-                navButtonHover();
+                button.setStyle(
+                                normal);
 
-        button.setStyle(
-                normal
-        );
+                button.setOnMouseEntered(
+                                e -> button.setStyle(
+                                                hover));
 
-        button.setOnMouseEntered(
-                e -> button.setStyle(
-                        hover
-                )
-        );
+                button.setOnMouseExited(
+                                e -> button.setStyle(
+                                                normal));
 
-        button.setOnMouseExited(
-                e -> button.setStyle(
-                        normal
-                )
-        );
-
-        return button;
-    }
+                return button;
+        }
 }

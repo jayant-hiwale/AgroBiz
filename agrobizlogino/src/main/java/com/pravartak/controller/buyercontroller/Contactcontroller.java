@@ -8,11 +8,9 @@ public class Contactcontroller {
 
     private Stage stage;
 
-    // १. Default Constructor (LoginPage साठी)
     public Contactcontroller() {
     }
 
-    // २. Parameterized Constructor
     public Contactcontroller(Stage stage) {
         this.stage = stage;
     }
@@ -25,7 +23,6 @@ public class Contactcontroller {
         return stage;
     }
 
-    
     public void show(Parent root) {
         if (stage != null) {
             if (stage.getScene() == null) {
@@ -37,7 +34,6 @@ public class Contactcontroller {
         }
     }
 
-    
     public void show(Scene scene) {
         if (stage != null) {
             stage.setScene(scene);

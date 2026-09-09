@@ -1111,7 +1111,7 @@ public class AdminModulePage {
                 // TITLE
                 // =====================================================
 
-                Label title = new Label( "No modules yet");
+                Label title = new Label("No modules yet");
 
                 title.setStyle(
                                 "-fx-text-fill:#EEEEEE;" +
@@ -1122,13 +1122,13 @@ public class AdminModulePage {
                 // MESSAGE
                 // =====================================================
 
-                Label message = new Label( "Create your first module for this course.");
+                Label message = new Label("Create your first module for this course.");
 
                 message.setStyle(
                                 "-fx-text-fill:#777777;" +
                                                 "-fx-font-size:10px;");
 
-                box.getChildren().addAll(icon,title, message);
+                box.getChildren().addAll(icon, title, message);
 
                 return box;
         }
@@ -1139,7 +1139,7 @@ public class AdminModulePage {
 
         private void refreshPage() {
 
-                AdminModulePage page = new AdminModulePage( course);
+                AdminModulePage page = new AdminModulePage(course);
 
                 LoginPage.mainStage.setScene(page.getModuleScene());
         }
@@ -1155,8 +1155,8 @@ public class AdminModulePage {
                 LoginPage.mainStage.setScene(adminPage.getAdminPage("Manage Course"));
         }
 
-        private String safe( String value) {
+        private String safe(String value) {
 
-                return value == null? ""  : value;
+                return value == null ? "" : value;
         }
 }

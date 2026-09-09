@@ -1127,7 +1127,6 @@
 //     }
 // }
 
-
 package com.pravartak.view.buyer;
 
 import com.cloudinary.Cloudinary;
@@ -1166,1210 +1165,984 @@ import java.util.concurrent.Executors;
 
 public class BuyerEditProfilePage {
 
-    // =========================================================
-    // FORM FIELDS
-    // =========================================================
+        // =========================================================
+        // FORM FIELDS
+        // =========================================================
 
-    private TextField nameField;
-    private TextField phoneField;
-    private TextField emailField;
-    private TextField locationField;
+        private TextField nameField;
+        private TextField phoneField;
+        private TextField emailField;
+        private TextField locationField;
 
-    private ComboBox<String> buyerTypeBox;
+        private ComboBox<String> buyerTypeBox;
 
-    // =========================================================
-    // PROFILE IMAGE UI
-    // =========================================================
+        // =========================================================
+        // PROFILE IMAGE UI
+        // =========================================================
 
-    private ImageView profileImageView;
+        private ImageView profileImageView;
 
-    private Label imageStatusLabel;
+        private Label imageStatusLabel;
 
-    private Button uploadImageButton;
+        private Button uploadImageButton;
 
-    // =========================================================
-    // FIREBASE
-    // =========================================================
+        // =========================================================
+        // FIREBASE
+        // =========================================================
 
-    private static final String COLLECTION_NAME =
-            "buyers";
+        private static final String COLLECTION_NAME = "buyers";
 
-    private final ExecutorService executor =
-            Executors.newCachedThreadPool();
+        private final ExecutorService executor = Executors.newCachedThreadPool();
 
-    public BuyerEditProfilePage() {
-    }
-
-    // =========================================================
-    // EDIT PROFILE SCENE
-    // =========================================================
-
-    public Scene getEditProfileScene() {
-
-        BorderPane root =
-                new BorderPane();
-
-        root.setPrefSize(
-                1368,
-                768
-        );
-
-        root.setStyle(
-                "-fx-background-color: #06110c;"
-        );
-
-        // =====================================================
-        // HEADER
-        // =====================================================
-
-        VBox header =
-                new VBox(4);
-
-        header.setPadding(
-                new Insets(18, 35, 18, 35)
-        );
-
-        header.setStyle(
-                "-fx-background-color: #0b2613;"
-        );
-
-        Label title =
-                new Label(
-                        "Edit Buyer Profile"
-                );
-
-        title.setStyle(
-                "-fx-font-size: 28px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: white;"
-        );
-
-        Label subtitle =
-                new Label(
-                        "Update your personal and buying information."
-                );
-
-        subtitle.setStyle(
-                "-fx-font-size: 14px;" +
-                "-fx-text-fill: #7f9987;"
-        );
-
-        header.getChildren().addAll(
-                title,
-                subtitle
-        );
-
-        root.setTop(
-                header
-        );
-
-        // =====================================================
-        // FORM CARD
-        // =====================================================
-
-        VBox card =
-                new VBox(25);
-
-        card.setMaxWidth(
-                900
-        );
-
-        card.setPadding(
-                new Insets(30)
-        );
-
-        card.setStyle(
-                "-fx-background-color: #007d00;" +
-                "-fx-background-radius: 15;"
-        );
-
-        // =====================================================
-        // PROFILE IMAGE SECTION
-        // =====================================================
-
-        HBox imageSection =
-                new HBox(20);
-
-        imageSection.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        StackPane imageContainer =
-                createProfileImage();
-
-        VBox imageInfo =
-                new VBox(8);
-
-        imageInfo.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        Label imageTitle =
-                new Label(
-                        "Profile Picture"
-                );
-
-        imageTitle.setStyle(
-                "-fx-font-size: 17px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: white;"
-        );
-
-        Label imageDescription =
-                new Label(
-                        "Upload a profile image for your buyer account."
-                );
-
-        imageDescription.setStyle(
-                "-fx-font-size: 13px;" +
-                "-fx-text-fill: #d4f0d4;"
-        );
-
-        uploadImageButton =
-                new Button(
-                        "Upload Image"
-                );
-
-        uploadImageButton.setPrefWidth(
-                140
-        );
-
-        uploadImageButton.setPrefHeight(
-                38
-        );
-
-        uploadImageButton.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-text-fill: #006b00;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 7;" +
-                "-fx-cursor: hand;"
-        );
-
-        uploadImageButton.setOnAction(
-                e -> uploadImage()
-        );
-
-        imageStatusLabel =
-                new Label("");
-
-        imageStatusLabel.setStyle(
-                "-fx-font-size: 12px;" +
-                "-fx-text-fill: #d4f0d4;"
-        );
-
-        imageInfo.getChildren().addAll(
-                imageTitle,
-                imageDescription,
-                uploadImageButton,
-                imageStatusLabel
-        );
-
-        imageSection.getChildren().addAll(
-                imageContainer,
-                imageInfo
-        );
-
-        // =====================================================
-        // FORM GRID
-        // =====================================================
-
-        GridPane form =
-                new GridPane();
-
-        form.setHgap(
-                25
-        );
-
-        form.setVgap(
-                18
-        );
-
-        // =====================================================
-        // NAME
-        // =====================================================
-
-        Label nameLabel =
-                createLabel(
-                        "Full Name"
-                );
-
-        nameField =
-                createTextField(
-                        BuyerProfilePage.buyerName
-                );
-
-        // =====================================================
-        // PHONE
-        // =====================================================
-
-        Label phoneLabel =
-                createLabel(
-                        "Phone Number"
-                );
-
-        phoneField =
-                createTextField(
-                        BuyerProfilePage.phoneNumber
-                );
-
-        // =====================================================
-        // EMAIL
-        // =====================================================
-
-        Label emailLabel =
-                createLabel(
-                        "Gmail"
-                );
-
-        emailField =
-                createTextField(
-                        BuyerProfilePage.email
-                );
-
-        // =====================================================
-        // LOCATION
-        // =====================================================
-
-        Label locationLabel =
-                createLabel(
-                        "Location"
-                );
-
-        locationField =
-                createTextField(
-                        BuyerProfilePage.location
-                );
-
-        // =====================================================
-        // BUYER TYPE
-        // =====================================================
-
-        Label buyerTypeLabel =
-                createLabel(
-                        "Buyer Type"
-                );
-
-        buyerTypeBox =
-                new ComboBox<>();
-
-        buyerTypeBox.getItems().addAll(
-                "Wholesale Buyer",
-                "Retail Buyer",
-                "Regular Buyer",
-                "Local Buyer"
-        );
-
-        buyerTypeBox.setValue(
-                BuyerProfilePage.buyerType
-        );
-
-        buyerTypeBox.setPrefWidth(
-                350
-        );
-
-        buyerTypeBox.setPrefHeight(
-                40
-        );
-
-        buyerTypeBox.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 7;"
-        );
-
-        // =====================================================
-        // ADD TO GRID
-        // =====================================================
-
-        form.add(
-                nameLabel,
-                0,
-                0
-        );
-
-        form.add(
-                nameField,
-                0,
-                1
-        );
-
-        form.add(
-                phoneLabel,
-                1,
-                0
-        );
-
-        form.add(
-                phoneField,
-                1,
-                1
-        );
-
-        form.add(
-                emailLabel,
-                0,
-                2
-        );
-
-        form.add(
-                emailField,
-                0,
-                3
-        );
-
-        form.add(
-                locationLabel,
-                1,
-                2
-        );
-
-        form.add(
-                locationField,
-                1,
-                3
-        );
-
-        form.add(
-                buyerTypeLabel,
-                0,
-                4
-        );
-
-        form.add(
-                buyerTypeBox,
-                0,
-                5
-        );
-
-        // =====================================================
-        // BUTTON BOX
-        // =====================================================
-
-        HBox buttonBox =
-                new HBox(15);
-
-        buttonBox.setAlignment(
-                Pos.CENTER_RIGHT
-        );
-
-        // =====================================================
-        // CANCEL BUTTON
-        // =====================================================
-
-        Button cancelButton =
-                new Button(
-                        "Cancel"
-                );
-
-        cancelButton.setPrefWidth(
-                120
-        );
-
-        cancelButton.setPrefHeight(
-                40
-        );
-
-        cancelButton.setStyle(
-                "-fx-background-color: #eeeeee;" +
-                "-fx-text-fill: #333333;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 7;" +
-                "-fx-cursor: hand;"
-        );
-
-        cancelButton.setOnAction(e -> {
-
-            BuyerProfilePage profilePage =
-                    new BuyerProfilePage();
-
-            Stage currentStage =
-                    (Stage) cancelButton
-                            .getScene()
-                            .getWindow();
-
-            currentStage.setScene(
-                    profilePage.getProfilePageScene()
-            );
-        });
-
-        // =====================================================
-        // SAVE BUTTON
-        // =====================================================
-
-        Button saveButton =
-                new Button(
-                        "Save Profile"
-                );
-
-        saveButton.setPrefWidth(
-                140
-        );
-
-        saveButton.setPrefHeight(
-                40
-        );
-
-        saveButton.setStyle(
-                "-fx-background-color: #063b0f;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 7;" +
-                "-fx-cursor: hand;"
-        );
-
-        saveButton.setOnAction(
-                e -> saveProfile(saveButton)
-        );
-
-        buttonBox.getChildren().addAll(
-                cancelButton,
-                saveButton
-        );
-
-        card.getChildren().addAll(
-                imageSection,
-                form,
-                buttonBox
-        );
-
-        // =====================================================
-        // CENTER
-        // =====================================================
-
-        VBox centerBox =
-                new VBox();
-
-        centerBox.setAlignment(
-                Pos.TOP_CENTER
-        );
-
-        centerBox.setPadding(
-                new Insets(25)
-        );
-
-        centerBox.getChildren().add(
-                card
-        );
-
-        root.setCenter(
-                centerBox
-        );
-
-        return new Scene(
-                root,
-                1368,
-                768
-        );
-    }
-
-    // =========================================================
-    // CREATE PROFILE IMAGE
-    // =========================================================
-
-    private StackPane createProfileImage() {
-
-        StackPane container =
-                new StackPane();
-
-        container.setPrefSize(
-                105,
-                105
-        );
-
-        container.setMinSize(
-                105,
-                105
-        );
-
-        container.setMaxSize(
-                105,
-                105
-        );
-
-        Circle backgroundCircle =
-                new Circle(
-                        52.5
-                );
-
-        backgroundCircle.setStyle(
-                "-fx-fill: #092d13;"
-        );
-
-        profileImageView =
-                new ImageView();
-
-        profileImageView.setFitWidth(
-                105
-        );
-
-        profileImageView.setFitHeight(
-                105
-        );
-
-        profileImageView.setPreserveRatio(
-                false
-        );
-
-        Circle imageClip =
-                new Circle(
-                        52.5,
-                        52.5,
-                        52.5
-                );
-
-        profileImageView.setClip(
-                imageClip
-        );
-
-        Label initial =
-                new Label(
-                        "B"
-                );
-
-        initial.setStyle(
-                "-fx-font-size: 35px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: white;"
-        );
-
-        container.getChildren().addAll(
-                backgroundCircle,
-                initial,
-                profileImageView
-        );
-
-        // =====================================================
-        // LOAD CURRENT IMAGE
-        // =====================================================
-
-        if (BuyerProfilePage.profileImageUrl != null
-                && !BuyerProfilePage
-                        .profileImageUrl
-                        .trim()
-                        .isEmpty()) {
-
-            setImage(
-                    BuyerProfilePage.profileImageUrl
-            );
+        public BuyerEditProfilePage() {
         }
 
-        return container;
-    }
+        // =========================================================
+        // EDIT PROFILE SCENE
+        // =========================================================
 
-    // =========================================================
-    // SET IMAGE
-    // =========================================================
+        public Scene getEditProfileScene() {
 
-    private void setImage(
-            String imageUrl
-    ) {
+                BorderPane root = new BorderPane();
 
-        if (imageUrl == null
-                || imageUrl.trim().isEmpty()) {
+                root.setPrefSize(
+                                1368,
+                                768);
 
-            return;
-        }
+                root.setStyle(
+                                "-fx-background-color: #06110c;");
 
-        try {
+                // =====================================================
+                // HEADER
+                // =====================================================
 
-            Image image =
-                    new Image(
-                            imageUrl,
-                            105,
-                            105,
-                            false,
-                            true
-                    );
+                VBox header = new VBox(4);
 
-            profileImageView.setImage(
-                    image
-            );
+                header.setPadding(
+                                new Insets(18, 35, 18, 35));
 
-        } catch (Exception e) {
+                header.setStyle(
+                                "-fx-background-color: #0b2613;");
 
-            System.err.println(
-                    "Unable to load profile image."
-            );
+                Label title = new Label(
+                                "Edit Buyer Profile");
 
-            e.printStackTrace();
-        }
-    }
+                title.setStyle(
+                                "-fx-font-size: 28px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-text-fill: white;");
 
-    // =========================================================
-    // UPLOAD IMAGE
-    // =========================================================
+                Label subtitle = new Label(
+                                "Update your personal and buying information.");
 
-    private void uploadImage() {
+                subtitle.setStyle(
+                                "-fx-font-size: 14px;" +
+                                                "-fx-text-fill: #7f9987;");
 
-        // =====================================================
-        // CHECK AUTHENTICATED BUYER
-        // =====================================================
+                header.getChildren().addAll(
+                                title,
+                                subtitle);
 
-        if (BuyerProfilePage.currentBuyerUid == null
-                || BuyerProfilePage.currentBuyerUid
-                        .trim()
-                        .isEmpty()) {
+                root.setTop(
+                                header);
 
-            showAlert(
-                    "Authentication Error",
-                    "Buyer authentication information is not available."
-            );
+                // =====================================================
+                // FORM CARD
+                // =====================================================
 
-            return;
-        }
+                VBox card = new VBox(25);
 
-        // =====================================================
-        // FILE CHOOSER
-        // =====================================================
+                card.setMaxWidth(
+                                900);
 
-        FileChooser fileChooser =
-                new FileChooser();
+                card.setPadding(
+                                new Insets(30));
 
-        fileChooser.setTitle(
-                "Select Buyer Profile Image"
-        );
+                card.setStyle(
+                                "-fx-background-color: #007d00;" +
+                                                "-fx-background-radius: 15;");
 
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter(
-                        "Image Files",
-                        "*.png",
-                        "*.jpg",
-                        "*.jpeg",
-                        "*.webp"
-                )
-        );
+                // =====================================================
+                // PROFILE IMAGE SECTION
+                // =====================================================
 
-        Stage stage =
-                (Stage) uploadImageButton
-                        .getScene()
-                        .getWindow();
+                HBox imageSection = new HBox(20);
 
-        File selectedFile =
-                fileChooser.showOpenDialog(
-                        stage
-                );
+                imageSection.setAlignment(
+                                Pos.CENTER_LEFT);
 
-        if (selectedFile == null) {
+                StackPane imageContainer = createProfileImage();
 
-            return;
-        }
+                VBox imageInfo = new VBox(8);
 
-        // =====================================================
-        // DISABLE BUTTON
-        // =====================================================
+                imageInfo.setAlignment(
+                                Pos.CENTER_LEFT);
 
-        uploadImageButton.setDisable(
-                true
-        );
+                Label imageTitle = new Label(
+                                "Profile Picture");
 
-        uploadImageButton.setText(
-                "Uploading..."
-        );
+                imageTitle.setStyle(
+                                "-fx-font-size: 17px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-text-fill: white;");
 
-        imageStatusLabel.setText(
-                "Uploading image to Cloudinary..."
-        );
+                Label imageDescription = new Label(
+                                "Upload a profile image for your buyer account.");
 
-        // =====================================================
-        // CLOUDINARY UPLOAD
-        // =====================================================
+                imageDescription.setStyle(
+                                "-fx-font-size: 13px;" +
+                                                "-fx-text-fill: #d4f0d4;");
 
-        executor.submit(() -> {
+                uploadImageButton = new Button(
+                                "Upload Image");
 
-            try {
+                uploadImageButton.setPrefWidth(
+                                140);
 
-                Cloudinary cloudinary =
-                        CloudinaryConfig.getCloudinary();
+                uploadImageButton.setPrefHeight(
+                                38);
 
-                Map<String, Object> uploadOptions =
-                        new HashMap<>();
+                uploadImageButton.setStyle(
+                                "-fx-background-color: white;" +
+                                                "-fx-text-fill: #006b00;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-background-radius: 7;" +
+                                                "-fx-cursor: hand;");
 
-                uploadOptions.put(
-                        "folder",
-                        "agrobiz/buyer_profiles"
-                );
+                uploadImageButton.setOnAction(
+                                e -> uploadImage());
 
-                Map<?, ?> uploadResult =
-                        cloudinary.uploader().upload(
-                                selectedFile,
-                                uploadOptions
-                        );
+                imageStatusLabel = new Label("");
 
-                Object secureUrlObject =
-                        uploadResult.get(
-                                "secure_url"
-                        );
+                imageStatusLabel.setStyle(
+                                "-fx-font-size: 12px;" +
+                                                "-fx-text-fill: #d4f0d4;");
 
-                if (secureUrlObject == null) {
+                imageInfo.getChildren().addAll(
+                                imageTitle,
+                                imageDescription,
+                                uploadImageButton,
+                                imageStatusLabel);
 
-                    throw new RuntimeException(
-                            "Cloudinary did not return image URL."
-                    );
-                }
+                imageSection.getChildren().addAll(
+                                imageContainer,
+                                imageInfo);
 
-                String imageUrl =
-                        secureUrlObject.toString();
+                // =====================================================
+                // FORM GRID
+                // =====================================================
 
-                // =================================================
-                // UPDATE LOCAL VALUE
-                // =================================================
+                GridPane form = new GridPane();
 
-                BuyerProfilePage.profileImageUrl =
-                        imageUrl;
+                form.setHgap(
+                                25);
 
-                // =================================================
-                // SAVE IMAGE URL TO SAME FIREBASE DOCUMENT
-                // =================================================
+                form.setVgap(
+                                18);
 
-                saveImageUrlToFirebase(
-                        imageUrl
-                );
+                // =====================================================
+                // NAME
+                // =====================================================
 
-                Platform.runLater(() -> {
+                Label nameLabel = createLabel(
+                                "Full Name");
 
-                    setImage(
-                            imageUrl
-                    );
+                nameField = createTextField(
+                                BuyerProfilePage.buyerName);
 
-                    uploadImageButton.setDisable(
-                            false
-                    );
+                // =====================================================
+                // PHONE
+                // =====================================================
 
-                    uploadImageButton.setText(
-                            "Change Image"
-                    );
+                Label phoneLabel = createLabel(
+                                "Phone Number");
 
-                    imageStatusLabel.setText(
-                            "Image uploaded successfully."
-                    );
+                phoneField = createTextField(
+                                BuyerProfilePage.phoneNumber);
+
+                // =====================================================
+                // EMAIL
+                // =====================================================
+
+                Label emailLabel = createLabel(
+                                "Gmail");
+
+                emailField = createTextField(
+                                BuyerProfilePage.email);
+
+                // =====================================================
+                // LOCATION
+                // =====================================================
+
+                Label locationLabel = createLabel(
+                                "Location");
+
+                locationField = createTextField(
+                                BuyerProfilePage.location);
+
+                // =====================================================
+                // BUYER TYPE
+                // =====================================================
+
+                Label buyerTypeLabel = createLabel(
+                                "Buyer Type");
+
+                buyerTypeBox = new ComboBox<>();
+
+                buyerTypeBox.getItems().addAll(
+                                "Wholesale Buyer",
+                                "Retail Buyer",
+                                "Regular Buyer",
+                                "Local Buyer");
+
+                buyerTypeBox.setValue(
+                                BuyerProfilePage.buyerType);
+
+                buyerTypeBox.setPrefWidth(
+                                350);
+
+                buyerTypeBox.setPrefHeight(
+                                40);
+
+                buyerTypeBox.setStyle(
+                                "-fx-background-color: white;" +
+                                                "-fx-background-radius: 7;");
+
+                // =====================================================
+                // ADD TO GRID
+                // =====================================================
+
+                form.add(
+                                nameLabel,
+                                0,
+                                0);
+
+                form.add(
+                                nameField,
+                                0,
+                                1);
+
+                form.add(
+                                phoneLabel,
+                                1,
+                                0);
+
+                form.add(
+                                phoneField,
+                                1,
+                                1);
+
+                form.add(
+                                emailLabel,
+                                0,
+                                2);
+
+                form.add(
+                                emailField,
+                                0,
+                                3);
+
+                form.add(
+                                locationLabel,
+                                1,
+                                2);
+
+                form.add(
+                                locationField,
+                                1,
+                                3);
+
+                form.add(
+                                buyerTypeLabel,
+                                0,
+                                4);
+
+                form.add(
+                                buyerTypeBox,
+                                0,
+                                5);
+
+                // =====================================================
+                // BUTTON BOX
+                // =====================================================
+
+                HBox buttonBox = new HBox(15);
+
+                buttonBox.setAlignment(
+                                Pos.CENTER_RIGHT);
+
+                // =====================================================
+                // CANCEL BUTTON
+                // =====================================================
+
+                Button cancelButton = new Button(
+                                "Cancel");
+
+                cancelButton.setPrefWidth(
+                                120);
+
+                cancelButton.setPrefHeight(
+                                40);
+
+                cancelButton.setStyle(
+                                "-fx-background-color: #eeeeee;" +
+                                                "-fx-text-fill: #333333;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-background-radius: 7;" +
+                                                "-fx-cursor: hand;");
+
+                cancelButton.setOnAction(e -> {
+
+                        BuyerProfilePage profilePage = new BuyerProfilePage();
+
+                        Stage currentStage = (Stage) cancelButton
+                                        .getScene()
+                                        .getWindow();
+
+                        currentStage.setScene(
+                                        profilePage.getProfilePageScene());
                 });
 
-            } catch (Exception ex) {
+                // =====================================================
+                // SAVE BUTTON
+                // =====================================================
 
-                ex.printStackTrace();
+                Button saveButton = new Button(
+                                "Save Profile");
 
-                Platform.runLater(() -> {
+                saveButton.setPrefWidth(
+                                140);
 
-                    uploadImageButton.setDisable(
-                            false
-                    );
+                saveButton.setPrefHeight(
+                                40);
 
-                    uploadImageButton.setText(
-                            "Upload Image"
-                    );
+                saveButton.setStyle(
+                                "-fx-background-color: #063b0f;" +
+                                                "-fx-text-fill: white;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-background-radius: 7;" +
+                                                "-fx-cursor: hand;");
 
-                    imageStatusLabel.setText(
-                            "Image upload failed."
-                    );
-                });
-            }
-        });
-    }
+                saveButton.setOnAction(
+                                e -> saveProfile(saveButton));
 
-    // =========================================================
-    // SAVE IMAGE URL TO FIREBASE
-    // =========================================================
+                buttonBox.getChildren().addAll(
+                                cancelButton,
+                                saveButton);
 
-    private void saveImageUrlToFirebase(
-            String imageUrl
-    ) {
+                card.getChildren().addAll(
+                                imageSection,
+                                form,
+                                buttonBox);
 
-        executor.submit(() -> {
+                // =====================================================
+                // CENTER
+                // =====================================================
 
-            try {
+                VBox centerBox = new VBox();
 
-                Firestore db =
-                        FirebaseConfig.getFirestore();
+                centerBox.setAlignment(
+                                Pos.TOP_CENTER);
 
-                // =================================================
-                // IMPORTANT:
-                // UID IS THE DOCUMENT ID
-                // =================================================
+                centerBox.setPadding(
+                                new Insets(25));
 
-                String documentId =
-                        BuyerProfilePage
-                                .currentBuyerUid
-                                .trim();
+                centerBox.getChildren().add(
+                                card);
 
-                Map<String, Object> data =
-                        new HashMap<>();
+                root.setCenter(
+                                centerBox);
 
-                data.put(
-                        "profileImageUrl",
-                        imageUrl
-                );
-
-                ApiFuture<?> future =
-                        db.collection(
-                                COLLECTION_NAME
-                        )
-                        .document(
-                                documentId
-                        )
-                        .set(
-                                data,
-                                SetOptions.merge()
-                        );
-
-                future.get();
-
-                System.out.println(
-                        "Profile image URL saved to buyer UID document."
-                );
-
-            } catch (Exception e) {
-
-                System.err.println(
-                        "Unable to save image URL to Firebase."
-                );
-
-                e.printStackTrace();
-            }
-        });
-    }
-
-    // =========================================================
-    // SAVE PROFILE
-    // =========================================================
-
-    private void saveProfile(
-            Button saveButton
-    ) {
-
-        // =====================================================
-        // CHECK UID
-        // =====================================================
-
-        if (BuyerProfilePage.currentBuyerUid == null
-                || BuyerProfilePage.currentBuyerUid
-                        .trim()
-                        .isEmpty()) {
-
-            showAlert(
-                    "Authentication Error",
-                    "Buyer authentication information is not available."
-            );
-
-            return;
+                return new Scene(
+                                root,
+                                1368,
+                                768);
         }
 
-        // =====================================================
-        // GET VALUES
-        // =====================================================
+        // =========================================================
+        // CREATE PROFILE IMAGE
+        // =========================================================
 
-        String newName =
-                nameField.getText().trim();
+        private StackPane createProfileImage() {
 
-        String newPhone =
-                phoneField.getText().trim();
+                StackPane container = new StackPane();
 
-        String newEmail =
-                emailField.getText().trim();
+                container.setPrefSize(
+                                105,
+                                105);
 
-        String newLocation =
-                locationField.getText().trim();
+                container.setMinSize(
+                                105,
+                                105);
 
-        String newBuyerType =
-                buyerTypeBox.getValue();
+                container.setMaxSize(
+                                105,
+                                105);
 
-        // =====================================================
-        // BASIC VALIDATION
-        // =====================================================
+                Circle backgroundCircle = new Circle(
+                                52.5);
 
-        if (newName.isEmpty()
-                || newPhone.isEmpty()
-                || newEmail.isEmpty()
-                || newLocation.isEmpty()
-                || newBuyerType == null) {
+                backgroundCircle.setStyle(
+                                "-fx-fill: #092d13;");
 
-            showAlert(
-                    "Missing Information",
-                    "Please fill all profile fields."
-            );
+                profileImageView = new ImageView();
 
-            return;
-        }
+                profileImageView.setFitWidth(
+                                105);
 
-        // =====================================================
-        // EMAIL VALIDATION
-        // =====================================================
+                profileImageView.setFitHeight(
+                                105);
 
-        if (!newEmail.matches(
-                "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+                profileImageView.setPreserveRatio(
+                                false);
 
-            showAlert(
-                    "Invalid Email",
-                    "Please enter a valid email address."
-            );
+                Circle imageClip = new Circle(
+                                52.5,
+                                52.5,
+                                52.5);
 
-            return;
-        }
+                profileImageView.setClip(
+                                imageClip);
 
-        // =====================================================
-        // DISABLE BUTTON
-        // =====================================================
+                Label initial = new Label(
+                                "B");
 
-        saveButton.setDisable(
-                true
-        );
+                initial.setStyle(
+                                "-fx-font-size: 35px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-text-fill: white;");
 
-        saveButton.setText(
-                "Saving..."
-        );
+                container.getChildren().addAll(
+                                backgroundCircle,
+                                initial,
+                                profileImageView);
 
-        // =====================================================
-        // UPDATE LOCAL VALUES
-        // =====================================================
-
-        BuyerProfilePage.buyerName =
-                newName;
-
-        BuyerProfilePage.phoneNumber =
-                newPhone;
-
-        BuyerProfilePage.email =
-                newEmail;
-
-        BuyerProfilePage.location =
-                newLocation;
-
-        BuyerProfilePage.buyerType =
-                newBuyerType;
-
-        // =====================================================
-        // FIREBASE SAVE
-        // =====================================================
-
-        executor.submit(() -> {
-
-            try {
-
-                Firestore db =
-                        FirebaseConfig.getFirestore();
-
-                // =================================================
-                // VERY IMPORTANT
-                //
-                // NEVER USE EMAIL AS DOCUMENT ID
-                //
-                // ALWAYS USE FIREBASE UID
-                // =================================================
-
-                String documentId =
-                        BuyerProfilePage
-                                .currentBuyerUid
-                                .trim();
-
-                // =================================================
-                // PROFILE DATA
-                // =================================================
-
-                Map<String, Object> profileData =
-                        new HashMap<>();
-
-                profileData.put(
-                        "uid",
-                        documentId
-                );
-
-                profileData.put(
-                        "name",
-                        newName
-                );
-
-                profileData.put(
-                        "phone",
-                        newPhone
-                );
-
-                profileData.put(
-                        "email",
-                        newEmail
-                );
-
-                profileData.put(
-                        "location",
-                        newLocation
-                );
-
-                profileData.put(
-                        "buyerType",
-                        newBuyerType
-                );
-
-                // =================================================
-                // KEEP CLOUDINARY IMAGE URL
-                // =================================================
+                // =====================================================
+                // LOAD CURRENT IMAGE
+                // =====================================================
 
                 if (BuyerProfilePage.profileImageUrl != null
-                        && !BuyerProfilePage
-                                .profileImageUrl
-                                .trim()
-                                .isEmpty()) {
+                                && !BuyerProfilePage.profileImageUrl
+                                                .trim()
+                                                .isEmpty()) {
 
-                    profileData.put(
-                            "profileImageUrl",
-                            BuyerProfilePage.profileImageUrl
-                    );
+                        setImage(
+                                        BuyerProfilePage.profileImageUrl);
                 }
 
-                // =================================================
-                // SAVE TO SAME UID DOCUMENT
-                // =================================================
+                return container;
+        }
 
-                ApiFuture<?> future =
-                        db.collection(
-                                COLLECTION_NAME
-                        )
-                        .document(
-                                documentId
-                        )
-                        .set(
-                                profileData,
-                                SetOptions.merge()
-                        );
+        // =========================================================
+        // SET IMAGE
+        // =========================================================
 
-                future.get();
+        private void setImage(
+                        String imageUrl) {
 
-                System.out.println(
-                        "Buyer profile saved successfully."
-                );
+                if (imageUrl == null
+                                || imageUrl.trim().isEmpty()) {
 
-                System.out.println(
-                        "Buyer document ID = "
-                                + documentId
-                );
+                        return;
+                }
 
-                // =================================================
-                // UI
-                // =================================================
+                try {
 
-                Platform.runLater(() -> {
+                        Image image = new Image(
+                                        imageUrl,
+                                        105,
+                                        105,
+                                        false,
+                                        true);
 
-                    saveButton.setDisable(
-                            false
-                    );
+                        profileImageView.setImage(
+                                        image);
 
-                    saveButton.setText(
-                            "Save Profile"
-                    );
+                } catch (Exception e) {
 
-                    BuyerProfilePage profilePage =
-                            new BuyerProfilePage();
+                        System.err.println(
+                                        "Unable to load profile image.");
 
-                    Stage currentStage =
-                            (Stage) saveButton
-                                    .getScene()
-                                    .getWindow();
+                        e.printStackTrace();
+                }
+        }
 
-                    currentStage.setScene(
-                            profilePage
-                                    .getProfilePageScene()
-                    );
+        // =========================================================
+        // UPLOAD IMAGE
+        // =========================================================
+
+        private void uploadImage() {
+
+                // =====================================================
+                // CHECK AUTHENTICATED BUYER
+                // =====================================================
+
+                if (BuyerProfilePage.currentBuyerUid == null
+                                || BuyerProfilePage.currentBuyerUid
+                                                .trim()
+                                                .isEmpty()) {
+
+                        showAlert(
+                                        "Authentication Error",
+                                        "Buyer authentication information is not available.");
+
+                        return;
+                }
+
+                // =====================================================
+                // FILE CHOOSER
+                // =====================================================
+
+                FileChooser fileChooser = new FileChooser();
+
+                fileChooser.setTitle(
+                                "Select Buyer Profile Image");
+
+                fileChooser.getExtensionFilters().add(
+                                new FileChooser.ExtensionFilter(
+                                                "Image Files",
+                                                "*.png",
+                                                "*.jpg",
+                                                "*.jpeg",
+                                                "*.webp"));
+
+                Stage stage = (Stage) uploadImageButton
+                                .getScene()
+                                .getWindow();
+
+                File selectedFile = fileChooser.showOpenDialog(
+                                stage);
+
+                if (selectedFile == null) {
+
+                        return;
+                }
+
+                // =====================================================
+                // DISABLE BUTTON
+                // =====================================================
+
+                uploadImageButton.setDisable(
+                                true);
+
+                uploadImageButton.setText(
+                                "Uploading...");
+
+                imageStatusLabel.setText(
+                                "Uploading image to Cloudinary...");
+
+                // =====================================================
+                // CLOUDINARY UPLOAD
+                // =====================================================
+
+                executor.submit(() -> {
+
+                        try {
+
+                                Cloudinary cloudinary = CloudinaryConfig.getCloudinary();
+
+                                Map<String, Object> uploadOptions = new HashMap<>();
+
+                                uploadOptions.put(
+                                                "folder",
+                                                "agrobiz/buyer_profiles");
+
+                                Map<?, ?> uploadResult = cloudinary.uploader().upload(
+                                                selectedFile,
+                                                uploadOptions);
+
+                                Object secureUrlObject = uploadResult.get(
+                                                "secure_url");
+
+                                if (secureUrlObject == null) {
+
+                                        throw new RuntimeException(
+                                                        "Cloudinary did not return image URL.");
+                                }
+
+                                String imageUrl = secureUrlObject.toString();
+
+                                // =================================================
+                                // UPDATE LOCAL VALUE
+                                // =================================================
+
+                                BuyerProfilePage.profileImageUrl = imageUrl;
+
+                                // =================================================
+                                // SAVE IMAGE URL TO SAME FIREBASE DOCUMENT
+                                // =================================================
+
+                                saveImageUrlToFirebase(
+                                                imageUrl);
+
+                                Platform.runLater(() -> {
+
+                                        setImage(
+                                                        imageUrl);
+
+                                        uploadImageButton.setDisable(
+                                                        false);
+
+                                        uploadImageButton.setText(
+                                                        "Change Image");
+
+                                        imageStatusLabel.setText(
+                                                        "Image uploaded successfully.");
+                                });
+
+                        } catch (Exception ex) {
+
+                                ex.printStackTrace();
+
+                                Platform.runLater(() -> {
+
+                                        uploadImageButton.setDisable(
+                                                        false);
+
+                                        uploadImageButton.setText(
+                                                        "Upload Image");
+
+                                        imageStatusLabel.setText(
+                                                        "Image upload failed.");
+                                });
+                        }
                 });
+        }
 
-            } catch (Exception ex) {
+        // =========================================================
+        // SAVE IMAGE URL TO FIREBASE
+        // =========================================================
 
-                ex.printStackTrace();
+        private void saveImageUrlToFirebase(
+                        String imageUrl) {
 
-                Platform.runLater(() -> {
+                executor.submit(() -> {
 
-                    saveButton.setDisable(
-                            false
-                    );
+                        try {
 
-                    saveButton.setText(
-                            "Save Profile"
-                    );
+                                Firestore db = FirebaseConfig.getFirestore();
 
-                    showAlert(
-                            "Save Failed",
-                            "Unable to save buyer profile to Firebase."
-                    );
+                                // =================================================
+                                // IMPORTANT:
+                                // UID IS THE DOCUMENT ID
+                                // =================================================
+
+                                String documentId = BuyerProfilePage.currentBuyerUid
+                                                .trim();
+
+                                Map<String, Object> data = new HashMap<>();
+
+                                data.put(
+                                                "profileImageUrl",
+                                                imageUrl);
+
+                                ApiFuture<?> future = db.collection(
+                                                COLLECTION_NAME)
+                                                .document(
+                                                                documentId)
+                                                .set(
+                                                                data,
+                                                                SetOptions.merge());
+
+                                future.get();
+
+                                System.out.println(
+                                                "Profile image URL saved to buyer UID document.");
+
+                        } catch (Exception e) {
+
+                                System.err.println(
+                                                "Unable to save image URL to Firebase.");
+
+                                e.printStackTrace();
+                        }
                 });
-            }
-        });
-    }
+        }
 
-    // =========================================================
-    // ALERT
-    // =========================================================
+        // =========================================================
+        // SAVE PROFILE
+        // =========================================================
 
-    private void showAlert(
-            String title,
-            String message
-    ) {
+        private void saveProfile(
+                        Button saveButton) {
 
-        Alert alert =
-                new Alert(
-                        AlertType.ERROR
-                );
+                // =====================================================
+                // CHECK UID
+                // =====================================================
 
-        alert.setTitle(
-                title
-        );
+                if (BuyerProfilePage.currentBuyerUid == null
+                                || BuyerProfilePage.currentBuyerUid
+                                                .trim()
+                                                .isEmpty()) {
 
-        alert.setHeaderText(
-                null
-        );
+                        showAlert(
+                                        "Authentication Error",
+                                        "Buyer authentication information is not available.");
 
-        alert.setContentText(
-                message
-        );
+                        return;
+                }
 
-        alert.showAndWait();
-    }
+                // =====================================================
+                // GET VALUES
+                // =====================================================
 
-    // =========================================================
-    // CREATE LABEL
-    // =========================================================
+                String newName = nameField.getText().trim();
 
-    private Label createLabel(
-            String text
-    ) {
+                String newPhone = phoneField.getText().trim();
 
-        Label label =
-                new Label(
-                        text
-                );
+                String newEmail = emailField.getText().trim();
 
-        label.setStyle(
-                "-fx-font-size: 14px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: white;"
-        );
+                String newLocation = locationField.getText().trim();
 
-        return label;
-    }
+                String newBuyerType = buyerTypeBox.getValue();
 
-    // =========================================================
-    // CREATE TEXT FIELD
-    // =========================================================
+                // =====================================================
+                // BASIC VALIDATION
+                // =====================================================
 
-    private TextField createTextField(
-            String value
-    ) {
+                if (newName.isEmpty()
+                                || newPhone.isEmpty()
+                                || newEmail.isEmpty()
+                                || newLocation.isEmpty()
+                                || newBuyerType == null) {
 
-        TextField field =
-                new TextField(
-                        value
-                );
+                        showAlert(
+                                        "Missing Information",
+                                        "Please fill all profile fields.");
 
-        field.setPrefWidth(
-                350
-        );
+                        return;
+                }
 
-        field.setPrefHeight(
-                40
-        );
+                // =====================================================
+                // EMAIL VALIDATION
+                // =====================================================
 
-        field.setStyle(
-                "-fx-background-color: white;" +
-                "-fx-background-radius: 7;" +
-                "-fx-border-radius: 7;" +
-                "-fx-padding: 8;"
-        );
+                if (!newEmail.matches(
+                                "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
 
-        return field;
-    }
+                        showAlert(
+                                        "Invalid Email",
+                                        "Please enter a valid email address.");
+
+                        return;
+                }
+
+                // =====================================================
+                // DISABLE BUTTON
+                // =====================================================
+
+                saveButton.setDisable(
+                                true);
+
+                saveButton.setText(
+                                "Saving...");
+
+                // =====================================================
+                // UPDATE LOCAL VALUES
+                // =====================================================
+
+                BuyerProfilePage.buyerName = newName;
+
+                BuyerProfilePage.phoneNumber = newPhone;
+
+                BuyerProfilePage.email = newEmail;
+
+                BuyerProfilePage.location = newLocation;
+
+                BuyerProfilePage.buyerType = newBuyerType;
+
+                // =====================================================
+                // FIREBASE SAVE
+                // =====================================================
+
+                executor.submit(() -> {
+
+                        try {
+
+                                Firestore db = FirebaseConfig.getFirestore();
+
+                                // =================================================
+                                // VERY IMPORTANT
+                                //
+                                // NEVER USE EMAIL AS DOCUMENT ID
+                                //
+                                // ALWAYS USE FIREBASE UID
+                                // =================================================
+
+                                String documentId = BuyerProfilePage.currentBuyerUid
+                                                .trim();
+
+                                // =================================================
+                                // PROFILE DATA
+                                // =================================================
+
+                                Map<String, Object> profileData = new HashMap<>();
+
+                                profileData.put(
+                                                "uid",
+                                                documentId);
+
+                                profileData.put(
+                                                "name",
+                                                newName);
+
+                                profileData.put(
+                                                "phone",
+                                                newPhone);
+
+                                profileData.put(
+                                                "email",
+                                                newEmail);
+
+                                profileData.put(
+                                                "location",
+                                                newLocation);
+
+                                profileData.put(
+                                                "buyerType",
+                                                newBuyerType);
+
+                                // =================================================
+                                // KEEP CLOUDINARY IMAGE URL
+                                // =================================================
+
+                                if (BuyerProfilePage.profileImageUrl != null
+                                                && !BuyerProfilePage.profileImageUrl
+                                                                .trim()
+                                                                .isEmpty()) {
+
+                                        profileData.put(
+                                                        "profileImageUrl",
+                                                        BuyerProfilePage.profileImageUrl);
+                                }
+
+                                // =================================================
+                                // SAVE TO SAME UID DOCUMENT
+                                // =================================================
+
+                                ApiFuture<?> future = db.collection(
+                                                COLLECTION_NAME)
+                                                .document(
+                                                                documentId)
+                                                .set(
+                                                                profileData,
+                                                                SetOptions.merge());
+
+                                future.get();
+
+                                System.out.println(
+                                                "Buyer profile saved successfully.");
+
+                                System.out.println(
+                                                "Buyer document ID = "
+                                                                + documentId);
+
+                                // =================================================
+                                // UI
+                                // =================================================
+
+                                Platform.runLater(() -> {
+
+                                        saveButton.setDisable(
+                                                        false);
+
+                                        saveButton.setText(
+                                                        "Save Profile");
+
+                                        BuyerProfilePage profilePage = new BuyerProfilePage();
+
+                                        Stage currentStage = (Stage) saveButton
+                                                        .getScene()
+                                                        .getWindow();
+
+                                        currentStage.setScene(
+                                                        profilePage
+                                                                        .getProfilePageScene());
+                                });
+
+                        } catch (Exception ex) {
+
+                                ex.printStackTrace();
+
+                                Platform.runLater(() -> {
+
+                                        saveButton.setDisable(
+                                                        false);
+
+                                        saveButton.setText(
+                                                        "Save Profile");
+
+                                        showAlert(
+                                                        "Save Failed",
+                                                        "Unable to save buyer profile to Firebase.");
+                                });
+                        }
+                });
+        }
+
+        // =========================================================
+        // ALERT
+        // =========================================================
+
+        private void showAlert(
+                        String title,
+                        String message) {
+
+                Alert alert = new Alert(
+                                AlertType.ERROR);
+
+                alert.setTitle(
+                                title);
+
+                alert.setHeaderText(
+                                null);
+
+                alert.setContentText(
+                                message);
+
+                alert.showAndWait();
+        }
+
+        // =========================================================
+        // CREATE LABEL
+        // =========================================================
+
+        private Label createLabel(
+                        String text) {
+
+                Label label = new Label(
+                                text);
+
+                label.setStyle(
+                                "-fx-font-size: 14px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-text-fill: white;");
+
+                return label;
+        }
+
+        // =========================================================
+        // CREATE TEXT FIELD
+        // =========================================================
+
+        private TextField createTextField(
+                        String value) {
+
+                TextField field = new TextField(
+                                value);
+
+                field.setPrefWidth(
+                                350);
+
+                field.setPrefHeight(
+                                40);
+
+                field.setStyle(
+                                "-fx-background-color: white;" +
+                                                "-fx-background-radius: 7;" +
+                                                "-fx-border-radius: 7;" +
+                                                "-fx-padding: 8;");
+
+                return field;
+        }
 }

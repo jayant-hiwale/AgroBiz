@@ -24,760 +24,622 @@ import java.util.Locale;
 
 public class FarmerReviewsPage {
 
-    private final int farmerId;
+        private final int farmerId;
 
-    private final ReviewController reviewController;
+        private final ReviewController reviewController;
 
-    private VBox reviewsContainer;
+        private VBox reviewsContainer;
 
-    private Label averageRatingLabel;
-    private Label totalReviewsLabel;
+        private Label averageRatingLabel;
+        private Label totalReviewsLabel;
 
-    public FarmerReviewsPage(int farmerId) {
+        public FarmerReviewsPage(int farmerId) {
 
-        this.farmerId = farmerId;
-        this.reviewController = new ReviewController();
-    }
+                this.farmerId = farmerId;
+                this.reviewController = new ReviewController();
+        }
 
-    // =========================================================
-    // MAIN PAGE
-    // =========================================================
+        // =========================================================
+        // MAIN PAGE
+        // =========================================================
 
-    public BorderPane getReviewsPage() {
+        public BorderPane getReviewsPage() {
 
-        BorderPane root = new BorderPane();
+                BorderPane root = new BorderPane();
 
-        root.setStyle(
-                "-fx-background-color: #050B0A;"
-        );
-        //  root.setTop(
-        //         new NavBar(
-        //                 farmerId,
-        //                 LoginPage.getLoggedInFirebaseUid()
-        //         ).createNavbar("⭐ Reviews")
-        // );
+                root.setStyle(
+                                "-fx-background-color: #050B0A;");
+                // root.setTop(
+                // new NavBar(
+                // farmerId,
+                // LoginPage.getLoggedInFirebaseUid()
+                // ).createNavbar("⭐ Reviews")
+                // );
 
-        // =====================================================
-        // HEADER
-        // =====================================================
+                // =====================================================
+                // HEADER
+                // =====================================================
 
-        HBox header = new HBox(15);
+                HBox header = new HBox(15);
 
-        header.setAlignment(Pos.CENTER_LEFT);
+                header.setAlignment(Pos.CENTER_LEFT);
 
-        header.setPadding(
-                new Insets(25, 35, 20, 35)
-        );
+                header.setPadding(
+                                new Insets(25, 35, 20, 35));
 
-        Label title = new Label(
-                "⭐ Customer Reviews"
-        );
+                Label title = new Label(
+                                "⭐ Customer Reviews");
 
-        title.setFont(
-                Font.font(
-                        "System",
-                        FontWeight.BOLD,
-                        28
-                )
-        );
+                title.setFont(
+                                Font.font(
+                                                "System",
+                                                FontWeight.BOLD,
+                                                28));
 
-        title.setTextFill(Color.WHITE);
+                title.setTextFill(Color.WHITE);
 
-        Region spacer = new Region();
+                Region spacer = new Region();
 
-        HBox.setHgrow(
-                spacer,
-                Priority.ALWAYS
-        );
+                HBox.setHgrow(
+                                spacer,
+                                Priority.ALWAYS);
 
-        Button refreshButton =
-                new Button("🔄 Refresh");
+                Button refreshButton = new Button("🔄 Refresh");
 
-        refreshButton.setPrefHeight(40);
+                refreshButton.setPrefHeight(40);
 
-        refreshButton.setStyle(
-                "-fx-background-color: #238636;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-size: 14px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 9;" +
-                "-fx-padding: 0 18 0 18;"
-        );
+                refreshButton.setStyle(
+                                "-fx-background-color: #238636;" +
+                                                "-fx-text-fill: white;" +
+                                                "-fx-font-size: 14px;" +
+                                                "-fx-font-weight: bold;" +
+                                                "-fx-background-radius: 9;" +
+                                                "-fx-padding: 0 18 0 18;");
 
-        refreshButton.setOnAction(
-                e -> loadReviews()
-        );
+                refreshButton.setOnAction(
+                                e -> loadReviews());
 
-        header.getChildren().addAll(
-                title,
-                spacer,
-                refreshButton
-        );
+                header.getChildren().addAll(
+                                title,
+                                spacer,
+                                refreshButton);
 
-        // =====================================================
-        // SUMMARY CARDS
-        // =====================================================
+                // =====================================================
+                // SUMMARY CARDS
+                // =====================================================
 
-        HBox summaryBox = new HBox(20);
+                HBox summaryBox = new HBox(20);
 
-        summaryBox.setPadding(
-                new Insets(0, 35, 20, 35)
-        );
+                summaryBox.setPadding(
+                                new Insets(0, 35, 20, 35));
 
-        summaryBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
+                summaryBox.setAlignment(
+                                Pos.CENTER_LEFT);
 
-        VBox ratingCard =
-                createSummaryCard(
-                        "⭐",
-                        "Average Rating"
-                );
+                VBox ratingCard = createSummaryCard(
+                                "⭐",
+                                "Average Rating");
 
-        averageRatingLabel =
-                new Label("0.0");
+                averageRatingLabel = new Label("0.0");
 
-        styleSummaryValue(
-                averageRatingLabel
-        );
+                styleSummaryValue(
+                                averageRatingLabel);
 
-        ratingCard.getChildren().add(
-                averageRatingLabel
-        );
+                ratingCard.getChildren().add(
+                                averageRatingLabel);
 
-        VBox reviewCard =
-                createSummaryCard(
-                        "💬",
-                        "Total Reviews"
-                );
+                VBox reviewCard = createSummaryCard(
+                                "💬",
+                                "Total Reviews");
 
-        totalReviewsLabel =
-                new Label("0");
+                totalReviewsLabel = new Label("0");
 
-        styleSummaryValue(
-                totalReviewsLabel
-        );
+                styleSummaryValue(
+                                totalReviewsLabel);
 
-        reviewCard.getChildren().add(
-                totalReviewsLabel
-        );
+                reviewCard.getChildren().add(
+                                totalReviewsLabel);
 
-        summaryBox.getChildren().addAll(
-                ratingCard,
-                reviewCard
-        );
+                summaryBox.getChildren().addAll(
+                                ratingCard,
+                                reviewCard);
 
-        // =====================================================
-        // REVIEWS CONTAINER
-        // =====================================================
+                // =====================================================
+                // REVIEWS CONTAINER
+                // =====================================================
 
-        reviewsContainer =
-                new VBox(15);
+                reviewsContainer = new VBox(15);
 
-        reviewsContainer.setPadding(
-                new Insets(5, 35, 30, 35)
-        );
+                reviewsContainer.setPadding(
+                                new Insets(5, 35, 30, 35));
 
-        // =====================================================
-        // SCROLL PANE
-        // =====================================================
+                // =====================================================
+                // SCROLL PANE
+                // =====================================================
 
-        ScrollPane scrollPane =
-                new ScrollPane(
-                        reviewsContainer
-                );
+                ScrollPane scrollPane = new ScrollPane(
+                                reviewsContainer);
 
-        scrollPane.setFitToWidth(true);
+                scrollPane.setFitToWidth(true);
 
-        scrollPane.setStyle(
-                "-fx-background-color: #050B0A;" +
-                "-fx-background: #050B0A;"
-        );
+                scrollPane.setStyle(
+                                "-fx-background-color: #050B0A;" +
+                                                "-fx-background: #050B0A;");
 
-        VBox mainContent =
-                new VBox();
+                VBox mainContent = new VBox();
 
-        mainContent.getChildren().addAll(
-                header,
-                summaryBox,
-                scrollPane
-        );
+                mainContent.getChildren().addAll(
+                                header,
+                                summaryBox,
+                                scrollPane);
 
-        VBox.setVgrow(
-                scrollPane,
-                Priority.ALWAYS
-        );
+                VBox.setVgrow(
+                                scrollPane,
+                                Priority.ALWAYS);
 
-        root.setCenter(mainContent);
+                root.setCenter(mainContent);
 
-        // =====================================================
-        // FOOTER
-        // =====================================================
+                // =====================================================
+                // FOOTER
+                // =====================================================
 
-        // root.setBottom(
-        //         new Footer().createFooter()
-        // );
+                // root.setBottom(
+                // new Footer().createFooter()
+                // );
 
-        // =====================================================
-        // LOAD DATA
-        // =====================================================
+                // =====================================================
+                // LOAD DATA
+                // =====================================================
 
-        loadReviews();
+                loadReviews();
 
-        return root;
-    }
+                return root;
+        }
 
-    // =========================================================
-    // LOAD REVIEWS
-    // =========================================================
+        // =========================================================
+        // LOAD REVIEWS
+        // =========================================================
 
-    private void loadReviews() {
+        private void loadReviews() {
 
-        reviewsContainer.getChildren().clear();
+                reviewsContainer.getChildren().clear();
 
-        try {
+                try {
 
-            List<Review> reviews =
-                    reviewController.getFarmerReviews(
-                            farmerId
-                    );
+                        List<Review> reviews = reviewController.getFarmerReviews(
+                                        farmerId);
 
-            if (reviews == null ||
-                    reviews.isEmpty()) {
+                        if (reviews == null ||
+                                        reviews.isEmpty()) {
 
-                averageRatingLabel.setText(
-                        "0.0"
-                );
+                                averageRatingLabel.setText(
+                                                "0.0");
 
-                totalReviewsLabel.setText(
-                        "0"
-                );
+                                totalReviewsLabel.setText(
+                                                "0");
 
-                showEmptyState();
+                                showEmptyState();
 
-                return;
-            }
+                                return;
+                        }
 
-            // =================================================
-            // CALCULATE AVERAGE
-            // =================================================
+                        // =================================================
+                        // CALCULATE AVERAGE
+                        // =================================================
 
-            double totalRating = 0;
+                        double totalRating = 0;
 
-            for (Review review : reviews) {
+                        for (Review review : reviews) {
 
-                totalRating +=
-                        review.getRating();
-            }
+                                totalRating += review.getRating();
+                        }
 
-            double average =
-                    totalRating / reviews.size();
+                        double average = totalRating / reviews.size();
 
-            averageRatingLabel.setText(
-                    String.format(
-                            Locale.US,
-                            "%.1f / 5",
-                            average
-                    )
-            );
+                        averageRatingLabel.setText(
+                                        String.format(
+                                                        Locale.US,
+                                                        "%.1f / 5",
+                                                        average));
 
-            totalReviewsLabel.setText(
-                    String.valueOf(
-                            reviews.size()
-                    )
-            );
+                        totalReviewsLabel.setText(
+                                        String.valueOf(
+                                                        reviews.size()));
 
-            // =================================================
-            // REVIEW CARDS
-            // =================================================
+                        // =================================================
+                        // REVIEW CARDS
+                        // =================================================
 
-            for (Review review : reviews) {
+                        for (Review review : reviews) {
+
+                                reviewsContainer.getChildren().add(
+                                                createReviewCard(review));
+                        }
+
+                } catch (Exception e) {
+
+                        e.printStackTrace();
+
+                        showErrorState(
+                                        "Unable to load customer reviews.");
+                }
+        }
+
+        // =========================================================
+        // CREATE REVIEW CARD
+        // =========================================================
+
+        private VBox createReviewCard(
+                        Review review) {
+
+                VBox card = new VBox(12);
+
+                card.setPadding(
+                                new Insets(20));
+
+                card.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                card.setStyle(
+                                "-fx-background-color: #101516;" +
+                                                "-fx-background-radius: 15;" +
+                                                "-fx-border-color: #30363D;" +
+                                                "-fx-border-radius: 15;");
+
+                // =====================================================
+                // TOP ROW
+                // =====================================================
+
+                HBox topRow = new HBox(12);
+
+                topRow.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                // Buyer icon
+                Label buyerIcon = new Label("👤");
+
+                buyerIcon.setFont(
+                                Font.font(24));
+
+                // Buyer name
+                String buyerName = review.getBuyerName();
+
+                if (buyerName == null ||
+                                buyerName.trim().isEmpty()) {
+
+                        buyerName = "Customer";
+                }
+
+                Label buyerLabel = new Label(
+                                buyerName);
+
+                buyerLabel.setFont(
+                                Font.font(
+                                                "System",
+                                                FontWeight.BOLD,
+                                                16));
+
+                buyerLabel.setTextFill(
+                                Color.WHITE);
+
+                Region spacer = new Region();
+
+                HBox.setHgrow(
+                                spacer,
+                                Priority.ALWAYS);
+
+                // Date
+                Label dateLabel = new Label(
+                                formatDate(
+                                                review.getCreatedAt()));
+
+                dateLabel.setFont(
+                                Font.font(12));
+
+                dateLabel.setTextFill(
+                                Color.web("#8B949E"));
+
+                topRow.getChildren().addAll(
+                                buyerIcon,
+                                buyerLabel,
+                                spacer,
+                                dateLabel);
+
+                // =====================================================
+                // RATING
+                // =====================================================
+
+                HBox ratingBox = new HBox(2);
+
+                ratingBox.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                int rating = (int) Math.round(
+                                review.getRating());
+
+                for (int i = 1; i <= 5; i++) {
+
+                        Label star = new Label(
+                                        i <= rating
+                                                        ? "★"
+                                                        : "☆");
+
+                        star.setFont(
+                                        Font.font(20));
+
+                        star.setTextFill(
+                                        Color.web("#F5C542"));
+
+                        ratingBox.getChildren().add(
+                                        star);
+                }
+
+                Label ratingNumber = new Label(
+                                String.format(
+                                                Locale.US,
+                                                "%.1f / 5",
+                                                review.getRating()));
+
+                ratingNumber.setFont(
+                                Font.font(
+                                                "System",
+                                                FontWeight.BOLD,
+                                                13));
+
+                ratingNumber.setTextFill(
+                                Color.web("#F5C542"));
+
+                ratingBox.getChildren().add(
+                                ratingNumber);
+
+                // =====================================================
+                // PRODUCT
+                // =====================================================
+
+                Label productLabel = new Label(
+                                "Product ID: "
+                                                + review.getProductId());
+
+                productLabel.setFont(
+                                Font.font(
+                                                "System",
+                                                FontWeight.BOLD,
+                                                13));
+
+                productLabel.setTextFill(
+                                Color.web("#58A6FF"));
+
+                // =====================================================
+                // COMMENT
+                // =====================================================
+
+                String comment = review.getComment();
+
+                if (comment == null ||
+                                comment.trim().isEmpty()) {
+
+                        comment = "No written comment provided.";
+                }
+
+                Label commentLabel = new Label(
+                                "\"" + comment + "\"");
+
+                commentLabel.setWrapText(true);
+
+                commentLabel.setFont(
+                                Font.font(14));
+
+                commentLabel.setTextFill(
+                                Color.web("#C9D1D9"));
+
+                // =====================================================
+                // ORDER
+                // =====================================================
+
+                Label orderLabel = new Label(
+                                "Order: "
+                                                + safe(
+                                                                review.getOrderId()));
+
+                orderLabel.setFont(
+                                Font.font(12));
+
+                orderLabel.setTextFill(
+                                Color.web("#8B949E"));
+                Label productnameLabel = new Label(
+                                "Product: " + review.getProductName());
+
+                productnameLabel.setTextFill(Color.WHITE);
+
+                card.getChildren().addAll(
+                                topRow,
+                                ratingBox,
+                                productLabel,
+                                productnameLabel,
+                                commentLabel,
+                                orderLabel);
+
+                return card;
+        }
+
+        // =========================================================
+        // SUMMARY CARD
+        // =========================================================
+
+        private VBox createSummaryCard(
+                        String icon,
+                        String title) {
+
+                VBox card = new VBox(5);
+
+                card.setPrefWidth(240);
+
+                card.setPadding(
+                                new Insets(18, 22, 18, 22));
+
+                card.setStyle(
+                                "-fx-background-color: #101516;" +
+                                                "-fx-background-radius: 14;" +
+                                                "-fx-border-color: #30363D;" +
+                                                "-fx-border-radius: 14;");
+
+                HBox heading = new HBox(8);
+
+                heading.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                Label iconLabel = new Label(icon);
+
+                iconLabel.setFont(
+                                Font.font(20));
+
+                Label titleLabel = new Label(title);
+
+                titleLabel.setFont(
+                                Font.font(
+                                                "System",
+                                                FontWeight.BOLD,
+                                                13));
+
+                titleLabel.setTextFill(
+                                Color.web("#8B949E"));
+
+                heading.getChildren().addAll(
+                                iconLabel,
+                                titleLabel);
+
+                card.getChildren().add(
+                                heading);
+
+                return card;
+        }
+
+        private void styleSummaryValue(
+                        Label label) {
+
+                label.setFont(
+                                Font.font(
+                                                "System",
+                                                FontWeight.BOLD,
+                                                24));
+
+                label.setTextFill(
+                                Color.web("#3FB950"));
+        }
+
+        // =========================================================
+        // EMPTY STATE
+        // =========================================================
+
+        private void showEmptyState() {
+
+                VBox emptyBox = new VBox(12);
+
+                emptyBox.setAlignment(
+                                Pos.CENTER);
+
+                emptyBox.setPadding(
+                                new Insets(60));
+
+                Label icon = new Label("💬");
+
+                icon.setFont(
+                                Font.font(45));
+
+                Label title = new Label(
+                                "No Customer Reviews Yet");
+
+                title.setFont(
+                                Font.font(
+                                                "System",
+                                                FontWeight.BOLD,
+                                                20));
+
+                title.setTextFill(
+                                Color.WHITE);
+
+                Label message = new Label(
+                                "Reviews from your customers will appear here.");
+
+                message.setFont(
+                                Font.font(14));
+
+                message.setTextFill(
+                                Color.web("#8B949E"));
+
+                emptyBox.getChildren().addAll(
+                                icon,
+                                title,
+                                message);
 
                 reviewsContainer.getChildren().add(
-                        createReviewCard(review)
-                );
-            }
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-            showErrorState(
-                    "Unable to load customer reviews."
-            );
-        }
-    }
-
-    // =========================================================
-    // CREATE REVIEW CARD
-    // =========================================================
-
-    private VBox createReviewCard(
-            Review review) {
-
-        VBox card = new VBox(12);
-
-        card.setPadding(
-                new Insets(20)
-        );
-
-        card.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        card.setStyle(
-                "-fx-background-color: #101516;" +
-                "-fx-background-radius: 15;" +
-                "-fx-border-color: #30363D;" +
-                "-fx-border-radius: 15;"
-        );
-
-        // =====================================================
-        // TOP ROW
-        // =====================================================
-
-        HBox topRow = new HBox(12);
-
-        topRow.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        // Buyer icon
-        Label buyerIcon =
-                new Label("👤");
-
-        buyerIcon.setFont(
-                Font.font(24)
-        );
-
-        // Buyer name
-        String buyerName =
-                review.getBuyerName();
-
-        if (buyerName == null ||
-                buyerName.trim().isEmpty()) {
-
-            buyerName = "Customer";
+                                emptyBox);
         }
 
-        Label buyerLabel =
-                new Label(
-                        buyerName
-                );
+        // =========================================================
+        // ERROR STATE
+        // =========================================================
 
-        buyerLabel.setFont(
-                Font.font(
-                        "System",
-                        FontWeight.BOLD,
-                        16
-                )
-        );
+        private void showErrorState(
+                        String message) {
 
-        buyerLabel.setTextFill(
-                Color.WHITE
-        );
+                Label error = new Label(
+                                "⚠ " + message);
 
-        Region spacer = new Region();
+                error.setFont(
+                                Font.font(15));
 
-        HBox.setHgrow(
-                spacer,
-                Priority.ALWAYS
-        );
+                error.setTextFill(
+                                Color.web("#F85149"));
 
-        // Date
-        Label dateLabel =
-                new Label(
-                        formatDate(
-                                review.getCreatedAt()
-                        )
-                );
+                error.setPadding(
+                                new Insets(30));
 
-        dateLabel.setFont(
-                Font.font(12)
-        );
-
-        dateLabel.setTextFill(
-                Color.web("#8B949E")
-        );
-
-        topRow.getChildren().addAll(
-                buyerIcon,
-                buyerLabel,
-                spacer,
-                dateLabel
-        );
-
-        // =====================================================
-        // RATING
-        // =====================================================
-
-        HBox ratingBox =
-                new HBox(2);
-
-        ratingBox.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        int rating =
-                (int) Math.round(
-                        review.getRating()
-                );
-
-        for (int i = 1; i <= 5; i++) {
-
-            Label star =
-                    new Label(
-                            i <= rating
-                                    ? "★"
-                                    : "☆"
-                    );
-
-            star.setFont(
-                    Font.font(20)
-            );
-
-            star.setTextFill(
-                    Color.web("#F5C542")
-            );
-
-            ratingBox.getChildren().add(
-                    star
-            );
+                reviewsContainer.getChildren().add(
+                                error);
         }
 
-        Label ratingNumber =
-                new Label(
-                        String.format(
-                                Locale.US,
-                                "%.1f / 5",
-                                review.getRating()
-                        )
-                );
+        // =========================================================
+        // FORMAT DATE
+        // =========================================================
 
-        ratingNumber.setFont(
-                Font.font(
-                        "System",
-                        FontWeight.BOLD,
-                        13
-                )
-        );
+        private String formatDate(
+                        Timestamp timestamp) {
 
-        ratingNumber.setTextFill(
-                Color.web("#F5C542")
-        );
+                if (timestamp == null) {
+                        return "";
+                }
 
-        ratingBox.getChildren().add(
-                ratingNumber
-        );
+                try {
 
-        // =====================================================
-        // PRODUCT
-        // =====================================================
+                        LocalDateTime dateTime = timestamp.toDate()
+                                        .toInstant()
+                                        .atZone(
+                                                        ZoneId.systemDefault())
+                                        .toLocalDateTime();
 
-        Label productLabel =
-                new Label(
-                        "Product ID: "
-                                + review.getProductId()
-                );
+                        return dateTime.format(
+                                        DateTimeFormatter.ofPattern(
+                                                        "dd MMM yyyy, hh:mm a"));
 
-        productLabel.setFont(
-                Font.font(
-                        "System",
-                        FontWeight.BOLD,
-                        13
-                )
-        );
+                } catch (Exception e) {
 
-        productLabel.setTextFill(
-                Color.web("#58A6FF")
-        );
-
-        // =====================================================
-        // COMMENT
-        // =====================================================
-
-        String comment =
-                review.getComment();
-
-        if (comment == null ||
-                comment.trim().isEmpty()) {
-
-            comment =
-                    "No written comment provided.";
+                        return "";
+                }
         }
 
-        Label commentLabel =
-                new Label(
-                        "\"" + comment + "\""
-                );
+        // =========================================================
+        // SAFE STRING
+        // =========================================================
 
-        commentLabel.setWrapText(true);
+        private String safe(String value) {
 
-        commentLabel.setFont(
-                Font.font(14)
-        );
+                if (value == null ||
+                                value.trim().isEmpty()) {
 
-        commentLabel.setTextFill(
-                Color.web("#C9D1D9")
-        );
+                        return "-";
+                }
 
-        // =====================================================
-        // ORDER
-        // =====================================================
-
-        Label orderLabel =
-                new Label(
-                        "Order: "
-                                + safe(
-                                        review.getOrderId()
-                                )
-                );
-
-        orderLabel.setFont(
-                Font.font(12)
-        );
-
-        orderLabel.setTextFill(
-                Color.web("#8B949E")
-        );
-        Label productnameLabel = new Label(
-        "Product: " + review.getProductName()
-);
-
-productnameLabel.setTextFill(Color.WHITE);
-        
-
-        card.getChildren().addAll(
-                topRow,
-                ratingBox,
-                productLabel,
-                productnameLabel,
-                commentLabel,
-                orderLabel
-        );
-
-        return card;
-    }
-
-    // =========================================================
-    // SUMMARY CARD
-    // =========================================================
-
-    private VBox createSummaryCard(
-            String icon,
-            String title) {
-
-        VBox card = new VBox(5);
-
-        card.setPrefWidth(240);
-
-        card.setPadding(
-                new Insets(18, 22, 18, 22)
-        );
-
-        card.setStyle(
-                "-fx-background-color: #101516;" +
-                "-fx-background-radius: 14;" +
-                "-fx-border-color: #30363D;" +
-                "-fx-border-radius: 14;"
-        );
-
-        HBox heading =
-                new HBox(8);
-
-        heading.setAlignment(
-                Pos.CENTER_LEFT
-        );
-
-        Label iconLabel =
-                new Label(icon);
-
-        iconLabel.setFont(
-                Font.font(20)
-        );
-
-        Label titleLabel =
-                new Label(title);
-
-        titleLabel.setFont(
-                Font.font(
-                        "System",
-                        FontWeight.BOLD,
-                        13
-                )
-        );
-
-        titleLabel.setTextFill(
-                Color.web("#8B949E")
-        );
-
-        heading.getChildren().addAll(
-                iconLabel,
-                titleLabel
-        );
-
-        card.getChildren().add(
-                heading
-        );
-
-        return card;
-    }
-
-    private void styleSummaryValue(
-            Label label) {
-
-        label.setFont(
-                Font.font(
-                        "System",
-                        FontWeight.BOLD,
-                        24
-                )
-        );
-
-        label.setTextFill(
-                Color.web("#3FB950")
-        );
-    }
-
-    // =========================================================
-    // EMPTY STATE
-    // =========================================================
-
-    private void showEmptyState() {
-
-        VBox emptyBox =
-                new VBox(12);
-
-        emptyBox.setAlignment(
-                Pos.CENTER
-        );
-
-        emptyBox.setPadding(
-                new Insets(60)
-        );
-
-        Label icon =
-                new Label("💬");
-
-        icon.setFont(
-                Font.font(45)
-        );
-
-        Label title =
-                new Label(
-                        "No Customer Reviews Yet"
-                );
-
-        title.setFont(
-                Font.font(
-                        "System",
-                        FontWeight.BOLD,
-                        20
-                )
-        );
-
-        title.setTextFill(
-                Color.WHITE
-        );
-
-        Label message =
-                new Label(
-                        "Reviews from your customers will appear here."
-                );
-
-        message.setFont(
-                Font.font(14)
-        );
-
-        message.setTextFill(
-                Color.web("#8B949E")
-        );
-
-        emptyBox.getChildren().addAll(
-                icon,
-                title,
-                message
-        );
-
-        reviewsContainer.getChildren().add(
-                emptyBox
-        );
-    }
-
-    // =========================================================
-    // ERROR STATE
-    // =========================================================
-
-    private void showErrorState(
-            String message) {
-
-        Label error =
-                new Label(
-                        "⚠ " + message
-                );
-
-        error.setFont(
-                Font.font(15)
-        );
-
-        error.setTextFill(
-                Color.web("#F85149")
-        );
-
-        error.setPadding(
-                new Insets(30)
-        );
-
-        reviewsContainer.getChildren().add(
-                error
-        );
-    }
-
-    // =========================================================
-    // FORMAT DATE
-    // =========================================================
-
-    private String formatDate(
-            Timestamp timestamp) {
-
-        if (timestamp == null) {
-            return "";
+                return value;
         }
-
-        try {
-
-            LocalDateTime dateTime =
-                    timestamp.toDate()
-                            .toInstant()
-                            .atZone(
-                                    ZoneId.systemDefault()
-                            )
-                            .toLocalDateTime();
-
-            return dateTime.format(
-                    DateTimeFormatter.ofPattern(
-                            "dd MMM yyyy, hh:mm a"
-                    )
-            );
-
-        } catch (Exception e) {
-
-            return "";
-        }
-    }
-
-    // =========================================================
-    // SAFE STRING
-    // =========================================================
-
-    private String safe(String value) {
-
-        if (value == null ||
-                value.trim().isEmpty()) {
-
-            return "-";
-        }
-
-        return value;
-    }
 }

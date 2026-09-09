@@ -31,755 +31,616 @@ import javafx.scene.layout.VBox;
 
 public class MarketPlace {
 
-    private Scene marketPlaceScene;
+        private Scene marketPlaceScene;
 
-    private final ProductController productController;
+        private final ProductController productController;
 
-    private FlowPane productGrid;
+        private FlowPane productGrid;
 
-    private Label resultLabel;
+        private Label resultLabel;
 
-    private final int farmerId;
-    private final String firebaseUid;
+        private final int farmerId;
+        private final String firebaseUid;
 
-    // =====================================================
-    // CONSTRUCTOR
-    // =====================================================
+        // =====================================================
+        // CONSTRUCTOR
+        // =====================================================
 
-    public MarketPlace(
-            int farmerId,String firebaseUid) {
+        public MarketPlace(
+                        int farmerId, String firebaseUid) {
 
-        if (farmerId <= 0) {
+                if (farmerId <= 0) {
 
-            throw new IllegalArgumentException(
-                    "Invalid farmer ID: "
-                    + farmerId
-            );
+                        throw new IllegalArgumentException(
+                                        "Invalid farmer ID: "
+                                                        + farmerId);
+                }
+                if (firebaseUid == null || firebaseUid.trim().isEmpty()) {
+                        throw new IllegalArgumentException("Firebase UID is missing");
+                }
+
+                this.farmerId = farmerId;
+                this.firebaseUid = firebaseUid;
+
+                this.productController = new ProductController();
+
+                System.out.println(
+                                "Opening farmer marketplace.");
+
+                System.out.println(
+                                "Farmer ID = "
+                                                + farmerId);
+                System.out.println("Firebase UID:" + firebaseUid);
         }
-        if (firebaseUid ==null || firebaseUid.trim().isEmpty()){
-                throw new IllegalArgumentException("Firebase UID is missing");
+
+        // =====================================================
+        // SCENE
+        // =====================================================
+
+        public Scene getMarketPlaceScene() {
+
+                BorderPane root = new BorderPane();
+
+                root.setStyle(
+                                "-fx-background-color:#080C0D;");
+
+                root.setTop(
+                                new NavBar(farmerId, firebaseUid)
+                                                .createNavbar(
+                                                                "Marketplace"));
+
+                root.setCenter(
+                                createMarketplaceContent());
+
+                root.setBottom(
+                                new Footer()
+                                                .createFooter());
+
+                marketPlaceScene = new Scene(
+                                root,
+                                1200,
+                                750);
+
+                return marketPlaceScene;
         }
 
-        this.farmerId = farmerId;
-        this.firebaseUid = firebaseUid;
+        // =====================================================
+        // CONTENT
+        // =====================================================
 
-        this.productController =
-                new ProductController();
+        private VBox createMarketplaceContent() {
 
-        System.out.println(
-                "Opening farmer marketplace."
-        );
+                VBox content = new VBox(15);
 
-        System.out.println(
-                "Farmer ID = "
-                + farmerId
-        );
-        System.out.println("Firebase UID:"+firebaseUid);
-    }
+                content.setPadding(
+                                new Insets(
+                                                25,
+                                                20,
+                                                30,
+                                                20));
 
-    // =====================================================
-    // SCENE
-    // =====================================================
+                content.setStyle(
+                                "-fx-background-color:#080C0D;");
 
-    public Scene getMarketPlaceScene() {
+                Label title = new Label(
+                                "Marketplace");
 
-        BorderPane root =
-                new BorderPane();
+                title.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:40px;" +
+                                                "-fx-font-weight:bold;");
 
-        root.setStyle(
-                "-fx-background-color:#080C0D;"
-        );
+                Label description = new Label(
+                                "Manage and sell your agricultural products directly to buyers.");
 
-        root.setTop(
-                new NavBar(farmerId, firebaseUid)
-                        .createNavbar(
-                                "Marketplace"
-                        )
-        );
+                description.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:14px;");
 
-        root.setCenter(
-                createMarketplaceContent()
-        );
+                VBox productArea = createProductArea();
 
-        root.setBottom(
-                new Footer()
-                        .createFooter()
-        );
+                VBox.setVgrow(
+                                productArea,
+                                Priority.ALWAYS);
 
-        marketPlaceScene =
-                new Scene(
-                        root,
-                        1200,
-                        750
-                );
+                content.getChildren()
+                                .addAll(
+                                                title,
+                                                description,
+                                                productArea);
 
-        return marketPlaceScene;
-    }
+                return content;
+        }
 
-    // =====================================================
-    // CONTENT
-    // =====================================================
+        // =====================================================
+        // PRODUCT AREA
+        // =====================================================
 
-    private VBox createMarketplaceContent() {
+        private VBox createProductArea() {
 
-        VBox content =
-                new VBox(15);
+                VBox area = new VBox(15);
 
-        content.setPadding(
-                new Insets(
-                        25,
-                        20,
-                        30,
-                        20
-                )
-        );
+                area.setPadding(
+                                new Insets(15));
 
-        content.setStyle(
-                "-fx-background-color:#080C0D;"
-        );
+                area.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:12;" +
+                                                "-fx-background-radius:12;");
 
-        Label title =
-                new Label(
-                        "Marketplace"
-                );
+                HBox top = new HBox(12);
 
-        title.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-font-size:40px;" +
-                "-fx-font-weight:bold;"
-        );
+                top.setAlignment(
+                                Pos.CENTER_LEFT);
 
-        Label description =
-                new Label(
-                        "Manage and sell your agricultural products directly to buyers."
-                );
+                resultLabel = new Label(
+                                "My Products");
 
-        description.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-font-size:14px;"
-        );
+                resultLabel.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:13px;");
 
-        VBox productArea =
-                createProductArea();
+                Region spacer = new Region();
 
-        VBox.setVgrow(
-                productArea,
-                Priority.ALWAYS
-        );
+                HBox.setHgrow(
+                                spacer,
+                                Priority.ALWAYS);
 
-        content.getChildren()
-                .addAll(
-                        title,
-                        description,
-                        productArea
-                );
+                TextField searchBox = new TextField();
 
-        return content;
-    }
+                searchBox.setPromptText(
+                                "Search your products...");
 
-    // =====================================================
-    // PRODUCT AREA
-    // =====================================================
+                searchBox.setPrefWidth(
+                                200);
 
-    private VBox createProductArea() {
+                searchBox.setOnKeyReleased(
+                                e -> searchProducts(
+                                                searchBox.getText()));
 
-        VBox area =
-                new VBox(15);
+                Button addButton = new Button(
+                                "+ Add Product");
 
-        area.setPadding(
-                new Insets(15)
-        );
+                addButton.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-border-color:#68D34A;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-padding:7 12;" +
+                                                "-fx-cursor:hand;");
 
-        area.setStyle(
-                "-fx-background-color:#0D1213;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-radius:12;" +
-                "-fx-background-radius:12;"
-        );
+                addButton.setOnAction(
+                                e -> openAddProductPage());
 
-        HBox top =
-                new HBox(12);
+                top.getChildren()
+                                .addAll(
+                                                resultLabel,
+                                                spacer,
+                                                searchBox,
+                                                addButton);
 
-        top.setAlignment(
-                Pos.CENTER_LEFT
-        );
+                productGrid = new FlowPane();
 
-        resultLabel =
-                new Label(
-                        "My Products"
-                );
+                productGrid.setHgap(15);
+                productGrid.setVgap(15);
+                productGrid.setPadding(
+                                new Insets(5));
 
-        resultLabel.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-font-size:13px;"
-        );
+                productGrid.setAlignment(
+                                Pos.TOP_LEFT);
 
-        Region spacer =
-                new Region();
+                ScrollPane scroll = new ScrollPane(
+                                productGrid);
 
-        HBox.setHgrow(
-                spacer,
-                Priority.ALWAYS
-        );
+                scroll.setFitToWidth(true);
 
-        TextField searchBox =
-                new TextField();
+                scroll.setStyle(
+                                "-fx-background:#0D1213;" +
+                                                "-fx-background-color:#0D1213;" +
+                                                "-fx-control-inner-background:#0D1213;");
 
-        searchBox.setPromptText(
-                "Search your products..."
-        );
+                VBox.setVgrow(
+                                scroll,
+                                Priority.ALWAYS);
 
-        searchBox.setPrefWidth(
-                200
-        );
+                loadProducts();
 
-        searchBox.setOnKeyReleased(
-                e -> searchProducts(
-                        searchBox.getText()
-                )
-        );
+                area.getChildren()
+                                .addAll(
+                                                top,
+                                                scroll);
 
-        Button addButton =
-                new Button(
-                        "+ Add Product"
-                );
+                return area;
+        }
 
-        addButton.setStyle(
-                "-fx-background-color:transparent;" +
-                "-fx-text-fill:#68D34A;" +
-                "-fx-border-color:#68D34A;" +
-                "-fx-border-radius:5;" +
-                "-fx-padding:7 12;" +
-                "-fx-cursor:hand;"
-        );
+        // =====================================================
+        // LOAD CURRENT FARMER PRODUCTS
+        // =====================================================
 
-        addButton.setOnAction(
-                e -> openAddProductPage()
-        );
+        private void loadProducts() {
 
-        top.getChildren()
-                .addAll(
-                        resultLabel,
-                        spacer,
-                        searchBox,
-                        addButton
-                );
+                productGrid
+                                .getChildren()
+                                .clear();
 
-        productGrid =
-                new FlowPane();
+                List<Product> products = productController
+                                .getFarmerProducts(
+                                                farmerId);
 
-        productGrid.setHgap(15);
-        productGrid.setVgap(15);
-        productGrid.setPadding(
-                new Insets(5)
-        );
+                resultLabel.setText(
+                                "My Products ("
+                                                + products.size()
+                                                + ")");
 
-        productGrid.setAlignment(
-                Pos.TOP_LEFT
-        );
+                for (Product product : products) {
 
-        ScrollPane scroll =
-                new ScrollPane(
                         productGrid
-                );
-
-        scroll.setFitToWidth(true);
-
-        scroll.setStyle(
-                "-fx-background:#0D1213;" +
-                "-fx-background-color:#0D1213;" +
-                "-fx-control-inner-background:#0D1213;"
-        );
-
-        VBox.setVgrow(
-                scroll,
-                Priority.ALWAYS
-        );
-
-        loadProducts();
-
-        area.getChildren()
-                .addAll(
-                        top,
-                        scroll
-                );
-
-        return area;
-    }
-
-    // =====================================================
-    // LOAD CURRENT FARMER PRODUCTS
-    // =====================================================
-
-    private void loadProducts() {
-
-        productGrid
-                .getChildren()
-                .clear();
-
-        List<Product> products =
-                productController
-                        .getFarmerProducts(
-                                farmerId
-                        );
-
-        resultLabel.setText(
-                "My Products ("
-                + products.size()
-                + ")"
-        );
-
-        for (Product product :
-                products) {
-
-            productGrid
-                    .getChildren()
-                    .add(
-                            createProductCard(
-                                    product
-                            )
-                    );
-        }
-    }
-
-    // =====================================================
-    // PRODUCT CARD
-    // =====================================================
-
-    private VBox createProductCard(
-            Product product) {
-
-        VBox card =
-                new VBox();
-
-        card.setPrefWidth(
-                250
-        );
-
-        card.setMaxWidth(
-                250
-        );
-
-        card.setStyle(
-                "-fx-background-color:#101516;" +
-                "-fx-border-color:#242B2C;" +
-                "-fx-border-radius:12;" +
-                "-fx-background-radius:12;"
-        );
-
-        // =================================================
-        // IMAGE
-        // =================================================
-
-        StackPane image =
-                new StackPane();
-
-        image.setPrefHeight(
-                135
-        );
-
-        image.setStyle(
-                "-fx-background-color:#1B2425;" +
-                "-fx-background-radius:12 12 0 0;"
-        );
-
-        String imagePath =
-                product.getImagePath();
-
-        if (imagePath != null &&
-                !imagePath.trim().isEmpty()) {
-
-            try {
-
-                Image img =
-                        new Image(
-                                imagePath,
-                                250,
-                                135,
-                                true,
-                                true
-                        );
-
-                ImageView imageView =
-                        new ImageView(img);
-
-                imageView.setFitWidth(
-                        250
-                );
-
-                imageView.setFitHeight(
-                        135
-                );
-
-                imageView.setPreserveRatio(
-                        true
-                );
-
-                image.getChildren()
-                        .add(imageView);
-
-            } catch (Exception e) {
-
-                addImagePlaceholder(
-                        image
-                );
-            }
-
-        } else {
-
-            addImagePlaceholder(
-                    image
-            );
+                                        .getChildren()
+                                        .add(
+                                                        createProductCard(
+                                                                        product));
+                }
         }
 
-        // =================================================
-        // STATUS
-        // =================================================
+        // =====================================================
+        // PRODUCT CARD
+        // =====================================================
 
-        String statusText =
-                product.getStatus();
+        private VBox createProductCard(
+                        Product product) {
 
-        if (statusText == null ||
-                statusText.trim().isEmpty()) {
+                VBox card = new VBox();
 
-            statusText =
-                    "Active";
-        }
+                card.setPrefWidth(
+                                250);
 
-        Label status =
-                new Label(
-                        statusText
-                );
+                card.setMaxWidth(
+                                250);
 
-        status.setStyle(
-                "-fx-background-color:#245D35;" +
-                "-fx-text-fill:white;" +
-                "-fx-padding:5 8;" +
-                "-fx-background-radius:5;"
-        );
+                card.setStyle(
+                                "-fx-background-color:#101516;" +
+                                                "-fx-border-color:#242B2C;" +
+                                                "-fx-border-radius:12;" +
+                                                "-fx-background-radius:12;");
 
-        StackPane.setAlignment(
-                status,
-                Pos.TOP_LEFT
-        );
+                // =================================================
+                // IMAGE
+                // =================================================
 
-        StackPane.setMargin(
-                status,
-                new Insets(10)
-        );
+                StackPane image = new StackPane();
 
-        image.getChildren()
-                .add(status);
+                image.setPrefHeight(
+                                135);
 
-        // =================================================
-        // DETAILS
-        // =================================================
+                image.setStyle(
+                                "-fx-background-color:#1B2425;" +
+                                                "-fx-background-radius:12 12 0 0;");
 
-        VBox details =
-                new VBox(7);
+                String imagePath = product.getImagePath();
 
-        details.setPadding(
-                new Insets(12)
-        );
+                if (imagePath != null &&
+                                !imagePath.trim().isEmpty()) {
 
-        Label name =
-                new Label(
-                        safe(
-                                product.getProductName()
-                        )
-                );
+                        try {
 
-        name.setStyle(
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-font-size:16px;" +
-                "-fx-font-weight:bold;"
-        );
+                                Image img = new Image(
+                                                imagePath,
+                                                250,
+                                                135,
+                                                true,
+                                                true);
 
-        Label category =
-                new Label(
-                        safe(
-                                product.getCategory()
-                        )
-                );
+                                ImageView imageView = new ImageView(img);
 
-        category.setStyle(
-                "-fx-text-fill:#888888;" +
-                "-fx-font-size:11px;"
-        );
+                                imageView.setFitWidth(
+                                                250);
 
-        Label price =
-                new Label(
-                        "₹"
-                        + product.getPrice()
-                        + " / "
-                        + safe(product.getUnit())
-                );
+                                imageView.setFitHeight(
+                                                135);
 
-        price.setStyle(
-                "-fx-text-fill:#68D34A;" +
-                "-fx-font-size:17px;" +
-                "-fx-font-weight:bold;"
-        );
+                                imageView.setPreserveRatio(
+                                                true);
 
-        Label quantity =
-                new Label(
-                        "Stock: "
-                        + product.getQuantity()
-                        + " "
-                        + safe(product.getUnit())
-                );
+                                image.getChildren()
+                                                .add(imageView);
 
-        quantity.setStyle(
-                "-fx-text-fill:#AAAAAA;" +
-                "-fx-font-size:12px;"
-        );
+                        } catch (Exception e) {
 
-        Button edit =
-                new Button(
-                        "Edit"
-                );
-
-        Button delete =
-                new Button(
-                        "Delete"
-                );
-
-        edit.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        delete.setMaxWidth(
-                Double.MAX_VALUE
-        );
-
-        HBox.setHgrow(
-                edit,
-                Priority.ALWAYS
-        );
-
-        HBox.setHgrow(
-                delete,
-                Priority.ALWAYS
-        );
-
-        edit.setStyle(
-                "-fx-background-color:transparent;" +
-                "-fx-text-fill:#68D34A;" +
-                "-fx-border-color:#68D34A;" +
-                "-fx-border-radius:5;" +
-                "-fx-cursor:hand;"
-        );
-
-        delete.setStyle(
-                "-fx-background-color:transparent;" +
-                "-fx-text-fill:#E57373;" +
-                "-fx-border-color:#E57373;" +
-                "-fx-border-radius:5;" +
-                "-fx-cursor:hand;"
-        );
-
-        edit.setOnAction(
-                e -> editProduct(product)
-        );
-
-        delete.setOnAction(
-                e -> deleteProduct(product)
-        );
-
-        HBox buttons =
-                new HBox(
-                        8,
-                        edit,
-                        delete
-                );
-
-        details.getChildren()
-                .addAll(
-                        name,
-                        category,
-                        price,
-                        quantity,
-                        buttons
-                );
-
-        card.getChildren()
-                .addAll(
-                        image,
-                        details
-                );
-
-        return card;
-    }
-
-    // =====================================================
-    // SEARCH
-    // =====================================================
-
-    private void searchProducts(
-            String text) {
-
-        if (text == null ||
-                text.trim().isEmpty()) {
-
-            loadProducts();
-
-            return;
-        }
-
-        List<Product> products =
-                productController
-                        .searchProducts(
-                                farmerId,
-                                text
-                        );
-
-        productGrid
-                .getChildren()
-                .clear();
-
-        resultLabel.setText(
-                "Found "
-                + products.size()
-                + " products"
-        );
-
-        for (Product product :
-                products) {
-
-            productGrid
-                    .getChildren()
-                    .add(
-                            createProductCard(
-                                    product
-                            )
-                    );
-        }
-    }
-
-    // =====================================================
-    // ADD PRODUCT
-    // =====================================================
-
-    private void openAddProductPage() {
-
-        AddProductPage page =
-                new AddProductPage(
-                        farmerId
-                );
-
-        Scene scene =
-                page.getAddProductScene(
-                        () -> {
-
-                            LoginPage.mainStage
-                                    .setScene(
-                                            new MarketPlace(
-                                                    farmerId,firebaseUid
-                                            )
-                                            .getMarketPlaceScene()
-                                    );
+                                addImagePlaceholder(
+                                                image);
                         }
-                );
 
-        LoginPage.mainStage
-                .setScene(scene);
-    }
+                } else {
 
-    // =====================================================
-    // EDIT PRODUCT
-    // =====================================================
+                        addImagePlaceholder(
+                                        image);
+                }
 
-    private void editProduct(
-            Product product) {
+                // =================================================
+                // STATUS
+                // =================================================
 
-        AddProductPage page =
-                new AddProductPage(
-                        farmerId
-                );
+                String statusText = product.getStatus();
 
-        LoginPage.mainStage
-                .setScene(
-                        page.getAddProductScene(
-                                () ->
+                if (statusText == null ||
+                                statusText.trim().isEmpty()) {
+
+                        statusText = "Active";
+                }
+
+                Label status = new Label(
+                                statusText);
+
+                status.setStyle(
+                                "-fx-background-color:#245D35;" +
+                                                "-fx-text-fill:white;" +
+                                                "-fx-padding:5 8;" +
+                                                "-fx-background-radius:5;");
+
+                StackPane.setAlignment(
+                                status,
+                                Pos.TOP_LEFT);
+
+                StackPane.setMargin(
+                                status,
+                                new Insets(10));
+
+                // image.getChildren()
+                //                 .add(status);
+
+                // =================================================
+                // DETAILS
+                // =================================================
+
+                VBox details = new VBox(7);
+
+                details.setPadding(
+                                new Insets(12));
+
+                Label name = new Label(
+                                safe(
+                                                product.getProductName()));
+
+                name.setStyle(
+                                "-fx-text-fill:#EEEEEE;" +
+                                                "-fx-font-size:16px;" +
+                                                "-fx-font-weight:bold;");
+
+                Label category = new Label(
+                                safe(
+                                                product.getCategory()));
+
+                category.setStyle(
+                                "-fx-text-fill:#888888;" +
+                                                "-fx-font-size:11px;");
+
+                Label price = new Label(
+                                "₹"
+                                                + product.getPrice()
+                                                + " / "
+                                                + safe(product.getUnit()));
+
+                price.setStyle(
+                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-font-size:17px;" +
+                                                "-fx-font-weight:bold;");
+
+                Label quantity = new Label(
+                                "Stock: "
+                                                + product.getQuantity()
+                                                + " "
+                                                + safe(product.getUnit()));
+
+                quantity.setStyle(
+                                "-fx-text-fill:#AAAAAA;" +
+                                                "-fx-font-size:12px;");
+
+                Button edit = new Button(
+                                "Edit");
+
+                Button delete = new Button(
+                                "Delete");
+
+                edit.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                delete.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                HBox.setHgrow(
+                                edit,
+                                Priority.ALWAYS);
+
+                HBox.setHgrow(
+                                delete,
+                                Priority.ALWAYS);
+
+                edit.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-border-color:#68D34A;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-cursor:hand;");
+
+                delete.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-text-fill:#E57373;" +
+                                                "-fx-border-color:#E57373;" +
+                                                "-fx-border-radius:5;" +
+                                                "-fx-cursor:hand;");
+
+                edit.setOnAction(
+                                e -> editProduct(product));
+
+                delete.setOnAction(
+                                e -> deleteProduct(product));
+
+                HBox buttons = new HBox(
+                                8,
+                                edit,
+                                delete);
+
+                details.getChildren()
+                                .addAll(
+                                                name,
+                                                category,
+                                                price,
+                                                quantity,
+                                                buttons);
+
+                card.getChildren()
+                                .addAll(
+                                                image,
+                                                details);
+
+                return card;
+        }
+
+        // =====================================================
+        // SEARCH
+        // =====================================================
+
+        private void searchProducts(
+                        String text) {
+
+                if (text == null ||
+                                text.trim().isEmpty()) {
+
+                        loadProducts();
+
+                        return;
+                }
+
+                List<Product> products = productController
+                                .searchProducts(
+                                                farmerId,
+                                                text);
+
+                productGrid
+                                .getChildren()
+                                .clear();
+
+                resultLabel.setText(
+                                "Found "
+                                                + products.size()
+                                                + " products");
+
+                for (Product product : products) {
+
+                        productGrid
+                                        .getChildren()
+                                        .add(
+                                                        createProductCard(
+                                                                        product));
+                }
+        }
+
+        // =====================================================
+        // ADD PRODUCT
+        // =====================================================
+
+        private void openAddProductPage() {
+
+                AddProductPage page = new AddProductPage(
+                                farmerId);
+
+                Scene scene = page.getAddProductScene(
+                                () -> {
+
                                         LoginPage.mainStage
-                                                .setScene(
-                                                        new MarketPlace(
-                                                                farmerId,firebaseUid
-                                                        )
-                                                        .getMarketPlaceScene()
-                                                )
-                        )
-                );
-    }
+                                                        .setScene(
+                                                                        new MarketPlace(
+                                                                                        farmerId, firebaseUid)
+                                                                                        .getMarketPlaceScene());
+                                });
 
-    // =====================================================
-    // DELETE
-    // =====================================================
-
-    private void deleteProduct(
-            Product product) {
-
-        boolean deleted =
-                productController
-                        .deleteProduct(
-                                product.getProductId()
-                        );
-
-        if (deleted) {
-
-            loadProducts();
-        }
-    }
-
-    // =====================================================
-    // IMAGE PLACEHOLDER
-    // =====================================================
-
-    private void addImagePlaceholder(
-            StackPane box) {
-
-        Label label =
-                new Label(
-                        "Product Image"
-                );
-
-        label.setStyle(
-                "-fx-text-fill:#666666;" +
-                "-fx-font-size:13px;"
-        );
-
-        box.getChildren()
-                .add(label);
-    }
-
-    // =====================================================
-    // SAFE
-    // =====================================================
-
-    private String safe(
-            String value) {
-
-        if (value == null ||
-                value.trim().isEmpty()) {
-
-            return "Not provided";
+                LoginPage.mainStage
+                                .setScene(scene);
         }
 
-        return value;
-    }
+        // =====================================================
+        // EDIT PRODUCT
+        // =====================================================
 
-    // =====================================================
-    // BACK
-    // =====================================================
+        private void editProduct(
+                        Product product) {
 
-    public void backToMarket() {
+                AddProductPage page = new AddProductPage(
+                                farmerId);
 
-        LoginPage.mainStage
-                .setScene(
-                        new MarketPlace(
-                                farmerId,firebaseUid
-                        )
-                        .getMarketPlaceScene()
-                );
-    }
+                LoginPage.mainStage
+                                .setScene(
+                                                page.getAddProductScene(
+                                                                () -> LoginPage.mainStage
+                                                                                .setScene(
+                                                                                                new MarketPlace(
+                                                                                                                farmerId,
+                                                                                                                firebaseUid)
+                                                                                                                .getMarketPlaceScene())));
+        }
+
+        // =====================================================
+        // DELETE
+        // =====================================================
+
+        private void deleteProduct(
+                        Product product) {
+
+                boolean deleted = productController
+                                .deleteProduct(
+                                                product.getProductId());
+
+                if (deleted) {
+
+                        loadProducts();
+                }
+        }
+
+        // =====================================================
+        // IMAGE PLACEHOLDER
+        // =====================================================
+
+        private void addImagePlaceholder(
+                        StackPane box) {
+
+                Label label = new Label(
+                                "Product Image");
+
+                label.setStyle(
+                                "-fx-text-fill:#666666;" +
+                                                "-fx-font-size:13px;");
+
+                box.getChildren()
+                                .add(label);
+        }
+
+        // =====================================================
+        // SAFE
+        // =====================================================
+
+        private String safe(
+                        String value) {
+
+                if (value == null ||
+                                value.trim().isEmpty()) {
+
+                        return "Not provided";
+                }
+
+                return value;
+        }
+
+        // =====================================================
+        // BACK
+        // =====================================================
+
+        public void backToMarket() {
+
+                LoginPage.mainStage
+                                .setScene(
+                                                new MarketPlace(
+                                                                farmerId, firebaseUid)
+                                                                .getMarketPlaceScene());
+        }
 }

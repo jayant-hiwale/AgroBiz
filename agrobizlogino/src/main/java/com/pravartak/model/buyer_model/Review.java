@@ -38,7 +38,7 @@ public class Review {
 
         this.reviewId = reviewId;
         this.productId = productId;
-         this.productName = productName;
+        this.productName = productName;
         this.orderId = orderId;
         this.farmerId = farmerId;
         this.buyerUid = buyerUid;
@@ -68,13 +68,14 @@ public class Review {
 
         return map;
     }
-    public String getProductName() {
-    return productName;
-}
 
-public void setProductName(String productName) {
-    this.productName = productName;
-}
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
 
     public String getReviewId() {
         return reviewId;
