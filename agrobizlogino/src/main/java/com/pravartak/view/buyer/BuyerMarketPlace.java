@@ -1140,45 +1140,43 @@ public class BuyerMarketPlace {
         );
     }
 
-    // =====================================================
-    // LIKE BUTTON
-    // =====================================================
+  
 
-    private void updateLikeButton(
-            Button button,
-            Product product) {
+   // =====================================================
+// LIKE BUTTON
+// =====================================================
 
-        if (WatchlistManager.isLiked(
-                product
-        )) {
+private void updateLikeButton(
+        Button button,
+        Product product) {
 
-            button.setText(
-                    "❤️"
-            );
+    if (WatchlistManager.isLiked(product)) {
 
-            button.setStyle(
-                    "-fx-background-color:#3A1518;" +
-                    "-fx-text-fill:#FF4D5A;" +
-                    "-fx-font-size:17px;" +
-                    "-fx-background-radius:7;" +
-                    "-fx-cursor:hand;"
-            );
+        // Liked
+        button.setText("♥");
 
-        } else {
+        button.setStyle(
+                "-fx-background-color:#3A1518;" +
+                "-fx-text-fill:#FF4D5A;" +
+                "-fx-font-size:22px;" +
+                "-fx-background-radius:7;" +
+                "-fx-cursor:hand;"
+        );
 
-            button.setText(
-                    "♡"
-            );
+    } else {
 
-            button.setStyle(
-                    "-fx-background-color:#212627;" +
-                    "-fx-text-fill:#AAAAAA;" +
-                    "-fx-font-size:22px;" +
-                    "-fx-background-radius:7;" +
-                    "-fx-cursor:hand;"
-            );
-        }
+        // Not liked
+        button.setText("♡");
+
+        button.setStyle(
+                "-fx-background-color:#212627;" +
+                "-fx-text-fill:#AAAAAA;" +
+                "-fx-font-size:22px;" +
+                "-fx-background-radius:7;" +
+                "-fx-cursor:hand;"
+        );
     }
+}
 
     // =====================================================
     // CATEGORY SEARCH
@@ -1198,22 +1196,82 @@ public class BuyerMarketPlace {
         );
     }
 
-    // =====================================================
-    // COMBOBOX STYLE
-    // =====================================================
+    
+// =====================================================
+// COMBOBOX STYLE
+// =====================================================
 
-    private void styleComboBox(
-            ComboBox<String> box) {
+private void styleComboBox(ComboBox<String> box) {
 
-        box.setStyle(
-                "-fx-background-color:#161B22;" +
-                "-fx-text-fill:#EEEEEE;" +
-                "-fx-border-color:#30363D;" +
-                "-fx-border-radius:7;" +
-                "-fx-background-radius:7;" +
-                "-fx-padding:4;"
-        );
-    }
+    box.setStyle(
+            "-fx-background-color:#161B22;" +
+            "-fx-border-color:#30363D;" +
+            "-fx-border-radius:7;" +
+            "-fx-background-radius:7;" +
+            "-fx-padding:4;"
+    );
+
+    box.setButtonCell(new javafx.scene.control.ListCell<String>() {
+
+        @Override
+        protected void updateItem(String item, boolean empty) {
+
+            super.updateItem(item, empty);
+
+            setText(empty ? null : item);
+
+            if (!empty) {
+                setTextFill(
+                        javafx.scene.paint.Color.web("#EEEEEE")
+                );
+            }
+
+            setBorder(
+                    javafx.scene.layout.Border.EMPTY
+            );
+
+            setBackground(
+                    javafx.scene.layout.Background.EMPTY
+            );
+        }
+    });
+
+    box.setCellFactory(listView ->
+            new javafx.scene.control.ListCell<String>() {
+
+        @Override
+        protected void updateItem(String item, boolean empty) {
+
+            super.updateItem(item, empty);
+
+            setText(empty ? null : item);
+
+            if (!empty) {
+                setTextFill(
+                        javafx.scene.paint.Color.web("#EEEEEE")
+                );
+            }
+
+            setBorder(
+                    javafx.scene.layout.Border.EMPTY
+            );
+
+            setBackground(
+                    new javafx.scene.layout.Background(
+                            new javafx.scene.layout.BackgroundFill(
+                                    javafx.scene.paint.Color.web("#161B22"),
+                                    javafx.scene.layout.CornerRadii.EMPTY,
+                                    javafx.geometry.Insets.EMPTY
+                            )
+                    )
+            );
+
+            setPadding(
+                    new javafx.geometry.Insets(6, 8, 6, 8)
+            );
+        }
+    });
+}
 
     // =====================================================
     // PLACEHOLDER

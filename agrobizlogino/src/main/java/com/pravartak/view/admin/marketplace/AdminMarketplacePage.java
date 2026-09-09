@@ -358,8 +358,8 @@ public class AdminMarketplacePage {
                                 status,
                                 new Insets(10));
 
-                image.getChildren()
-                                .add(status);
+                // image.getChildren()
+                //                 .add(status);
 
                 // =================================================
                 // DETAILS

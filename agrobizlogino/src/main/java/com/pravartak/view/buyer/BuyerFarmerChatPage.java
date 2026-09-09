@@ -133,65 +133,203 @@ public class BuyerFarmerChatPage {
         // CHAT HEADER
         // =========================================================
 
+        // private VBox createChatHeader() {
+
+        //         VBox header = new VBox(6);
+
+        //         header.setPadding(
+        //                         new Insets(
+        //                                         18,
+        //                                         30,
+        //                                         18,
+        //                                         30));
+
+        //         header.setStyle(
+        //                         "-fx-background-color:#101516;" +
+        //                                         "-fx-border-color:#242B2C;" +
+        //                                         "-fx-border-width:0 0 1 0;");
+
+        //         Label title = new Label(
+        //                         "💬 Chat with Farmer");
+
+        //         title.setStyle(
+        //                         "-fx-text-fill:#EEEEEE;" +
+        //                                         "-fx-font-size:23px;" +
+        //                                         "-fx-font-weight:bold;");
+
+        //         Label farmer = new Label(
+        //                         "👨‍🌾 "
+        //                                         + getFarmerName());
+
+        //         farmer.setStyle(
+        //                         "-fx-text-fill:#68D34A;" +
+        //                                         "-fx-font-size:14px;" +
+        //                                         "-fx-font-weight:bold;");
+
+        //         Label productName = new Label(
+        //                         "Product: "
+        //                                         + safe(
+        //                                                         product.getProductName()));
+
+        //         productName.setStyle(
+        //                         "-fx-text-fill:#AAAAAA;" +
+        //                                         "-fx-font-size:13px;");
+
+        //         Label location = new Label(
+        //                         "📍 "
+        //                                         + safe(
+        //                                                         product.getLocation()));
+
+        //         location.setStyle(
+        //                         "-fx-text-fill:#888888;" +
+        //                                         "-fx-font-size:12px;");
+
+        //         header.getChildren().addAll(
+        //                         title,
+        //                         farmer,
+        //                         productName,
+        //                         location);
+
+        //         return header;
+        // }
         private VBox createChatHeader() {
 
-                VBox header = new VBox(6);
+    VBox header = new VBox(8);
 
-                header.setPadding(
-                                new Insets(
-                                                18,
-                                                30,
-                                                18,
-                                                30));
+    header.setPadding(
+            new Insets(
+                    12,
+                    30,
+                    18,
+                    30
+            )
+    );
 
-                header.setStyle(
-                                "-fx-background-color:#101516;" +
-                                                "-fx-border-color:#242B2C;" +
-                                                "-fx-border-width:0 0 1 0;");
+    header.setStyle(
+            "-fx-background-color:#101516;" +
+            "-fx-border-color:#242B2C;" +
+            "-fx-border-width:0 0 1 0;"
+    );
 
-                Label title = new Label(
-                                "💬 Chat with Farmer");
+    // =====================================================
+    // BACK BUTTON
+    // =====================================================
 
-                title.setStyle(
-                                "-fx-text-fill:#EEEEEE;" +
-                                                "-fx-font-size:23px;" +
-                                                "-fx-font-weight:bold;");
+    Button backButton = new Button(
+            "← Back to Product"
+    );
 
-                Label farmer = new Label(
-                                "👨‍🌾 "
-                                                + getFarmerName());
+    backButton.setStyle(
+            "-fx-background-color:transparent;" +
+            "-fx-text-fill:#68D34A;" +
+            "-fx-font-size:14px;" +
+            "-fx-font-weight:bold;" +
+            "-fx-padding:4 0 8 0;" +
+            "-fx-cursor:hand;"
+    );
 
-                farmer.setStyle(
-                                "-fx-text-fill:#68D34A;" +
-                                                "-fx-font-size:14px;" +
-                                                "-fx-font-weight:bold;");
+    backButton.setOnAction(e -> {
 
-                Label productName = new Label(
-                                "Product: "
-                                                + safe(
-                                                                product.getProductName()));
+        try {
 
-                productName.setStyle(
-                                "-fx-text-fill:#AAAAAA;" +
-                                                "-fx-font-size:13px;");
+            ProductDetailsPage productDetailsPage =
+                    new ProductDetailsPage(product);
 
-                Label location = new Label(
-                                "📍 "
-                                                + safe(
-                                                                product.getLocation()));
+            BorderPane productPage =
+                    productDetailsPage.getProductDetailsPage();
 
-                location.setStyle(
-                                "-fx-text-fill:#888888;" +
-                                                "-fx-font-size:12px;");
+            Scene scene =
+                    new Scene(
+                            productPage,
+                            1400,
+                            850
+                    );
 
-                header.getChildren().addAll(
-                                title,
-                                farmer,
-                                productName,
-                                location);
+            LoginPage.mainStage.setScene(scene);
+            LoginPage.mainStage.show();
 
-                return header;
+        } catch (Exception ex) {
+
+            ex.printStackTrace();
+
+            showAlert(
+                    Alert.AlertType.ERROR,
+                    "Navigation Error",
+                    "Unable to return to product details."
+            );
         }
+    });
+
+    // =====================================================
+    // TITLE
+    // =====================================================
+
+    Label title = new Label(
+            "💬 Chat with Farmer"
+    );
+
+    title.setStyle(
+            "-fx-text-fill:#EEEEEE;" +
+            "-fx-font-size:23px;" +
+            "-fx-font-weight:bold;"
+    );
+
+    // =====================================================
+    // FARMER
+    // =====================================================
+
+    Label farmer = new Label(
+            "👨‍🌾 " + getFarmerName()
+    );
+
+    farmer.setStyle(
+            "-fx-text-fill:#68D34A;" +
+            "-fx-font-size:14px;" +
+            "-fx-font-weight:bold;"
+    );
+
+    // =====================================================
+    // PRODUCT
+    // =====================================================
+
+    Label productName = new Label(
+            "Product: " +
+            safe(product.getProductName())
+    );
+
+    productName.setStyle(
+            "-fx-text-fill:#AAAAAA;" +
+            "-fx-font-size:13px;"
+    );
+
+    // =====================================================
+    // LOCATION
+    // =====================================================
+
+    Label location = new Label(
+            "📍 " +
+            safe(product.getLocation())
+    );
+
+    location.setStyle(
+            "-fx-text-fill:#888888;" +
+            "-fx-font-size:12px;"
+    );
+
+    // =====================================================
+    // ADD ALL
+    // =====================================================
+
+    header.getChildren().addAll(
+            backButton,
+            title,
+            farmer,
+            productName,
+            location
+    );
+
+    return header;
+}
 
         // =========================================================
         // INPUT AREA

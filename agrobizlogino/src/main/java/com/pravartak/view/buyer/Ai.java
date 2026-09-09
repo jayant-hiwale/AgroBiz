@@ -151,8 +151,8 @@ public class Ai {
 
                 HBox headerRow = new HBox(
                                 leftHeader,
-                                spacer,
-                                pastSessions);
+                                spacer
+                                );
 
                 headerRow.setAlignment(
                                 Pos.CENTER_LEFT);

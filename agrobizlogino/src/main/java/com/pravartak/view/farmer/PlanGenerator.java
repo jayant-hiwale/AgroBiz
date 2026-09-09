@@ -1222,236 +1222,441 @@ public class PlanGenerator {
         // BUILD FARMING QUESTIONS
         // =========================================================
 
-        private void buildFarmingQuestions(
-                        String farmingType) {
+        // private void buildFarmingQuestions(
+        //                 String farmingType) {
 
-                currentFarmingQuestionKeys.clear();
+        //         currentFarmingQuestionKeys.clear();
 
-                currentFarmingQuestions.clear();
+        //         currentFarmingQuestions.clear();
 
-                // COMMON QUESTIONS
+        //         // COMMON QUESTIONS
 
-                addFarmingQuestion(
-                                "Location",
-                                "Which district and state is your farm located in?");
+        //         // addFarmingQuestion(
+        //         //                 "Location",
+        //         //                 "Which district and state is your farm located in?");
 
-                addFarmingQuestion(
-                                "Area",
-                                "How much land or farming area do you have?");
+        //         addFarmingQuestion(
+        //                         "Area",
+        //                         "How much land or farming area do you have?");
 
-                addFarmingQuestion(
-                                "Capacity",
-                                "What capacity are you planning for this farm?");
+        //         addFarmingQuestion(
+        //                         "Capacity",
+        //                         "What capacity are you planning for this farm?");
 
-                addFarmingQuestion(
-                                "Budget",
-                                "What is your approximate budget in Indian Rupees?");
+        //         addFarmingQuestion(
+        //                         "Budget",
+        //                         "What is your approximate budget in Indian Rupees?");
 
-                addFarmingQuestion(
-                                "Water",
-                                "Do you have a reliable water source? Please describe it.");
+        //         addFarmingQuestion(
+        //                         "Water",
+        //                         "Do you have a reliable water source? Please describe it.");
 
-                addFarmingQuestion(
-                                "Electricity",
-                                "Is electricity available at your farm?");
+        //         addFarmingQuestion(
+        //                         "Electricity",
+        //                         "Is electricity available at your farm?");
 
-                addFarmingQuestion(
-                                "Infrastructure",
-                                "Do you already have any shed, pond, room, equipment or other infrastructure?");
+        //         addFarmingQuestion(
+        //                         "Infrastructure",
+        //                         "Do you already have any shed, pond, room, equipment or other infrastructure?");
 
-                addFarmingQuestion(
-                                "Labour",
-                                "How many people can work on the farm?");
+        //         addFarmingQuestion(
+        //                         "Labour",
+        //                         "How many people can work on the farm?");
 
-                addFarmingQuestion(
-                                "Experience",
-                                "What is your farming experience level? Beginner, some experience, or experienced?");
+        //         addFarmingQuestion(
+        //                         "Experience",
+        //                         "What is your farming experience level? Beginner, some experience, or experienced?");
 
-                addFarmingQuestion(
-                                "Market",
-                                "How do you plan to sell your farm products?");
+        //         addFarmingQuestion(
+        //                         "Market",
+        //                         "How do you plan to sell your farm products?");
 
-                // FARMING-SPECIFIC QUESTIONS
+        //         // FARMING-SPECIFIC QUESTIONS
 
-                switch (farmingType) {
+        //         switch (farmingType) {
 
-                        case "Poultry":
+        //                 case "Poultry":
 
-                                addFarmingQuestion(
-                                                "Poultry Purpose",
-                                                "Is your poultry farm for meat, eggs, or both?");
+        //                         addFarmingQuestion(
+        //                                         "Poultry Purpose",
+        //                                         "Is your poultry farm for meat, eggs, or both?");
 
-                                addFarmingQuestion(
-                                                "Bird Number",
-                                                "How many birds are you planning to rear?");
+        //                         addFarmingQuestion(
+        //                                         "Bird Number",
+        //                                         "How many birds are you planning to rear?");
 
-                                addFarmingQuestion(
-                                                "Poultry Breed",
-                                                "Do you have a preferred poultry breed or type?");
+        //                         addFarmingQuestion(
+        //                                         "Poultry Breed",
+        //                                         "Do you have a preferred poultry breed or type?");
 
-                                addFarmingQuestion(
-                                                "Poultry Shed",
-                                                "Do you already have a poultry shed? If yes, describe its approximate size.");
+        //                         addFarmingQuestion(
+        //                                         "Poultry Shed",
+        //                                         "Do you already have a poultry shed? If yes, describe its approximate size.");
 
-                                addFarmingQuestion(
-                                                "Feed",
-                                                "Do you have access to poultry feed or local feed ingredients?");
+        //                         addFarmingQuestion(
+        //                                         "Feed",
+        //                                         "Do you have access to poultry feed or local feed ingredients?");
 
-                                break;
+        //                         break;
 
-                        case "Goat":
+        //                 case "Goat":
 
-                                addFarmingQuestion(
-                                                "Goat Purpose",
-                                                "Is your goat farm mainly for meat, breeding, milk, or a combination?");
+        //                         addFarmingQuestion(
+        //                                         "Goat Purpose",
+        //                                         "Is your goat farm mainly for meat, breeding, milk, or a combination?");
 
-                                addFarmingQuestion(
-                                                "Goat Number",
-                                                "How many goats are you planning to keep?");
+        //                         addFarmingQuestion(
+        //                                         "Goat Number",
+        //                                         "How many goats are you planning to keep?");
 
-                                addFarmingQuestion(
-                                                "Goat Breed",
-                                                "Do you have a preferred goat breed?");
+        //                         addFarmingQuestion(
+        //                                         "Goat Breed",
+        //                                         "Do you have a preferred goat breed?");
 
-                                addFarmingQuestion(
-                                                "Grazing",
-                                                "Do you have grazing land or access to fodder?");
+        //                         addFarmingQuestion(
+        //                                         "Grazing",
+        //                                         "Do you have grazing land or access to fodder?");
 
-                                addFarmingQuestion(
-                                                "Goat Shed",
-                                                "Do you already have a goat shed?");
+        //                         addFarmingQuestion(
+        //                                         "Goat Shed",
+        //                                         "Do you already have a goat shed?");
 
-                                break;
+        //                         break;
 
-                        case "Mushroom":
+        //                 case "Mushroom":
 
-                                addFarmingQuestion(
-                                                "Mushroom Type",
-                                                "Which mushroom do you want to cultivate?");
+        //                         addFarmingQuestion(
+        //                                         "Mushroom Type",
+        //                                         "Which mushroom do you want to cultivate?");
 
-                                addFarmingQuestion(
-                                                "Growing Area",
-                                                "How much growing-room area is available?");
+        //                         addFarmingQuestion(
+        //                                         "Growing Area",
+        //                                         "How much growing-room area is available?");
 
-                                addFarmingQuestion(
-                                                "Growing Room",
-                                                "Do you already have a suitable mushroom growing room?");
+        //                         addFarmingQuestion(
+        //                                         "Growing Room",
+        //                                         "Do you already have a suitable mushroom growing room?");
 
-                                addFarmingQuestion(
-                                                "Substrate",
-                                                "What substrate or agricultural waste materials are available to you?");
+        //                         addFarmingQuestion(
+        //                                         "Substrate",
+        //                                         "What substrate or agricultural waste materials are available to you?");
 
-                                addFarmingQuestion(
-                                                "Temperature",
-                                                "Do you have facilities for temperature and humidity management?");
+        //                         addFarmingQuestion(
+        //                                         "Temperature",
+        //                                         "Do you have facilities for temperature and humidity management?");
 
-                                break;
+        //                         break;
 
-                        case "Dairy / Cow":
+        //                 case "Dairy / Cow":
 
-                                addFarmingQuestion(
-                                                "Cattle Number",
-                                                "How many cattle are you planning to keep?");
+        //                         addFarmingQuestion(
+        //                                         "Cattle Number",
+        //                                         "How many cattle are you planning to keep?");
 
-                                addFarmingQuestion(
-                                                "Dairy Purpose",
-                                                "Is your main goal milk production, breeding, or both?");
+        //                         addFarmingQuestion(
+        //                                         "Dairy Purpose",
+        //                                         "Is your main goal milk production, breeding, or both?");
 
-                                addFarmingQuestion(
-                                                "Cattle Breed",
-                                                "Do you have a preferred cattle breed?");
+        //                         addFarmingQuestion(
+        //                                         "Cattle Breed",
+        //                                         "Do you have a preferred cattle breed?");
 
-                                addFarmingQuestion(
-                                                "Fodder",
-                                                "Do you have access to green fodder or other feed resources?");
+        //                         addFarmingQuestion(
+        //                                         "Fodder",
+        //                                         "Do you have access to green fodder or other feed resources?");
 
-                                addFarmingQuestion(
-                                                "Cattle Shed",
-                                                "Do you already have a cattle shed?");
+        //                         addFarmingQuestion(
+        //                                         "Cattle Shed",
+        //                                         "Do you already have a cattle shed?");
 
-                                break;
+        //                         break;
 
-                        case "Pearl":
+        //                 case "Pearl":
 
-                                addFarmingQuestion(
-                                                "Water Area",
-                                                "How much pond or suitable water area is available?");
+        //                         addFarmingQuestion(
+        //                                         "Water Area",
+        //                                         "How much pond or suitable water area is available?");
 
-                                addFarmingQuestion(
-                                                "Pearl Method",
-                                                "Do you have a preferred pearl culture method?");
+        //                         addFarmingQuestion(
+        //                                         "Pearl Method",
+        //                                         "Do you have a preferred pearl culture method?");
 
-                                addFarmingQuestion(
-                                                "Water Quality",
-                                                "Do you know the current water quality or water source?");
+        //                         addFarmingQuestion(
+        //                                         "Water Quality",
+        //                                         "Do you know the current water quality or water source?");
 
-                                addFarmingQuestion(
-                                                "Mussel Availability",
-                                                "Do you have access to suitable freshwater mussels?");
+        //                         addFarmingQuestion(
+        //                                         "Mussel Availability",
+        //                                         "Do you have access to suitable freshwater mussels?");
 
-                                break;
+        //                         break;
 
-                        case "Fish":
+        //                 case "Fish":
 
-                                addFarmingQuestion(
-                                                "Pond Area",
-                                                "What is the available pond area?");
+        //                         addFarmingQuestion(
+        //                                         "Pond Area",
+        //                                         "What is the available pond area?");
 
-                                addFarmingQuestion(
-                                                "Fish Species",
-                                                "Which fish species do you want to culture?");
+        //                         addFarmingQuestion(
+        //                                         "Fish Species",
+        //                                         "Which fish species do you want to culture?");
 
-                                addFarmingQuestion(
-                                                "Pond Condition",
-                                                "Is the pond already constructed and suitable for fish culture?");
+        //                         addFarmingQuestion(
+        //                                         "Pond Condition",
+        //                                         "Is the pond already constructed and suitable for fish culture?");
 
-                                addFarmingQuestion(
-                                                "Water Source",
-                                                "What is the main source of water for the pond?");
+        //                         addFarmingQuestion(
+        //                                         "Water Source",
+        //                                         "What is the main source of water for the pond?");
 
-                                break;
+        //                         break;
 
-                        case "Moringa":
+        //                 case "Moringa":
 
-                                addFarmingQuestion(
-                                                "Moringa Purpose",
-                                                "Are you growing moringa mainly for leaves, pods, seed, or another purpose?");
+        //                         addFarmingQuestion(
+        //                                         "Moringa Purpose",
+        //                                         "Are you growing moringa mainly for leaves, pods, seed, or another purpose?");
 
-                                addFarmingQuestion(
-                                                "Moringa Variety",
-                                                "Do you have a preferred moringa variety?");
+        //                         addFarmingQuestion(
+        //                                         "Moringa Variety",
+        //                                         "Do you have a preferred moringa variety?");
 
-                                addFarmingQuestion(
-                                                "Planting Time",
-                                                "When are you planning to start planting?");
+        //                         addFarmingQuestion(
+        //                                         "Planting Time",
+        //                                         "When are you planning to start planting?");
 
-                                addFarmingQuestion(
-                                                "Irrigation",
-                                                "What irrigation facility is available?");
+        //                         addFarmingQuestion(
+        //                                         "Irrigation",
+        //                                         "What irrigation facility is available?");
 
-                                break;
+        //                         break;
 
-                        case "Crop":
+        //                 case "Crop":
 
-                                addFarmingQuestion(
-                                                "Crop Type",
-                                                "Which crop or group of crops are you considering?");
+        //                         addFarmingQuestion(
+        //                                         "Crop Type",
+        //                                         "Which crop or group of crops are you considering?");
 
-                                addFarmingQuestion(
-                                                "Soil",
-                                                "Do you know your soil type or recent soil-test results?");
+        //                         addFarmingQuestion(
+        //                                         "Soil",
+        //                                         "Do you know your soil type or recent soil-test results?");
 
-                                addFarmingQuestion(
-                                                "Season",
-                                                "Which season are you planning to cultivate?");
+        //                         addFarmingQuestion(
+        //                                         "Season",
+        //                                         "Which season are you planning to cultivate?");
 
-                                addFarmingQuestion(
-                                                "Irrigation",
-                                                "What irrigation facility is available?");
+        //                         addFarmingQuestion(
+        //                                         "Irrigation",
+        //                                         "What irrigation facility is available?");
 
-                                break;
-                }
-        }
+        //                         break;
+        //         }
+        // }
+        // =========================================================
+// BUILD FARMING QUESTIONS
+// =========================================================
+
+private void buildFarmingQuestions(
+        String farmingType) {
+
+    currentFarmingQuestionKeys.clear();
+    currentFarmingQuestions.clear();
+
+    // =================================================
+    // COMMON QUESTIONS - ONLY 5
+    // =================================================
+
+    addFarmingQuestion(
+            "Location",
+            "Which district and state is your farm located in?"
+    );
+
+    addFarmingQuestion(
+            "Area",
+            "How much land or farming area do you have?"
+    );
+
+    addFarmingQuestion(
+            "Budget",
+            "What is your approximate budget in Indian Rupees?"
+    );
+
+    addFarmingQuestion(
+            "Water",
+            "What water source is available on your farm?"
+    );
+
+    addFarmingQuestion(
+            "Infrastructure",
+            "What infrastructure, equipment or facilities do you already have?"
+    );
+
+    // =================================================
+    // FARMING-SPECIFIC QUESTIONS - ONLY 3
+    // =================================================
+
+    switch (farmingType) {
+
+        case "Poultry":
+
+            addFarmingQuestion(
+                    "Poultry Purpose",
+                    "Do you want to raise poultry for meat, eggs, or both?"
+            );
+
+            addFarmingQuestion(
+                    "Bird Number",
+                    "How many birds are you planning to rear?"
+            );
+
+            addFarmingQuestion(
+                    "Poultry Breed",
+                    "Do you have a preferred poultry breed or type?"
+            );
+
+            break;
+
+
+        case "Goat":
+
+            addFarmingQuestion(
+                    "Goat Purpose",
+                    "Is your goat farm mainly for meat, breeding, milk, or a combination?"
+            );
+
+            addFarmingQuestion(
+                    "Goat Number",
+                    "How many goats are you planning to keep?"
+            );
+
+            addFarmingQuestion(
+                    "Goat Resources",
+                    "Do you have a preferred breed and access to grazing land or fodder?"
+            );
+
+            break;
+
+
+        case "Mushroom":
+
+            addFarmingQuestion(
+                    "Mushroom Type",
+                    "Which mushroom do you want to cultivate?"
+            );
+
+            addFarmingQuestion(
+                    "Growing Area",
+                    "How much growing-room area is available?"
+            );
+
+            addFarmingQuestion(
+                    "Growing Conditions",
+                    "Do you have a suitable growing room and facilities for temperature and humidity control?"
+            );
+
+            break;
+
+
+        case "Dairy / Cow":
+
+            addFarmingQuestion(
+                    "Cattle Number",
+                    "How many cattle are you planning to keep?"
+            );
+
+            addFarmingQuestion(
+                    "Dairy Purpose",
+                    "Is your main goal milk production, breeding, or both?"
+            );
+
+            addFarmingQuestion(
+                    "Cattle Resources",
+                    "Do you have a preferred cattle breed and access to green fodder?"
+            );
+
+            break;
+
+
+        case "Pearl":
+
+            addFarmingQuestion(
+                    "Water Area",
+                    "How much pond or suitable water area is available?"
+            );
+
+            addFarmingQuestion(
+                    "Pearl Method",
+                    "Do you have a preferred pearl culture method?"
+            );
+
+            addFarmingQuestion(
+                    "Water Quality",
+                    "What is your water source and do you know its current quality?"
+            );
+
+            break;
+
+
+        case "Fish":
+
+            addFarmingQuestion(
+                    "Pond Area",
+                    "What is the available pond area?"
+            );
+
+            addFarmingQuestion(
+                    "Fish Species",
+                    "Which fish species do you want to culture?"
+            );
+
+            addFarmingQuestion(
+                    "Pond Condition",
+                    "Is the pond already constructed and what is its main water source?"
+            );
+
+            break;
+
+
+        case "Moringa":
+
+            addFarmingQuestion(
+                    "Moringa Purpose",
+                    "Are you growing moringa mainly for leaves, pods, seed, or another purpose?"
+            );
+
+            addFarmingQuestion(
+                    "Moringa Variety",
+                    "Do you have a preferred moringa variety?"
+            );
+
+            addFarmingQuestion(
+                    "Planting Irrigation",
+                    "When are you planning to start planting and what irrigation facility is available?"
+            );
+
+            break;
+
+
+        case "Crop":
+
+            addFarmingQuestion(
+                    "Crop Type",
+                    "Which crop or group of crops are you considering?"
+            );
+
+            addFarmingQuestion(
+                    "Soil",
+                    "Do you know your soil type or have recent soil-test results?"
+            );
+
+            addFarmingQuestion(
+                    "Season Irrigation",
+                    "Which season are you planning to cultivate and what irrigation facility is available?"
+            );
+
+            break;
+    }
+}
 
         // =========================================================
         // ADD QUESTION

@@ -593,7 +593,7 @@ public class ProductDetailsPage {
                                 separator,
                                 descriptionTitle,
                                 description,
-                                farmerBox,
+                                //farmerBox,
                                 quantityTitle,
                                 quantitySpinner,
                                 buttons,

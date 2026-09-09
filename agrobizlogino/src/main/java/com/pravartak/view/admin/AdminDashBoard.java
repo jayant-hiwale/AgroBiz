@@ -878,7 +878,7 @@ public class AdminDashBoard extends BorderPane {
         //                         "-fx-background-color: transparent;" +
         //                                         "-fx-text-fill:  " + TEXT_SECONDARY + ";");
         // }
-        
+
         private void updateUserDistribution(
                 List<User> farmers,
                 List<User> buyers) {
@@ -905,7 +905,7 @@ public class AdminDashBoard extends BorderPane {
         userPieChart.setData(chartData);
 
         userPieChart.setLegendVisible(true);
-        userPieChart.setLabelsVisible(true);
+        userPieChart.setLabelsVisible(false);
         userPieChart.setAnimated(false);
 
         userPieChart.setStyle(
