@@ -1,0 +1,495 @@
+
+package com.pravartak.view.admin;
+
+import com.pravartak.view.admin.community.AdminCommunityPage;
+import com.pravartak.view.admin.course.AdminLearning;
+import com.pravartak.view.admin.marketplace.AdminMarketplacePage;
+import com.pravartak.view.admin.order.AdminOrdersPage;
+import com.pravartak.view.admin.review.AdminReviewsPage;
+import com.pravartak.view.admin.scheme.SchemeTab;
+import com.pravartak.view.login.LoginPage;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+
+public class AdminPage {
+
+        private Scene adminPageScene;
+
+        // =========================================================
+        // MAIN ADMIN PAGE
+        // =========================================================
+
+        public Scene getAdminPage(String currentPage) {
+
+                BorderPane bp = new BorderPane();
+
+                // =====================================================
+                // DEFAULT PAGE
+                // =====================================================
+
+                if (currentPage == null || currentPage.isEmpty()) {
+                        currentPage = "Dashboard";
+                }
+
+                // =====================================================
+                // SIDEBAR
+                // =====================================================
+
+                VBox sidebar = new VBox();
+
+                sidebar.setPrefWidth(220);
+
+                sidebar.setPadding(
+                                new Insets(15, 10, 15, 10));
+
+                sidebar.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-border-color:#1B2021;" +
+                                                "-fx-border-width:0 1 0 0;");
+
+                // =====================================================
+                // LIST VIEW
+                // =====================================================
+
+                ListView<String> lv = new ListView<>();
+
+                lv.getItems().addAll(
+                                "Dashboard",
+                                "Users",
+                                "Marketplace",
+                                "Orders",
+                                "Reviews",
+                                "Manage Course",
+                                "Community",
+                                "Government Schemes",
+                                "About us");
+                lv.setStyle(
+                                "-fx-background-color:#0D1213;" +
+                                                "-fx-control-inner-background:#0D1213;" +
+                                                "-fx-border-color:transparent;" +
+                                                "-fx-font-size:14px;" +
+                                                "-fx-cursor:hand;");
+
+                // =====================================================
+                // LIST VIEW CELL STYLE
+                // =====================================================
+
+                lv.setCellFactory(list -> {
+
+                        ListCell<String> cell = new ListCell<String>() {
+
+                                @Override
+                                protected void updateItem(String item, boolean empty) {
+
+                                        super.updateItem(item, empty);
+
+                                        if (empty || item == null) {
+
+                                                setText(null);
+
+                                                setStyle("-fx-background-color:#0D1213;");
+
+                                        } else {
+
+                                                setText(item);
+                                                updateCellStyle();
+                                        }
+                                }
+
+                                private void updateCellStyle() {
+
+                                        if (isSelected()) {
+
+                                                setTextFill(Color.web("#68D34A"));
+
+                                                setStyle(
+                                                                "-fx-background-color:#245D35;" +
+                                                                                "-fx-text-fill:#68D34A;" +
+                                                                                "-fx-padding:12 15;" +
+                                                                                "-fx-font-size:14px;" +
+                                                                                "-fx-font-weight:bold;" +
+                                                                                "-fx-background-radius:6;");
+
+                                        } else {
+
+                                                setTextFill(Color.web("#AAAAAA"));
+
+                                                setStyle("-fx-background-color:#0D1213;" + "-fx-padding:12 15;"
+                                                                + "-fx-font-size:14px;");
+                                        }
+                                }
+                        };
+
+                        return cell;
+                });
+
+                // =====================================================
+                // SIDEBAR GROW
+                // =====================================================
+
+                VBox.setVgrow(
+                                lv,
+                                Priority.ALWAYS);
+
+                // =====================================================
+                // LOGOUT BUTTON
+                // =====================================================
+
+                Button logout = new Button(
+                                "⇥   Logout");
+
+                logout.setMaxWidth(
+                                Double.MAX_VALUE);
+
+                logout.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                logout.setPadding(
+                                new Insets(
+                                                12,
+                                                15,
+                                                12,
+                                                15));
+
+                logout.setStyle(
+                                "-fx-background-color:transparent;" +
+                                                "-fx-text-fill:#E57373;" +
+                                                "-fx-font-size:14px;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-background-radius:6;" +
+                                                "-fx-cursor:hand;");
+
+                // =====================================================
+                // LOGOUT ACTION
+                // =====================================================
+
+                logout.setOnAction(e -> {
+                        try {
+                                LoginPage loginPage = new LoginPage();
+                                loginPage.start(LoginPage.mainStage);
+                        } catch (Exception ex) {
+                                ex.printStackTrace();
+                        }
+                });
+
+                // =====================================================
+                // LOGOUT HOVER
+                // =====================================================
+
+                logout.setOnMouseEntered(event -> {
+
+                        logout.setStyle(
+                                        "-fx-background-color:#633333;" +
+                                                        "-fx-text-fill:#E57373;" +
+                                                        "-fx-font-size:14px;" +
+                                                        "-fx-font-weight:bold;" +
+                                                        "-fx-background-radius:6;" +
+                                                        "-fx-cursor:hand;");
+                });
+
+                logout.setOnMouseExited(event -> {
+
+                        logout.setStyle(
+                                        "-fx-background-color:transparent;" +
+                                                        "-fx-text-fill:#E57373;" +
+                                                        "-fx-font-size:14px;" +
+                                                        "-fx-font-weight:bold;" +
+                                                        "-fx-background-radius:6;" +
+                                                        "-fx-cursor:hand;");
+                });
+
+                // =====================================================
+                // SIDEBAR COMPONENTS
+                // =====================================================
+
+                sidebar.getChildren().addAll(
+                                lv,
+                                logout);
+
+                bp.setLeft(sidebar);
+
+                // =====================================================
+                // TOP BAR
+                // =====================================================
+
+                HBox topBar = new HBox();
+
+                topBar.setAlignment(
+                                Pos.CENTER_LEFT);
+
+                topBar.setSpacing(20);
+
+                topBar.setPadding(
+                                new Insets(
+                                                8,
+                                                30,
+                                                8,
+                                                30));
+
+                topBar.setPrefHeight(62);
+
+                topBar.setMinHeight(62);
+
+                topBar.setMaxHeight(62);
+
+                topBar.setStyle(
+                                "-fx-background-color:#080C0D;" +
+                                                "-fx-border-color:#1B2021;" +
+                                                "-fx-border-width:0 0 1 0;");
+
+                // =====================================================
+                // HEADER LOGO
+                // =====================================================
+
+                Label headerLogo = new Label("AgroBiz ");
+
+                headerLogo.setStyle(
+                                "-fx-text-fill:#68D34A;" +
+                                                "-fx-font-size:20px;" +
+                                                "-fx-font-weight:bold;");
+
+                // =====================================================
+                // TOP SPACE
+                // =====================================================
+
+                Region topSpace = new Region();
+
+                HBox.setHgrow(
+                                topSpace,
+                                Priority.ALWAYS);
+
+                // =====================================================
+                // SEARCH
+                // =====================================================
+
+                // =====================================================
+                // TOP BAR COMPONENTS
+                // =====================================================
+
+                topBar.getChildren().addAll(
+                                headerLogo,
+                                topSpace);
+
+                bp.setTop(topBar);
+
+                // =====================================================
+                // SHOW SELECTED PAGE
+                // =====================================================
+
+                showPage(
+                                currentPage,
+                                bp);
+
+                // =====================================================
+                // SELECT CURRENT PAGE
+                // IMPORTANT: DO THIS AFTER CELL FACTORY
+                // =====================================================
+
+                int selectedIndex = lv.getItems().indexOf(currentPage);
+
+                if (selectedIndex >= 0) {
+
+                        lv.getSelectionModel().select(selectedIndex);
+                } else {
+
+                        lv.getSelectionModel().select(0);
+                }
+
+                // =====================================================
+                // LIST VIEW SELECTION
+                // =====================================================
+
+                lv.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
+                        if (newValue == null) {
+                                return;
+                        }
+
+                        System.out.println(
+                                        "Selected item: "
+                                                        + newValue);
+
+                        showPage(
+                                        newValue,
+                                        bp);
+                });
+
+                // =====================================================
+                // ROOT STYLE
+                // =====================================================
+
+                bp.setStyle(
+                                "-fx-background-color:#080C0D;");
+
+                // =====================================================
+                // SCENE
+                // =====================================================
+
+                adminPageScene = new Scene(
+                                bp,
+                                1000,
+                                700);
+
+                return adminPageScene;
+        }
+
+        // =========================================================
+        // SHOW PAGE
+        // =========================================================
+
+        private void showPage(
+                        String page,
+                        BorderPane bp) {
+
+                switch (page) {
+
+                        // =================================================
+                        // DASHBOARD
+                        // =================================================
+
+                        case "Dashboard":
+
+                                AdminDashBoard dashboardPage = new AdminDashBoard();
+
+                                bp.setCenter(dashboardPage);
+
+                                break;
+
+                        // =================================================
+                        // USERS
+                        // =================================================
+
+                        case "Users":
+
+                                AdminUsersPage usersPage = new AdminUsersPage();
+
+                                bp.setCenter(
+                                                usersPage.getUsersPage());
+                                break;
+
+                        // =================================================
+                        // MARKETPLACE
+                        // =================================================
+
+                        case "Marketplace":
+
+                                AdminMarketplacePage marketplacePage = new AdminMarketplacePage();
+                                bp.setCenter(marketplacePage.getMarketplacePage());
+
+                                break;
+
+                        // =================================================
+                        // MANAGE COURSE
+                        // =================================================
+
+                        case "Manage Course":
+
+                                bp.setCenter(AdminLearning.getLearningPage());
+
+                                break;
+
+                        // =================================================
+                        // COMMUNITY
+                        // =================================================
+
+                        case "Community":
+
+                                AdminCommunityPage adminCommunityPage = new AdminCommunityPage();
+
+                                bp.setCenter(
+                                                adminCommunityPage.getCommunityPage());
+
+                                break;
+
+                        // =================================================
+                        // GOVERNMENT SCHEMES
+                        // =================================================
+
+                        case "Government Schemes":
+
+                                // Text schemes = createPageTitle(
+                                // "Government Schemes");
+
+                                bp.setCenter(SchemeTab.getSchemesPage());
+
+                                break;
+
+                        // =================================================
+                        // ORDERS
+                        // =================================================
+
+                        case "Orders":
+
+                                AdminOrdersPage ordersPage = new AdminOrdersPage();
+
+                                bp.setCenter(
+                                                ordersPage.getOrdersPage());
+
+                                break;
+
+                        // =================================================
+                        // REVIEWS
+                        // =================================================
+
+                        case "Reviews":
+
+                                AdminReviewsPage reviewsPage = new AdminReviewsPage();
+
+                                bp.setCenter(
+                                                reviewsPage.getReviewsPage());
+
+                                break;
+
+                   case "About us":
+
+    AboutUs aboutUs = new AboutUs();
+
+    bp.setCenter(aboutUs.getAboutUsPage());
+
+    break;
+
+                        // =================================================
+                        // DEFAULT
+                        // =================================================
+
+                        default:
+
+                                AdminDashBoard dashboardPage1 = new AdminDashBoard();
+
+                                bp.setCenter(dashboardPage1);
+
+                                break;
+                }
+        }
+
+        // =========================================================
+        // CREATE PAGE TITLE
+        // =========================================================
+
+        private Text createPageTitle(
+                        String title) {
+
+                Text text = new Text(title);
+
+                text.setStyle(
+                                "-fx-font-size:34px;" +
+                                                "-fx-font-weight:bold;" +
+                                                "-fx-fill:#EEEEEE;");
+
+                return text;
+        }
+}
